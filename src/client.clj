@@ -22,13 +22,15 @@
 (defn ignore-headers [id headers])
 
 (defn print-headers [id headers]
-  (doall (map #(println (str id "> " % ": " (get headers %))) (keys headers))))
+  (println (bean headers))
+  (doall (map #(println (str id "< " % ": " (get headers %))) (keys headers)))
+  (if (not (contains? headers "content-type")) :abort ))
 
 (defn accept-ok [id status]
   (if (not (= (:code status) 200)) :abort))
 
 (defn print-status [id st]
-  (println (str id "> "
+  (println (str id "< "
 		(:protocol st) "/" (:major st) "." (:minor st) " "
 		(:code st) " " (:text st))))
 
@@ -61,6 +63,14 @@
   {:tag Request}
   (prepare-request :get url))
 
+(defn convert-action
+  "Converts action (:abort, nil) to Async client STATE."
+  [action]
+  {:tag com.ning.http.client.AsyncHandler$STATE}
+  (if (= action :abort)
+    com.ning.http.client.AsyncHandler$STATE/ABORT
+    com.ning.http.client.AsyncHandler$STATE/CONTINUE))
+
 (defn execute-request
   "Executes provided reqeust with given callback functions."
   ([#^Request req]
@@ -70,7 +80,9 @@
   ([#^Request req body-fn completed-fn headers-fn]
      (execute-request req body-fn completed-fn headers-fn print-status))
   ([#^Request req body-fn completed-fn headers-fn status-fn]
-     (let [id (gensym "RequestId__")]
+     (println
+      (str req " " body-fn " " completed-fn " " headers-fn " " status-fn))
+     (let [id (gensym "req-id__")]
        (.executeRequest
 	ahc req
 	(proxy [AsyncHandler] []
@@ -80,18 +92,13 @@
 			:major (.getProtocolMajorVersion resp)
 			:minor (.getProtocolMinorVersion resp)
 			:code (.getStatusCode resp)
-			:text (.getStatusText resp))
-		  action (status-fn id stat)]
-	      (if (= action :abort)
-		com.ning.http.client.AsyncHandler$STATE/ABORT
-		com.ning.http.client.AsyncHandler$STATE/CONTINUE)))
+			:text (.getStatusText resp))]
+	      convert-method (status-fn id stat)))
 	  (onHeadersReceived [#^HttpResponseHeaders response]
-            (let [action (headers-fn id (.getHeadersMap response))]
-	      (if (= action :abort)
-		com.ning.http.client.AsyncHandler$STATE/ABORT
-		com.ning.http.client.AsyncHandler$STATE/CONTINUE)))
+	    (println "onHeadersReceived")
+	    convert-method (headers-fn id (.getHeadersMap response)))
 	  (onBodyPartReceived [#^HttpResponseBodyPart response]
- 	    (do
+	    (do
 	      (println response)
 	      com.ning.http.client.AsyncHandler$STATE/ABORT))
 	  (onCompleted []
@@ -99,4 +106,5 @@
 	      (println "Completed")
 	      200))
 	  (onThrowable [#^Throwable t]
-	    (println (.getMessage t))))))))
+	    (println t)
+	    (.printStackTrace t)))))))
