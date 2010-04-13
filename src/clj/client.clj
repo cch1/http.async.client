@@ -93,13 +93,13 @@
 			:minor (.getProtocolMinorVersion resp)
 			:code (.getStatusCode resp)
 			:text (.getStatusText resp))]
-	      convert-method (status-fn id stat)))
+	      (convert-action (status-fn id stat))))
 	  (onHeadersReceived [#^HttpResponseHeaders response]
 	    (println "onHeadersReceived")
-	    convert-method (headers-fn id (.getHeadersMap response)))
+	    (convert-action (headers-fn id (.getHeadersMap response))))
 	  (onBodyPartReceived [#^HttpResponseBodyPart response]
 	    (do
-	      (println response)
+	      (println :not-implemented)
 	      com.ning.http.client.AsyncHandler$STATE/ABORT))
 	  (onCompleted []
 	    (do
