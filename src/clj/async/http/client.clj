@@ -1,14 +1,11 @@
-(ns async.client
-  (:use [de.kotka.lazymap :only (lazy-hash-map)])
-  (:import (com.ning.http.client AsyncHttpClient AsyncHandler
+(ns async.http.client
+  (:use [async.http.client.status])
+  (:import (com.ning.http.client AsyncHttpClient AsyncHandler Headers
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart Request RequestBuilder
 				 RequestType)))
 
 (def ahc (AsyncHttpClient.))
-
-(defstruct status
-  :protocol :major :minor :code :text)
 
 ;; default set of callbacks
 (defn body-collect [#^byteL bytes]
@@ -22,7 +19,7 @@
 (defn ignore-headers [id headers])
 
 (defn print-headers [id headers]
-  (println (bean headers))
+  (println (str "bean: " (bean headers)))
   (doall (map #(println (str id "< " % ": " (get headers %))) (keys headers)))
   (if (not (contains? headers "content-type")) :abort ))
 
@@ -50,6 +47,13 @@
    (= method :delete) RequestType/DELETE
    (= method :head) RequestType/HEAD
    :default RequestType/GET))
+
+(defn- convert-headers [#^Headers headers]
+  "Converts Headers to lazy map"
+  ;; TODO write conversion
+  ;; introspect
+  (let [mts (.. headers getClass getMethods)]
+    (println (map #(.getName %) mts))))
 
 (defn prepare-request [method #^String url]
   "Prepares request."
@@ -87,16 +91,13 @@
 	ahc req
 	(proxy [AsyncHandler] []
 	  (onStatusReceived [#^HttpResponseStatus resp]
-	    (let [stat (lazy-hash-map
-			:protocol (.getProtocolName resp)
-			:major (.getProtocolMajorVersion resp)
-			:minor (.getProtocolMinorVersion resp)
-			:code (.getStatusCode resp)
-			:text (.getStatusText resp))]
+	    (let [stat (convert-status-to-map resp)]
 	      (convert-action (status-fn id stat))))
 	  (onHeadersReceived [#^HttpResponseHeaders response]
 	    (println "onHeadersReceived")
-	    (convert-action (headers-fn id (.getHeadersMap response))))
+	    (convert-action
+	     (headers-fn id
+			 (convert-headers (.getHeaders response)))))
 	  (onBodyPartReceived [#^HttpResponseBodyPart response]
 	    (do
 	      (println :not-implemented)
