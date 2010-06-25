@@ -51,7 +51,6 @@
 (defn- convert-headers [#^Headers headers]
   "Converts Headers to lazy map"
   ;; TODO write conversion
-  ;; introspect
   (let [mts (.. headers getClass getMethods)]
     (println (map #(.getName %) mts))))
 
@@ -84,8 +83,6 @@
   ([#^Request req body-fn completed-fn headers-fn]
      (execute-request req body-fn completed-fn headers-fn print-status))
   ([#^Request req body-fn completed-fn headers-fn status-fn]
-     (println
-      (str req " " body-fn " " completed-fn " " headers-fn " " status-fn))
      (let [id (gensym "req-id__")]
        (.executeRequest
 	ahc req
