@@ -40,3 +40,13 @@
     (is (= (status :protocol) "HTTP/1.1"))
     (is (= (status :major) 1))
     (is (= (status :minor) 1))))
+
+(deftest test-headers
+  (let [headers# (promise)
+        _ (execute-request
+           (prepare-get "http://localhost:8080/")
+           body-collect body-completed
+           (fn [_ hds] (do (deliver headers# hds) :abort)))
+        headers @headers#]
+    (println headers)
+    (is (= (headers :server) "Jetty"))))

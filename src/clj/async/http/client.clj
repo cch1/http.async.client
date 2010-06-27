@@ -13,7 +13,7 @@
 ; limitations under the License.
 
 (ns async.http.client
-  (:use [async.http.client.status])
+  (:use [async.http.client status headers])
   (:import (com.ning.http.client AsyncHttpClient AsyncHandler Headers
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart Request RequestBuilder
@@ -62,12 +62,6 @@
    (= method :head) RequestType/HEAD
    :default RequestType/GET))
 
-(defn- convert-headers [#^Headers headers]
-  "Converts Headers to lazy map"
-  ;; TODO write conversion
-  (let [mts (.. headers getClass getMethods)]
-    (println (map #(.getName %) mts))))
-
 (defn prepare-request [method #^String url]
   "Prepares request."
   {:tag Request}
@@ -102,13 +96,11 @@
 	ahc req
 	(proxy [AsyncHandler] []
 	  (onStatusReceived [#^HttpResponseStatus resp]
-	    (let [stat (convert-status-to-map resp)]
-	      (convert-action (status-fn id stat))))
-	  (onHeadersReceived [#^HttpResponseHeaders response]
-	    (println "onHeadersReceived")
-	    (convert-action
-	     (headers-fn id
-			 (convert-headers (.getHeaders response)))))
+                            (let [stat (convert-status-to-map resp)]
+                              (convert-action (status-fn id stat))))
+	  (onHeadersReceived [#^HttpResponseHeaders resp]
+                             (let [hdrs (convert-headers-to-map resp)]
+                               (convert-action (headers-fn id hdrs))))
 	  (onBodyPartReceived [#^HttpResponseBodyPart response]
 	    (do
 	      (println :not-implemented)
