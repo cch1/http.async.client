@@ -36,7 +36,7 @@
 	   (fn [_ st] (do (deliver status# st) :abort)))
 	status @status#]
     (is (= (status :code) 200))
-    (is (= (status :text) "OK"))
+    (is (= (status :msg) "OK"))
     (is (= (status :protocol) "HTTP/1.1"))
     (is (= (status :major) 1))
     (is (= (status :minor) 1))))
@@ -50,3 +50,11 @@
         headers @headers#]
     (println headers)
     (is (= (headers :server) "Jetty"))))
+
+(deftest test-body
+  (let [resp (execute-request
+              (prepare-get "http://localhost:8080/"))]
+    (println (apply str (map #(char %) (:body @resp))))
+    (is (not (empty? (:body @resp))))
+    (if (contains? (:headers @resp) :content-length)
+      (is (= (count (:body @resp)) (:content-length (:headers @resp)))))))

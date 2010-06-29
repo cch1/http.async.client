@@ -22,7 +22,7 @@
 (def ahc (AsyncHttpClient.))
 
 ;; default set of callbacks
-(defn body-collect [#^byteL bytes]
+(defn body-collect [id #^byteL bytes]
   ;; TODO append to rest of the body collected already
 )
 
@@ -33,17 +33,13 @@
 (defn ignore-headers [id headers])
 
 (defn print-headers [id headers]
-  (println (str "bean: " (bean headers)))
-  (doall (map #(println (str id "< " % ": " (get headers %))) (keys headers)))
-  (if (not (contains? headers "content-type")) :abort ))
+  (doall (map #(println (str id "< " % ": " (get headers %))) (keys headers))))
 
 (defn accept-ok [id status]
   (if (not (= (:code status) 200)) :abort))
 
 (defn print-status [id st]
-  (println (str id "< "
-		(:protocol st) "/" (:major st) "." (:minor st) " "
-		(:code st) " " (:text st))))
+  (println (str id "< " (:protocol st) " " (:code st) " " (:msg st))))
 
 (defn status-callback [id status]
     (println (str "Status code: " (status :code)))
@@ -91,24 +87,29 @@
   ([#^Request req body-fn completed-fn headers-fn]
      (execute-request req body-fn completed-fn headers-fn print-status))
   ([#^Request req body-fn completed-fn headers-fn status-fn]
-     (let [id (gensym "req-id__")]
+     (let [id (gensym "req-id__")
+           status (ref nil)
+           headers (ref nil)
+           body (ref (vector))
+           response (promise)]
        (.executeRequest
 	ahc req
 	(proxy [AsyncHandler] []
 	  (onStatusReceived [#^HttpResponseStatus resp]
                             (let [stat (convert-status-to-map resp)]
+                              (dosync (ref-set status stat))
                               (convert-action (status-fn id stat))))
 	  (onHeadersReceived [#^HttpResponseHeaders resp]
                              (let [hdrs (convert-headers-to-map resp)]
+                               (dosync (ref-set headers hdrs))
                                (convert-action (headers-fn id hdrs))))
-	  (onBodyPartReceived [#^HttpResponseBodyPart response]
-	    (do
-	      (println :not-implemented)
-	      com.ning.http.client.AsyncHandler$STATE/ABORT))
-	  (onCompleted []
-	    (do
-	      (println "Completed")
-	      200))
+	  (onBodyPartReceived [#^HttpResponseBodyPart resp]
+                              (let [#^byteL part (.getBodyPartBytes resp)
+                                    v (seq part)]
+                                (dosync (alter body #(apply conj %1 %2) v))
+                                (convert-action (body-fn id part))))
+	  (onCompleted [] (deliver response {:status @status :headers @headers :body @body}))
 	  (onThrowable [#^Throwable t]
-	    (println t)
-	    (.printStackTrace t)))))))
+                       (println t)
+                       (.printStackTrace t))))
+       response)))

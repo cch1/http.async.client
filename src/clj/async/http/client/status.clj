@@ -17,7 +17,7 @@
 
 (defn convert-status-to-map [st]
   (let [lm {:code (delay (.getStatusCode st))
-	    :text (delay (.getStatusText st))
+	    :msg (delay (.getStatusText st))
 	    :protocol (delay (.getProtocolText st))
 	    :major (delay (.getProtocolMajorVersion st))
 	    :minor (delay (.getProtocolMinorVersion st))}]
