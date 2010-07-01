@@ -13,7 +13,8 @@
 ; limitations under the License.
 
 (ns async.http.client
-  (:use [async.http.client status headers])
+  (:use (async.http.client status headers)
+        clojure.stacktrace)
   (:import (com.ning.http.client AsyncHttpClient AsyncHandler Headers
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart Request RequestBuilder
@@ -22,30 +23,38 @@
 (def ahc (AsyncHttpClient.))
 
 ;; default set of callbacks
-(defn body-collect [id #^byteL bytes]
-  ;; TODO append to rest of the body collected already
-)
+(defn body-collect [state bytes]
+  "Stores body parts under :body in state."
+  (if bytes
+    (dosync (alter state assoc :body (apply conj (or (@state :body) []) bytes)))
+    ((println "Received empty body part, aborting.") :abort)))
 
-(defn body-completed []
-  ;; TODO return completed body
-)
+(defn body-completed [state]
+  "Provides value that will be delivered to response promise."
+  @state)
 
-(defn ignore-headers [id headers])
+(defn headers-collect [state headers]
+  "Stores headers under :headers in state."
+  (if headers
+    (dosync (alter state assoc :headers headers))
+    ((println "Received empty headers, aborting.") :abort)))
 
-(defn print-headers [id headers]
-  (doall (map #(println (str id "< " % ": " (get headers %))) (keys headers))))
+(defn print-headers [state headers]
+  (doall (map #(println (str (:id @state) "< " % ": " (get headers %))) (keys headers))))
 
-(defn accept-ok [id status]
+(defn accept-ok [_ status]
   (if (not (= (:code status) 200)) :abort))
 
-(defn print-status [id st]
-  (println (str id "< " (:protocol st) " " (:code st) " " (:msg st))))
+(defn status-collect [state status]
+  "Storest status map under :status in state."
+  (dosync (alter state assoc :status status)))
 
-(defn status-callback [id status]
-    (println (str "Status code: " (status :code)))
-    :abort)
+(defn status-print [state st]
+  (println (str (:id @state) "< " (:protocol st) " " (:code st) " " (:msg st))))
 
-(defn- default-status-callback [id status])
+(defn error-collect [state t]
+  "Stores exception under :error in state"
+  (dosync (alter state assoc :error t)))
 
 (defn- convert-method [method]
   "Converts clj method (:get, :put, ...) to Async Client specific.
@@ -78,38 +87,74 @@
     com.ning.http.client.AsyncHandler$STATE/ABORT
     com.ning.http.client.AsyncHandler$STATE/CONTINUE))
 
+(defprotocol AsyncResponseHandler
+  "Asynchronous response handler"
+  (onStatus [state status] "On status received callback")
+  (onHeaders [state headers] "On headers received callback")
+  (onBodyPart [state part] "On body part (chunk) received callback")
+  (onCompleted [state] "On response completed callback")
+  (onError [state #^Throwable t] "On error callback"))
+
+(deftype StoringHandler []
+  AsyncResponseHandler
+  (onStatus [state status] (status-collect state status))
+  (onHeaders [state headers] (headers-collect state headers))
+  (onBodyPart [state part] (body-collect state part))
+  (onCompleted [state] (body-completed state))
+  (onError [state t] (error-collect state t)))
+
 (defn execute-request
   "Executes provided reqeust with given callback functions."
+  ([#^Request req handler]
+     (let [resp (promise)
+           status (ref {:id (gensym "req-id__")})]
+       (.executeRequest
+        ahc req
+        (proxy [AsyncHandler] []
+          (onStatusReceived [#^HttpResponseStatus e]
+                            (convert-action (onStatus handler status (convert-status-to-map e))))
+          (onHeadersReceived [#^HttpResponseHeaders e]
+                             (convert-action (onHeaders handler status (convert-headers-to-map e))))
+          (onBodyPartReceived [#^HttpResponseBodyPart e]
+                              (convert-action (onBodyPart handler status (vec (.getBodyPartBytes e)))))
+          (onCompleted [] (deliver resp (onCompleted handler status)))
+          (onThrowable [#^Throwable t]
+                       (do
+                         (onError handler status t)
+                         (deliver resp (onCompleted status handler))))))))
   ([#^Request req]
      (execute-request req body-collect body-completed))
   ([#^Request req body-fn completed-fn]
-     (execute-request req body-fn completed-fn print-headers))
+     (execute-request req body-fn completed-fn headers-collect))
   ([#^Request req body-fn completed-fn headers-fn]
-     (execute-request req body-fn completed-fn headers-fn print-status))
+     (execute-request req body-fn completed-fn headers-fn status-collect))
   ([#^Request req body-fn completed-fn headers-fn status-fn]
-     (let [id (gensym "req-id__")
-           status (ref nil)
-           headers (ref nil)
-           body (ref (vector))
+     (execute-request req body-fn completed-fn headers-fn status-fn error-collect))
+  ([#^Request req body-fn completed-fn headers-fn status-fn error-fn]
+     (let [state (ref {:id (gensym "req-id-")})
            response (promise)]
        (.executeRequest
 	ahc req
 	(proxy [AsyncHandler] []
-	  (onStatusReceived [#^HttpResponseStatus resp]
-                            (let [stat (convert-status-to-map resp)]
-                              (dosync (ref-set status stat))
-                              (convert-action (status-fn id stat))))
+          (onStatusReceived [#^HttpResponseStatus resp]
+                            (let [status (convert-status-to-map resp)]
+                              (println "status")
+                              (convert-action (status-fn state status))))
 	  (onHeadersReceived [#^HttpResponseHeaders resp]
                              (let [hdrs (convert-headers-to-map resp)]
-                               (dosync (ref-set headers hdrs))
-                               (convert-action (headers-fn id hdrs))))
+                               (println "headers")
+                               (convert-action (headers-fn state hdrs))))
 	  (onBodyPartReceived [#^HttpResponseBodyPart resp]
-                              (let [#^byteL part (.getBodyPartBytes resp)
-                                    v (seq part)]
-                                (dosync (alter body #(apply conj %1 %2) v))
-                                (convert-action (body-fn id part))))
-	  (onCompleted [] (deliver response {:status @status :headers @headers :body @body}))
+                              (let [part (vec (.getBodyPartBytes resp))]
+                                (println "body")
+                                (convert-action (body-fn state part))))
+	  (onCompleted [] (do
+                            (println "completed")
+                            (deliver response (completed-fn state))))
 	  (onThrowable [#^Throwable t]
-                       (println t)
-                       (.printStackTrace t))))
+                       (do
+                         (println (str "error: " t))
+                         (clojure.stacktrace/print-stack-trace t)
+                         (error-fn state t)
+                         (deliver response (completed-fn state))))))
        response)))

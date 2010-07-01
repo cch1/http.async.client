@@ -15,8 +15,9 @@
 (ns async.http.client.test
   "Testing of ahc-clj"
   #^{:author "Hubert Iwaniuk <neotyk@kungfoo.pl>"}
-  (:use clojure.test async.http.client)
-  (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)))
+  (:use clojure.test async.http.client )
+  (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
+           (async.http.client StoringHandler)))
 
 (defn once-fixture [f]
   "Configures Logger before test here are executed, and closes AHC after tests are done."
@@ -32,7 +33,7 @@
   (let [status# (promise)
 	_ (execute-request
 	   (prepare-get "http://localhost:8080/")
-	   body-collect body-completed ignore-headers
+	   body-collect body-completed headers-collect
 	   (fn [_ st] (do (deliver status# st) :abort)))
 	status @status#]
     (is (= (status :code) 200))
@@ -52,9 +53,19 @@
     (is (= (headers :server) "Jetty"))))
 
 (deftest test-body
-  (let [resp (execute-request
-              (prepare-get "http://localhost:8080/"))]
-    (println (apply str (map #(char %) (:body @resp))))
-    (is (not (empty? (:body @resp))))
-    (if (contains? (:headers @resp) :content-length)
-      (is (= (count (:body @resp)) (:content-length (:headers @resp)))))))
+  (let [resp (execute-request (prepare-get "http://localhost:8080/"))
+        headers (@resp :headers)
+        body (@resp :body)]
+    (println (apply str (map #(char %) body)))
+    (is (not (empty? body)))
+    (if (contains? headers :content-length)
+      (is (= (count body) (:content-length headers))))))
+
+(deftest test-arh
+  (let [resp (execute-request (prepare-get "http://localhost:8080")
+                              (StoringHandler. (ref {:id (gensym "test-req-id__")})))
+        headers (@resp :headers)
+        body (@resp :body)]
+    (is (not (empty? body)))
+    (if (contains? headers :content-length)
+      (is (= (count body) (headers :content-length))))))
