@@ -87,74 +87,41 @@
     com.ning.http.client.AsyncHandler$STATE/ABORT
     com.ning.http.client.AsyncHandler$STATE/CONTINUE))
 
-(defprotocol AsyncResponseHandler
-  "Asynchronous response handler"
-  (onStatus [state status] "On status received callback")
-  (onHeaders [state headers] "On headers received callback")
-  (onBodyPart [state part] "On body part (chunk) received callback")
-  (onCompleted [state] "On response completed callback")
-  (onError [state #^Throwable t] "On error callback"))
-
-(deftype StoringHandler []
-  AsyncResponseHandler
-  (onStatus [state status] (status-collect state status))
-  (onHeaders [state headers] (headers-collect state headers))
-  (onBodyPart [state part] (body-collect state part))
-  (onCompleted [state] (body-completed state))
-  (onError [state t] (error-collect state t)))
-
 (defn execute-request
-  "Executes provided reqeust with given callback functions."
-  ([#^Request req handler]
+  "Executes provided reqeust with given callback functions.
+  Options:
+    :status    - Status callback, fn called with state (ref {}) and status map.
+    :headers   - Headers callback, fn called with state (ref {}) and headers map.
+    :part      - Body part callback, fn called with state (ref {}) and vector of bytes.
+    :completed - Request completed callback, fn called with state (ref {}), result is delivered to response promise..
+    :error     - Error callback, fn called with state (ref {}) and Throwable."
+  ([#^Request req options]
      (let [resp (promise)
-           status (ref {:id (gensym "req-id__")})]
+           state (ref {:id (gensym "req-id__")})
+           st-cb (:status options)
+           hd-cb (:headers options)
+           pt-cb (:part options)
+           ct-cb (:completed options)
+           er-cb (:error options)]
        (.executeRequest
         ahc req
         (proxy [AsyncHandler] []
           (onStatusReceived [#^HttpResponseStatus e]
-                            (convert-action (onStatus handler status (convert-status-to-map e))))
+                            (convert-action (st-cb state (convert-status-to-map e))))
           (onHeadersReceived [#^HttpResponseHeaders e]
-                             (convert-action (onHeaders handler status (convert-headers-to-map e))))
-          (onBodyPartReceived [#^HttpResponseBodyPart e]
-                              (convert-action (onBodyPart handler status (vec (.getBodyPartBytes e)))))
-          (onCompleted [] (deliver resp (onCompleted handler status)))
+                             (convert-action (hd-cb state (convert-headers-to-map e))))
+          (onBodyPartReceived  [#^HttpResponseBodyPart e]
+                               (convert-action (pt-cb state (vec (.getBodyPartBytes e)))))
+          (onCompleted []
+                       (deliver resp (ct-cb state)))
           (onThrowable [#^Throwable t]
-                       (do
-                         (onError handler status t)
-                         (deliver resp (onCompleted status handler))))))))
-  ([#^Request req]
-     (execute-request req body-collect body-completed))
-  ([#^Request req body-fn completed-fn]
-     (execute-request req body-fn completed-fn headers-collect))
-  ([#^Request req body-fn completed-fn headers-fn]
-     (execute-request req body-fn completed-fn headers-fn status-collect))
-  ([#^Request req body-fn completed-fn headers-fn status-fn]
-     (execute-request req body-fn completed-fn headers-fn status-fn error-collect))
-  ([#^Request req body-fn completed-fn headers-fn status-fn error-fn]
-     (let [state (ref {:id (gensym "req-id-")})
-           response (promise)]
-       (.executeRequest
-	ahc req
-	(proxy [AsyncHandler] []
-          (onStatusReceived [#^HttpResponseStatus resp]
-                            (let [status (convert-status-to-map resp)]
-                              (println "status")
-                              (convert-action (status-fn state status))))
-	  (onHeadersReceived [#^HttpResponseHeaders resp]
-                             (let [hdrs (convert-headers-to-map resp)]
-                               (println "headers")
-                               (convert-action (headers-fn state hdrs))))
-	  (onBodyPartReceived [#^HttpResponseBodyPart resp]
-                              (let [part (vec (.getBodyPartBytes resp))]
-                                (println "body")
-                                (convert-action (body-fn state part))))
-	  (onCompleted [] (do
-                            (println "completed")
-                            (deliver response (completed-fn state))))
-	  (onThrowable [#^Throwable t]
-                       (do
-                         (println (str "error: " t))
-                         (clojure.stacktrace/print-stack-trace t)
-                         (error-fn state t)
-                         (deliver response (completed-fn state))))))
-       response)))
+                       (do (er-cb state t) (deliver resp (ct-cb state))))))
+       resp)))
+
+(defn GET [#^String url]
+  "GET resource from url. Return promise, that is delivered once, response is completed."
+  (execute-request (prepare-get url) {:status status-collect
+                                      :headers headers-collect
+                                      :part body-collect
+                                      :completed body-completed
+                                      :error error-collect}))

@@ -33,8 +33,10 @@
   (let [status# (promise)
 	_ (execute-request
 	   (prepare-get "http://localhost:8080/")
-	   body-collect body-completed headers-collect
-	   (fn [_ st] (do (deliver status# st) :abort)))
+	   {:status (fn [_ st] (do (deliver status# st) :abort))
+            :part body-collect
+            :completed body-completed
+            :headers headers-collect})
 	status @status#]
     (is (= (status :code) 200))
     (is (= (status :msg) "OK"))
@@ -46,26 +48,19 @@
   (let [headers# (promise)
         _ (execute-request
            (prepare-get "http://localhost:8080/")
-           body-collect body-completed
-           (fn [_ hds] (do (deliver headers# hds) :abort)))
+           {:status status-collect
+            :part body-collect
+            :completed body-completed
+            :headers (fn [_ hds] (do (deliver headers# hds) :abort))})
         headers @headers#]
     (println headers)
     (is (= (headers :server) "Jetty"))))
 
 (deftest test-body
-  (let [resp (execute-request (prepare-get "http://localhost:8080/"))
+  (let [resp (GET "http://localhost:8080/")
         headers (@resp :headers)
         body (@resp :body)]
     (println (apply str (map #(char %) body)))
     (is (not (empty? body)))
     (if (contains? headers :content-length)
       (is (= (count body) (:content-length headers))))))
-
-(deftest test-arh
-  (let [resp (execute-request (prepare-get "http://localhost:8080")
-                              (StoringHandler. (ref {:id (gensym "test-req-id__")})))
-        headers (@resp :headers)
-        body (@resp :body)]
-    (is (not (empty? body)))
-    (if (contains? headers :content-length)
-      (is (= (count body) (headers :content-length))))))
