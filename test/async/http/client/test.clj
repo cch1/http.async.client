@@ -15,17 +15,53 @@
 (ns async.http.client.test
   "Testing of ahc-clj"
   #^{:author "Hubert Iwaniuk <neotyk@kungfoo.pl>"}
-  (:use clojure.test async.http.client )
+  (:use clojure.test
+        async.http.client
+        [clojure.stacktrace :only [print-stack-trace]])
   (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
-           (async.http.client StoringHandler)))
+           (org.eclipse.jetty.server Server Request)
+           (org.eclipse.jetty.server.handler AbstractHandler)
+           (javax.servlet.http HttpServletRequest HttpServletResponse)))
 
-(defn once-fixture [f]
+(def default-handler
+     (proxy [AbstractHandler] []
+       (handle [target #^Request req #^HttpServletRequest hReq #^HttpServletResponse hResp]
+         (do
+           (.setHeader hResp "test-header" "test-value")
+           (let [hdrs (enumeration-seq (.getHeaderNames hReq))]
+             (doseq [k hdrs :when (not (contains? #{"Server"
+                                                    "Connection"
+                                                    "Content-Length"
+                                                    "Host"
+                                                    "User-Agent"
+                                                    "Content-Type"} k))]
+               (.setHeader hResp k (.getHeader hReq k))))
+           (doto hResp
+             (.setContentType "text/plain;charset=utf-8")
+             (.setStatus 200))
+           (.setHandled req true)))))
+
+(defn- start-jetty
+  ([handler]
+     (start-jetty handler {:port 8123}))
+  ([handler {port :port :as opts :or {:port 8123}}]
+     (let [srv (Server. port)]
+       (doto srv
+         (.setHandler handler)
+         (.start))
+       srv)))
+
+(defn- once-fixture [f]
   "Configures Logger before test here are executed, and closes AHC after tests are done."
   (doto (Logger/getRootLogger)
     (.setLevel Level/WARN)
     (.addAppender (ConsoleAppender. (PatternLayout. PatternLayout/TTCC_CONVERSION_PATTERN))))
-  (f)
-  (.close ahc))
+  (def srv (start-jetty default-handler))
+  (try (f)
+       (finally
+        (do
+          (.close ahc)
+          (.stop srv)))))
 
 (use-fixtures :once once-fixture)
 
@@ -44,17 +80,27 @@
     (is (= (status :major) 1))
     (is (= (status :minor) 1))))
 
-(deftest test-headers
+(deftest test-receive-headers
   (let [headers# (promise)
         _ (execute-request
-           (prepare-get "http://localhost:8080/")
+           (prepare-get "http://localhost:8123/")
            {:status status-collect
             :part body-collect
             :completed body-completed
             :headers (fn [_ hds] (do (deliver headers# hds) :abort))})
         headers @headers#]
     (println headers)
-    (is (= (headers :server) "Jetty"))))
+    (is (= (headers :test-header) "test-value"))))
+
+(deftest test-send-headers
+  (let [resp (GET "http://localhost:8123/" {:headers {:a 1 :b 2}})
+        headers (@resp :headers)]
+    (if (contains? @resp :error)
+      (print-stack-trace (:error @resp)))
+    (is (not (contains? (keys @resp) :error)))
+    (is (not (empty? headers)))
+    (are (= (headers :a) 1)
+         (= (headers :b) 2))))
 
 (deftest test-body
   (let [resp (GET "http://localhost:8080/")
@@ -64,3 +110,11 @@
     (is (not (empty? body)))
     (if (contains? headers :content-length)
       (is (= (count body) (:content-length headers))))))
+
+(deftest test-query-params
+  (let [resp (GET "http://localhost:8123" {:query {:a 1 :b 2}})
+        headers (@resp :headers)]
+    (is (not (empty? headers)))
+    (are [x y] (= x y)
+         (headers :a) 1
+         (headers :b) 2)))

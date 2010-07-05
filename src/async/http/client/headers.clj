@@ -20,7 +20,7 @@
 
 (defn- v [#^Headers h k]
   (let [vals (.getHeaderValues h (kn k))]
-    (reduce (fn [n m] (str n "," m)) vals)))
+    (apply str (interpose "," vals))))
 
 (defn convert-headers-to-map [#^HttpResponseHeaders headers]
   "Converts Http Response Headers to lazy map."
