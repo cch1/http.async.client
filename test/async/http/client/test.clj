@@ -17,7 +17,8 @@
   #^{:author "Hubert Iwaniuk <neotyk@kungfoo.pl>"}
   (:use clojure.test
         async.http.client
-        [clojure.stacktrace :only [print-stack-trace]])
+        [clojure.stacktrace :only [print-stack-trace]]
+        [clojure.contrib.str-utils2 :only [split]])
   (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
@@ -36,6 +37,10 @@
                                                     "User-Agent"
                                                     "Content-Type"} k))]
                (.setHeader hResp k (.getHeader hReq k))))
+           (when-let [q (.getQueryString hReq)]
+            (doseq [p (split q #"\&")]
+              (let [[k v] (split p #"=")]
+                (.setHeader hResp k v))))
            (doto hResp
              (.setContentType "text/plain;charset=utf-8")
              (.setStatus 200))
@@ -89,7 +94,6 @@
             :completed body-completed
             :headers (fn [_ hds] (do (deliver headers# hds) :abort))})
         headers @headers#]
-    (println headers)
     (is (= (headers :test-header) "test-value"))))
 
 (deftest test-send-headers
@@ -112,9 +116,9 @@
       (is (= (count body) (:content-length headers))))))
 
 (deftest test-query-params
-  (let [resp (GET "http://localhost:8123" {:query {:a 1 :b 2}})
+  (let [resp (GET "http://localhost:8123/" {:query {:a 1 :b 2}})
         headers (@resp :headers)]
     (is (not (empty? headers)))
     (are [x y] (= x y)
-         (headers :a) 1
-         (headers :b) 2)))
+         (headers :a) "1"
+         (headers :b) "2")))

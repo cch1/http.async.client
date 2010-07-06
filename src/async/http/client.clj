@@ -28,9 +28,7 @@
   "Stores body parts under :body in state."
   (if (not (empty? bytes))
     (dosync (alter state assoc :body (apply conj (or (:body @state) []) bytes)))
-    (do
-      (println "Received empty body part, aborting.")
-      :abort)))
+    (do (println "Received empty body part."))))
 
 (defn body-completed [state]
   "Provides value that will be delivered to response promise."
@@ -83,7 +81,8 @@
     #^String url
     {headers :headers
      param :param
-     query :query}]
+     query :query
+     :as options}]
      (let [#^RequestBuilderWrapper rbw (RequestBuilderWrapper. (RequestBuilder. (convert-method method)))]
        (doseq [[k v] headers] (. rbw addHeader (if (keyword? k) (name k) k) (str v)))
        (doseq [[k v] param] (.addParameter rbw (if (keyword? k) (name k) k) (str v)))
