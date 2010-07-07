@@ -113,7 +113,7 @@
   (let [resp (GET "http://localhost:8080/")
         headers (@resp :headers)
         body (@resp :body)]
-    (is (= "<h1>Hello WWW!</h1>\n" (apply str (map #(char %) body))))
+    (is (= "<h1>Hello WWW!</h1>\n" (apply str (map char body))))
     (is (not (empty? body)))
     (if (contains? headers :content-length)
       (is (= (count body) (:content-length headers))))))
