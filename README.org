@@ -1,6 +1,7 @@
 README -*- mode: org -*-
 #+TITLE: Async Http Client - Clojure
 #+AUTHOR: Hubert Iwaniuk
+#+EMAIL: ...
 
 * Intro
   *ahc-clj* is Async Http Client for Clojure.
@@ -19,17 +20,19 @@ README -*- mode: org -*-
   - handle error.
 
   That should allow to consume streams.
+
+  *ahc-clj* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
 * Sample
-#+BEGIN_SRC
+#+BEGIN_VERSE
 (let [resp (GET "http://localhost:8123/")
       headers (:headers @resp)
       body (:body @resp)]
   (println (:server headers))
   (println (apply str (map char body))))
-#+END_SRC
+#+END_VERSE
 * Requires
   Clojure 1.2
 * Documentation
-  See [[docs.org]].
+  See [[./docs.org][docs]].
 * Progress
-  List of tasks [[todo.org][to do]].
+  List of tasks [[./todo.org][to do]].

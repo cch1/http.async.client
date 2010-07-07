@@ -1,6 +1,7 @@
 docs -*- mode: org -*-
 #+TITLE: Async Http Client - Clojure - Documentation
 #+AUTHOR: Hubert Iwaniuk
+#+EMAIL: ...
 
 * Documentation [0/3]
   For now there is not much of documentation here.
