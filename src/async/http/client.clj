@@ -39,7 +39,7 @@
   (if (not (= (:code status) 200)) :abort))
 
 (defn status-collect [state status]
-  "Storest status map under :status in state."
+  "Stores status map under :status in state."
   (dosync (alter state assoc :status status)))
 
 (defn status-print [state st]

@@ -38,6 +38,8 @@
                                                     "User-Agent"
                                                     "Content-Type"} k))]
                (.setHeader hResp k (.getHeader hReq k))))
+           (doseq [[k [v]] (.getParameterMap hReq)]
+                  (.addHeader hResp k v))
            (when-let [q (.getQueryString hReq)]
             (doseq [p (split q #"\&")]
               (let [[k v] (split p #"=")]
@@ -111,27 +113,28 @@
   (let [resp (GET "http://localhost:8080/")
         headers (@resp :headers)
         body (@resp :body)]
-    (println (apply str (map #(char %) body)))
+    (is (= "<h1>Hello WWW!</h1>\n" (apply str (map #(char %) body))))
     (is (not (empty? body)))
     (if (contains? headers :content-length)
       (is (= (count body) (:content-length headers))))))
 
 (deftest test-query-params
-  (let [resp (GET "http://localhost:8123/" {:query {:a 1 :b 2}})
+  (let [resp (GET "http://localhost:8123/" {:query {:a 3 :b 4}})
         headers (@resp :headers)]
     (is (not (empty? headers)))
     (are [x y] (= x (str y))
-         (headers :a) 1
-         (headers :b) 2)))
+         (headers :a) 3
+         (headers :b) 4)))
 
 (deftest test-get-params-not-allowed
-  (is (thrown? IllegalArgumentException
-               (GET "http://localhost:8123/" {:param {:a 1 :b 2}}))))
+  (is (thrown?
+       IllegalArgumentException
+       (GET "http://localhost:8123/" {:param {:a 5 :b 6}}))))
 
 (deftest test-post-params
-  (let [resp (POST "http://localhost:8123/" {:param {:a 1 :b 2}})
+  (let [resp (POST "http://localhost:8123/" nil {:param {:a 5 :b 6}})
         headers (:headers @resp)]
     (is (not (empty? headers)))
     (are [x y] (= x (str y))
-         (:a headers) 1
-         (headers :b) 2)))
+         (:a headers) 5
+         (headers :b) 6)))
