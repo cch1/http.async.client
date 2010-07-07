@@ -17,6 +17,7 @@
   #^{:author "Hubert Iwaniuk <neotyk@kungfoo.pl>"}
   (:use clojure.test
         async.http.client
+        async.http.client.request
         [clojure.stacktrace :only [print-stack-trace]]
         [clojure.contrib.str-utils2 :only [split]])
   (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
@@ -119,6 +120,18 @@
   (let [resp (GET "http://localhost:8123/" {:query {:a 1 :b 2}})
         headers (@resp :headers)]
     (is (not (empty? headers)))
-    (are [x y] (= x y)
-         (headers :a) "1"
-         (headers :b) "2")))
+    (are [x y] (= x (str y))
+         (headers :a) 1
+         (headers :b) 2)))
+
+(deftest test-get-params-not-allowed
+  (is (thrown? IllegalArgumentException
+               (GET "http://localhost:8123/" {:param {:a 1 :b 2}}))))
+
+(deftest test-post-params
+  (let [resp (POST "http://localhost:8123/" {:param {:a 1 :b 2}})
+        headers (:headers @resp)]
+    (is (not (empty? headers)))
+    (are [x y] (= x (str y))
+         (:a headers) 1
+         (headers :b) 2)))
