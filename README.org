@@ -1,0 +1,35 @@
+README -*- mode: org -*-
+#+TITLE: Async Http Client - Clojure
+#+AUTHOR: Hubert Iwaniuk
+
+* Intro
+  *ahc-clj* is Async Http Client for Clojure.
+
+  Will not block a thread to wait for response.
+
+  Will return a [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][clojure.core/promise]] that will be
+  [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/deliver][clojure.code/deliver]]ed once response is completed.
+
+  Allows you to provide callbacks that will get triggered on Http
+  Response events like:
+  - received status line,
+  - received headers,
+  - received body part,
+  - completed request,
+  - handle error.
+
+  That should allow to consume streams.
+* Sample
+#+BEGIN_SRC
+(let [resp (GET "http://localhost:8123/")
+      headers (:headers @resp)
+      body (:body @resp)]
+  (println (:server headers))
+  (println (apply str (map char body))))
+#+END_SRC
+* Requires
+  Clojure 1.2
+* Documentation
+  See [[docs.org]].
+* Progress
+  List of tasks [[todo.org][to do]].
