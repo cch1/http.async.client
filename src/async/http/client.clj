@@ -68,7 +68,7 @@
   ([#^String url body]
      (POST url body {}))
   ([#^String url body options]
-     (execute-request (prepare-post url options)
+     (execute-request (prepare-post url options body)
                       {:status status-collect
                        :headers headers-collect
                        :part body-collect

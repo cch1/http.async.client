@@ -13,13 +13,18 @@
 ; limitations under the License.
 
 (ns async.http.client.request
-  (:use (async.http.client status headers)
-        (clojure.stacktrace))
+  (:require [clojure.contrib.duck-streams :as duck])
+  (:use [async.http.client status headers]
+        [clojure.stacktrace]
+        [clojure.contrib.java-utils :only [as-str]]
+        [clojure.contrib.str-utils :only [str-join]])
   (:import (com.ning.http.client AsyncHttpClient AsyncHandler Headers
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart Request RequestBuilder
 				 RequestType)
-           (ahc RequestBuilderWrapper)))
+           (ahc RequestBuilderWrapper)
+           (java.net URLEncoder)
+           (java.io InputStream)))
 
 (def ahc (AsyncHttpClient.))
 
@@ -34,6 +39,13 @@
    (= method :head) RequestType/HEAD
    :default RequestType/GET))
 
+(defn url-encode
+  "Taken from Clojure Http Client"
+  [arg]
+  (if (map? arg)
+    (str-join \& (map #(str-join \= (map url-encode %)) arg))
+    (URLEncoder/encode (as-str arg) "UTF-8")))
+
 (defn prepare-request
   "Prepares method (GET, POST, ..) request to url.
   Options:
@@ -43,16 +55,35 @@
   {:tag Request}
   ([method #^String url]
      (prepare-request method url {}))
+  ([method #^String url options]
+     (prepare-request method url options nil))
   ([method
     #^String url
     {headers :headers
      param :param
      query :query
-     :as options}]
-     (let [#^RequestBuilderWrapper rbw (RequestBuilderWrapper. (RequestBuilder. (convert-method method)))]
-       (doseq [[k v] headers] (. rbw addHeader (if (keyword? k) (name k) k) (str v)))
-       (doseq [[k v] param] (.addParameter rbw (if (keyword? k) (name k) k) (str v)))
-       (doseq [[k v] query] (.addQueryParameter rbw (if (keyword? k) (name k) k) (str v)))
+     :as options}
+    body]
+     ; RequestBuilderWrapper is needed for now, until RequestBuilder
+     ; is able to be used directly from Clojure.
+     (let [#^RequestBuilderWrapper rbw
+           (RequestBuilderWrapper.
+            (RequestBuilder. (convert-method method)))]
+       (doseq [[k v] headers] (.addHeader rbw
+                                          (if (keyword? k) (name k) k)
+                                          (str v)))
+       (doseq [[k v] param] (.addParameter rbw
+                                           (if (keyword? k) (name k) k)
+                                           (str v)))
+       (doseq [[k v] query] (.addQueryParameter rbw
+                                                (if (keyword? k) (name k) k)
+                                                (str v)))
+       (if body
+         (.setBody
+          (.getRequestBuilder rbw)
+          (cond
+           (or (string? body) (map? body)) (.getBytes (url-encode body) "UTF-8")
+           (instance? InputStream body) body)))
        (.. (.getRequestBuilder rbw) (setUrl url) (build)))))
 
 (defn prepare-get
@@ -69,7 +100,9 @@
   ([#^String url]
      (prepare-post url {}))
   ([#^String url options]
-     (prepare-request :post url options)))
+     (prepare-post url options nil))
+  ([#^String url options body]
+     (prepare-request :post url options body)))
 
 (defn convert-action
   "Converts action (:abort, nil) to Async client STATE."

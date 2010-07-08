@@ -38,15 +38,17 @@
                                                     "User-Agent"
                                                     "Content-Type"} k))]
                (.setHeader hResp k (.getHeader hReq k))))
-           (doseq [[k [v]] (.getParameterMap hReq)]
-                  (.addHeader hResp k v))
+           (.setContentType hResp "text/plain;charset=utf-8")
+           (.setStatus hResp 200)
+           (if (= target "/body-str")
+             (when-let [line (.readLine (.getReader hReq))]
+               (.write (.getWriter hResp) line))
+             (doseq [[k [v]] (.getParameterMap hReq)]
+               (.addHeader hResp k v)))
            (when-let [q (.getQueryString hReq)]
-            (doseq [p (split q #"\&")]
-              (let [[k v] (split p #"=")]
-                (.setHeader hResp k v))))
-           (doto hResp
-             (.setContentType "text/plain;charset=utf-8")
-             (.setStatus 200))
+             (doseq [p (split q #"\&")]
+               (let [[k v] (split p #"=")]
+                 (.setHeader hResp k v))))
            (.setHandled req true)))))
 
 (defn- start-jetty
@@ -138,3 +140,11 @@
     (are [x y] (= x (str y))
          (:a headers) 5
          (headers :b) 6)))
+
+(deftest test-post-string-body
+  (let [resp (POST "http://localhost:8123/body-str" "TestBody" nil)
+        headers (:headers @resp)
+        body (:body @resp)]
+    (is (not (empty? headers)))
+    (is (not (empty? body)))
+    (is (= "TestBody" (apply str (map char body))))))
