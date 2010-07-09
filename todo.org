@@ -16,9 +16,9 @@ todo -*- mode: org -*-
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
-** TODO PUT/POST body [1/3]                                            :rel1:
+** TODO PUT/POST body [2/3]                                            :rel1:
 *** DONE Support sending strings                                       :rel1:
-*** TODO Support sending map as for encoded data                       :rel1:
+*** DONE Support sending map as form encoded data                      :rel1:
 *** TODO Support InputStream body                                      :rel1:
 ** TODO All HTTP verbs                                                 :rel1:
 ** TODO PUT/POST streaming body                                        :rel2:

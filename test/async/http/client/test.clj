@@ -40,11 +40,13 @@
                (.setHeader hResp k (.getHeader hReq k))))
            (.setContentType hResp "text/plain;charset=utf-8")
            (.setStatus hResp 200)
-           (if (= target "/body-str")
-             (when-let [line (.readLine (.getReader hReq))]
-               (.write (.getWriter hResp) line))
-             (doseq [[k [v]] (.getParameterMap hReq)]
-               (.addHeader hResp k v)))
+           ; process params
+           (condp = target
+               "/body-str" (when-let [line (.readLine (.getReader hReq))]
+                             (.write (.getWriter hResp) line))
+               (doseq [n (enumeration-seq (.getParameterNames hReq))]
+                 (doseq [v (.getParameterValues hReq n)]
+                   (.addHeader hResp n v))))
            (when-let [q (.getQueryString hReq)]
              (doseq [p (split q #"\&")]
                (let [[k v] (split p #"=")]
@@ -84,11 +86,12 @@
             :completed body-completed
             :headers headers-collect})
 	status @status#]
-    (is (= (status :code) 200))
-    (is (= (status :msg) "OK"))
-    (is (= (status :protocol) "HTTP/1.1"))
-    (is (= (status :major) 1))
-    (is (= (status :minor) 1))))
+    (are [k v] (= (k status) v)
+         :code 200
+         :msg "OK"
+         :protocol "HTTP/1.1"
+         :major 1
+         :minor 1)))
 
 (deftest test-receive-headers
   (let [headers# (promise)
@@ -108,8 +111,9 @@
       (print-stack-trace (:error @resp)))
     (is (not (contains? (keys @resp) :error)))
     (is (not (empty? headers)))
-    (are (= (headers :a) 1)
-         (= (headers :b) 2))))
+    (are [k v] (= (k headers) (str v))
+         :a 1
+         :b 2)))
 
 (deftest test-body
   (let [resp (GET "http://localhost:8080/")
@@ -124,9 +128,9 @@
   (let [resp (GET "http://localhost:8123/" {:query {:a 3 :b 4}})
         headers (@resp :headers)]
     (is (not (empty? headers)))
-    (are [x y] (= x (str y))
-         (headers :a) 3
-         (headers :b) 4)))
+    (are [x y] (= (x headers) (str y))
+         :a 3
+         :b 4)))
 
 (deftest test-get-params-not-allowed
   (is (thrown?
@@ -137,14 +141,23 @@
   (let [resp (POST "http://localhost:8123/" nil {:param {:a 5 :b 6}})
         headers (:headers @resp)]
     (is (not (empty? headers)))
-    (are [x y] (= x (str y))
-         (:a headers) 5
-         (headers :b) 6)))
+    (are [x y] (= (x headers) (str y))
+         :a 5
+         :b 6)))
 
 (deftest test-post-string-body
   (let [resp (POST "http://localhost:8123/body-str" "TestBody" nil)
         headers (:headers @resp)
         body (:body @resp)]
-    (is (not (empty? headers)))
-    (is (not (empty? body)))
+    (are [x] (not (empty? x))
+         headers
+         body)
     (is (= "TestBody" (apply str (map char body))))))
+
+(deftest test-post-map-body
+  (let [resp (POST "http://localhost:8123/" {:u "user" :p "s3cr3t"})
+        headers (:headers @resp)]
+    (is (not (empty? headers)))
+    (are [x y] (= x (y headers))
+         "user" :u
+         "s3cr3t" :p)))

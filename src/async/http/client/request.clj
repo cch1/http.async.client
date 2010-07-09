@@ -43,7 +43,7 @@
   "Taken from Clojure Http Client"
   [arg]
   (if (map? arg)
-    (str-join \& (map #(str-join \= (map url-encode %)) arg))
+    (URLEncoder/encode (str-join \& (map #(str-join \= (map url-encode %)) arg)) "UTF-8")
     (URLEncoder/encode (as-str arg) "UTF-8")))
 
 (defn prepare-request
@@ -79,11 +79,16 @@
                                                 (if (keyword? k) (name k) k)
                                                 (str v)))
        (if body
-         (.setBody
-          (.getRequestBuilder rbw)
-          (cond
-           (or (string? body) (map? body)) (.getBytes (url-encode body) "UTF-8")
-           (instance? InputStream body) body)))
+         (if (map? body)
+           (doseq [[k v] body]
+             (.addParameter rbw
+                            (if (keyword? k) (name k) k)
+                            (str v)))
+           (.setBody
+            rbw
+            (cond
+             (string? body) (.getBytes (url-encode body) "UTF-8")
+             (instance? InputStream body) body))))
        (.. (.getRequestBuilder rbw) (setUrl url) (build)))))
 
 (defn prepare-get
