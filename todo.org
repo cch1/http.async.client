@@ -1,7 +1,7 @@
-todo -*- mode: org -*-
 #+TITLE: Async Http Client - Clojure - To Do
 #+AUTHOR: Hubert Iwaniuk
-#+EMAIL: ...
+#+EMAIL: neotyk@kungfoo.pl
+#+INFOJS_OPT: view:info toc:1
 
 * Receive [5/6]                                                   :code:rel1:
 ** DONE Status Line                                                     :rel1:
