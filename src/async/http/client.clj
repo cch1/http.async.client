@@ -13,41 +13,7 @@
 ; limitations under the License.
 
 (ns async.http.client
-  (:use (async.http.client request)))
-
-;; default set of callbacks
-(defn body-collect [state bytes]
-  "Stores body parts under :body in state."
-  (if (not (empty? bytes))
-    (dosync (alter state assoc :body (apply conj (or (:body @state) []) bytes)))
-    (do (println "Received empty body part."))))
-
-(defn body-completed [state]
-  "Provides value that will be delivered to response promise."
-  @state)
-
-(defn headers-collect [state headers]
-  "Stores headers under :headers in state."
-  (if headers
-    (dosync (alter state assoc :headers headers))
-    ((println "Received empty headers, aborting.") :abort)))
-
-(defn print-headers [state headers]
-  (doall (map #(println (str (:id @state) "< " % ": " (get headers %))) (keys headers))))
-
-(defn accept-ok [_ status]
-  (if (not (= (:code status) 200)) :abort))
-
-(defn status-collect [state status]
-  "Stores status map under :status in state."
-  (dosync (alter state assoc :status status)))
-
-(defn status-print [state st]
-  (println (str (:id @state) "< " (:protocol st) " " (:code st) " " (:msg st))))
-
-(defn error-collect [state t]
-  "Stores exception under :error in state"
-  (dosync (alter state assoc :error t)))
+  (:use async.http.client.request))
 
 (defn GET
   "GET resource from url. Returns promise, that is delivered once response is completed."
@@ -69,6 +35,20 @@
      (POST url body {}))
   ([#^String url body options]
      (execute-request (prepare-post url options body)
+                      {:status status-collect
+                       :headers headers-collect
+                       :part body-collect
+                       :completed body-completed
+                       :error error-collect})))
+
+(defn PUT
+  "PUT to resource. Returns promise, that is delivered once response is completed."
+  ([#^String url]
+     (PUT url []))
+  ([#^String url body]
+     (PUT url body {}))
+  ([#^String url body options]
+     (execute-request (prepare-put url options body)
                       {:status status-collect
                        :headers headers-collect
                        :part body-collect

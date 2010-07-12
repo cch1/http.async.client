@@ -44,6 +44,7 @@
            (condp = target
                "/body-str" (when-let [line (.readLine (.getReader hReq))]
                              (.write (.getWriter hResp) line))
+               "/put" (.setHeader hResp "Method" (.getMethod hReq))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -161,3 +162,13 @@
     (are [x y] (= x (y headers))
          "user" :u
          "s3cr3t" :p)))
+
+(deftest test-put
+  (let [resp (PUT "http://localhost:8123/put" "TestContent")
+        status (:status @resp)
+        headers (:headers @resp)]
+    (are [x] (not (empty? x))
+         status
+         headers)
+    (is (= 200 (:code status)))
+    (is (= "PUT" (:method headers)))))

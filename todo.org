@@ -12,7 +12,7 @@
 ** DONE Implement response *promise*                                    :rel1:
 ** TODO Consume stream                                                  :rel1:
 ** DONE Error function                                                  :rel1:
-* Send [3/6]                                                           :code:
+* Send [3/7]                                                           :code:
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
@@ -20,12 +20,26 @@
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
 *** TODO Support InputStream body                                      :rel1:
-** TODO All HTTP verbs                                                 :rel1:
+** TODO All HTTP verbs [3/7]                                           :rel1:
+*** DONE GET                                                           :rel1:
+*** DONE POST                                                          :rel1:
+*** DONE PUT                                                           :rel1:
+*** TODO DELETE                                                        :rel1:
+*** TODO HEAD                                                          :rel1:
+*** TODO OPTIONS                                                       :rel1:
+*** TODO Others once supported by AHC-Java                             :rel2:
 ** TODO PUT/POST streaming body                                        :rel2:
    That can be done with *clojure.core/add-watch*.
    Watcher in that scenario will grab new content and write it via
    AHC, or alternatively will *clojure.core/send-off* to execute
    IO operation in separate thread.
+** TODO Multipart                                                      :rel2:
+* Configuration [0/2]
+** TODO Global configuration of AHC                                    :rel2:
+   Connection limiting per host.
+   Global proxy.
+** TODO Per request configuration                                      :rel2:
+   For stuff like proxy, timeout.
 * Tasks [2/3]
 ** DONE License                                                         :rel1:
 ** DONE Cleanup namespaces                                              :rel1:

@@ -39,6 +39,40 @@
    (= method :head) RequestType/HEAD
    :default RequestType/GET))
 
+;; default set of callbacks
+(defn body-collect [state bytes]
+  "Stores body parts under :body in state."
+  (if (not (empty? bytes))
+    (dosync (alter state assoc :body (apply conj (or (:body @state) []) bytes)))
+    (do (println "Received empty body part."))))
+
+(defn body-completed [state]
+  "Provides value that will be delivered to response promise."
+  @state)
+
+(defn headers-collect [state headers]
+  "Stores headers under :headers in state."
+  (if headers
+    (dosync (alter state assoc :headers headers))
+    ((println "Received empty headers, aborting.") :abort)))
+
+(defn print-headers [state headers]
+  (doall (map #(println (str (:id @state) "< " % ": " (get headers %))) (keys headers))))
+
+(defn accept-ok [_ status]
+  (if (not (= (:code status) 200)) :abort))
+
+(defn status-collect [state status]
+  "Stores status map under :status in state."
+  (dosync (alter state assoc :status status)))
+
+(defn status-print [state st]
+  (println (str (:id @state) "< " (:protocol st) " " (:code st) " " (:msg st))))
+
+(defn error-collect [state t]
+  "Stores exception under :error in state"
+  (dosync (alter state assoc :error t)))
+
 (defn url-encode
   "Taken from Clojure Http Client"
   [arg]
@@ -108,6 +142,16 @@
      (prepare-post url options nil))
   ([#^String url options body]
      (prepare-request :post url options body)))
+
+(defn prepare-put
+  "Prepares PUT request to given url."
+  {:tag Request}
+  ([#^String url]
+     (prepare-put url {}))
+  ([#^String url options]
+     (prepare-put url options nil))
+  ([#^String url options body]
+     (prepare-request :put url options body)))
 
 (defn convert-action
   "Converts action (:abort, nil) to Async client STATE."
