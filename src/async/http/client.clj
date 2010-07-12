@@ -54,3 +54,15 @@
                        :part body-collect
                        :completed body-completed
                        :error error-collect})))
+
+(defn DELETE
+  "DELETE resource from url. Returns promise, that is delivered once response is completed."
+  ([#^String url]
+     (DELETE url {}))
+  ([#^String url options]
+     (execute-request (prepare-delete url options)
+                      {:status status-collect
+                       :headers headers-collect
+                       :part body-collect
+                       :completed body-completed
+                       :error error-collect})))

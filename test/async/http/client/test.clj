@@ -45,6 +45,7 @@
                "/body-str" (when-let [line (.readLine (.getReader hReq))]
                              (.write (.getWriter hResp) line))
                "/put" (.setHeader hResp "Method" (.getMethod hReq))
+               "/delete" (.setHeader hResp "Method" (.getMethod hReq))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -172,3 +173,13 @@
          headers)
     (is (= 200 (:code status)))
     (is (= "PUT" (:method headers)))))
+
+(deftest test-put
+  (let [resp (DELETE "http://localhost:8123/delete")
+        status (:status @resp)
+        headers (:headers @resp)]
+    (are [x] (not (empty? x))
+         status
+         headers)
+    (is (= 200 (:code status)))
+    (is (= "DELETE" (:method headers)))))

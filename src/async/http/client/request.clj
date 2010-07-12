@@ -153,6 +153,16 @@
   ([#^String url options body]
      (prepare-request :put url options body)))
 
+(defn prepare-delete
+  "Prepares DELETE request to given url."
+  {:tag Request}
+  ([#^String url]
+     (prepare-delete url {}))
+  ([#^String url options]
+     (prepare-delete url options nil))
+  ([#^String url options body]
+     (prepare-request :delete url options body)))
+
 (defn convert-action
   "Converts action (:abort, nil) to Async client STATE."
   [action]
