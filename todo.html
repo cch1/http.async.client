@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -6,18 +7,20 @@ lang="en" xml:lang="en">
 <title>Async Http Client - Clojure - To Do</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-07-12 08:55:24 CEST"/>
+<meta name="generated" content="2010-07-13 08:50:07 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   html { font-family: Times, serif; font-size: 12pt; }
   .title  { text-align: center; }
   .todo   { color: red; }
   .done   { color: green; }
-  .tag    { background-color:lightblue; font-weight:normal }
+  .tag    { background-color: #add8e6; font-weight:normal }
   .target { }
-  .timestamp { color: grey }
-  .timestamp-kwd { color: CadetBlue }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -54,7 +57,7 @@ org_html_manager.set("FIXED_TOC", "0");
 org_html_manager.set("TOC", "1");
 org_html_manager.set("VIEW", "info");
 org_html_manager.setup();  // activate after the parameters are set
-/*]]>*/-->
+/*]]>*///-->
 </script>
 <script type="text/javascript">
 <!--/*--><![CDATA[/*><!--*/
@@ -76,9 +79,12 @@ org_html_manager.setup();  // activate after the parameters are set
    if(elem.cacheClassTarget)
      target.className = elem.cacheClassTarget;
  }
-/*]]>*/-->
+/*]]>*///-->
 </script>
-</head><body>
+</head>
+<body>
+<div id="content">
+
 <h1 class="title">Async Http Client - Clojure - To Do</h1>
 
 
@@ -129,7 +135,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-3.2">3.2 Per request configuration</a></li>
 </ul>
 </li>
-<li><a href="#sec-4">4 Tasks [2/3] </a>
+<li><a href="#sec-4">4 Tasks [3/4] </a>
 <ul>
 <li><a href="#sec-4.1">4.1 License</a></li>
 <li><a href="#sec-4.2">4.2 Cleanup namespaces</a>
@@ -139,6 +145,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </ul>
 </li>
 <li><a href="#sec-4.3">4.3 Release 1.0</a></li>
+<li><a href="#sec-4.4">4.4 Make tests stand-alone</a></li>
 </ul>
 </li>
 </ul>
@@ -146,31 +153,31 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1">1 Receive [5/6] &nbsp;&nbsp;&nbsp;<span class="tag">code&nbsp;rel1</span></h2>
-<div id="text-1">
+<h2 id="sec-1"><span class="section-number-2">1</span> Receive [5/6] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="code">code</span>&nbsp;<span class="rel1">rel1</span></span></h2>
+<div class="outline-text-2" id="text-1">
 
 
 </div>
 
 <div id="outline-container-1.1" class="outline-3">
-<h3 id="sec-1.1">1.1 <span class="done">DONE</span> Status Line &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-1.1">
+<h3 id="sec-1.1"><span class="section-number-3">1.1</span> <span class="done DONE"> DONE</span> Status Line &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1.1">
 
 </div>
 
 </div>
 
 <div id="outline-container-1.2" class="outline-3">
-<h3 id="sec-1.2">1.2 <span class="done">DONE</span> Headers &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-1.2">
+<h3 id="sec-1.2"><span class="section-number-3">1.2</span> <span class="done DONE"> DONE</span> Headers &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1.2">
 
 </div>
 
 </div>
 
 <div id="outline-container-1.3" class="outline-3">
-<h3 id="sec-1.3">1.3 <span class="done">DONE</span> Body &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-1.3">
+<h3 id="sec-1.3"><span class="section-number-3">1.3</span> <span class="done DONE"> DONE</span> Body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1.3">
 
 <p>Instead of <b>id</b>, pass <b>(ref {})</b> to callbacks so they have their own
 STM ref'ed map.
@@ -179,24 +186,24 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-1.4" class="outline-3">
-<h3 id="sec-1.4">1.4 <span class="done">DONE</span> Implement response <b>promise</b> &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-1.4">
+<h3 id="sec-1.4"><span class="section-number-3">1.4</span> <span class="done DONE"> DONE</span> Implement response <b>promise</b> &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1.4">
 
 </div>
 
 </div>
 
 <div id="outline-container-1.5" class="outline-3">
-<h3 id="sec-1.5">1.5 <span class="todo">TODO</span> Consume stream &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-1.5">
+<h3 id="sec-1.5"><span class="section-number-3">1.5</span> <span class="todo TODO"> TODO</span> Consume stream &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1.5">
 
 </div>
 
 </div>
 
 <div id="outline-container-1.6" class="outline-3">
-<h3 id="sec-1.6">1.6 <span class="done">DONE</span> Error function &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-1.6">
+<h3 id="sec-1.6"><span class="section-number-3">1.6</span> <span class="done DONE"> DONE</span> Error function &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1.6">
 
 </div>
 </div>
@@ -204,62 +211,62 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2">2 Send [3/7] &nbsp;&nbsp;&nbsp;<span class="tag">code</span></h2>
-<div id="text-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Send [3/7] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="code">code</span></span></h2>
+<div class="outline-text-2" id="text-2">
 
 
 </div>
 
 <div id="outline-container-2.1" class="outline-3">
-<h3 id="sec-2.1">2.1 <span class="done">DONE</span> Query parameters &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-2.1">
+<h3 id="sec-2.1"><span class="section-number-3">2.1</span> <span class="done DONE"> DONE</span> Query parameters &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2.1">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.2" class="outline-3">
-<h3 id="sec-2.2">2.2 <span class="done">DONE</span> Parameters &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-2.2">
+<h3 id="sec-2.2"><span class="section-number-3">2.2</span> <span class="done DONE"> DONE</span> Parameters &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2.2">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.3" class="outline-3">
-<h3 id="sec-2.3">2.3 <span class="done">DONE</span> Parameters allowed only on PUT/POST &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-2.3">
+<h3 id="sec-2.3"><span class="section-number-3">2.3</span> <span class="done DONE"> DONE</span> Parameters allowed only on PUT/POST &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2.3">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.4" class="outline-3">
-<h3 id="sec-2.4">2.4 <span class="todo">TODO</span> PUT/POST body [2/3] &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-2.4">
+<h3 id="sec-2.4"><span class="section-number-3">2.4</span> <span class="todo TODO"> TODO</span> PUT/POST body [2/3] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2.4">
 
 
 </div>
 
 <div id="outline-container-2.4.1" class="outline-4">
-<h4 id="sec-2.4.1">2.4.1 <span class="done">DONE</span> Support sending strings &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.4.1">
+<h4 id="sec-2.4.1"><span class="section-number-4">2.4.1</span> <span class="done DONE"> DONE</span> Support sending strings &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.4.1">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.4.2" class="outline-4">
-<h4 id="sec-2.4.2">2.4.2 <span class="done">DONE</span> Support sending map as form encoded data &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.4.2">
+<h4 id="sec-2.4.2"><span class="section-number-4">2.4.2</span> <span class="done DONE"> DONE</span> Support sending map as form encoded data &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.4.2">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.4.3" class="outline-4">
-<h4 id="sec-2.4.3">2.4.3 <span class="todo">TODO</span> Support InputStream body &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.4.3">
+<h4 id="sec-2.4.3"><span class="section-number-4">2.4.3</span> <span class="todo TODO"> TODO</span> Support InputStream body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.4.3">
 
 </div>
 </div>
@@ -267,63 +274,63 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2.5" class="outline-3">
-<h3 id="sec-2.5">2.5 <span class="todo">TODO</span> All HTTP verbs [4/7] &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-2.5">
+<h3 id="sec-2.5"><span class="section-number-3">2.5</span> <span class="todo TODO"> TODO</span> All HTTP verbs [4/7] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2.5">
 
 
 </div>
 
 <div id="outline-container-2.5.1" class="outline-4">
-<h4 id="sec-2.5.1">2.5.1 <span class="done">DONE</span> GET &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.5.1">
+<h4 id="sec-2.5.1"><span class="section-number-4">2.5.1</span> <span class="done DONE"> DONE</span> GET &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.5.1">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.5.2" class="outline-4">
-<h4 id="sec-2.5.2">2.5.2 <span class="done">DONE</span> POST &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.5.2">
+<h4 id="sec-2.5.2"><span class="section-number-4">2.5.2</span> <span class="done DONE"> DONE</span> POST &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.5.2">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.5.3" class="outline-4">
-<h4 id="sec-2.5.3">2.5.3 <span class="done">DONE</span> PUT &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.5.3">
+<h4 id="sec-2.5.3"><span class="section-number-4">2.5.3</span> <span class="done DONE"> DONE</span> PUT &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.5.3">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.5.4" class="outline-4">
-<h4 id="sec-2.5.4">2.5.4 <span class="done">DONE</span> DELETE &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.5.4">
+<h4 id="sec-2.5.4"><span class="section-number-4">2.5.4</span> <span class="done DONE"> DONE</span> DELETE &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.5.4">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.5.5" class="outline-4">
-<h4 id="sec-2.5.5">2.5.5 <span class="todo">TODO</span> HEAD &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.5.5">
+<h4 id="sec-2.5.5"><span class="section-number-4">2.5.5</span> <span class="todo TODO"> TODO</span> HEAD &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.5.5">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.5.6" class="outline-4">
-<h4 id="sec-2.5.6">2.5.6 <span class="todo">TODO</span> OPTIONS &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h4>
-<div id="text-2.5.6">
+<h4 id="sec-2.5.6"><span class="section-number-4">2.5.6</span> <span class="todo TODO"> TODO</span> OPTIONS &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.5.6">
 
 </div>
 
 </div>
 
 <div id="outline-container-2.5.7" class="outline-4">
-<h4 id="sec-2.5.7">2.5.7 <span class="todo">TODO</span> Others once supported by AHC-Java &nbsp;&nbsp;&nbsp;<span class="tag">rel2</span></h4>
-<div id="text-2.5.7">
+<h4 id="sec-2.5.7"><span class="section-number-4">2.5.7</span> <span class="todo TODO"> TODO</span> Others once supported by AHC-Java &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h4>
+<div class="outline-text-4" id="text-2.5.7">
 
 </div>
 </div>
@@ -331,8 +338,8 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2.6" class="outline-3">
-<h3 id="sec-2.6">2.6 <span class="todo">TODO</span> PUT/POST streaming body &nbsp;&nbsp;&nbsp;<span class="tag">rel2</span></h3>
-<div id="text-2.6">
+<h3 id="sec-2.6"><span class="section-number-3">2.6</span> <span class="todo TODO"> TODO</span> PUT/POST streaming body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<div class="outline-text-3" id="text-2.6">
 
 <p>That can be done with <b>clojure.core/add-watch</b>.
 Watcher in that scenario will grab new content and write it via
@@ -343,8 +350,8 @@ IO operation in separate thread.
 </div>
 
 <div id="outline-container-2.7" class="outline-3">
-<h3 id="sec-2.7">2.7 <span class="todo">TODO</span> Multipart &nbsp;&nbsp;&nbsp;<span class="tag">rel2</span></h3>
-<div id="text-2.7">
+<h3 id="sec-2.7"><span class="section-number-3">2.7</span> <span class="todo TODO"> TODO</span> Multipart &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<div class="outline-text-3" id="text-2.7">
 
 </div>
 </div>
@@ -352,15 +359,15 @@ IO operation in separate thread.
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3">3 Configuration [0/2] </h2>
-<div id="text-3">
+<h2 id="sec-3"><span class="section-number-2">3</span> Configuration [0/2] </h2>
+<div class="outline-text-2" id="text-3">
 
 
 </div>
 
 <div id="outline-container-3.1" class="outline-3">
-<h3 id="sec-3.1">3.1 <span class="todo">TODO</span> Global configuration of AHC &nbsp;&nbsp;&nbsp;<span class="tag">rel2</span></h3>
-<div id="text-3.1">
+<h3 id="sec-3.1"><span class="section-number-3">3.1</span> <span class="todo TODO"> TODO</span> Global configuration of AHC &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<div class="outline-text-3" id="text-3.1">
 
 <p>Connection limiting per host.
 Global proxy.
@@ -369,8 +376,8 @@ Global proxy.
 </div>
 
 <div id="outline-container-3.2" class="outline-3">
-<h3 id="sec-3.2">3.2 <span class="todo">TODO</span> Per request configuration &nbsp;&nbsp;&nbsp;<span class="tag">rel2</span></h3>
-<div id="text-3.2">
+<h3 id="sec-3.2"><span class="section-number-3">3.2</span> <span class="todo TODO"> TODO</span> Per request configuration &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<div class="outline-text-3" id="text-3.2">
 
 <p>For stuff like proxy, timeout.
 </p></div>
@@ -379,30 +386,30 @@ Global proxy.
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4">4 Tasks [2/3] </h2>
-<div id="text-4">
+<h2 id="sec-4"><span class="section-number-2">4</span> Tasks [3/4] </h2>
+<div class="outline-text-2" id="text-4">
 
 
 </div>
 
 <div id="outline-container-4.1" class="outline-3">
-<h3 id="sec-4.1">4.1 <span class="done">DONE</span> License &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-4.1">
+<h3 id="sec-4.1"><span class="section-number-3">4.1</span> <span class="done DONE"> DONE</span> License &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4.1">
 
 </div>
 
 </div>
 
 <div id="outline-container-4.2" class="outline-3">
-<h3 id="sec-4.2">4.2 <span class="done">DONE</span> Cleanup namespaces &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-4.2">
+<h3 id="sec-4.2"><span class="section-number-3">4.2</span> <span class="done DONE"> DONE</span> Cleanup namespaces &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4.2">
 
 
 </div>
 
 <div id="outline-container-4.2.1" class="outline-4">
-<h4 id="sec-4.2.1">4.2.1 async.http.client </h4>
-<div id="text-4.2.1">
+<h4 id="sec-4.2.1"><span class="section-number-4">4.2.1</span> async.http.client </h4>
+<div class="outline-text-4" id="text-4.2.1">
 
 <p>Should contain helper functions to call all HTTP verbs.
 Default set of call-backs.
@@ -411,8 +418,8 @@ Default set of call-backs.
 </div>
 
 <div id="outline-container-4.2.2" class="outline-4">
-<h4 id="sec-4.2.2">4.2.2 async.http.client.request </h4>
-<div id="text-4.2.2">
+<h4 id="sec-4.2.2"><span class="section-number-4">4.2.2</span> async.http.client.request </h4>
+<div class="outline-text-4" id="text-4.2.2">
 
 <p>Lower level of requesting:
 </p><ul>
@@ -429,16 +436,28 @@ prepare-request
 </div>
 
 <div id="outline-container-4.3" class="outline-3">
-<h3 id="sec-4.3">4.3 <span class="todo">TODO</span> Release 1.0 &nbsp;&nbsp;&nbsp;<span class="tag">rel1</span></h3>
-<div id="text-4.3">
+<h3 id="sec-4.3"><span class="section-number-3">4.3</span> <span class="todo TODO"> TODO</span> Release 1.0 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4.3">
 
 </div>
+
+</div>
+
+<div id="outline-container-4.4" class="outline-3">
+<h3 id="sec-4.4"><span class="section-number-3">4.4</span> <span class="done DONE"> DONE</span> Make tests stand-alone &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4.4">
+
+<p>Test suite should not fail when there is now hollo-www on port 8080.
+</p></div>
 </div>
 </div>
-<div id="postamble"><p class="author"> Author: Hubert Iwaniuk
+<div id="postamble">
+<p class="author"> Author: Hubert Iwaniuk
 <a href="mailto:neotyk@kungfoo.pl">&lt;neotyk@kungfoo.pl&gt;</a>
 </p>
-<p class="date"> Date: 2010-07-12 08:55:24 CEST</p>
-<p>HTML generated by org-mode 6.21b in emacs 23</p>
-</div></body>
+<p class="date"> Date: 2010-07-13 08:50:07 CEST</p>
+<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
+</div>
+</div>
+</body>
 </html>
