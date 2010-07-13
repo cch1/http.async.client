@@ -85,7 +85,7 @@
 (deftest test-status
   (let [status# (promise)
 	_ (execute-request
-	   (prepare-get "http://localhost:8123/")
+	   (prepare-request :get "http://localhost:8123/")
 	   {:status (fn [_ st] (do (deliver status# st) :abort))
             :part body-collect
             :completed body-completed
@@ -102,7 +102,7 @@
 (deftest test-receive-headers
   (let [headers# (promise)
         _ (execute-request
-           (prepare-get "http://localhost:8123/")
+           (prepare-request :get "http://localhost:8123/")
            {:status status-collect
             :part body-collect
             :completed body-completed

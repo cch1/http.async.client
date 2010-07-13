@@ -20,7 +20,7 @@
   ([#^String url]
      (GET url {}))
   ([#^String url options]
-     (execute-request (prepare-get url options)
+     (execute-request (prepare-request :get url options)
                       {:status status-collect
                        :headers headers-collect
                        :part body-collect
@@ -34,7 +34,7 @@
   ([#^String url body]
      (POST url body {}))
   ([#^String url body options]
-     (execute-request (prepare-post url options body)
+     (execute-request (prepare-request :post url options body)
                       {:status status-collect
                        :headers headers-collect
                        :part body-collect
@@ -48,7 +48,7 @@
   ([#^String url body]
      (PUT url body {}))
   ([#^String url body options]
-     (execute-request (prepare-put url options body)
+     (execute-request (prepare-request :put url options body)
                       {:status status-collect
                        :headers headers-collect
                        :part body-collect
@@ -60,7 +60,7 @@
   ([#^String url]
      (DELETE url {}))
   ([#^String url options]
-     (execute-request (prepare-delete url options)
+     (execute-request (prepare-request :delete url options)
                       {:status status-collect
                        :headers headers-collect
                        :part body-collect

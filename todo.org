@@ -10,7 +10,7 @@
    Instead of *id*, pass *(ref {})* to callbacks so they have their own
    STM ref'ed map.
 ** DONE Implement response *promise*                                    :rel1:
-** TODO Consume stream                                                  :rel1:
+** TODO [#B] Consume stream                                            :rel1:
 ** DONE Error function                                                  :rel1:
 * Send [3/7]                                                           :code:
 ** DONE Query parameters                                               :rel1:
@@ -19,7 +19,7 @@
 ** TODO PUT/POST body [2/3]                                            :rel1:
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
-*** TODO Support InputStream body                                      :rel1:
+*** TODO [#C] Support InputStream body                                 :rel1:
 ** TODO All HTTP verbs [6/7]                                           :rel1:
 *** DONE GET                                                           :rel1:
 *** DONE POST                                                          :rel1:
@@ -40,7 +40,7 @@
    Global proxy.
 ** TODO Per request configuration                                      :rel2:
    For stuff like proxy, timeout.
-* Tasks [3/5]
+* Tasks [4/6]
 ** DONE License                                                         :rel1:
 ** DONE Cleanup namespaces                                              :rel1:
 *** async.http.client
@@ -53,6 +53,9 @@
 ** TODO Release 1.0                                                     :rel1:
 ** DONE Make tests stand-alone                                         :rel1:
    Test suite should not fail when there is now hello-www on port 8080.
-** TODO Simplify request preparation                                   :rel1:
+** DONE Simplify request preparation                                   :rel1:
    For now fns like GET will call prepare-get that will call
-   prepare-reqeust. I don't think prepare-get is necessary.
+   prepare-reqeust. I don't think prepare-get is necessary,
+   should be quite fine to only use *prepare-request*.
+** TODO Use last argument as key worded map                            :rel2:
+   As suggested by [[http://blog.licenser.net/][Licenser]] on #clojure [[http://clojure-log.n01se.net/date/2010-07-08.html#i25][here]].

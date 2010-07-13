@@ -126,44 +126,6 @@
              (instance? InputStream body) body))))
        (.. (.getRequestBuilder rbw) (setUrl url) (build)))))
 
-(defn prepare-get
-  "Prepares GET reqeust for given url."
-  {:tag Request}
-  ([#^String url]
-     (prepare-get url {}))
-  ([#^String url options]
-     (prepare-request :get url options)))
-
-(defn prepare-post
-  "Prepares POST request to given url."
-  {:tag Request}
-  ([#^String url]
-     (prepare-post url {}))
-  ([#^String url options]
-     (prepare-post url options nil))
-  ([#^String url options body]
-     (prepare-request :post url options body)))
-
-(defn prepare-put
-  "Prepares PUT request to given url."
-  {:tag Request}
-  ([#^String url]
-     (prepare-put url {}))
-  ([#^String url options]
-     (prepare-put url options nil))
-  ([#^String url options body]
-     (prepare-request :put url options body)))
-
-(defn prepare-delete
-  "Prepares DELETE request to given url."
-  {:tag Request}
-  ([#^String url]
-     (prepare-delete url {}))
-  ([#^String url options]
-     (prepare-delete url options nil))
-  ([#^String url options body]
-     (prepare-request :delete url options body)))
-
 (defn convert-action
   "Converts action (:abort, nil) to Async client STATE."
   [action]
