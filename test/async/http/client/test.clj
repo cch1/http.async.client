@@ -47,6 +47,7 @@
                              (.write (.getWriter hResp) line))
                "/put" (.setHeader hResp "Method" (.getMethod hReq))
                "/delete" (.setHeader hResp "Method" (.getMethod hReq))
+               "/head" (.setHeader hResp "Method" (.getMethod hReq))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -186,3 +187,13 @@
          headers)
     (is (= 200 (:code status)))
     (is (= "DELETE" (:method headers)))))
+
+(deftest test-head
+  (let [resp (HEAD "http://localhost:8123/head")
+        status (:status @resp)
+        headers (:headers @resp)]
+    (are [x] (not (empty? x))
+         status
+         headers)
+    (is (= 200 (:code status)))
+    (is (= "HEAD" (:method headers)))))

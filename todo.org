@@ -20,12 +20,12 @@
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
 *** TODO Support InputStream body                                      :rel1:
-** TODO All HTTP verbs [4/7]                                           :rel1:
+** TODO All HTTP verbs [5/7]                                           :rel1:
 *** DONE GET                                                           :rel1:
 *** DONE POST                                                          :rel1:
 *** DONE PUT                                                           :rel1:
 *** DONE DELETE                                                        :rel1:
-*** TODO HEAD                                                          :rel1:
+*** DONE HEAD                                                          :rel1:
 *** TODO OPTIONS                                                       :rel1:
 *** TODO Others once supported by AHC-Java                             :rel2:
 ** TODO PUT/POST streaming body                                        :rel2:
@@ -40,7 +40,7 @@
    Global proxy.
 ** TODO Per request configuration                                      :rel2:
    For stuff like proxy, timeout.
-* Tasks [3/4]
+* Tasks [3/5]
 ** DONE License                                                         :rel1:
 ** DONE Cleanup namespaces                                              :rel1:
 *** async.http.client
@@ -52,4 +52,7 @@
     - prepare-request
 ** TODO Release 1.0                                                     :rel1:
 ** DONE Make tests stand-alone                                         :rel1:
-   Test suite should not fail when there is now hollo-www on port 8080.
+   Test suite should not fail when there is now hello-www on port 8080.
+** TODO Simplify request preparation                                   :rel1:
+   For now fns like GET will call prepare-get that will call
+   prepare-reqeust. I don't think prepare-get is necessary.

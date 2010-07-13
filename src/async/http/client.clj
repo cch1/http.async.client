@@ -66,3 +66,15 @@
                        :part body-collect
                        :completed body-completed
                        :error error-collect})))
+
+(defn HEAD
+  "Request HEAD from url. Returns promise, that is delivered once response is completed."
+  ([#^String url]
+     (HEAD url {}))
+  ([#^String url options]
+     (execute-request (prepare-request :head url options)
+                      {:status status-collect
+                       :headers headers-collect
+                       :part body-collect
+                       :completed body-completed
+                       :error error-collect})))
