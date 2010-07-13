@@ -200,5 +200,5 @@
           (onCompleted []
                        (deliver resp (ct-cb state)))
           (onThrowable [#^Throwable t]
-                       (do (er-cb state t) (deliver resp (ct-cb state))))))
+                       (do (er-cb state t) (deliver resp @state)))))
        resp)))

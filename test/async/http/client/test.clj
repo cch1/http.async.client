@@ -42,6 +42,7 @@
            (.setStatus hResp 200)
            ; process params
            (condp = target
+               "/body" (.write (.getWriter hResp) "Remember to checkout #clojure@freenode")
                "/body-str" (when-let [line (.readLine (.getReader hReq))]
                              (.write (.getWriter hResp) line))
                "/put" (.setHeader hResp "Method" (.getMethod hReq))
@@ -82,11 +83,12 @@
 (deftest test-status
   (let [status# (promise)
 	_ (execute-request
-	   (prepare-get "http://localhost:8080/")
+	   (prepare-get "http://localhost:8123/")
 	   {:status (fn [_ st] (do (deliver status# st) :abort))
             :part body-collect
             :completed body-completed
-            :headers headers-collect})
+            :headers headers-collect
+            :error error-collect})
 	status @status#]
     (are [k v] (= (k status) v)
          :code 200
@@ -102,7 +104,8 @@
            {:status status-collect
             :part body-collect
             :completed body-completed
-            :headers (fn [_ hds] (do (deliver headers# hds) :abort))})
+            :headers (fn [_ hds] (do (deliver headers# hds) :abort))
+            :error error-collect})
         headers @headers#]
     (is (= (headers :test-header) "test-value"))))
 
@@ -118,11 +121,11 @@
          :b 2)))
 
 (deftest test-body
-  (let [resp (GET "http://localhost:8080/")
+  (let [resp (GET "http://localhost:8123/body")
         headers (@resp :headers)
         body (@resp :body)]
-    (is (= "<h1>Hello WWW!</h1>\n" (apply str (map char body))))
     (is (not (empty? body)))
+    (is (= "Remember to checkout #clojure@freenode" (apply str (map char body))))
     (if (contains? headers :content-length)
       (is (= (count body) (:content-length headers))))))
 
