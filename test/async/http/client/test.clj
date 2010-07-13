@@ -48,6 +48,7 @@
                "/put" (.setHeader hResp "Method" (.getMethod hReq))
                "/delete" (.setHeader hResp "Method" (.getMethod hReq))
                "/head" (.setHeader hResp "Method" (.getMethod hReq))
+               "/options" (.setHeader hResp "Method" (.getMethod hReq))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -197,3 +198,13 @@
          headers)
     (is (= 200 (:code status)))
     (is (= "HEAD" (:method headers)))))
+
+(deftest test-options
+  (let [resp (OPTIONS "http://localhost:8123/options")
+        status (:status @resp)
+        headers (:headers @resp)]
+    (are [x] (not (empty? x))
+         status
+         headers)
+    (is (= 200 (:code status)))
+    (is (= "OPTIONS" (:method headers)))))

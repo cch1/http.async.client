@@ -78,3 +78,15 @@
                        :part body-collect
                        :completed body-completed
                        :error error-collect})))
+
+(defn OPTIONS
+  "Request OPTIONS from url. Returns promise, that is delivered once response is completed."
+  ([#^String url]
+     (OPTIONS url {}))
+  ([#^String url options]
+     (execute-request (prepare-request :options url options)
+                      {:status status-collect
+                       :headers headers-collect
+                       :part body-collect
+                       :completed body-completed
+                       :error error-collect})))

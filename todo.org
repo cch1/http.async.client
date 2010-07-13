@@ -20,13 +20,13 @@
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
 *** TODO Support InputStream body                                      :rel1:
-** TODO All HTTP verbs [5/7]                                           :rel1:
+** TODO All HTTP verbs [6/7]                                           :rel1:
 *** DONE GET                                                           :rel1:
 *** DONE POST                                                          :rel1:
 *** DONE PUT                                                           :rel1:
 *** DONE DELETE                                                        :rel1:
 *** DONE HEAD                                                          :rel1:
-*** TODO OPTIONS                                                       :rel1:
+*** DONE OPTIONS                                                       :rel1:
 *** TODO Others once supported by AHC-Java                             :rel2:
 ** TODO PUT/POST streaming body                                        :rel2:
    That can be done with *clojure.core/add-watch*.

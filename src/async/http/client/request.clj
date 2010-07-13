@@ -37,6 +37,7 @@
    (= method :put) RequestType/PUT
    (= method :delete) RequestType/DELETE
    (= method :head) RequestType/HEAD
+   (= method :options) RequestType/OPTIONS
    :default RequestType/GET))
 
 ;; default set of callbacks
