@@ -90,3 +90,20 @@
                        :part body-collect
                        :completed body-completed
                        :error error-collect})))
+
+(defn STREAM
+  "Consumes stream from given url.
+  method - HTTP method to be used (:get, :post, ...)
+  url - URL to set request to
+  body-part-callback - callback that takes status (ref {}) of request
+                       and received body part as vector of bytes
+  options - are optional and can contain :headers, :param, and :query (see prepare-request)."
+  ([#^String method url body-part-callback]
+     (STREAM method url body-part-callback {}))
+  ([#^String method url body-part-callback options]
+     (execute-request (prepare-request method url options)
+                      {:status status-collect
+                       :headers headers-collect
+                       :part body-part-callback
+                       :completed body-completed
+                       :error error-collect})))

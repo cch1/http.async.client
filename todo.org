@@ -3,15 +3,15 @@
 #+EMAIL: neotyk@kungfoo.pl
 #+INFOJS_OPT: view:info toc:1
 
-* Receive [5/6]                                                   :code:rel1:
-** DONE Status Line                                                     :rel1:
-** DONE Headers                                                         :rel1:
-** DONE Body                                                            :rel1:
+* Receive [6/6]                                                   :code:rel1:
+** DONE Status Line                                                    :rel1:
+** DONE Headers                                                        :rel1:
+** DONE Body                                                           :rel1:
    Instead of *id*, pass *(ref {})* to callbacks so they have their own
    STM ref'ed map.
-** DONE Implement response *promise*                                    :rel1:
-** TODO [#B] Consume stream                                            :rel1:
-** DONE Error function                                                  :rel1:
+** DONE Implement response *promise*                                   :rel1:
+** DONE Consume stream                                                 :rel1:
+** DONE Error function                                                 :rel1:
 * Send [3/7]                                                           :code:
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
@@ -19,8 +19,8 @@
 ** TODO PUT/POST body [2/3]                                            :rel1:
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
-*** TODO [#C] Support InputStream body                                 :rel1:
-** TODO All HTTP verbs [6/7]                                           :rel1:
+*** TODO [#A] Support InputStream body                                 :rel1:
+** TODO All HTTP verbs [6/7]
 *** DONE GET                                                           :rel1:
 *** DONE POST                                                          :rel1:
 *** DONE PUT                                                           :rel1:

@@ -23,6 +23,7 @@
   (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
+           (org.eclipse.jetty.continuation Continuation ContinuationSupport)
            (javax.servlet.http HttpServletRequest HttpServletResponse)))
 
 (def default-handler
@@ -40,7 +41,7 @@
                (.setHeader hResp k (.getHeader hReq k))))
            (.setContentType hResp "text/plain;charset=utf-8")
            (.setStatus hResp 200)
-           ; process params
+                                        ; process params
            (condp = target
                "/body" (.write (.getWriter hResp) "Remember to checkout #clojure@freenode")
                "/body-str" (when-let [line (.readLine (.getReader hReq))]
@@ -49,6 +50,25 @@
                "/delete" (.setHeader hResp "Method" (.getMethod hReq))
                "/head" (.setHeader hResp "Method" (.getMethod hReq))
                "/options" (.setHeader hResp "Method" (.getMethod hReq))
+               "/stream" (do
+                           (let [cont (ContinuationSupport/getContinuation hReq)
+                                 writer (.getWriter hResp)
+                                 prom (promise)]
+                             (.suspend cont)
+                             (future
+                              (Thread/sleep 100)
+                              (doto writer
+                                (.write "part1")
+                                (.flush)))
+                             (future
+                              (Thread/sleep 200)
+                              (doto writer
+                                (.write "part2")
+                                (.flush))
+                              (deliver prom true))
+                             (future
+                              (if @prom
+                                (.complete cont)))))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -208,3 +228,20 @@
          headers)
     (is (= 200 (:code status)))
     (is (= "OPTIONS" (:method headers)))))
+
+(deftest test-stream
+  (let [stream (ref #{})
+        consume-stream (fn [state bytes]
+                         (if (not (empty? bytes))
+                           (let [s (apply str (map char bytes))]
+                             (dosync (alter stream conj s)))
+                           (println "Received empty body part instead of stream.")))
+        resp (STREAM :get "http://localhost:8123/stream" consume-stream)
+        status (:status @resp)]
+    (are [x] (not (empty? x))
+         status
+         @stream)
+    (is (= 200 (:code status)))
+    (doseq [s @stream]
+      (let [part s]
+        (is (contains? #{"part1" "part2"} part))))))
