@@ -12,14 +12,14 @@
 ** DONE Implement response *promise*                                   :rel1:
 ** DONE Consume stream                                                 :rel1:
 ** DONE Error function                                                 :rel1:
-* Send [3/7]                                                           :code:
+* Send [4/7]                                                           :code:
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
-** TODO PUT/POST body [2/3]                                            :rel1:
+** DONE PUT/POST body [3/3]                                            :rel1:
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
-*** TODO [#A] Support InputStream body                                 :rel1:
+*** DONE Support InputStream body                                      :rel1:
 ** TODO All HTTP verbs [6/7]
 *** DONE GET                                                           :rel1:
 *** DONE POST                                                          :rel1:

@@ -19,7 +19,8 @@
         async.http.client
         async.http.client.request
         [clojure.stacktrace :only [print-stack-trace]]
-        [clojure.contrib.str-utils2 :only [split]])
+        [clojure.contrib.str-utils2 :only [split]]
+        [clojure.java.io :only [input-stream]])
   (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
@@ -189,6 +190,15 @@
          "user" :u
          "s3cr3t" :p)))
 
+(deftest test-post-input-stream-body
+  (let [resp (POST "http://localhost:8123/body-str" (input-stream (.getBytes "TestContent" "UTF-8")))
+        headers (:headers @resp)
+        body (:body @resp)]
+    (are [x] (not (empty? x))
+         headers
+         body)
+    (is (= "TestContent" (apply str (map char body))))))
+
 (deftest test-put
   (let [resp (PUT "http://localhost:8123/put" "TestContent")
         status (:status @resp)
@@ -199,7 +209,7 @@
     (is (= 200 (:code status)))
     (is (= "PUT" (:method headers)))))
 
-(deftest test-put
+(deftest test-delete
   (let [resp (DELETE "http://localhost:8123/delete")
         status (:status @resp)
         headers (:headers @resp)]
