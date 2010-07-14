@@ -1,0 +1,235 @@
+<html>
+  <head>
+    <title>async.http.client API reference (ahc-clj)</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <!-- TODO: are we using these (from clojure.org)? If so, add the files -->
+    <script src="file/view/code_highlighter.js" type="text/javascript"></script>
+    <script src="file/view/clojure.js" type="text/javascript"></script>
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<a id="Logo" href="index.html"><img alt="Clojure" height="100" width="100" src="static/clojure-icon.gif" /></a>
+	<h1><a title="page header title" id="page-header" href="index.html">ahc-clj</a></h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <a class="wiki_link" href="index.html">Overview</a><br />
+    <a class="wiki_link" href="api-index.html">API Index</a><br />
+    <a class="wiki_link" href="#">Namespaces:</a>
+    <ul id="left-sidebar-list">
+      <li><a href="async.http.client-api.html" class="wiki_link">async.http.client</a></li>
+    </ul>
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#toc0">Overview</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/DELETE">DELETE</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/GET">GET</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/HEAD">HEAD</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/OPTIONS">OPTIONS</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/POST">POST</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/PUT">PUT</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/STREAM">STREAM</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#async.http.client.request">async.http.client.request</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client.request/convert-action">convert-action</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client.request/execute-request">execute-request</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client.request/prepare-request">prepare-request</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client.request/url-encode">url-encode</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag"><h1 id="overview">API for <span id="namespace-name">async.http.client</span></h1>
+by <span id="author">Hubert Iwaniuk</span><br />
+<br />Usage:
+<pre>
+(ns your-namespace
+  (:require <span id="long-name">async.http.client</span>))
+</pre><pre>
+</pre><h2>Overview</h2>
+<pre id="namespace-docstr">Async HTTP Client - Clojure</pre>
+<br />
+<h2>Public Variables and Functions</h2>
+<div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/DELETE">DELETE</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (DELETE url)
+       (DELETE url options)
+</pre>
+  <pre id="var-docstr">DELETE resource from url. Returns promise, that is delivered once response is completed.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L61" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/GET">GET</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (GET url)
+       (GET url options)
+</pre>
+  <pre id="var-docstr">GET resource from url. Returns promise, that is delivered once response is completed.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L21" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/HEAD">HEAD</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (HEAD url)
+       (HEAD url options)
+</pre>
+  <pre id="var-docstr">Request HEAD from url. Returns promise, that is delivered once response is completed.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L73" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/OPTIONS">OPTIONS</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (OPTIONS url)
+       (OPTIONS url options)
+</pre>
+  <pre id="var-docstr">Request OPTIONS from url. Returns promise, that is delivered once response is completed.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L85" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/POST">POST</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (POST url)
+       (POST url body)
+       (POST url body options)
+</pre>
+  <pre id="var-docstr">POST to resource. Returns promise, that is delivered once response is completed.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L33" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/PUT">PUT</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (PUT url)
+       (PUT url body)
+       (PUT url body options)
+</pre>
+  <pre id="var-docstr">PUT to resource. Returns promise, that is delivered once response is completed.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L47" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/STREAM">STREAM</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (STREAM method url body-part-callback)
+       (STREAM method url body-part-callback options)
+</pre>
+  <pre id="var-docstr">Consumes stream from given url.
+method - HTTP method to be used (:get, :post, ...)
+url - URL to set request to
+body-part-callback - callback that takes status (ref {}) of request
+                     and received body part as vector of bytes
+options - are optional and can contain :headers, :param, and :query (see prepare-request).</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L97" id="var-source">Source</a>
+</div>
+<h2 id="namespace-name">async.http.client.request</h2>
+<pre id="namespace-docstr">Async HTTP Client - Clojure - Requesting API</pre>
+<br />
+<div id="var-entry">
+  <hr />
+  <h2 id="async.http.client.request/convert-action">convert-action</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (convert-action action)
+</pre>
+  <pre id="var-docstr">Converts action (:abort, nil) to Async client STATE.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/213654885ebd72d42dd29edb6f986589c0b4e7da/src/async/http/client/request.clj#L132" id="var-source">Source</a>
+</div><div id="var-entry">
+  <hr />
+  <h2 id="async.http.client.request/execute-request">execute-request</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (execute-request req options)
+</pre>
+  <pre id="var-docstr">Executes provided reqeust with given callback functions.
+Options:
+  :status    - Status callback, fn called with state (ref {}) and status map.
+  :headers   - Headers callback, fn called with state (ref {}) and headers map.
+  :part      - Body part callback, fn called with state (ref {}) and vector of bytes.
+  :completed - Request completed callback, fn called with state (ref {}), result is delivered to response promise..
+  :error     - Error callback, fn called with state (ref {}) and Throwable.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/213654885ebd72d42dd29edb6f986589c0b4e7da/src/async/http/client/request.clj#L140" id="var-source">Source</a>
+</div><div id="var-entry">
+  <hr />
+  <h2 id="async.http.client.request/prepare-request">prepare-request</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (prepare-request method url)
+       (prepare-request method url options)
+       (prepare-request method url {headers :headers, param :param, query :query, :as options} body)
+</pre>
+  <pre id="var-docstr">Prepares method (GET, POST, ..) request to url.
+Options:
+  :query   - map of query parameters
+  :param   - map of parameters
+  :headers - map of headers</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/213654885ebd72d42dd29edb6f986589c0b4e7da/src/async/http/client/request.clj#L87" id="var-source">Source</a>
+</div><div id="var-entry">
+  <hr />
+  <h2 id="async.http.client.request/url-encode">url-encode</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (url-encode arg)
+</pre>
+  <pre id="var-docstr">Taken from Clojure Http Client</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/213654885ebd72d42dd29edb6f986589c0b4e7da/src/async/http/client/request.clj#L80" id="var-source">Source</a>
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2010 Hubert Iwaniuk</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Logo &amp; site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      Clojure auto-documentation system by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>
