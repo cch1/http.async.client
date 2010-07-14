@@ -58,7 +58,9 @@
   "Stores headers under :headers in state."
   (if headers
     (dosync (alter state assoc :headers headers))
-    ((println "Received empty headers, aborting.") :abort)))
+    (do
+      (println "Received empty headers, aborting.")
+      :abort)))
 
 (defn print-headers [state headers]
   (doall (map #(println (str (:id @state) "< " % ": " (get headers %))) (keys headers))))
