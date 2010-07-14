@@ -34,5 +34,6 @@
   Clojure 1.2
 * Documentation
   See [[./docs.org][docs]].
+  Also [[http://neotyk.github.com/ahc-clj/autodoc/][autodoc]] is available.
 * Progress
   List of tasks [[./todo.org][to do]].
