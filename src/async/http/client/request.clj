@@ -12,7 +12,10 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client.request
+(ns
+    #^{:author "Hubert Iwaniuk"
+       :doc   "Async HTTP Client - Clojure - Requesting API"}
+  async.http.client.request
   (:require [clojure.contrib.duck-streams :as duck])
   (:use [async.http.client status headers]
         [clojure.stacktrace]

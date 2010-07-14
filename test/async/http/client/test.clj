@@ -12,9 +12,10 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client.test
-  "Testing of ahc-clj"
-  #^{:author "Hubert Iwaniuk <neotyk@kungfoo.pl>"}
+(ns
+    #^{:author "Hubert Iwaniuk"
+       :doc "Testing of ahc-clj"}
+  async.http.client.test
   (:use clojure.test
         async.http.client
         async.http.client.request

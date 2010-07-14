@@ -2,12 +2,170 @@
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
 #+INFOJS_OPT: view:info toc:1
+#+OPTIONS: H:4
 
-* User Documentation [0/3]
+* User Documentation [3/3]
   For now there is not much of documentation here.
   I've tried to cover ahc-clj with tests, this is a good source of examples.
-** TODO HTTP methods                                                   :rel1:
-** TODO Requesting                                                     :rel1:
-** TODO Streaming                                                      :rel2:
+** DONE HTTP methods                                                   :rel1:
+*** GET
+    Most basic invocation of *GET* is only with *url* you want to get.
+    Extended invocation includes options that can be any options
+    accepted by *prepare-request* (:headers :query ..).
+
+    Simple invocation:
+#+BEGIN_VERSE
+    (let [resp (GET "<your url>")
+          status (:status @resp)
+          headers (:headers @resp)
+          body (:body @resp)]
+      (println (:code status))
+      (println (apply str (map char body))))
+#+END_VERSE
+
+    Invocation with query parameters:
+#+BEGIN_VERSE
+    (let [resp (GET "<your url>" {:query {:param-name "some-value}})
+          status (:status @resp)
+          headers (:headers @resp)
+          body (:body @resp)]
+      (println (:code status))
+      (println (apply str (map char body))))
+#+END_VERSE
+*** POST/PUT
+    *PUT*/*POST* work the same way as get but they accept *body* as
+    parameter as well.
+
+    *body* can be:
+    - String
+    - map, for easy form data submissions
+    - InputStream for any content
+**** Submitting body as String
+     You can send String as body with PUT/POST:
+#+BEGIN_VERSE
+(let [resp (POST "<your url>" "SampleBody")]
+  ; do something with @resp
+  )
+#+END_VERSE
+**** Submitting form parameters
+     For now there are two ways to submit body parameters.
+     Most likely only one will survive.
+
+     Submitting parameters via options:
+#+BEGIN_VERSE
+(let [resp (POST "<your url>" nil {:param {:a 5 :b 6}})]
+  ; do something with @resp
+  )
+#+END_VERSE
+
+     Submitting parameters via body map:
+#+BEGIN_VERSE
+(let [resp (POST "<your url>" {:u "user" :p "s3cr3t"})]
+  ; do something with @resp
+  )
+#+END_VERSE
+**** Submitting body as InputStream
+     Last method to provide body is via InputStream:
+#+BEGIN_VERSE
+(use '[clojure.java.io :only [input-stream]])
+(let [resp (PUT "<your url>" (input-stream (.getBytes "SampleContent" "UTF-8")))]
+  ; do something with @resp
+  )
+#+END_VERSE
+*** DELETE
+    To call DELETE on a resource:
+#+BEGIN_VERSE
+(let [resp (DELETE "<your url>")]
+  ; do something with @resp
+  )
+#+END_VERSE
+*** HEAD
+    To call HEAD on a resource:
+#+BEGIN_VERSE
+(let [resp (HEAD "<your url>")]
+  ; do something with @resp
+  )
+#+END_VERSE
+*** OPTIONS
+    To call OPTIONS on a resource:
+#+BEGIN_VERSE
+(let [resp (OPTIONS "<your url>")]
+  ; do something with @resp
+  )
+#+END_VERSE
+** DONE Requesting                                                     :rel1:
+   This is lower level access to *ahc-clj*.
+   It provides default set of callbacks and functions to create and
+   execute reqeusts.
+*** Preparing request
+    *prepare-request* is responsible for request preparation.
+    It takes following arguments:
+    - HTTP Method like *:get* *:head*
+    - *url* that you want to call
+    - and optional *options* map:
+      - *:query* is map of query parameters to be sent over
+      - *:headers* is map of headers to be send over
+      - *:params* is map of request parameters to send over, keep in
+        mind that those should be send only with *PUT* and *POST*
+        requests.
+*** Executing request
+    *execute-request* returns a *promise* that will be *delivered*
+    once response is received.
+    It takes request to be executed (one returned by
+    *prepare-request*) and *options* map.
+    *options* map consists of:
+    - *:status* status line received callback
+    - *:headers* headers received callback
+    - *:part* body part received callback
+    - *:completed* body receiving completed callback
+    - *:error* error callback
+    All callbacks take *(ref {})* as first argument. This is STM map
+    per request, you can store here what ever you want. Look at
+    implementations of default callbacks for more information.
+**** Status line
+     Status line callback is called with *state* and lazy map with following keys:
+     - *:code* status code
+     - *:msg* status message
+     - *:protocol* protocol with version (HTTP/1.1)
+     - *:major* major protocol version
+     - *:minor* minor protocol version
+**** Headers
+     Headers callback is called with *state* and lazy map of headers.
+     Keys in that map are *(keyword (.toLowerCase <header name>))*, so
+     "Server" headers is *:server* and so on.
+**** Body part
+     Body part callback is called with *state* and *vec* of bytes that
+     have been received.
+**** Body completed
+     This callback is called with *state* only and result of it is
+     delivered to response promise.
+**** Error
+     Error callback gets called with *state* and *Throwable*.
+** DONE Streaming                                                      :rel1:
+   Consuming HTTP Stream is quite straight forward with *ahc-clj*.
+   You will need to know what HTTP Method you will call, what URL
+   and provide a call back function to handle body parts been
+   received.
+#+BEGIN_VERSE
+(let [stream (ref #{})
+      resp (STREAM :get "<your url>"
+                   (fn [state bytes]
+                     (if (not (empty? bytes))
+                       (let [p (apply str (map char bytes))]
+                         (dosync (alter stream conj p)))
+                       (println "Empty body part received."))))]
+  ; do something to @stream
+  ; @resp will not get delivered until streaming is done
+  )
+#+END_VERSE
+  Few notes on implementing body part callback:
+  - state is *(ref {})* with *:status* and *:headers*,
+  - some streams are not meant to be finish, in that case don't
+    collect body parts, as for sure you will run out of available
+    resources,
+  - try not to do any heavy lifting in this callback, better send it
+    to agent,
+  - if you need to stop stream consumption just return *:abort* from
+    callback.
 * Developer [0/1]
 ** TODO Building                                                       :rel2:
