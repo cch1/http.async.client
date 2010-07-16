@@ -137,5 +137,4 @@
                        :part mk-seq
                        :completed done-seq
                        :error error-collect)]
-       (dosync (alter resp assoc :body s-seq))
        resp)))
