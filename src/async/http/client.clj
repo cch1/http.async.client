@@ -125,7 +125,9 @@
                     (when-not (empty? bytes)
                       (let [v (apply str (map char bytes))]
                         ;;(println "putting: " v)
-                        (.put que v))))
+                        (.put que v)
+                        (if-not (contains? @state :body )
+                          (dosync (alter state assoc :body s-seq))
            done-seq (fn [state]
                       ;;(println "putting: " ::done)
                       (.put que ::done))
