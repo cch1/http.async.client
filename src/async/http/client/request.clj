@@ -170,3 +170,52 @@
           (onThrowable [#^Throwable t]
                        (do (er-cb state t) (deliver resp @state)))))
        resp)))
+
+(defn consume-stream
+  "Executes provided request, assuming target will stream..
+  Arguments:
+  - req - prepared request
+  - options
+    - :status - status callback
+    - :headers - headers callback
+    - :part - body part callback
+    - :completed - request completed
+    - :error - error callback"
+  ([#^Request req & {status-fn    :status
+                     headers-fn   :headers
+                     part-fn      :part
+                     completed-fn :completed
+                     error-fn     :error}]
+     (let [resp (ref {:id (gensym "req-id__")
+                      :status-received (promise)
+                      :headers-received (promise)
+                      :body-started (promise)
+                      :body-finished (promise)
+                      :errored (promise)})
+           body-started (ref false)]
+       (.executeRequest
+        ahc req
+        (proxy [AsyncHandler] []
+          (onStatusReceived [#^HttpResponseStatus e]
+                            (let [action (status-fn resp (convert-status-to-map e))]
+                              (deliver (:status-received @resp) true)
+                              (convert-action actions)))
+          (onHeadersReceived [#^HttpResponseHeaders e]
+                             (let [action (headers-fn resp (convert-headers-to-map e))]
+                               (deliver (:headers-received @resp) true)
+                               (convert-action action)))
+          (onBodyPartReceived  [#^HttpResponseBodyPart e]
+                               (when-let [vb (vec (.getBodyPartBytes e))
+                                          action (part-fn resp vb)]
+                                 (when-not @body-started
+                                   (dosync (alter body-started (fn [_ a] a) true))
+                                   (deliver (:body-started @resp) true))
+                                 (convert-action action)))
+          (onCompleted [] (do
+                            (deliver (:body-finished @resp) true)
+                            (completed-fn resp)))
+          (onThrowable [#^Throwable t]
+                       (do
+                         (deliver (:errored @resp) true)
+                         (error-fn resp t)))))
+       resp)))
