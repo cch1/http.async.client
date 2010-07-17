@@ -257,34 +257,54 @@
       (let [part s]
         (is (contains? #{"part1" "part2"} part))))))
 
-(require 'clojure.contrib.json)
-(deftest test-stream-proto
-  (let [stream-queue (java.util.concurrent.LinkedBlockingQueue. 10)
-        stream-seq ((fn thisfn []
-                      (lazy-seq
-                       (let [v (.take stream-queue)]
-                         ;(println "took: " v)
-                         (when-not (= ::done v)
-                           (cons
-                            v
-                            (thisfn)))))))
-        create-lazy-seq (fn [state bytes]
-                          (if (not (empty? bytes))
-                           (let [v (apply str (map char bytes))]
-                             ;(println "putting: " v)
-                             (.put stream-queue v))))
-        lazy-seq-completed (fn [state]
-                             (println "putting: nil")
-                             (.put stream-queue ::done))
-        resp (execute-request
-              (prepare-request :get "http://stream.twitter.com/1/statuses/sample.json"
-                               {:headers {:authorization "Basic YWhjY2xqOmFoY2NsajEx"}})
-              {:status status-collect
-               :headers headers-collect
-               :part create-lazy-seq
-               :completed lazy-seq-completed
-               :error error-collect})]
-    (doseq [s (take 2 stream-seq)] (println (select-keys (clojure.contrib.json/read-json s) [:text :screen_name])))
-    (is (= "part1" (first stream-seq)))
-    (is (= "part2" (nth stream-seq 1)))
-    (is (= nil (nnext stream-seq)))))
+(deftest test-stream-seq
+  (let [resp (STREAM-SEQ :get "http://localhost:8123/stream")
+        status-received @(:status-received @resp)
+        status (:status @resp)
+        headers-received @(:headers-received @resp)
+        headers (:headers @resp)
+        body-started @(:body-started @resp)
+        body (:body @resp)
+        ;; body-finished @(:body-finished @resp)
+        ]
+    (are [e p] (= e p)
+         true status-received
+         200 (:code status)
+         true headers-received
+         "test-value" (:test-header headers)
+         true body-started
+         2 (count body)
+         ;true body-finished
+         )))
+
+;(require 'clojure.contrib.json)
+;(deftest test-stream-proto
+;  (let [stream-queue (java.util.concurrent.LinkedBlockingQueue. 10)
+;        stream-seq ((fn thisfn []
+;                      (lazy-seq
+;                       (let [v (.take stream-queue)]
+;                         ;(println "took: " v)
+;                         (when-not (= ::done v)
+;                           (cons
+;                            v
+;                            (thisfn)))))))
+;        create-lazy-seq (fn [state bytes]
+;                          (if (not (empty? bytes))
+;                           (let [v (apply str (map char bytes))]
+;                             ;(println "putting: " v)
+;                             (.put stream-queue v))))
+;        lazy-seq-completed (fn [state]
+;                             (println "putting: nil")
+;                             (.put stream-queue ::done))
+;        resp (execute-request
+;              (prepare-request :get "http://stream.twitter.com/1/statuses/sample.json"
+;                               {:headers {:authorization "Basic YWhjY2xqOmFoY2NsajEx"}})
+;              {:status status-collect
+;               :headers headers-collect
+;               :part create-lazy-seq
+;               :completed lazy-seq-completed
+;               :error error-collect})]
+;    (doseq [s (take 2 stream-seq)] (println (select-keys (clojure.contrib.json/read-json s) [:text ;:screen_name])))
+;    (is (= "part1" (first stream-seq)))
+;    (is (= "part2" (nth stream-seq 1)))
+;    (is (= nil (nnext stream-seq)))))

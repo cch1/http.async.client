@@ -199,18 +199,18 @@
           (onStatusReceived [#^HttpResponseStatus e]
                             (let [action (status-fn resp (convert-status-to-map e))]
                               (deliver (:status-received @resp) true)
-                              (convert-action actions)))
+                              (convert-action action)))
           (onHeadersReceived [#^HttpResponseHeaders e]
                              (let [action (headers-fn resp (convert-headers-to-map e))]
                                (deliver (:headers-received @resp) true)
                                (convert-action action)))
           (onBodyPartReceived  [#^HttpResponseBodyPart e]
-                               (when-let [vb (vec (.getBodyPartBytes e))
-                                          action (part-fn resp vb)]
-                                 (when-not @body-started
-                                   (dosync (alter body-started (fn [_ a] a) true))
-                                   (deliver (:body-started @resp) true))
-                                 (convert-action action)))
+                               (when-let [vb (vec (.getBodyPartBytes e))]
+                                 (let [action (part-fn resp vb)]
+                                  (when-not @body-started
+                                    (dosync (alter body-started (fn [_ a] a) true))
+                                    (deliver (:body-started @resp) true))
+                                  (convert-action action))))
           (onCompleted [] (do
                             (deliver (:body-finished @resp) true)
                             (completed-fn resp)))

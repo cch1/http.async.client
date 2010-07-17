@@ -115,21 +115,21 @@
   "Creates potentially infinite lazy sequence of Http Stream."
   ([method #^String url & {:as options}]
      (let [que (java.util.concurrent.LinkedBlockingQueue.)
-           s-seq ((fn thinsfn []
+           s-seq ((fn thisfn []
                     (lazy-seq
                      (let [v (.take que)]
-                       ;;(println "took: " v)
+                       (println "took: " v)
                        (when-not (= ::done v)
                          (cons v (thisfn)))))))
            mk-seq (fn [state bytes]
                     (when-not (empty? bytes)
                       (let [v (apply str (map char bytes))]
-                        ;;(println "putting: " v)
+                        (println "putting: " v)
                         (.put que v)
                         (if-not (contains? @state :body )
-                          (dosync (alter state assoc :body s-seq))
+                          (dosync (alter state assoc :body s-seq))))))
            done-seq (fn [state]
-                      ;;(println "putting: " ::done)
+                      (println "putting: " ::done)
                       (.put que ::done))
            resp (consume-stream (prepare-request method url options)
                        :status status-collect
