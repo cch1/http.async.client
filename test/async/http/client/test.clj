@@ -257,6 +257,11 @@
       (let [part s]
         (is (contains? #{"part1" "part2"} part))))))
 
+(deftest test-get-stream
+  (let [resp (GET "http://localhost:8123/stream")
+        body (@resp :body)]
+    (is (= "part1part2" (apply str (map char body))))))
+
 (deftest test-stream-seq
   (let [resp (STREAM-SEQ :get "http://localhost:8123/stream")
         status-received @(:status-received @resp)
@@ -265,8 +270,7 @@
         headers (:headers @resp)
         body-started @(:body-started @resp)
         body (:body @resp)
-        ;; body-finished @(:body-finished @resp)
-        ]
+        body-finished @(:body-finished @resp)]
     (are [e p] (= e p)
          true status-received
          200 (:code status)
@@ -274,8 +278,9 @@
          "test-value" (:test-header headers)
          true body-started
          2 (count body)
-         ;true body-finished
-         )))
+         true body-finished)
+    (doseq [s body]
+      (is (or (= "part1" s) (= "part2" s))))))
 
 ;(require 'clojure.contrib.json)
 ;(deftest test-stream-proto

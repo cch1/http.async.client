@@ -168,7 +168,10 @@
           (onCompleted []
                        (deliver resp (ct-cb state)))
           (onThrowable [#^Throwable t]
-                       (do (er-cb state t) (deliver resp @state)))))
+                       (do
+                         (print-cause-trace t)
+                         (er-cb state t)
+                         (deliver resp @state)))))
        resp)))
 
 (defn consume-stream
@@ -208,14 +211,15 @@
                                (when-let [vb (vec (.getBodyPartBytes e))]
                                  (let [action (part-fn resp vb)]
                                   (when-not @body-started
-                                    (dosync (alter body-started (fn [_ a] a) true))
-                                    (deliver (:body-started @resp) true))
+                                    (dosync (alter body-started (fn [_ a] a) true)
+                                            (deliver (:body-started @resp) true)))
                                   (convert-action action))))
           (onCompleted [] (do
                             (deliver (:body-finished @resp) true)
                             (completed-fn resp)))
           (onThrowable [#^Throwable t]
                        (do
+                         (print-cause-trace t)
                          (deliver (:errored @resp) true)
                          (error-fn resp t)))))
        resp)))
