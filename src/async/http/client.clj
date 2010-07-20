@@ -101,12 +101,34 @@
   body-part-callback - callback that takes status (ref {}) of request
                        and received body part as vector of bytes
   options - are optional and can contain :headers, :param, and :query (see prepare-request)."
-  ([#^String method url body-part-callback]
+  ([method #^String url body-part-callback]
      (STREAM method url body-part-callback {}))
-  ([#^String method url body-part-callback options]
+  ([method #^String url body-part-callback options]
      (execute-request (prepare-request method url options)
                       {:status status-collect
                        :headers headers-collect
                        :part body-part-callback
                        :completed body-completed
                        :error error-collect})))
+
+(defn STREAM-SEQ
+  "Creates potentially infinite lazy sequence of Http Stream."
+  ([method #^String url & {:as options :or {}}]
+     (let [que (java.util.concurrent.LinkedBlockingQueue.)
+           s-seq ((fn thisfn []
+                    (lazy-seq
+                     (let [v (.take que)]
+                       (when-not (= ::done v)
+                         (cons v (thisfn)))))))]
+       (consume-stream (prepare-request method url options)
+                       :status status-collect
+                       :headers headers-collect
+                       :part (fn [state bytes]
+                               (when-not (empty? bytes)
+                                 (let [v (apply str (map char bytes))]
+                                   (.put que v)
+                                   (if-not (contains? @state :body )
+                                     (dosync (alter state assoc :body s-seq))))))
+                       :completed (fn [state]
+                                    (.put que ::done))
+                       :error error-collect))))
