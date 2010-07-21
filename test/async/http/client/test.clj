@@ -12,10 +12,9 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns
-    #^{:author "Hubert Iwaniuk"
-       :doc "Testing of ahc-clj"}
-  async.http.client.test
+(ns async.http.client.test
+  "Testing of ahc-clj"
+  {:author "Hubert Iwaniuk"}
   (:use clojure.test
         async.http.client
         async.http.client.request
@@ -282,34 +281,8 @@
     (doseq [s body]
       (is (or (= "part1" s) (= "part2" s))))))
 
-;(require 'clojure.contrib.json)
-;(deftest test-stream-proto
-;  (let [stream-queue (java.util.concurrent.LinkedBlockingQueue. 10)
-;        stream-seq ((fn thisfn []
-;                      (lazy-seq
-;                       (let [v (.take stream-queue)]
-;                         ;(println "took: " v)
-;                         (when-not (= ::done v)
-;                           (cons
-;                            v
-;                            (thisfn)))))))
-;        create-lazy-seq (fn [state bytes]
-;                          (if (not (empty? bytes))
-;                           (let [v (apply str (map char bytes))]
-;                             ;(println "putting: " v)
-;                             (.put stream-queue v))))
-;        lazy-seq-completed (fn [state]
-;                             (println "putting: nil")
-;                             (.put stream-queue ::done))
-;        resp (execute-request
-;              (prepare-request :get "http://stream.twitter.com/1/statuses/sample.json"
-;                               {:headers {:authorization "Basic YWhjY2xqOmFoY2NsajEx"}})
-;              {:status status-collect
-;               :headers headers-collect
-;               :part create-lazy-seq
-;               :completed lazy-seq-completed
-;               :error error-collect})]
-;    (doseq [s (take 2 stream-seq)] (println (select-keys (clojure.contrib.json/read-json s) [:text ;:screen_name])))
-;    (is (= "part1" (first stream-seq)))
-;    (is (= "part2" (nth stream-seq 1)))
-;    (is (= nil (nnext stream-seq)))))
+(deftest issue-1
+  (let [resp (GET "http://gettingreal.37signals.com/GR_rus.php")
+        headers (:headers @resp)
+        body (apply str (map char (:body @resp)))]
+    (is (= (:content-length headers) (count body)))))

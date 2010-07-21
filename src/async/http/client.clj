@@ -12,10 +12,9 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns
-    #^{:author "Hubert Iwaniuk"
-       :doc "Async HTTP Client - Clojure"}
-  async.http.client
+(ns async.http.client
+  "Async HTTP Client - Clojure"
+  {:author "Hubert Iwaniuk"}
   (:use async.http.client.request))
 
 (defn GET
