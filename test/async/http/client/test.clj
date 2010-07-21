@@ -287,7 +287,5 @@
 
 (deftest issue-1
   (let [resp (GET "http://localhost:8123/issue-1")
-        headers (:headers @resp)
-        body (apply str (map char (:body @resp)))]
-    (is (= (:content-length headers) (count body)))
-    (is (= ("глава" body)))))
+        body (String. (byte-array (:body @resp)) "UTF-8")]
+    (is (= "глава" body))))
