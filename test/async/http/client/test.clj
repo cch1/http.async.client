@@ -70,6 +70,10 @@
                              (future
                               (if @prom
                                 (.complete cont)))))
+               "/issue-1" (let [writer (.getWriter hResp)]
+                            (doto writer
+                              (.write "глава")
+                              (.flush)))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -282,7 +286,8 @@
       (is (or (= "part1" s) (= "part2" s))))))
 
 (deftest issue-1
-  (let [resp (GET "http://gettingreal.37signals.com/GR_rus.php")
+  (let [resp (GET "http://localhost:8123/issue-1")
         headers (:headers @resp)
         body (apply str (map char (:body @resp)))]
-    (is (= (:content-length headers) (count body)))))
+    (is (= (:content-length headers) (count body)))
+    (is (= ("глава" body)))))
