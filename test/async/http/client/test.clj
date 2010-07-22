@@ -280,5 +280,4 @@
       (is (or (= "part1" s) (= "part2" s))))))
 
 (deftest issue-1
-  (let [body (string (GET "http://localhost:8123/issue-1"))]
-    (is (= "глава" body))))
+  (is (= "глава" (string (GET "http://localhost:8123/issue-1")))))
