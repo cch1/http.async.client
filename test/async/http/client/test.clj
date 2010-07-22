@@ -21,12 +21,15 @@
         [clojure.stacktrace :only [print-stack-trace]]
         [clojure.contrib.str-utils2 :only [split]]
         [clojure.java.io :only [input-stream]])
+  (:require [clojure.contrib.io :as duck])
   (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
            (org.eclipse.jetty.continuation Continuation ContinuationSupport)
-           (javax.servlet.http HttpServletRequest HttpServletResponse)))
+           (javax.servlet.http HttpServletRequest HttpServletResponse)
+           (java.io ByteArrayOutputStream)))
 
+;; test suite setup
 (def default-handler
      (proxy [AbstractHandler] []
        (handle [target #^Request req #^HttpServletRequest hReq #^HttpServletResponse hResp]
@@ -107,6 +110,7 @@
 
 (use-fixtures :once once-fixture)
 
+;; testing
 (deftest test-status
   (let [status# (promise)
 	_ (execute-request
@@ -134,11 +138,11 @@
             :headers (fn [_ hds] (do (deliver headers# hds) :abort))
             :error error-collect})
         headers @headers#]
-    (is (= (headers :test-header) "test-value"))))
+    (is (= (:test-header headers) "test-value"))))
 
 (deftest test-send-headers
-  (let [resp (GET "http://localhost:8123/" {:headers {:a 1 :b 2}})
-        headers (@resp :headers)]
+  (let [resp (GET "http://localhost:8123/" :headers {:a 1 :b 2})
+        headers (:headers @resp)]
     (if (contains? @resp :error)
       (print-stack-trace (:error @resp)))
     (is (not (contains? (keys @resp) :error)))
@@ -149,16 +153,16 @@
 
 (deftest test-body
   (let [resp (GET "http://localhost:8123/body")
-        headers (@resp :headers)
-        body (@resp :body)]
-    (is (not (empty? body)))
-    (is (= "Remember to checkout #clojure@freenode" (apply str (map char body))))
+        headers (:headers @resp)
+        body (:body @resp)]
+    (is (not (nil? body)))
+    (is (= "Remember to checkout #clojure@freenode" (string resp)))
     (if (contains? headers :content-length)
       (is (= (count body) (:content-length headers))))))
 
 (deftest test-query-params
-  (let [resp (GET "http://localhost:8123/" {:query {:a 3 :b 4}})
-        headers (@resp :headers)]
+  (let [resp (GET "http://localhost:8123/" :query {:a 3 :b 4})
+        headers (:headers @resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
          :a 3
@@ -167,10 +171,10 @@
 (deftest test-get-params-not-allowed
   (is (thrown?
        IllegalArgumentException
-       (GET "http://localhost:8123/" {:param {:a 5 :b 6}}))))
+       (GET "http://localhost:8123/" :param {:a 5 :b 6}))))
 
 (deftest test-post-params
-  (let [resp (POST "http://localhost:8123/" nil {:param {:a 5 :b 6}})
+  (let [resp (POST "http://localhost:8123/" nil :param {:a 5 :b 6})
         headers (:headers @resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
@@ -178,13 +182,10 @@
          :b 6)))
 
 (deftest test-post-string-body
-  (let [resp (POST "http://localhost:8123/body-str" "TestBody" nil)
-        headers (:headers @resp)
-        body (:body @resp)]
-    (are [x] (not (empty? x))
-         headers
-         body)
-    (is (= "TestBody" (apply str (map char body))))))
+  (let [resp (POST "http://localhost:8123/body-str" "TestBody")
+        headers (:headers @resp)]
+    (is (not (empty? headers)))
+    (is (= "TestBody" (string resp)))))
 
 (deftest test-post-map-body
   (let [resp (POST "http://localhost:8123/" {:u "user" :p "s3cr3t"})
@@ -196,12 +197,9 @@
 
 (deftest test-post-input-stream-body
   (let [resp (POST "http://localhost:8123/body-str" (input-stream (.getBytes "TestContent" "UTF-8")))
-        headers (:headers @resp)
-        body (:body @resp)]
-    (are [x] (not (empty? x))
-         headers
-         body)
-    (is (= "TestContent" (apply str (map char body))))))
+        headers (:headers @resp)]
+    (is (not (empty? headers)))
+    (is (= "TestContent" (string resp)))))
 
 (deftest test-put
   (let [resp (PUT "http://localhost:8123/put" "TestContent")
@@ -245,12 +243,9 @@
 
 (deftest test-stream
   (let [stream (ref #{})
-        consume-stream (fn [_ bytes]
-                         (if (not (empty? bytes))
-                           (let [s (apply str (map char bytes))]
-                             (dosync (alter stream conj s)))
-                           (println "Received empty body part instead of stream.")))
-        resp (STREAM :get "http://localhost:8123/stream" consume-stream)
+        resp (STREAM :get "http://localhost:8123/stream"
+                     (fn [_ baos]
+                       (dosync (alter stream conj (.toString baos duck/*default-encoding*)))))
         status (:status @resp)]
     (are [x] (not (empty? x))
          status
@@ -261,9 +256,8 @@
         (is (contains? #{"part1" "part2"} part))))))
 
 (deftest test-get-stream
-  (let [resp (GET "http://localhost:8123/stream")
-        body (@resp :body)]
-    (is (= "part1part2" (apply str (map char body))))))
+  (let [resp (GET "http://localhost:8123/stream")]
+    (is (= "part1part2" (string resp)))))
 
 (deftest test-stream-seq
   (let [resp (STREAM-SEQ :get "http://localhost:8123/stream")
@@ -282,10 +276,9 @@
          true body-started
          2 (count body)
          true body-finished)
-    (doseq [s body]
+    (doseq [s (string resp)]
       (is (or (= "part1" s) (= "part2" s))))))
 
 (deftest issue-1
-  (let [resp (GET "http://localhost:8123/issue-1")
-        body (String. (byte-array (:body @resp)) "UTF-8")]
+  (let [body (string (GET "http://localhost:8123/issue-1"))]
     (is (= "глава" body))))

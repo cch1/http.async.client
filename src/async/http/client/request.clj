@@ -15,7 +15,7 @@
 (ns async.http.client.request
   "Async HTTP Client - Clojure - Requesting API"
   {:author "Hubert Iwaniuk"}
-  (:require [clojure.contrib.duck-streams :as duck])
+  (:require [clojure.contrib.io :as duck])
   (:use [async.http.client status headers]
         [clojure.stacktrace]
         [clojure.contrib.java-utils :only [as-str]]
@@ -26,7 +26,9 @@
 				 RequestType)
            (ahc RequestBuilderWrapper)
            (java.net URLEncoder)
-           (java.io InputStream)))
+           (java.io InputStream
+                    ByteArrayInputStream
+                    ByteArrayOutputStream)))
 
 (def ahc (AsyncHttpClient.))
 
@@ -42,12 +44,19 @@
    (= method :options) RequestType/OPTIONS
    :default RequestType/GET))
 
+(defn get-encoding
+  "Gets content encoding from headers, if Content-Type header not present
+  or media-type in it is missing => nil"
+  [{ct :content-type}]
+  (when-let [match (re-matches #".*charset\s*=\s*(.*)\s*" ct)]
+    (.toUpperCase (match 1))))
+
 ;; default set of callbacks
-(defn body-collect [state bytes]
+(defn body-collect [state baos]
   "Stores body parts under :body in state."
-  (if (not (empty? bytes))
-    (dosync (alter state assoc :body (apply conj (or (:body @state) []) bytes)))
-    (do (println "Received empty body part."))))
+  (if (:body @state)
+    (.writeTo baos (:body @state))
+    (dosync (alter state assoc :body baos))))
 
 (defn body-completed [state]
   "Provides value that will be delivered to response promise."
@@ -146,32 +155,35 @@
     :part      - Body part callback, fn called with state (ref {}) and vector of bytes.
     :completed - Request completed callback, fn called with state (ref {}), result is delivered to response promise..
     :error     - Error callback, fn called with state (ref {}) and Throwable."
-  ([#^Request req options]
-     (let [resp (promise)
-           state (ref {:id (gensym "req-id__")})
-           st-cb (:status options)
-           hd-cb (:headers options)
-           pt-cb (:part options)
-           ct-cb (:completed options)
-           er-cb (:error options)]
-       (.executeRequest
-        ahc req
-        (proxy [AsyncHandler] []
-          (onStatusReceived [#^HttpResponseStatus e]
-                            (convert-action (st-cb state (convert-status-to-map e))))
-          (onHeadersReceived [#^HttpResponseHeaders e]
-                             (convert-action (hd-cb state (convert-headers-to-map e))))
-          (onBodyPartReceived  [#^HttpResponseBodyPart e]
-                               (when-let [vb (vec (.getBodyPartBytes e))]
-                                 (convert-action (pt-cb state vb))))
-          (onCompleted []
-                       (deliver resp (ct-cb state)))
-          (onThrowable [#^Throwable t]
-                       (do
-                         (print-cause-trace t)
-                         (er-cb state t)
-                         (deliver resp @state)))))
-       resp)))
+  [#^Request req options]
+  (let [resp (promise)
+        state (ref {:id (gensym "req-id__")})
+        st-cb (:status options)
+        hd-cb (:headers options)
+        pt-cb (:part options)
+        ct-cb (:completed options)
+        er-cb (:error options)]
+    (.executeRequest
+     ahc req
+     (proxy [AsyncHandler] []
+       (onStatusReceived [#^HttpResponseStatus e]
+                         (convert-action (st-cb state (convert-status-to-map e))))
+       (onHeadersReceived [#^HttpResponseHeaders e]
+                          (convert-action (hd-cb state (convert-headers-to-map e))))
+       (onBodyPartReceived  [#^HttpResponseBodyPart e]
+                            (when-let [bytes (.getBodyPartBytes e)]
+                              (let [bais (ByteArrayInputStream. bytes)
+                                    baos (ByteArrayOutputStream.)]
+                                (duck/copy bais baos)
+                                (convert-action (pt-cb state baos)))))
+       (onCompleted []
+                    (deliver resp (ct-cb state)))
+       (onThrowable [#^Throwable t]
+                    (do
+                      (print-cause-trace t)
+                      (er-cb state t)
+                      (deliver resp @state)))))
+    resp))
 
 (defn consume-stream
   "Executes provided request, assuming target will stream..
@@ -183,42 +195,44 @@
     - :part - body part callback
     - :completed - request completed
     - :error - error callback"
-  ([#^Request req & {status-fn    :status
-                     headers-fn   :headers
-                     part-fn      :part
-                     completed-fn :completed
-                     error-fn     :error}]
-     (let [resp (ref {:id (gensym "req-id__")
-                      :status-received (promise)
-                      :headers-received (promise)
-                      :body-started (promise)
-                      :body-finished (promise)
-                      :errored (promise)})
-           body-started (ref false)]
-       (.executeRequest
-        ahc req
-        (proxy [AsyncHandler] []
-          (onStatusReceived [#^HttpResponseStatus e]
-                            (let [action (status-fn resp (convert-status-to-map e))]
-                              (deliver (:status-received @resp) true)
-                              (convert-action action)))
-          (onHeadersReceived [#^HttpResponseHeaders e]
-                             (let [action (headers-fn resp (convert-headers-to-map e))]
-                               (deliver (:headers-received @resp) true)
-                               (convert-action action)))
-          (onBodyPartReceived  [#^HttpResponseBodyPart e]
-                               (when-let [vb (vec (.getBodyPartBytes e))]
-                                 (let [action (part-fn resp vb)]
+  [#^Request req & {status-fn    :status
+                    headers-fn   :headers
+                    part-fn      :part
+                    completed-fn :completed
+                    error-fn     :error}]
+  (let [resp (ref {:id (gensym "req-id__")
+                   :status-received (promise)
+                   :headers-received (promise)
+                   :body-started (promise)
+                   :body-finished (promise)
+                   :errored (promise)})
+        body-started (ref false)]
+    (.executeRequest
+     ahc req
+     (proxy [AsyncHandler] []
+       (onStatusReceived [#^HttpResponseStatus e]
+                         (let [action (status-fn resp (convert-status-to-map e))]
+                           (deliver (:status-received @resp) true)
+                           (convert-action action)))
+       (onHeadersReceived [#^HttpResponseHeaders e]
+                          (let [action (headers-fn resp (convert-headers-to-map e))]
+                            (deliver (:headers-received @resp) true)
+                            (convert-action action)))
+       (onBodyPartReceived  [#^HttpResponseBodyPart e]
+                            (when-let [bytes (.getBodyPartBytes e)]
+                              (let [baos (ByteArrayOutputStream. (alength bytes))]
+                                (.write baos bytes 0 (alength bytes))
+                                (let [action (part-fn resp baos)]
                                   (when-not @body-started
                                     (dosync (alter body-started (fn [_ a] a) true)
                                             (deliver (:body-started @resp) true)))
-                                  (convert-action action))))
-          (onCompleted [] (do
-                            (deliver (:body-finished @resp) true)
-                            (completed-fn resp)))
-          (onThrowable [#^Throwable t]
-                       (do
-                         (print-cause-trace t)
-                         (deliver (:errored @resp) true)
-                         (error-fn resp t)))))
-       resp)))
+                                  (convert-action action)))))
+       (onCompleted [] (do
+                         (deliver (:body-finished @resp) true)
+                         (completed-fn resp)))
+       (onThrowable [#^Throwable t]
+                    (do
+                      (print-cause-trace t)
+                      (deliver (:errored @resp) true)
+                      (error-fn resp t)))))
+    resp))
