@@ -13,19 +13,19 @@
 ; limitations under the License.
 
 (ns async.http.client.headers
-  (:import (com.ning.http.client HttpResponseHeaders Headers)))
+  (:import (com.ning.http.client HttpResponseHeaders FluentCaseInsensitiveStringsMap)))
 
 (defn- kn [k]
   (if (keyword? k) (name k) k))
 
-(defn- v [#^Headers h k]
-  (let [vals (.getHeaderValues h (kn k))]
+(defn- v [#^FluentCaseInsensitiveStringsMap h k]
+  (let [vals (.get h (kn k))]
     (apply str (interpose "," vals))))
 
 (defn convert-headers-to-map [#^HttpResponseHeaders headers]
   "Converts Http Response Headers to lazy map."
   (let [hds (.getHeaders headers)
-        names (.getHeaderNames hds)]
+        names (.keySet hds)]
     (proxy [clojure.lang.APersistentMap]
         []
       (containsKey [k] (contains? names (kn k)))

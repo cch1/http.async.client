@@ -20,7 +20,8 @@
         async.http.client.request
         [clojure.stacktrace :only [print-stack-trace]]
         [clojure.contrib.str-utils2 :only [split]]
-        [clojure.java.io :only [input-stream]])
+        [clojure.java.io :only [input-stream]]
+        [clojure.contrib.profile :only [prof profile]])
   (:require [clojure.contrib.io :as duck])
   (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
@@ -77,6 +78,7 @@
                             (doto writer
                               (.write "глава")
                               (.flush)))
+               "/proxy-req" (.setHeader hResp "Target" (.. req (getUri) (toString)))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -281,3 +283,19 @@
 
 (deftest issue-1
   (is (= "глава" (string (GET "http://localhost:8123/issue-1")))))
+
+(deftest get-via-proxy
+  (let [target "http://localhost:8123/proxy-req"
+        resp (GET target :proxy {:host "localhost" :port 8123})
+        headers (:headers @resp)]
+    (is (= target (:target headers)))))
+
+(deftest profile-get-stream
+  (let [gets (repeat (GET "http://localhost:8123/stream"))
+        seqs (repeat (STREAM-SEQ :get "http://localhost:8123/stream"))
+        f (fn [resps] (doseq [resp resps] (is (= "part1part2" (prof :get-stream (string resp))))))
+        g (fn [resps] (doseq [resp resps] (doseq [s (prof :seq-stream (doall (string resp)))]
+                                                (is (or (= "part1" s) (= "part2 s"))))))]
+    (profile (dotimes [i 10]
+               (f (take 1000 (nthnext gets (* i 1000))))
+               (g (take 1000 (nthnext seqs (* i 1000))))))))

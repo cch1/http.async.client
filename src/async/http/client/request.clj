@@ -20,10 +20,10 @@
         [clojure.stacktrace]
         [clojure.contrib.java-utils :only [as-str]]
         [clojure.contrib.str-utils :only [str-join]])
-  (:import (com.ning.http.client AsyncHttpClient AsyncHandler Headers
+  (:import (com.ning.http.client AsyncHttpClient AsyncHandler FluentCaseInsensitiveStringsMap
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart Request RequestBuilder
-				 RequestType)
+				 RequestType ProxyServer)
            (ahc RequestBuilderWrapper)
            (java.net URLEncoder)
            (java.io InputStream
@@ -99,7 +99,8 @@
   Options:
     :query   - map of query parameters
     :param   - map of parameters
-    :headers - map of headers"
+    :headers - map of headers
+    :proxy   - map configurign proxy with :host and :port"
   {:tag Request}
   ([method #^String url]
      (prepare-request method url {}))
@@ -110,6 +111,7 @@
     {headers :headers
      param :param
      query :query
+     proxy :proxy
      :as options}
     body]
      ; RequestBuilderWrapper is needed for now, until RequestBuilder
@@ -126,6 +128,8 @@
        (doseq [[k v] query] (.addQueryParameter rbw
                                                 (if (keyword? k) (name k) k)
                                                 (str v)))
+       (if proxy
+         (.setProxyServer rbw (ProxyServer. (:host proxy) (:port proxy))))
        (if body
          (if (map? body)
            (doseq [[k v] body]
