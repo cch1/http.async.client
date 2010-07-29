@@ -98,50 +98,35 @@
   "Prepares method (GET, POST, ..) request to url.
   Options:
     :query   - map of query parameters
-    :param   - map of parameters
     :headers - map of headers
-    :proxy   - map configurign proxy with :host and :port"
+    :body    - body
+    :proxy   - map with proxy configuration to be used (:host and :port)"
   {:tag Request}
-  ([method #^String url]
-     (prepare-request method url {}))
-  ([method #^String url options]
-     (prepare-request method url options nil))
-  ([method
-    #^String url
-    {headers :headers
-     param :param
-     query :query
-     proxy :proxy
-     :as options}
-    body]
-     ; RequestBuilderWrapper is needed for now, until RequestBuilder
-     ; is able to be used directly from Clojure.
-     (let [#^RequestBuilderWrapper rbw
-           (RequestBuilderWrapper.
-            (RequestBuilder. (convert-method method)))]
-       (doseq [[k v] headers] (.addHeader rbw
-                                          (if (keyword? k) (name k) k)
-                                          (str v)))
-       (doseq [[k v] param] (.addParameter rbw
-                                           (if (keyword? k) (name k) k)
-                                           (str v)))
-       (doseq [[k v] query] (.addQueryParameter rbw
-                                                (if (keyword? k) (name k) k)
-                                                (str v)))
-       (if proxy
-         (.setProxyServer rbw (ProxyServer. (:host proxy) (:port proxy))))
-       (if body
-         (if (map? body)
-           (doseq [[k v] body]
-             (.addParameter rbw
-                            (if (keyword? k) (name k) k)
-                            (str v)))
-           (.setBody
-            rbw
-            (cond
-             (string? body) (.getBytes (url-encode body) "UTF-8")
-             (instance? InputStream body) body))))
-       (.. (.getRequestBuilder rbw) (setUrl url) (build)))))
+  [method #^String url & {headers :headers
+                          query :query
+                          body :body
+                          proxy :proxy}]
+  ;; RequestBuilderWrapper is needed for now, until RequestBuilder
+  ;; is able to be used directly from Clojure.
+  (let [#^RequestBuilderWrapper rbw
+        (RequestBuilderWrapper.
+         (RequestBuilder. (convert-method method)))]
+    (doseq [[k v] headers] (.addHeader rbw
+                                       (if (keyword? k) (name k) k)
+                                       (str v)))
+    (doseq [[k v] query] (.addQueryParameter rbw
+                                             (if (keyword? k) (name k) k)
+                                             (str v)))
+    (cond
+     (map? body) (doseq [[k v] body]
+                   (.addParameter rbw
+                                  (if (keyword? k) (name k) k)
+                                  (str v)))
+     (string? body) (.setBody rbw (.getBytes (url-encode body) "UTF-8"))
+     (instance? InputStream body) (.setBody rbw body))
+    (if proxy
+      (.setProxyServer rbw (ProxyServer. (:host proxy) (:port proxy))))
+    (.. (.getRequestBuilder rbw) (setUrl url) (build))))
 
 (defn convert-action
   "Converts action (:abort, nil) to Async client STATE."
@@ -159,14 +144,13 @@
     :part      - Body part callback, fn called with state (ref {}) and vector of bytes.
     :completed - Request completed callback, fn called with state (ref {}), result is delivered to response promise..
     :error     - Error callback, fn called with state (ref {}) and Throwable."
-  [#^Request req options]
+  [#^Request req & {st-cb :status
+                    hd-cb :headers
+                    pt-cb :part
+                    ct-cb :completed
+                    er-cb :error}]
   (let [resp (promise)
-        state (ref {:id (gensym "req-id__")})
-        st-cb (:status options)
-        hd-cb (:headers options)
-        pt-cb (:part options)
-        ct-cb (:completed options)
-        er-cb (:error options)]
+        state (ref {:id (gensym "req-id__")})]
     (.executeRequest
      ahc req
      (proxy [AsyncHandler] []

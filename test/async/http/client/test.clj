@@ -117,11 +117,11 @@
   (let [status# (promise)
 	_ (execute-request
 	   (prepare-request :get "http://localhost:8123/")
-	   {:status (fn [_ st] (do (deliver status# st) :abort))
-            :part body-collect
-            :completed body-completed
-            :headers headers-collect
-            :error error-collect})
+	   :status (fn [_ st] (do (deliver status# st) :abort))
+           :part body-collect
+           :completed body-completed
+           :headers headers-collect
+           :error error-collect)
 	status @status#]
     (are [k v] (= (k status) v)
          :code 200
@@ -134,11 +134,11 @@
   (let [headers# (promise)
         _ (execute-request
            (prepare-request :get "http://localhost:8123/")
-           {:status status-collect
-            :part body-collect
-            :completed body-completed
-            :headers (fn [_ hds] (do (deliver headers# hds) :abort))
-            :error error-collect})
+           :status status-collect
+           :part body-collect
+           :completed body-completed
+           :headers (fn [_ hds] (do (deliver headers# hds) :abort))
+           :error error-collect)
         headers @headers#]
     (is (= (:test-header headers) "test-value"))))
 
@@ -173,10 +173,10 @@
 (deftest test-get-params-not-allowed
   (is (thrown?
        IllegalArgumentException
-       (GET "http://localhost:8123/" :param {:a 5 :b 6}))))
+       (GET "http://localhost:8123/" :body {:a 5 :b 6}))))
 
 (deftest test-post-params
-  (let [resp (POST "http://localhost:8123/" nil :param {:a 5 :b 6})
+  (let [resp (POST "http://localhost:8123/" :body {:a 5 :b 6})
         headers (:headers @resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
@@ -184,13 +184,13 @@
          :b 6)))
 
 (deftest test-post-string-body
-  (let [resp (POST "http://localhost:8123/body-str" "TestBody")
+  (let [resp (POST "http://localhost:8123/body-str" :body "TestBody")
         headers (:headers @resp)]
     (is (not (empty? headers)))
     (is (= "TestBody" (string resp)))))
 
 (deftest test-post-map-body
-  (let [resp (POST "http://localhost:8123/" {:u "user" :p "s3cr3t"})
+  (let [resp (POST "http://localhost:8123/" :body {:u "user" :p "s3cr3t"})
         headers (:headers @resp)]
     (is (not (empty? headers)))
     (are [x y] (= x (y headers))
@@ -198,13 +198,13 @@
          "s3cr3t" :p)))
 
 (deftest test-post-input-stream-body
-  (let [resp (POST "http://localhost:8123/body-str" (input-stream (.getBytes "TestContent" "UTF-8")))
+  (let [resp (POST "http://localhost:8123/body-str" :body (input-stream (.getBytes "TestContent" "UTF-8")))
         headers (:headers @resp)]
     (is (not (empty? headers)))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-put
-  (let [resp (PUT "http://localhost:8123/put" "TestContent")
+  (let [resp (PUT "http://localhost:8123/put" :body "TestContent")
         status (:status @resp)
         headers (:headers @resp)]
     (are [x] (not (empty? x))

@@ -22,66 +22,62 @@
 (defn GET
   "GET resource from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (prepare-request :get url options)
-                   {:status status-collect
-                    :headers headers-collect
-                    :part body-collect
-                    :completed body-completed
-                    :error error-collect}))
+  (execute-request (apply prepare-request :get url (apply concat options))
+                   :status status-collect
+                   :headers headers-collect
+                   :part body-collect
+                   :completed body-completed
+                   :error error-collect))
 
 (defn POST
   "POST to resource. Returns promise, that is delivered once response is completed."
-  ([#^String url]
-     (POST url []))
-  ([#^String url body & {:as options}]
-     (execute-request (prepare-request :post url options body)
-                      {:status status-collect
-                       :headers headers-collect
-                       :part body-collect
-                       :completed body-completed
-                       :error error-collect})))
+  [#^String url & {:as options}]
+  (execute-request (apply prepare-request :post url (apply concat options))
+                   :status status-collect
+                   :headers headers-collect
+                   :part body-collect
+                   :completed body-completed
+                   :error error-collect))
 
 (defn PUT
   "PUT to resource. Returns promise, that is delivered once response is completed."
-  ([#^String url]
-     (PUT url []))
-  ([#^String url body & {:as options}]
-     (execute-request (prepare-request :put url options body)
-                      {:status status-collect
-                       :headers headers-collect
-                       :part body-collect
-                       :completed body-completed
-                       :error error-collect})))
+  [#^String url & {:as options}]
+  (execute-request (apply prepare-request :put url (apply concat options))
+                   :status status-collect
+                   :headers headers-collect
+                   :part body-collect
+                   :completed body-completed
+                   :error error-collect))
 
 (defn DELETE
   "DELETE resource from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (prepare-request :delete url options)
-                   {:status status-collect
-                    :headers headers-collect
-                    :part body-collect
-                    :completed body-completed
-                    :error error-collect}))
+  (execute-request (apply prepare-request :delete url (apply concat options))
+                   :status status-collect
+                   :headers headers-collect
+                   :part body-collect
+                   :completed body-completed
+                   :error error-collect))
 
 (defn HEAD
   "Request HEAD from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (prepare-request :head url options)
-                   {:status status-collect
-                    :headers headers-collect
-                    :part body-collect
-                    :completed body-completed
-                    :error error-collect}))
+  (execute-request (apply prepare-request :head url (apply concat options))
+                   :status status-collect
+                   :headers headers-collect
+                   :part body-collect
+                   :completed body-completed
+                   :error error-collect))
 
 (defn OPTIONS
   "Request OPTIONS from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (prepare-request :options url options)
-                   {:status status-collect
-                    :headers headers-collect
-                    :part body-collect
-                    :completed body-completed
-                    :error error-collect}))
+  (execute-request (apply prepare-request :options url (apply concat options))
+                   :status status-collect
+                   :headers headers-collect
+                   :part body-collect
+                   :completed body-completed
+                   :error error-collect))
 
 (defn STREAM
   "Consumes stream from given url.
@@ -91,12 +87,12 @@
                        and received body part as vector of bytes
   options - are optional and can contain :headers, :param, and :query (see prepare-request)."
   [method #^String url body-part-callback & {:as options}]
-  (execute-request (prepare-request method url options)
-                   {:status status-collect
-                    :headers headers-collect
-                    :part body-part-callback
-                    :completed body-completed
-                    :error error-collect}))
+  (execute-request (apply prepare-request method url (apply concat options))
+                   :status status-collect
+                   :headers headers-collect
+                   :part body-part-callback
+                   :completed body-completed
+                   :error error-collect))
 
 (defn STREAM-SEQ
   "Creates potentially infinite lazy sequence of Http Stream."
@@ -107,7 +103,7 @@
                   (let [v (.take que)]
                     (when-not (= ::done v)
                       (cons v (thisfn)))))))]
-    (consume-stream (prepare-request method url options)
+    (consume-stream (apply prepare-request method url (apply concat options))
                     :status status-collect
                     :headers headers-collect
                     :part (fn [state baos]
