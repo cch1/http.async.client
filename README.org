@@ -6,29 +6,50 @@
 * Intro
   *ahc-clj* is Async Http Client for Clojure.
 
-  Will not block a thread to wait for response.
+  It is based on [[http://github.com/ning/async-http-client][Asynchronous Http Client for Java]] which runs on top
+  of [[http://jboss.org/netty][Netty Project]].
 
-  Will return a [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][clojure.core/promise]] that will be
-  [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/deliver][deliver]]ed once response is completed.
-
-  Allows you to provide callbacks that will get triggered on Http
-  Response events like:
-  - received status line,
-  - received headers,
-  - received body part,
-  - completed request,
-  - handle error.
-
-  That should allow to consume streams.
+  There are three modes in witch it works:
+  - *Asynchronous operations*
+    When you do:
+    : (GET url)
+    Result will be a [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][clojure.core/promise]] that will be [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/deliver][deliver]]ed once
+    response is completed.
+    This promise is a map that contains following keys:
+    - *:status* - lazy map of status fields
+      - *:code* - response code
+      - *:msg* - response message
+      - *:protocol* - protocol with version
+      - *:major* - major version of protocol
+      - *:minor* - minor version of protocol
+    - *:headers* - lazy map of headers where header names are
+      keyworded, like *:server* for example
+    - *:body* - body of response, this is ByteArrayOutputStream, but you
+      have convenience functions to convert it to string for example
+    - *:error* if there was an error you will find Throwable here
+  - *Streaming*
+    When you do:
+    : (STREAM-SEQ :get url)
+    Result will be [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/ref][ref]] to a [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/map][map]] that contains [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][promise]]s for different
+    stages of request processing as well as contents of map returned
+    by functions like *GET* except *:body* will be lazy sequence of
+    ByteArrayOutputStreams.
+  - *Raw mode*
+    This allows you to provide callbacks that will get triggered on Http
+    Response events like:
+    - received status line,
+    - received headers,
+    - received body part,
+    - completed request,
+    - handle error.
 
   *ahc-clj* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
 * Sample
 #+BEGIN_VERSE
 (let [resp (GET "http://localhost:8123/")
-      headers (:headers @resp)
-      body (:body @resp)]
+      headers (:headers @resp)]
   (println (:server headers))
-  (println (apply str (map char body))))
+  (println (string resp)))
 #+END_VERSE
 * Requires
   Clojure 1.2

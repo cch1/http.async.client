@@ -28,19 +28,19 @@
 *** DONE HEAD                                                          :rel1:
 *** DONE OPTIONS                                                       :rel1:
 *** TODO Others once supported by AHC-Java                             :rel2:
-** TODO PUT/POST streaming body                                        :rel2:
+** TODO PUT/POST streaming body                                        :rel4:
    That can be done with *clojure.core/add-watch*.
    Watcher in that scenario will grab new content and write it via
    AHC, or alternatively will *clojure.core/send-off* to execute
    IO operation in separate thread.
-** TODO Multipart                                                      :rel2:
+** TODO Multipart                                                      :rel4:
 * Configuration [0/2]
-** TODO Global configuration of AHC                                    :rel2:
+** TODO Global configuration of AHC                                    :rel4:
    Connection limiting per host.
    Global proxy.
-** TODO Per request configuration                                      :rel2:
+** TODO Per request configuration                                      :rel4:
    For stuff like proxy, timeout.
-* Tasks [5/6]
+* Tasks [7/9]
 ** DONE License                                                         :rel1:
 ** DONE Cleanup namespaces                                              :rel1:
 *** async.http.client
@@ -51,11 +51,18 @@
     - execute-request
     - prepare-request
 ** DONE Release 0.1.0                                                  :rel1:
+** DONE Release 0.1.1                                                  :rel2:
+** TODO Release 0.2.0                                                  :rel3:
+   Changes:
+   - Stream as seq
+   - Streams used instead of byte vectors (issue-1)
+   - keyworded maps are used in api
 ** DONE Make tests stand-alone                                         :rel1:
    Test suite should not fail when there is now hello-www on port 8080.
 ** DONE Simplify request preparation                                   :rel1:
    For now fns like GET will call prepare-get that will call
    prepare-reqeust. I don't think prepare-get is necessary,
    should be quite fine to only use *prepare-request*.
-** TODO Use last argument as key worded map                            :rel2:
+** DONE Use last argument as key worded map                            :rel3:
    As suggested by [[http://blog.licenser.net/][Licenser]] on #clojure [[http://clojure-log.n01se.net/date/2010-07-08.html#i25][here]].
+** TODO Review documentation                                           :rel3:
