@@ -4,7 +4,7 @@
 #+INFOJS_OPT: view:info toc:1
 #+OPTIONS: H:4
 
-* User Documentation [3/3]
+* User Documentation [4/4]
   How to use Async Http Client - Clojure a.k.a. *ahc-clj*.
   : (ns your.ns (:require [async.http.client :as c]))
 ** DONE HTTP methods                                                   :rel1:
@@ -150,11 +150,12 @@
     to agent,
   - if you need to stop stream consumption just return *:abort* from
     callback.
-** DONE Requesting                                                     :rel1:
-   This is lower level access to *ahc-clj*.
-   It provides default set of callbacks and functions to create and
-   execute requests.
-*** Preparing request
+** DONE Low level                                                      :rel1:
+*** DONE Requesting                                                    :rel1:
+    This is lower level access to *ahc-clj*.
+    It provides default set of callbacks and functions to create and
+    execute requests.
+**** Preparing request
     *prepare-request* is responsible for request preparation.
     It takes following arguments:
     - HTTP Method like *:get* *:head*
@@ -173,38 +174,77 @@
                 :headers {:my-header "value"})]
       ...)
 #+END_VERSE
-*** Executing request
-    *execute-request* returns a *promise* that will be *delivered*
-    once response is received.
-    It takes request to be executed (one returned by
-    *prepare-request*) and *options* keyworded arguments.
-    *options* consists of:
-    - *:status* status line received callback
-    - *:headers* headers received callback
-    - *:part* body part received callback
-    - *:completed* body receiving completed callback
-    - *:error* error callback
-    All callbacks take *(ref {})* as first argument. This is STM map
-    per request, you can store here what ever you want. Look at
-    implementations of default callbacks for more information.
-**** Status line
-     Status line callback is called with *state* and lazy map with following keys:
-     - *:code* status code
-     - *:msg* status message
-     - *:protocol* protocol with version (HTTP/1.1)
-     - *:major* major protocol version
-     - *:minor* minor protocol version
-**** Headers
-     Headers callback is called with *state* and lazy map of headers.
-     Keys in that map are *(keyword (.toLowerCase <header name>))*, so
-     "Server" headers is *:server* and so on.
-**** Body part
-     Body part callback is called with *state* and *vec* of bytes that
-     have been received.
-**** Body completed
-     This callback is called with *state* only and result of it is
-     delivered to response promise.
-**** Error
-     Error callback gets called with *state* and *Throwable*.
+**** Executing request
+     *execute-request* returns a *promise* that will be *delivered*
+     once response is received.
+     *promise* to be delivered is result of call-back provided in
+     *options* under key *:completed*.
+     It takes request to be executed (result of *prepare-request*) and
+     *options* as keyworded arguments consisting of call-backs..
+     Following *options* are recognized:
+     - *:status* status line received callback
+     - *:headers* headers received callback
+     - *:part* body part received callback
+     - *:completed* body receiving completed callback
+     - *:error* error callback
+     All callbacks take *(ref {})* as first argument, called *state*
+     further on. This is STM map per request, you can store here
+     whatever you want. Look at implementations of default callbacks
+     for more information.
+***** Status line
+      Status line callback is called with *state* and lazy map
+      representing HTTP Response Status.
+      Status map has following keys:
+      - *:code* status code (200, 404, ..)
+      - *:msg* status message ("OK", ..)
+      - *:protocol* protocol with version ("HTTP/1.1")
+      - *:major* major protocol version (1)
+      - *:minor* minor protocol version (0, 1)
+***** Headers
+      Headers callback is called with *state* and lazy map of headers.
+      Keys in that map are *(keyword (.toLowerCase <header name>))*, so
+      "Server" headers is *:server* and so on.
+***** Body part
+      Body part callback is called with *state* and
+      ByteArrayOutputStream that have been received.
+***** Body completed
+      This callback is called with *state* only and result of it is
+      delivered to response promise.
+***** Error
+      Error callback gets called with *state* and *Throwable*.
+**** Consuming a stream                                                :rel3:
+     *consume-stream* is quite similar to *execute-request* but is
+     targeted for HTTP Streams that are not meant to finish, or are
+     anticipated to be bigger than available resources (so you will
+     not be able to fit them in RAM).
+     It returns *(ref {})* not promise, as we don't expect it to
+     finish. This ref will be map with following keys:
+     - *:id* request unique id
+     - response state promises:
+       - *:status-received* is delivered once status has been received
+         and *:status* is available
+       - *:headers-received* is delivered once headers has been
+         received and *:headers* is available
+       - *:body-started* is delivered once first body part has been
+         received and is available under *:body* lazy sequence
+       - *:body-finished* is delivered once response body has been
+         finished, and no more elements will be added to *:body*
+         lazy-seq
+       - *:errored* is delivered once error receiving response
+         happened.
+     - response content:
+       - *:status* is lazy map containing status information as
+         explained in Intro
+       - *:headers* is lazy map of headers
+       - *:body* is lazy sequence of ByteArrayOutputStream
+       - *:error* is Throwable if error appeared
+     Callback are provided same way as for "Executing request" and
+     following are recognized:
+     - *:status* status line received call-back
+     - *:headers* headers received call-back
+     - *:part* body part received call-back, body part received is
+       ByteArrayOutputStream
+     - *:completed* response body completed
+     - *:error* error callback
 * Developer [0/1]
 ** TODO Building                                                       :rel2:
