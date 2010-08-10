@@ -2,6 +2,7 @@ package ahc;
 import java.io.InputStream;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.ProxyServer;
+import com.ning.http.client.Cookie;
 public class RequestBuilderWrapper {
     private RequestBuilder rb;
     public RequestBuilderWrapper(RequestBuilder rb) { this.rb = rb; }
@@ -25,5 +26,8 @@ public class RequestBuilderWrapper {
         return this;}
     public RequestBuilderWrapper setProxyServer(ProxyServer proxy) {
         rb.setProxyServer(proxy);
+        return this;}
+    public RequestBuilderWrapper addCookie(Cookie cookie) {
+        rb.addCookie(cookie);
         return this;}
     public RequestBuilder getRequestBuilder() { return rb; }}

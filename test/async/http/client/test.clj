@@ -27,7 +27,7 @@
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
            (org.eclipse.jetty.continuation Continuation ContinuationSupport)
-           (javax.servlet.http HttpServletRequest HttpServletResponse)
+           (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
            (java.io ByteArrayOutputStream)))
 
 ;; test suite setup
@@ -42,7 +42,8 @@
                                                     "Content-Length"
                                                     "Host"
                                                     "User-Agent"
-                                                    "Content-Type"} k))]
+                                                    "Content-Type"
+                                                    "Cookie"} k))]
                (.setHeader hResp k (.getHeader hReq k))))
            (.setContentType hResp "text/plain;charset=utf-8")
            (.setStatus hResp 200)
@@ -79,6 +80,10 @@
                               (.write "глава")
                               (.flush)))
                "/proxy-req" (.setHeader hResp "Target" (.. req (getUri) (toString)))
+               "/cookie" (do
+                           (.addCookie hResp (Cookie. "foo" "bar"))
+                           (doseq [c (.getCookies hReq)]
+                             (.addCookie hResp c)))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -104,11 +109,12 @@
     (.setLevel Level/WARN)
     (.addAppender (ConsoleAppender. (PatternLayout. PatternLayout/TTCC_CONVERSION_PATTERN))))
   (def srv (start-jetty default-handler))
-  (try (f)
-       (finally
-        (do
-          (.close ahc)
-          (.stop srv)))))
+  (binding [*ahc* (create-client)]
+    (try (f)
+         (finally
+          (do
+            (.close *ahc*)
+            (.stop srv))))))
 
 (use-fixtures :once once-fixture)
 
@@ -160,7 +166,7 @@
     (is (not (nil? body)))
     (is (= "Remember to checkout #clojure@freenode" (string resp)))
     (if (contains? headers :content-length)
-      (is (= (count body) (:content-length headers))))))
+      (is (= (count (string resp)) (Integer/parseInt (:content-length headers)))))))
 
 (deftest test-query-params
   (let [resp (GET "http://localhost:8123/" :query {:a 3 :b 4})
@@ -245,7 +251,7 @@
 
 (deftest test-stream
   (let [stream (ref #{})
-        resp (STREAM :get "http://localhost:8123/stream"
+        resp (request-stream :get "http://localhost:8123/stream"
                      (fn [_ baos]
                        (dosync (alter stream conj (.toString baos duck/*default-encoding*)))))
         status (:status @resp)]
@@ -262,7 +268,7 @@
     (is (= "part1part2" (string resp)))))
 
 (deftest test-stream-seq
-  (let [resp (STREAM-SEQ :get "http://localhost:8123/stream")
+  (let [resp (stream-seq :get "http://localhost:8123/stream")
         status-received @(:status-received @resp)
         status (:status @resp)
         headers-received @(:headers-received @resp)
@@ -290,12 +296,34 @@
         headers (:headers @resp)]
     (is (= target (:target headers)))))
 
-(deftest profile-get-stream
-  (let [gets (repeat (GET "http://localhost:8123/stream"))
-        seqs (repeat (STREAM-SEQ :get "http://localhost:8123/stream"))
-        f (fn [resps] (doseq [resp resps] (is (= "part1part2" (prof :get-stream (string resp))))))
-        g (fn [resps] (doseq [resp resps] (doseq [s (prof :seq-stream (doall (string resp)))]
-                                                (is (or (= "part1" s) (= "part2 s"))))))]
-    (profile (dotimes [i 10]
-               (f (take 1000 (nthnext gets (* i 1000))))
-               (g (take 1000 (nthnext seqs (* i 1000))))))))
+(deftest get-with-cookie
+  (let [resp (GET "http://localhost:8123/cookie"
+                  :cookies #{{:domain "http://localhost:8123/"
+                              :name "sample-name"
+                              :value "sample value"
+                              :path "/cookie"
+                              :max-age 10
+                              :secure false}})
+        headers (:headers @resp)]
+    (is (contains? headers :set-cookie))
+    (let [cookies (cookies resp)]
+      (is (not (empty? cookies)))
+      (doseq [cookie cookies]
+        (is (or (= (:name cookie) "sample-name")
+                (= (:name cookie) "foo")))
+        (is (= (:value cookie)
+               (if (= (:name cookie) "sample-name")
+                 "\"sample value\"" ; TODO Why sample value get's
+                                    ; escaped, test if that happens on
+                                    ; plain java client as well.
+                 "bar")))))))
+
+;;(deftest profile-get-stream
+;;  (let [gets (repeat (GET "http://localhost:8123/stream"))
+;;        seqs (repeat (stream-seq :get "http://localhost:8123/stream"))
+;;        f (fn [resps] (doseq [resp resps] (is (= "part1part2" (prof :get-stream (string resp))))))
+;;        g (fn [resps] (doseq [resp resps] (doseq [s (prof :seq-stream (doall (string resp)))]
+;;                                                (is (or (= "part1" s) (= "part2 s"))))))]
+;;    (profile (dotimes [i 10]
+;;               (f (take 1000 (nthnext gets (* i 1000))))
+;;               (g (take 1000 (nthnext seqs (* i 1000))))))))
