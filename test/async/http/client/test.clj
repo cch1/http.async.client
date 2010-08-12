@@ -297,10 +297,11 @@
     (is (= target (:target headers)))))
 
 (deftest get-with-cookie
-  (let [resp (GET "http://localhost:8123/cookie"
+  (let [cv "sample-value"
+        resp (GET "http://localhost:8123/cookie"
                   :cookies #{{:domain "http://localhost:8123/"
                               :name "sample-name"
-                              :value "sample value"
+                              :value cv
                               :path "/cookie"
                               :max-age 10
                               :secure false}})
@@ -313,9 +314,7 @@
                 (= (:name cookie) "foo")))
         (is (= (:value cookie)
                (if (= (:name cookie) "sample-name")
-                 "\"sample value\"" ; TODO Why sample value get's
-                                    ; escaped, test if that happens on
-                                    ; plain java client as well.
+                 cv
                  "bar")))))))
 
 ;;(deftest profile-get-stream
