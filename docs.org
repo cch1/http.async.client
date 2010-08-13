@@ -4,10 +4,11 @@
 #+INFOJS_OPT: view:info toc:1
 #+OPTIONS: H:4
 
-* User Documentation [3/3]
-  For now there is not much of documentation here.
-  I've tried to cover ahc-clj with tests, this is a good source of examples.
+* User Documentation [4/4]
+  How to use Async Http Client - Clojure a.k.a. *ahc-clj*.
+  : (ns your.ns (:require [async.http.client :as c]))
 ** DONE HTTP methods                                                   :rel1:
+   HTTP methods and convenience functions to request them.
 *** GET
     Most basic invocation of *GET* is only with *url* you want to get.
     Extended invocation includes options that can be any options
@@ -17,24 +18,45 @@
 #+BEGIN_VERSE
     (let [resp (GET "<your url>")
           status (:status @resp)
-          headers (:headers @resp)
-          body (:body @resp)]
+          headers (:headers @resp)]
       (println (:code status))
-      (println (apply str (map char body))))
+      (println (string resp)))
 #+END_VERSE
 
     Invocation with query parameters:
 #+BEGIN_VERSE
-    (let [resp (GET "<your url>" {:query {:param-name "some-value}})
+    (let [resp (GET "<your url>" :query {:param-name "some-value})
           status (:status @resp)
-          headers (:headers @resp)
-          body (:body @resp)]
+          headers (:headers @resp)]
       (println (:code status))
-      (println (apply str (map char body))))
+      (println (string (:body @resp))))
 #+END_VERSE
-*** POST/PUT
-    *PUT*/*POST* work the same way as get but they accept *body* as
-    parameter as well.
+
+    Invocation with proxy:
+#+BEGIN_VERSE
+    (let [resp (GET "<your url>"
+                    :query {:param-name "some-value"}
+                    :proxy {:host host :port port})
+          status (:status @resp)]
+      (println (:code status))
+      (println (string (:body @resp))))
+#+END_VERSE
+
+    Invocation with cookies:
+#+BEGIN_VERSE
+    (let [resp (GET "http://localhost:8123/cookie"
+                    :cookies #{{:domain "http://localhost:8123/"
+                                :name "sample-name"
+                                :value "sample-value
+                                :path "/cookie"
+                                :max-age 10
+                                :secure false}})]
+      (doseq [cookie (cookies resp)]
+        (println "name:" (:name cookie) ", value:" (:value cookie)))
+#+END_VERSE
+    Notice *cookies* function that extracts cookies from response.
+*** PUT/POST
+    *PUT/POST* work the same way as *GET* but they also accept *body*.
 
     *body* can be:
     - String
@@ -43,24 +65,14 @@
 **** Submitting body as String
      You can send String as body with PUT/POST:
 #+BEGIN_VERSE
-(let [resp (POST "<your url>" "SampleBody")]
+(let [resp (POST "<your url>" :body "SampleBody")]
   ; do something with @resp
   )
 #+END_VERSE
 **** Submitting form parameters
-     For now there are two ways to submit body parameters.
-     Most likely only one will survive.
-
-     Submitting parameters via options:
-#+BEGIN_VERSE
-(let [resp (POST "<your url>" nil {:param {:a 5 :b 6}})]
-  ; do something with @resp
-  )
-#+END_VERSE
-
      Submitting parameters via body map:
 #+BEGIN_VERSE
-(let [resp (POST "<your url>" {:u "user" :p "s3cr3t"})]
+(let [resp (POST "<your url>" :body {:u "user" :p "s3cr3t"})]
   ; do something with @resp
   )
 #+END_VERSE
@@ -68,7 +80,7 @@
      Last method to provide body is via InputStream:
 #+BEGIN_VERSE
 (use '[clojure.java.io :only [input-stream]])
-(let [resp (PUT "<your url>" (input-stream (.getBytes "SampleContent" "UTF-8")))]
+(let [resp (PUT "<your url>" :body (input-stream (.getBytes "SampleContent" "UTF-8")))]
   ; do something with @resp
   )
 #+END_VERSE
@@ -93,67 +105,51 @@
   ; do something with @resp
   )
 #+END_VERSE
-** DONE Requesting                                                     :rel1:
-   This is lower level access to *ahc-clj*.
-   It provides default set of callbacks and functions to create and
-   execute reqeusts.
-*** Preparing request
-    *prepare-request* is responsible for request preparation.
-    It takes following arguments:
-    - HTTP Method like *:get* *:head*
-    - *url* that you want to call
-    - and optional *options* map:
-      - *:query* is map of query parameters to be sent over
-      - *:headers* is map of headers to be send over
-      - *:params* is map of request parameters to send over, keep in
-        mind that those should be send only with *PUT* and *POST*
-        requests.
-*** Executing request
-    *execute-request* returns a *promise* that will be *delivered*
-    once response is received.
-    It takes request to be executed (one returned by
-    *prepare-request*) and *options* map.
-    *options* map consists of:
-    - *:status* status line received callback
-    - *:headers* headers received callback
-    - *:part* body part received callback
-    - *:completed* body receiving completed callback
-    - *:error* error callback
-    All callbacks take *(ref {})* as first argument. This is STM map
-    per request, you can store here what ever you want. Look at
-    implementations of default callbacks for more information.
-**** Status line
-     Status line callback is called with *state* and lazy map with following keys:
-     - *:code* status code
-     - *:msg* status message
-     - *:protocol* protocol with version (HTTP/1.1)
-     - *:major* major protocol version
-     - *:minor* minor protocol version
-**** Headers
-     Headers callback is called with *state* and lazy map of headers.
-     Keys in that map are *(keyword (.toLowerCase <header name>))*, so
-     "Server" headers is *:server* and so on.
-**** Body part
-     Body part callback is called with *state* and *vec* of bytes that
-     have been received.
-**** Body completed
-     This callback is called with *state* only and result of it is
-     delivered to response promise.
-**** Error
-     Error callback gets called with *state* and *Throwable*.
-** DONE Streaming                                                      :rel1:
-   Consuming HTTP Stream is quite straight forward with *ahc-clj*.
-   You will need to know what HTTP Method you will call, what URL
-   and provide a call back function to handle body parts been
+** DONE Streaming                                                      :rel3:
+   Two ways of consuming a HTTP Stream are supported:
+   - Lazy sequence
+   - call-back
+*** Lazy sequence                                                      :rel3:
+    This is preferred way to consume a HTTP Stream.
+    *stream-seq* needs to know what HTTP Method to request
+    (:get, :post, ..), url and optionally keyworded arguments like:
+    - :query
+    - :headers
+    - :body
+    - :proxy
+    What it will return is a *(ref {})* consisting of:
+    - *:status-delivered* - promise that is delivered when status line
+      has been consumed and *:status* is available
+    - *:status* - same status lazy map as in standard request
+    - *:headers-received* - promise that is delivered when headers has
+      been received and *:headers* is available
+    - *:headers* - same headers lazy map as in standard request
+    - *:body-started* - promise that is delivered when first body part
+      has been received and *:body* is available
+    - *:body* - Lazy sequence of body parts that are
+      ByteArrayOutputStreams
+    - *:body-finished* - promise delivered when body consumption has
+      been finished, no more body parts will be received
+    Sample usage:
+#+BEGIN_VERSE
+(let [resp (stream-seq :get "<url>")
+      status-received @(:status-received @resp)
+      status (:status @resp)
+      body-started @(:body-started @resp)
+      body (:body @resp)]
+  (println (:code status))
+  (doseq [s (string resp)] (println s)))
+#+END_VERSE
+*** Call-back
+   Consuming HTTP Stream with call-back is quite straight forward with
+   *ahc-clj*. You will need to know what HTTP Method you will call,
+   what URL and provide a call back function to handle body parts been
    received.
 #+BEGIN_VERSE
 (let [stream (ref #{})
-      resp (STREAM :get "<your url>"
-                   (fn [state bytes]
-                     (if (not (empty? bytes))
-                       (let [p (apply str (map char bytes))]
-                         (dosync (alter stream conj p)))
-                       (println "Empty body part received."))))]
+      resp (stream :get "<your url>"
+                   (fn [state body]
+                     (dosync (alter stream conj (string body)))))]
   ; do something to @stream
   ; @resp will not get delivered until streaming is done
   )
@@ -167,5 +163,101 @@
     to agent,
   - if you need to stop stream consumption just return *:abort* from
     callback.
+** DONE Low level                                                      :rel1:
+*** DONE Requesting                                                    :rel1:
+    This is lower level access to *ahc-clj*.
+    It provides default set of callbacks and functions to create and
+    execute requests.
+**** Preparing request
+    *prepare-request* is responsible for request preparation.
+    It takes following arguments:
+    - HTTP Method like *:get* *:head*
+    - *url* that you want to call
+    - and optional *options* keyworded map:
+      - *:query* is map of query parameters to be sent over
+      - *:headers* is map of headers to be send over
+      - *:body* can be map of request parameters, string or
+        InputStream to send over, keep in mind that those should be
+        send only with *PUT* and *POST* requests
+      - *:proxy* proxy configuration to be used (*:host* and *:port*)
+    Sample:
+#+BEGIN_VERSE
+    (let [req (prepare-request
+                :get "http://google.com"
+                :headers {:my-header "value"})]
+      ...)
+#+END_VERSE
+**** Executing request
+     *execute-request* returns a *promise* that will be *delivered*
+     once response is received.
+     *promise* to be delivered is result of call-back provided in
+     *options* under key *:completed*.
+     It takes request to be executed (result of *prepare-request*) and
+     *options* as keyworded arguments consisting of call-backs..
+     Following *options* are recognized:
+     - *:status* status line received callback
+     - *:headers* headers received callback
+     - *:part* body part received callback
+     - *:completed* body receiving completed callback
+     - *:error* error callback
+     All callbacks take *(ref {})* as first argument, called *state*
+     further on. This is STM map per request, you can store here
+     whatever you want. Look at implementations of default callbacks
+     for more information.
+***** Status line
+      Status line callback is called with *state* and lazy map
+      representing HTTP Response Status.
+      Status map has following keys:
+      - *:code* status code (200, 404, ..)
+      - *:msg* status message ("OK", ..)
+      - *:protocol* protocol with version ("HTTP/1.1")
+      - *:major* major protocol version (1)
+      - *:minor* minor protocol version (0, 1)
+***** Headers
+      Headers callback is called with *state* and lazy map of headers.
+      Keys in that map are *(keyword (.toLowerCase <header name>))*, so
+      "Server" headers is *:server* and so on.
+***** Body part
+      Body part callback is called with *state* and
+      ByteArrayOutputStream that have been received.
+***** Body completed
+      This callback is called with *state* only and result of it is
+      delivered to response promise.
+***** Error
+      Error callback gets called with *state* and *Throwable*.
+**** Consuming a stream                                                :rel3:
+     *consume-stream* is quite similar to *execute-request* but is
+     targeted for HTTP Streams that are not meant to finish, or are
+     anticipated to be bigger than available resources (so you will
+     not be able to fit them in RAM).
+     It returns *(ref {})* not promise, as we don't expect it to
+     finish. This ref will be map with following keys:
+     - *:id* request unique id
+     - response state promises:
+       - *:status-received* is delivered once status has been received
+         and *:status* is available
+       - *:headers-received* is delivered once headers has been
+         received and *:headers* is available
+       - *:body-started* is delivered once first body part has been
+         received and is available under *:body* lazy sequence
+       - *:body-finished* is delivered once response body has been
+         finished, and no more elements will be added to *:body*
+         lazy-seq
+       - *:errored* is delivered once error receiving response
+         happened.
+     - response content:
+       - *:status* is lazy map containing status information as
+         explained in Intro
+       - *:headers* is lazy map of headers
+       - *:body* is lazy sequence of ByteArrayOutputStream
+       - *:error* is Throwable if error appeared
+     Callback are provided same way as for "Executing request" and
+     following are recognized:
+     - *:status* status line received call-back
+     - *:headers* headers received call-back
+     - *:part* body part received call-back, body part received is
+       ByteArrayOutputStream
+     - *:completed* response body completed
+     - *:error* error callback
 * Developer [0/1]
 ** TODO Building                                                       :rel2:

@@ -12,10 +12,12 @@
 ** DONE Implement response *promise*                                   :rel1:
 ** DONE Consume stream                                                 :rel1:
 ** DONE Error function                                                 :rel1:
-* Send [4/7]                                                           :code:
+* Send [5/8]                                                           :code:
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
+** DONE Cookies                                                        :rel3:
+*** TODO Describe                                                      :rel3:
 ** DONE PUT/POST body [3/3]                                            :rel1:
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
@@ -27,22 +29,24 @@
 *** DONE DELETE                                                        :rel1:
 *** DONE HEAD                                                          :rel1:
 *** DONE OPTIONS                                                       :rel1:
-*** TODO Others once supported by AHC-Java                             :rel2:
-** TODO PUT/POST streaming body                                        :rel2:
+*** TODO Others, once supported by AHC-Java                            :rel2:
+** TODO PUT/POST streaming body                                        :rel4:
    That can be done with *clojure.core/add-watch*.
    Watcher in that scenario will grab new content and write it via
    AHC, or alternatively will *clojure.core/send-off* to execute
    IO operation in separate thread.
-** TODO Multipart                                                      :rel2:
+** TODO Multipart                                                      :rel4:
 * Configuration [0/2]
-** TODO Global configuration of AHC                                    :rel2:
-   Connection limiting per host.
-   Global proxy.
-** TODO Per request configuration                                      :rel2:
-   For stuff like proxy, timeout.
-* Tasks [5/6]
-** DONE License                                                         :rel1:
-** DONE Cleanup namespaces                                              :rel1:
+** TODO Global configuration of AHC [0/3]                              :rel4:
+*** TODO Connection limiting per host.
+*** TODO Global proxy.
+*** TODO Timeout settings
+** TODO Per request configuration [1/2]                                :rel4:
+*** DONE Proxy configuration                                           :rel3:
+*** TODO Timeout                                                       :rel4:
+* Tasks [7/9]
+** DONE License                                                        :rel1:
+** DONE Cleanup namespaces                                             :rel1:
 *** async.http.client
     Should contain helper functions to call all HTTP verbs.
     Default set of call-backs.
@@ -51,11 +55,18 @@
     - execute-request
     - prepare-request
 ** DONE Release 0.1.0                                                  :rel1:
+** DONE Release 0.1.1                                                  :rel2:
+** TODO Release 0.2.0                                                  :rel3:
+   Changes:
+   - Stream as seq
+   - Streams used instead of byte vectors (issue-1)
+   - keyworded maps are used in api
 ** DONE Make tests stand-alone                                         :rel1:
    Test suite should not fail when there is now hello-www on port 8080.
 ** DONE Simplify request preparation                                   :rel1:
    For now fns like GET will call prepare-get that will call
    prepare-reqeust. I don't think prepare-get is necessary,
    should be quite fine to only use *prepare-request*.
-** TODO Use last argument as key worded map                            :rel2:
+** DONE Use last argument as key worded map                            :rel3:
    As suggested by [[http://blog.licenser.net/][Licenser]] on #clojure [[http://clojure-log.n01se.net/date/2010-07-08.html#i25][here]].
+** TODO Review documentation                                           :rel3:
