@@ -12,10 +12,12 @@
 ** DONE Implement response *promise*                                   :rel1:
 ** DONE Consume stream                                                 :rel1:
 ** DONE Error function                                                 :rel1:
-* Send [4/7]                                                           :code:
+* Send [5/8]                                                           :code:
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
+** DONE Cookies                                                        :rel3:
+*** TODO Describe                                                      :rel3:
 ** DONE PUT/POST body [3/3]                                            :rel1:
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
@@ -27,7 +29,7 @@
 *** DONE DELETE                                                        :rel1:
 *** DONE HEAD                                                          :rel1:
 *** DONE OPTIONS                                                       :rel1:
-*** TODO Others once supported by AHC-Java                             :rel2:
+*** TODO Others, once supported by AHC-Java                            :rel2:
 ** TODO PUT/POST streaming body                                        :rel4:
    That can be done with *clojure.core/add-watch*.
    Watcher in that scenario will grab new content and write it via
@@ -35,14 +37,16 @@
    IO operation in separate thread.
 ** TODO Multipart                                                      :rel4:
 * Configuration [0/2]
-** TODO Global configuration of AHC                                    :rel4:
-   Connection limiting per host.
-   Global proxy.
-** TODO Per request configuration                                      :rel4:
-   For stuff like proxy, timeout.
+** TODO Global configuration of AHC [0/3]                              :rel4:
+*** TODO Connection limiting per host.
+*** TODO Global proxy.
+*** TODO Timeout settings
+** TODO Per request configuration [1/2]                                :rel4:
+*** DONE Proxy configuration                                           :rel3:
+*** TODO Timeout                                                       :rel4:
 * Tasks [7/9]
-** DONE License                                                         :rel1:
-** DONE Cleanup namespaces                                              :rel1:
+** DONE License                                                        :rel1:
+** DONE Cleanup namespaces                                             :rel1:
 *** async.http.client
     Should contain helper functions to call all HTTP verbs.
     Default set of call-backs.
