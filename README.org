@@ -29,7 +29,7 @@
     - *:error* if there was an error you will find Throwable here
   - *Streaming*
     When you do:
-    : (STREAM-SEQ :get url)
+    : (stream-seq :get url)
     Result will be [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/ref][ref]] to a [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/map][map]] that contains [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][promise]]s for different
     stages of request processing as well as contents of map returned
     by functions like *GET* except *:body* will be lazy sequence of
