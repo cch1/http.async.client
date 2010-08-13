@@ -112,7 +112,7 @@
    - call-back
 *** Lazy sequence                                                      :rel3:
     This is preferred way to consume a HTTP Stream.
-    *STREAM-SEQ* needs to know what HTTP Method to request
+    *stream-seq* needs to know what HTTP Method to request
     (:get, :post, ..), url and optionally keyworded arguments like:
     - :query
     - :headers
@@ -133,7 +133,7 @@
       been finished, no more body parts will be received
     Sample usage:
 #+BEGIN_VERSE
-(let [resp (STREAM-SEQ :get "<url>")
+(let [resp (stream-seq :get "<url>")
       status-received @(:status-received @resp)
       status (:status @resp)
       body-started @(:body-started @resp)
@@ -148,7 +148,7 @@
    received.
 #+BEGIN_VERSE
 (let [stream (ref #{})
-      resp (STREAM :get "<your url>"
+      resp (stream :get "<your url>"
                    (fn [state body]
                      (dosync (alter stream conj (string body)))))]
   ; do something to @stream
