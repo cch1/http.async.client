@@ -44,12 +44,17 @@
 
     Invocation with cookies:
 #+BEGIN_VERSE
-    (let [resp (GET "<your url>"
-                    :cookies #{{:domain "<cookie domain>"
-                                :name "cookie-name"
-                                :value "cookie-value"
-                                :
+    (let [resp (GET "http://localhost:8123/cookie"
+                    :cookies #{{:domain "http://localhost:8123/"
+                                :name "sample-name"
+                                :value "sample-value
+                                :path "/cookie"
+                                :max-age 10
+                                :secure false}})]
+      (doseq [cookie (cookies resp)]
+        (println "name:" (:name cookie) ", value:" (:value cookie)))
 #+END_VERSE
+    Notice *cookies* function that extracts cookies from response.
 *** PUT/POST
     *PUT*/*POST* work the same way as get but they accept *body* as
     parameter as well.
