@@ -41,6 +41,15 @@
       (println (:code status))
       (println (string (:body @resp))))
 #+END_VERSE
+
+    Invocation with cookies:
+#+BEGIN_VERSE
+    (let [resp (GET "<your url>"
+                    :cookies #{{:domain "<cookie domain>"
+                                :name "cookie-name"
+                                :value "cookie-value"
+                                :
+#+END_VERSE
 *** PUT/POST
     *PUT*/*POST* work the same way as get but they accept *body* as
     parameter as well.
