@@ -60,15 +60,27 @@ namespace.
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#async.http.client/PUT">PUT</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a href="#async.http.client/STREAM">STREAM</a>
+      <a href="#async.http.client/cookies">cookies</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/create-client">create-client</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/request-stream">request-stream</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/stream-seq">stream-seq</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client/string">string</a>
     </div>
     <br />
   </div><div style="margin-left: 1em;" class="toc-section">
     <a href="#async.http.client.request">async.http.client.request</a>
     <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client.request/consume-stream">consume-stream</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#async.http.client.request/convert-action">convert-action</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#async.http.client.request/execute-request">execute-request</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#async.http.client.request/get-encoding">get-encoding</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#async.http.client.request/prepare-request">prepare-request</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
@@ -94,70 +106,79 @@ by <span id="author">Hubert Iwaniuk</span><br />
   <hr />
   <h2 id="async.http.client/DELETE">DELETE</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (DELETE url)
-       (DELETE url options)
+  <pre id="var-usage">Usage: (DELETE url &amp; {:as options})
 </pre>
   <pre id="var-docstr">DELETE resource from url. Returns promise, that is delivered once response is completed.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L61" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L58" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
   <h2 id="async.http.client/GET">GET</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (GET url)
-       (GET url options)
+  <pre id="var-usage">Usage: (GET url &amp; {:as options})
 </pre>
   <pre id="var-docstr">GET resource from url. Returns promise, that is delivered once response is completed.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L21" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L28" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
   <h2 id="async.http.client/HEAD">HEAD</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (HEAD url)
-       (HEAD url options)
+  <pre id="var-usage">Usage: (HEAD url &amp; {:as options})
 </pre>
   <pre id="var-docstr">Request HEAD from url. Returns promise, that is delivered once response is completed.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L73" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L68" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
   <h2 id="async.http.client/OPTIONS">OPTIONS</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (OPTIONS url)
-       (OPTIONS url options)
+  <pre id="var-usage">Usage: (OPTIONS url &amp; {:as options})
 </pre>
   <pre id="var-docstr">Request OPTIONS from url. Returns promise, that is delivered once response is completed.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L85" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L78" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
   <h2 id="async.http.client/POST">POST</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (POST url)
-       (POST url body)
-       (POST url body options)
+  <pre id="var-usage">Usage: (POST url &amp; {:as options})
 </pre>
   <pre id="var-docstr">POST to resource. Returns promise, that is delivered once response is completed.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L33" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L38" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
   <h2 id="async.http.client/PUT">PUT</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (PUT url)
-       (PUT url body)
-       (PUT url body options)
+  <pre id="var-usage">Usage: (PUT url &amp; {:as options})
 </pre>
   <pre id="var-docstr">PUT to resource. Returns promise, that is delivered once response is completed.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L47" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L48" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
-  <h2 id="async.http.client/STREAM">STREAM</h2>
+  <h2 id="async.http.client/cookies">cookies</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (STREAM method url body-part-callback)
-       (STREAM method url body-part-callback options)
+  <pre id="var-usage">Usage: (cookies resp)
+</pre>
+  <pre id="var-docstr">Gets cookies from response.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L133" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/create-client">create-client</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-client)
+</pre>
+  <pre id="var-docstr">Creates new Async Http Client</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L24" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/request-stream">request-stream</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (request-stream method url body-part-callback &amp; {:as options})
 </pre>
   <pre id="var-docstr">Consumes stream from given url.
 method - HTTP method to be used (:get, :post, ...)
@@ -165,24 +186,58 @@ url - URL to set request to
 body-part-callback - callback that takes status (ref {}) of request
                      and received body part as vector of bytes
 options - are optional and can contain :headers, :param, and :query (see prepare-request).</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/38e5261f43363177156c2ed9e051d18704cf7baf/src/async/http/client.clj#L97" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L88" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/stream-seq">stream-seq</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (stream-seq method url &amp; {:as options})
+</pre>
+  <pre id="var-docstr">Creates potentially infinite lazy sequence of Http Stream.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L103" id="var-source">Source</a>
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="async.http.client/string">string</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (string resp)
+</pre>
+  <pre id="var-docstr">Converts response to string.</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client.clj#L123" id="var-source">Source</a>
 </div>
 <h2 id="namespace-name">async.http.client.request</h2>
 <pre id="namespace-docstr">Async HTTP Client - Clojure - Requesting API</pre>
 <br />
 <div id="var-entry">
   <hr />
+  <h2 id="async.http.client.request/consume-stream">consume-stream</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (consume-stream req &amp; {status-fn :status, headers-fn :headers, part-fn :part, completed-fn :completed, error-fn :error})
+</pre>
+  <pre id="var-docstr">Executes provided request, assuming target will stream..
+Arguments:
+- req - prepared request
+- options
+  - :status - status callback
+  - :headers - headers callback
+  - :part - body part callback
+  - :completed - request completed
+  - :error - error callback</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client/request.clj#L189" id="var-source">Source</a>
+</div><div id="var-entry">
+  <hr />
   <h2 id="async.http.client.request/convert-action">convert-action</h2>
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (convert-action action)
 </pre>
   <pre id="var-docstr">Converts action (:abort, nil) to Async client STATE.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/213654885ebd72d42dd29edb6f986589c0b4e7da/src/async/http/client/request.clj#L132" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client/request.clj#L144" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="async.http.client.request/execute-request">execute-request</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (execute-request req options)
+  <pre id="var-usage">Usage: (execute-request req &amp; {st-cb :status, hd-cb :headers, pt-cb :part, ct-cb :completed, er-cb :error})
 </pre>
   <pre id="var-docstr">Executes provided reqeust with given callback functions.
 Options:
@@ -191,21 +246,30 @@ Options:
   :part      - Body part callback, fn called with state (ref {}) and vector of bytes.
   :completed - Request completed callback, fn called with state (ref {}), result is delivered to response promise..
   :error     - Error callback, fn called with state (ref {}) and Throwable.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/213654885ebd72d42dd29edb6f986589c0b4e7da/src/async/http/client/request.clj#L140" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client/request.clj#L152" id="var-source">Source</a>
+</div><div id="var-entry">
+  <hr />
+  <h2 id="async.http.client.request/get-encoding">get-encoding</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (get-encoding {ct :content-type})
+</pre>
+  <pre id="var-docstr">Gets content encoding from headers, if Content-Type header not present
+or media-type in it is missing =&gt; nil</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client/request.clj#L48" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="async.http.client.request/prepare-request">prepare-request</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (prepare-request method url)
-       (prepare-request method url options)
-       (prepare-request method url {headers :headers, param :param, query :query, :as options} body)
+  <pre id="var-usage">Usage: (prepare-request method url &amp; {headers :headers, query :query, body :body, cookies :cookies, proxy :proxy})
 </pre>
   <pre id="var-docstr">Prepares method (GET, POST, ..) request to url.
 Options:
   :query   - map of query parameters
-  :param   - map of parameters
-  :headers - map of headers</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/213654885ebd72d42dd29edb6f986589c0b4e7da/src/async/http/client/request.clj#L87" id="var-source">Source</a>
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used (:host and :port)</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client/request.clj#L98" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="async.http.client.request/url-encode">url-encode</h2>
@@ -213,7 +277,7 @@ Options:
   <pre id="var-usage">Usage: (url-encode arg)
 </pre>
   <pre id="var-docstr">Taken from Clojure Http Client</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/213654885ebd72d42dd29edb6f986589c0b4e7da/src/async/http/client/request.clj#L80" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/c127453b8d6d73552baf6b6027e35c9c7c3049a4/src/async/http/client/request.clj#L91" id="var-source">Source</a>
 </div>
 
 
