@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Async Http Client - Clojure - Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-07-14 15:45:59 CEST"/>
+<meta name="generated" content="2010-08-13 09:17:53 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -92,12 +92,12 @@ org_html_manager.setup();  // activate after the parameters are set
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 User Documentation [3/3] </a>
+<li><a href="#sec-1">1 User Documentation [4/4] </a>
 <ul>
 <li><a href="#sec-1.1">1.1 HTTP methods</a>
 <ul>
 <li><a href="#sec-1.1.1">1.1.1 GET </a></li>
-<li><a href="#sec-1.1.2">1.1.2 POST/PUT </a>
+<li><a href="#sec-1.1.2">1.1.2 PUT/POST </a>
 <ul>
 <li><a href="#sec-1.1.2.1">1.1.2.1 Submitting body as String </a></li>
 <li><a href="#sec-1.1.2.2">1.1.2.2 Submitting form parameters </a></li>
@@ -109,20 +109,21 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-1.1.5">1.1.5 OPTIONS </a></li>
 </ul>
 </li>
-<li><a href="#sec-1.2">1.2 Requesting</a>
+<li><a href="#sec-1.2">1.2 Streaming</a>
 <ul>
-<li><a href="#sec-1.2.1">1.2.1 Preparing request </a></li>
-<li><a href="#sec-1.2.2">1.2.2 Executing request </a>
-<ul>
-<li><a href="#sec-1.2.2.1">1.2.2.1 Status line </a></li>
-<li><a href="#sec-1.2.2.2">1.2.2.2 Headers </a></li>
-<li><a href="#sec-1.2.2.3">1.2.2.3 Body part </a></li>
-<li><a href="#sec-1.2.2.4">1.2.2.4 Body completed </a></li>
-<li><a href="#sec-1.2.2.5">1.2.2.5 Error </a></li>
-</ul></li>
+<li><a href="#sec-1.2.1">1.2.1 Lazy sequence</a></li>
+<li><a href="#sec-1.2.2">1.2.2 Call-back </a></li>
 </ul>
 </li>
-<li><a href="#sec-1.3">1.3 Streaming</a></li>
+<li><a href="#sec-1.3">1.3 Low level</a>
+<ul>
+<li><a href="#sec-1.3.1">1.3.1 Requesting</a>
+<ul>
+<li><a href="#sec-1.3.1.1">1.3.1.1 Preparing request </a></li>
+<li><a href="#sec-1.3.1.2">1.3.1.2 Executing request </a></li>
+<li><a href="#sec-1.3.1.3">1.3.1.3 Consuming a stream</a></li>
+</ul></li>
+</ul></li>
 </ul>
 </li>
 <li><a href="#sec-2">2 Developer [0/1] </a>
@@ -135,19 +136,23 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> User Documentation [3/3] </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> User Documentation [4/4] </h2>
 <div class="outline-text-2" id="text-1">
 
-<p>For now there is not much of documentation here.
-I've tried to cover ahc-clj with tests, this is a good source of examples.
-</p>
+<p>How to use Async Http Client - Clojure a.k.a. <b>ahc-clj</b>.
+</p><pre class="example">
+(ns your.ns (:require [async.http.client :as c]))
+</pre>
+
+
 </div>
 
 <div id="outline-container-1.1" class="outline-3">
 <h3 id="sec-1.1"><span class="section-number-3">1.1</span> <span class="done DONE"> DONE</span> HTTP methods &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-1.1">
 
-
+<p>HTTP methods and convenience functions to request them.
+</p>
 </div>
 
 <div id="outline-container-1.1.1" class="outline-4">
@@ -164,10 +169,9 @@ Simple invocation:
 <p class="verse">
 (let [resp (GET "&lt;your url&gt;")<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status (:status @resp)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; headers (:headers @resp)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; body (:body @resp)]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; headers (:headers @resp)]<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; (println (:code status))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp; (println (apply str (map char body))))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; (println (string resp)))<br/>
 </p>
 
 
@@ -175,24 +179,52 @@ Simple invocation:
 Invocation with query parameters:
 </p>
 <p class="verse">
-(let [resp (GET "&lt;your url&gt;" {:query {:param-name "some-value}})<br/>
+(let [resp (GET "&lt;your url&gt;" :query {:param-name "some-value})<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status (:status @resp)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; headers (:headers @resp)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; body (:body @resp)]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; headers (:headers @resp)]<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; (println (:code status))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp; (println (apply str (map char body))))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; (println (string (:body @resp))))<br/>
 </p>
 
-</div>
+
+<p>
+Invocation with proxy:
+</p>
+<p class="verse">
+(let [resp (GET "&lt;your url&gt;"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :query {:param-name "some-value"}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :proxy {:host host :port port})<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status (:status @resp)]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; (println (:code status))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; (println (string (:body @resp))))<br/>
+</p>
+
+
+<p>
+Invocation with cookies:
+</p>
+<p class="verse">
+(let [resp (GET "<a href="http://localhost:8123/cookie"">http://localhost:8123/cookie"</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :cookies #{{:domain "<a href="http://localhost:8123/"">http://localhost:8123/"</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :name "sample-name"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :value "sample-value<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :path "/cookie"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :max-age 10<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :secure false}})]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; (doseq [cookie (cookies resp)]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (println "name:" (:name cookie) ", value:" (:value cookie)))<br/>
+</p>
+
+<p>Notice <b>cookies</b> function that extracts cookies from response.
+</p></div>
 
 </div>
 
 <div id="outline-container-1.1.2" class="outline-4">
-<h4 id="sec-1.1.2"><span class="section-number-4">1.1.2</span> POST/PUT </h4>
+<h4 id="sec-1.1.2"><span class="section-number-4">1.1.2</span> PUT/POST </h4>
 <div class="outline-text-4" id="text-1.1.2">
 
-<p><b>PUT*/*POST</b> work the same way as get but they accept <b>body</b> as
-parameter as well.
+<p><b>PUT/POST</b> work the same way as <b>GET</b> but they also accept <b>body</b>.
 </p>
 <p>
 <b>body</b> can be:
@@ -217,7 +249,7 @@ InputStream for any content
 <p>You can send String as body with PUT/POST:
 </p>
 <p class="verse">
-(let [resp (POST "&lt;your url&gt;" "SampleBody")]<br/>
+(let [resp (POST "&lt;your url&gt;" :body "SampleBody")]<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; ; do something with @resp<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; )<br/>
 </p>
@@ -230,24 +262,10 @@ InputStream for any content
 <h5 id="sec-1.1.2.2"><span class="section-number-5">1.1.2.2</span> Submitting form parameters </h5>
 <div class="outline-text-5" id="text-1.1.2.2">
 
-<p>For now there are two ways to submit body parameters.
-Most likely only one will survive.
-</p>
-<p>
-Submitting parameters via options:
+<p>Submitting parameters via body map:
 </p>
 <p class="verse">
-(let [resp (POST "&lt;your url&gt;" nil {:param {:a 5 :b 6}})]<br/>
-&nbsp;&nbsp;&nbsp;&nbsp; ; do something with @resp<br/>
-&nbsp;&nbsp;&nbsp;&nbsp; )<br/>
-</p>
-
-
-<p>
-Submitting parameters via body map:
-</p>
-<p class="verse">
-(let [resp (POST "&lt;your url&gt;" {:u "user" :p "s3cr3t"})]<br/>
+(let [resp (POST "&lt;your url&gt;" :body {:u "user" :p "s3cr3t"})]<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; ; do something with @resp<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; )<br/>
 </p>
@@ -264,7 +282,7 @@ Submitting parameters via body map:
 </p>
 <p class="verse">
 (use '[clojure.java.io :only [input-stream]])<br/>
-(let [resp (PUT "&lt;your url&gt;" (input-stream (.getBytes "SampleContent" "UTF-8")))]<br/>
+(let [resp (PUT "&lt;your url&gt;" :body (input-stream (.getBytes "SampleContent" "UTF-8")))]<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; ; do something with @resp<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; )<br/>
 </p>
@@ -324,167 +342,103 @@ Submitting parameters via body map:
 </div>
 
 <div id="outline-container-1.2" class="outline-3">
-<h3 id="sec-1.2"><span class="section-number-3">1.2</span> <span class="done DONE"> DONE</span> Requesting &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<h3 id="sec-1.2"><span class="section-number-3">1.2</span> <span class="done DONE"> DONE</span> Streaming &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-1.2">
 
-<p>This is lower level access to <b>ahc-clj</b>.
-It provides default set of callbacks and functions to create and
-execute reqeusts.
-</p>
+<p>Two ways of consuming a HTTP Stream are supported:
+</p><ul>
+<li>
+Lazy sequence
+</li>
+<li>
+call-back
+</li>
+</ul>
+
 </div>
 
 <div id="outline-container-1.2.1" class="outline-4">
-<h4 id="sec-1.2.1"><span class="section-number-4">1.2.1</span> Preparing request </h4>
+<h4 id="sec-1.2.1"><span class="section-number-4">1.2.1</span> Lazy sequence &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
 <div class="outline-text-4" id="text-1.2.1">
 
-<p><b>prepare-request</b> is responsible for request preparation.
-It takes following arguments:
+<p>This is preferred way to consume a HTTP Stream.
+<b>stream-seq</b> needs to know what HTTP Method to request
+(:get, :post, ..), url and optionally keyworded arguments like:
 </p><ul>
 <li>
-HTTP Method like <b>:get</b> <b>:head</b>
+:query
 </li>
 <li>
-<b>url</b> that you want to call
+:headers
 </li>
 <li>
-and optional <b>options</b> map:
-<ul>
-<li>
-<b>:query</b> is map of query parameters to be sent over
+:body
 </li>
 <li>
-<b>:headers</b> is map of headers to be send over
-</li>
-<li>
-<b>:params</b> is map of request parameters to send over, keep in
-mind that those should be send only with <b>PUT</b> and <b>POST</b>
-requests.
+:proxy
 </li>
 </ul>
+
+<p>What it will return is a <b>(ref {})</b> consisting of:
+</p><ul>
+<li>
+<b>:status-delivered</b> - promise that is delivered when status line
+has been consumed and <b>:status</b> is available
+</li>
+<li>
+<b>:status</b> - same status lazy map as in standard request
+</li>
+<li>
+<b>:headers-received</b> - promise that is delivered when headers has
+been received and <b>:headers</b> is available
+</li>
+<li>
+<b>:headers</b> - same headers lazy map as in standard request
+</li>
+<li>
+<b>:body-started</b> - promise that is delivered when first body part
+has been received and <b>:body</b> is available
+</li>
+<li>
+<b>:body</b> - Lazy sequence of body parts that are
+ByteArrayOutputStreams
+</li>
+<li>
+<b>:body-finished</b> - promise delivered when body consumption has
+been finished, no more body parts will be received
 </li>
 </ul>
+
+<p>Sample usage:
+</p>
+<p class="verse">
+(let [resp (stream-seq :get "&lt;url&gt;")<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status-received @(:status-received @resp)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status (:status @resp)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; body-started @(:body-started @resp)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; body (:body @resp)]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; (println (:code status))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; (doseq [s (string resp)] (println s)))<br/>
+</p>
+
 </div>
 
 </div>
 
 <div id="outline-container-1.2.2" class="outline-4">
-<h4 id="sec-1.2.2"><span class="section-number-4">1.2.2</span> Executing request </h4>
+<h4 id="sec-1.2.2"><span class="section-number-4">1.2.2</span> Call-back </h4>
 <div class="outline-text-4" id="text-1.2.2">
 
-<p><b>execute-request</b> returns a <b>promise</b> that will be <b>delivered</b>
-once response is received.
-It takes request to be executed (one returned by
-<b>prepare-request</b>) and <b>options</b> map.
-<b>options</b> map consists of:
-</p><ul>
-<li>
-<b>:status</b> status line received callback
-</li>
-<li>
-<b>:headers</b> headers received callback
-</li>
-<li>
-<b>:part</b> body part received callback
-</li>
-<li>
-<b>:completed</b> body receiving completed callback
-</li>
-<li>
-<b>:error</b> error callback
-</li>
-</ul>
-
-<p>All callbacks take <b>(ref {})</b> as first argument. This is STM map
-per request, you can store here what ever you want. Look at
-implementations of default callbacks for more information.
-</p>
-</div>
-
-<div id="outline-container-1.2.2.1" class="outline-5">
-<h5 id="sec-1.2.2.1"><span class="section-number-5">1.2.2.1</span> Status line </h5>
-<div class="outline-text-5" id="text-1.2.2.1">
-
-<p>Status line callback is called with <b>state</b> and lazy map with following keys:
-</p><ul>
-<li>
-<b>:code</b> status code
-</li>
-<li>
-<b>:msg</b> status message
-</li>
-<li>
-<b>:protocol</b> protocol with version (HTTP/1.1)
-</li>
-<li>
-<b>:major</b> major protocol version
-</li>
-<li>
-<b>:minor</b> minor protocol version
-</li>
-</ul>
-</div>
-
-</div>
-
-<div id="outline-container-1.2.2.2" class="outline-5">
-<h5 id="sec-1.2.2.2"><span class="section-number-5">1.2.2.2</span> Headers </h5>
-<div class="outline-text-5" id="text-1.2.2.2">
-
-<p>Headers callback is called with <b>state</b> and lazy map of headers.
-Keys in that map are <b>(keyword (.toLowerCase &lt;header name&gt;))</b>, so
-"Server" headers is <b>:server</b> and so on.
-</p></div>
-
-</div>
-
-<div id="outline-container-1.2.2.3" class="outline-5">
-<h5 id="sec-1.2.2.3"><span class="section-number-5">1.2.2.3</span> Body part </h5>
-<div class="outline-text-5" id="text-1.2.2.3">
-
-<p>Body part callback is called with <b>state</b> and <b>vec</b> of bytes that
-have been received.
-</p></div>
-
-</div>
-
-<div id="outline-container-1.2.2.4" class="outline-5">
-<h5 id="sec-1.2.2.4"><span class="section-number-5">1.2.2.4</span> Body completed </h5>
-<div class="outline-text-5" id="text-1.2.2.4">
-
-<p>This callback is called with <b>state</b> only and result of it is
-delivered to response promise.
-</p></div>
-
-</div>
-
-<div id="outline-container-1.2.2.5" class="outline-5">
-<h5 id="sec-1.2.2.5"><span class="section-number-5">1.2.2.5</span> Error </h5>
-<div class="outline-text-5" id="text-1.2.2.5">
-
-<p>Error callback gets called with <b>state</b> and <b>Throwable</b>.
-</p></div>
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-1.3" class="outline-3">
-<h3 id="sec-1.3"><span class="section-number-3">1.3</span> <span class="done DONE"> DONE</span> Streaming &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-1.3">
-
-<p>Consuming HTTP Stream is quite straight forward with <b>ahc-clj</b>.
-You will need to know what HTTP Method you will call, what URL
-and provide a call back function to handle body parts been
+<p>Consuming HTTP Stream with call-back is quite straight forward with
+<b>ahc-clj</b>. You will need to know what HTTP Method you will call,
+what URL and provide a call back function to handle body parts been
 received.
 </p>
 <p class="verse">
 (let [stream (ref #{})<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; resp (STREAM :get "&lt;your url&gt;"<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (fn [state bytes]<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (not (empty? bytes))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let [p (apply str (map char bytes))]<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (dosync (alter stream conj p)))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (println "Empty body part received."))))]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; resp (stream :get "&lt;your url&gt;"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (fn [state body]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (dosync (alter stream conj (string body)))))]<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; ; do something to @stream<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; ; @resp will not get delivered until streaming is done<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; )<br/>
@@ -514,6 +468,234 @@ callback.
 
 </div>
 
+<div id="outline-container-1.3" class="outline-3">
+<h3 id="sec-1.3"><span class="section-number-3">1.3</span> <span class="done DONE"> DONE</span> Low level &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1.3">
+
+
+</div>
+
+<div id="outline-container-1.3.1" class="outline-4">
+<h4 id="sec-1.3.1"><span class="section-number-4">1.3.1</span> <span class="done DONE"> DONE</span> Requesting &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-1.3.1">
+
+<p>This is lower level access to <b>ahc-clj</b>.
+It provides default set of callbacks and functions to create and
+execute requests.
+</p>
+</div>
+
+<div id="outline-container-1.3.1.1" class="outline-5">
+<h5 id="sec-1.3.1.1"><span class="section-number-5">1.3.1.1</span> Preparing request </h5>
+<div class="outline-text-5" id="text-1.3.1.1">
+
+<p><b>prepare-request</b> is responsible for request preparation.
+It takes following arguments:
+</p><ul>
+<li>
+HTTP Method like <b>:get</b> <b>:head</b>
+</li>
+<li>
+<b>url</b> that you want to call
+</li>
+<li>
+and optional <b>options</b> keyworded map:
+<ul>
+<li>
+<b>:query</b> is map of query parameters to be sent over
+</li>
+<li>
+<b>:headers</b> is map of headers to be send over
+</li>
+<li>
+<b>:body</b> can be map of request parameters, string or
+InputStream to send over, keep in mind that those should be
+send only with <b>PUT</b> and <b>POST</b> requests
+</li>
+<li>
+<b>:proxy</b> proxy configuration to be used (<b>:host</b> and <b>:port</b>)
+</li>
+</ul>
+</li>
+</ul>
+
+<p>Sample:
+</p>
+<p class="verse">
+(let [req (prepare-request<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :get "<a href="http://google.com"">http://google.com"</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :headers {:my-header "value"})]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; &hellip;)<br/>
+</p>
+
+</div>
+
+</div>
+
+<div id="outline-container-1.3.1.2" class="outline-5">
+<h5 id="sec-1.3.1.2"><span class="section-number-5">1.3.1.2</span> Executing request </h5>
+<div class="outline-text-5" id="text-1.3.1.2">
+
+<p><b>execute-request</b> returns a <b>promise</b> that will be <b>delivered</b>
+once response is received.
+<b>promise</b> to be delivered is result of call-back provided in
+<b>options</b> under key <b>:completed</b>.
+It takes request to be executed (result of <b>prepare-request</b>) and
+<b>options</b> as keyworded arguments consisting of call-backs..
+Following <b>options</b> are recognized:
+</p><ul>
+<li>
+<b>:status</b> status line received callback
+</li>
+<li>
+<b>:headers</b> headers received callback
+</li>
+<li>
+<b>:part</b> body part received callback
+</li>
+<li>
+<b>:completed</b> body receiving completed callback
+</li>
+<li>
+<b>:error</b> error callback
+</li>
+</ul>
+
+<p>All callbacks take <b>(ref {})</b> as first argument, called <b>state</b>
+further on. This is STM map per request, you can store here
+whatever you want. Look at implementations of default callbacks
+for more information.
+</p><ul>
+<li id="sec-1.3.1.2.1">Status line <br/>
+Status line callback is called with <b>state</b> and lazy map
+representing HTTP Response Status.
+Status map has following keys:
+<ul>
+<li>
+<b>:code</b> status code (200, 404, ..)
+</li>
+<li>
+<b>:msg</b> status message ("OK", ..)
+</li>
+<li>
+<b>:protocol</b> protocol with version ("HTTP/1.1")
+</li>
+<li>
+<b>:major</b> major protocol version (1)
+</li>
+<li>
+<b>:minor</b> minor protocol version (0, 1)
+</li>
+</ul>
+</li>
+<li id="sec-1.3.1.2.2">Headers <br/>
+Headers callback is called with <b>state</b> and lazy map of headers.
+Keys in that map are <b>(keyword (.toLowerCase &lt;header name&gt;))</b>, so
+"Server" headers is <b>:server</b> and so on.
+</li>
+<li id="sec-1.3.1.2.3">Body part <br/>
+Body part callback is called with <b>state</b> and
+ByteArrayOutputStream that have been received.
+</li>
+<li id="sec-1.3.1.2.4">Body completed <br/>
+This callback is called with <b>state</b> only and result of it is
+delivered to response promise.
+</li>
+<li id="sec-1.3.1.2.5">Error <br/>
+Error callback gets called with <b>state</b> and <b>Throwable</b>.
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-1.3.1.3" class="outline-5">
+<h5 id="sec-1.3.1.3"><span class="section-number-5">1.3.1.3</span> Consuming a stream &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h5>
+<div class="outline-text-5" id="text-1.3.1.3">
+
+<p><b>consume-stream</b> is quite similar to <b>execute-request</b> but is
+targeted for HTTP Streams that are not meant to finish, or are
+anticipated to be bigger than available resources (so you will
+not be able to fit them in RAM).
+It returns <b>(ref {})</b> not promise, as we don't expect it to
+finish. This ref will be map with following keys:
+</p><ul>
+<li>
+<b>:id</b> request unique id
+</li>
+<li>
+response state promises:
+<ul>
+<li>
+<b>:status-received</b> is delivered once status has been received
+and <b>:status</b> is available
+</li>
+<li>
+<b>:headers-received</b> is delivered once headers has been
+received and <b>:headers</b> is available
+</li>
+<li>
+<b>:body-started</b> is delivered once first body part has been
+received and is available under <b>:body</b> lazy sequence
+</li>
+<li>
+<b>:body-finished</b> is delivered once response body has been
+finished, and no more elements will be added to <b>:body</b>
+lazy-seq
+</li>
+<li>
+<b>:errored</b> is delivered once error receiving response
+happened.
+</li>
+</ul>
+</li>
+<li>
+response content:
+<ul>
+<li>
+<b>:status</b> is lazy map containing status information as
+explained in Intro
+</li>
+<li>
+<b>:headers</b> is lazy map of headers
+</li>
+<li>
+<b>:body</b> is lazy sequence of ByteArrayOutputStream
+</li>
+<li>
+<b>:error</b> is Throwable if error appeared
+</li>
+</ul>
+</li>
+</ul>
+
+<p>Callback are provided same way as for "Executing request" and
+following are recognized:
+</p><ul>
+<li>
+<b>:status</b> status line received call-back
+</li>
+<li>
+<b>:headers</b> headers received call-back
+</li>
+<li>
+<b>:part</b> body part received call-back, body part received is
+ByteArrayOutputStream
+</li>
+<li>
+<b>:completed</b> response body completed
+</li>
+<li>
+<b>:error</b> error callback
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
 <div id="outline-container-2" class="outline-2">
 <h2 id="sec-2"><span class="section-number-2">2</span> Developer [0/1] </h2>
 <div class="outline-text-2" id="text-2">
@@ -532,7 +714,7 @@ callback.
 <p class="author"> Author: Hubert Iwaniuk
 <a href="mailto:neotyk@kungfoo.pl">&lt;neotyk@kungfoo.pl&gt;</a>
 </p>
-<p class="date"> Date: 2010-07-14 15:45:59 CEST</p>
+<p class="date"> Date: 2010-08-13 09:17:53 CEST</p>
 <p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
 </div>
 </div>
