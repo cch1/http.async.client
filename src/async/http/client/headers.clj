@@ -20,7 +20,9 @@
 
 (defn- v [#^FluentCaseInsensitiveStringsMap h k]
   (let [vals (.get h (kn k))]
-    (apply str (interpose "," vals))))
+    (if (= 1 (count vals))
+      (first vals)
+      (into [] vals))))
 
 (defn convert-headers-to-map [#^HttpResponseHeaders headers]
   "Converts Http Response Headers to lazy map."
@@ -28,18 +30,18 @@
         names (.keySet hds)]
     (proxy [clojure.lang.APersistentMap]
         []
-      (containsKey [k] (contains? names (kn k)))
-      (entryAt [k] (when (contains? names (kn k))
+      (containsKey [k] (.containsKey hds (kn k)))
+      (entryAt [k] (when (.containsKey hds (kn k))
                      (proxy [clojure.lang.MapEntry]
                          [k nil]
                        (val [] (v hds k)))))
       (valAt
        ([k] (v hds k))
-       ([k default] (if (contains? names k)
+       ([k default] (if (.containsKey hds k)
                       (v hds k)
                       default)))
       (cons [m] (throw "Headers are read only."))
-      (count [] (count names))
+      (count [] (.size hds))
       (assoc [k v] (throw "Headers are read only."))
       (without [k] (throw "Headers are read only"))
       (seq [] ((fn thisfn [plseq]
@@ -51,3 +53,18 @@
                                (val [] (v hds k)))
                              (thisfn (rest pseq)))))))
                names)))))
+
+(defn create-cookies [headers]
+  "Creates cookies from headers."
+  (if (contains? headers :set-cookie)
+    (for [cookie-string (:set-cookie headers)]
+      (let [name-token (atom true)]
+        (into {}
+              (for [#^String cookie (.split cookie-string ";")]
+                (let [keyval (map (fn [#^String x] (.trim x)) (.split cookie "=" 2))]
+                  (if @name-token
+                    (do
+                      (compare-and-set! name-token true false)
+                      {:name (first keyval) :value (second keyval)})
+                    [(keyword (first keyval)) (second keyval)]))))))
+    (println "No Set-Cookie header.")))

@@ -16,8 +16,14 @@
   "Async HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
   (:require [clojure.contrib.io :as duck])
-  (:use async.http.client.request)
-  (:import (java.io ByteArrayOutputStream)))
+  (:use async.http.client.request
+        async.http.client.headers)
+  (:import (java.io ByteArrayOutputStream)
+           (com.ning.http.client AsyncHttpClient)))
+
+(defn create-client
+  "Creates new Async Http Client"
+  [] (AsyncHttpClient.))
 
 (defn GET
   "GET resource from url. Returns promise, that is delivered once response is completed."
@@ -79,7 +85,7 @@
                    :completed body-completed
                    :error error-collect))
 
-(defn STREAM
+(defn request-stream
   "Consumes stream from given url.
   method - HTTP method to be used (:get, :post, ...)
   url - URL to set request to
@@ -94,15 +100,15 @@
                    :completed body-completed
                    :error error-collect))
 
-(defn STREAM-SEQ
+(defn stream-seq
   "Creates potentially infinite lazy sequence of Http Stream."
   [method #^String url & {:as options}]
   (let [que (java.util.concurrent.LinkedBlockingQueue.)
-        s-seq ((fn thisfn []
+        s-seq ((fn gen-next []
                  (lazy-seq
                   (let [v (.take que)]
                     (when-not (= ::done v)
-                      (cons v (thisfn)))))))]
+                      (cons v (gen-next)))))))]
     (consume-stream (apply prepare-request method url (apply concat options))
                     :status status-collect
                     :headers headers-collect
@@ -123,3 +129,16 @@
     (if (seq? body)
       (map convert body)
       (convert body))))
+
+(defn cookies
+  "Gets cookies from response."
+  [resp]
+  (if-let [headers-received (:headers-received @resp)]
+    (@headers-received))
+  (if-let [cookies (:cookies @resp)]
+    cookies
+    (let [cookies (create-cookies (:headers @resp))]
+      (if (instance? clojure.lang.Ref resp)
+        (dosync (alter resp assoc :cookies cookies))
+        (assoc @resp :cookies cookies))
+      cookies)))

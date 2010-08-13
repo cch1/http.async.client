@@ -20,7 +20,8 @@
         [clojure.stacktrace]
         [clojure.contrib.java-utils :only [as-str]]
         [clojure.contrib.str-utils :only [str-join]])
-  (:import (com.ning.http.client AsyncHttpClient AsyncHandler FluentCaseInsensitiveStringsMap
+  (:import (com.ning.http.client AsyncHttpClient AsyncHandler Cookie
+                                 FluentCaseInsensitiveStringsMap
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart Request RequestBuilder
 				 RequestType ProxyServer)
@@ -30,7 +31,7 @@
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
-(def ahc (AsyncHttpClient.))
+(def *ahc* (AsyncHttpClient.))
 
 (defn- convert-method [method]
   "Converts clj method (:get, :put, ...) to Async Client specific.
@@ -100,11 +101,13 @@
     :query   - map of query parameters
     :headers - map of headers
     :body    - body
+    :cookies - cookies to send
     :proxy   - map with proxy configuration to be used (:host and :port)"
   {:tag Request}
   [method #^String url & {headers :headers
                           query :query
                           body :body
+                          cookies :cookies
                           proxy :proxy}]
   ;; RequestBuilderWrapper is needed for now, until RequestBuilder
   ;; is able to be used directly from Clojure.
@@ -114,6 +117,16 @@
     (doseq [[k v] headers] (.addHeader rbw
                                        (if (keyword? k) (name k) k)
                                        (str v)))
+    (doseq [{domain :domain
+             name :name
+             value :value
+             path :path
+             max-age :max-age
+             secure :secure
+             :or {path "/"
+                  max-age 30
+                  secure false}} cookies]
+      (.addCookie rbw (Cookie. domain name value path max-age secure)))
     (doseq [[k v] query] (.addQueryParameter rbw
                                              (if (keyword? k) (name k) k)
                                              (str v)))
@@ -152,7 +165,7 @@
   (let [resp (promise)
         state (ref {:id (gensym "req-id__")})]
     (.executeRequest
-     ahc req
+     *ahc* req
      (proxy [AsyncHandler] []
        (onStatusReceived [#^HttpResponseStatus e]
                          (convert-action (st-cb state (convert-status-to-map e))))
@@ -196,7 +209,7 @@
                    :errored (promise)})
         body-started (ref false)]
     (.executeRequest
-     ahc req
+     *ahc* req
      (proxy [AsyncHandler] []
        (onStatusReceived [#^HttpResponseStatus e]
                          (let [action (status-fn resp (convert-status-to-map e))]
