@@ -56,8 +56,7 @@
 #+END_VERSE
     Notice *cookies* function that extracts cookies from response.
 *** PUT/POST
-    *PUT*/*POST* work the same way as get but they accept *body* as
-    parameter as well.
+    *PUT/POST* work the same way as *GET* but they also accept *body*.
 
     *body* can be:
     - String
