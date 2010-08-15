@@ -14,7 +14,8 @@
 
 (ns async.http.client.util
   "Async HTTP Client - Clojure - Utils"
-  {:author "Hubert Iwaniuk"})
+  {:author "Hubert Iwaniuk"}
+  (:refer-clojure :exclude [promise]))
 
 (defn promise
   "Alpha - subject to change.
