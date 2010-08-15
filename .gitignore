@@ -1,5 +1,5 @@
 *~
 lib/
 classes/
-http.async*jar
-
+ahc-clj*jar
+pom.xml
