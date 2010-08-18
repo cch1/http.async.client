@@ -15,8 +15,9 @@
 (ns async.http.client.request
   "Async HTTP Client - Clojure - Requesting API"
   {:author "Hubert Iwaniuk"}
+  (:refer-clojure :exclude [promise])
   (:require [clojure.contrib.io :as duck])
-  (:use [async.http.client status headers]
+  (:use [async.http.client status headers util]
         [clojure.stacktrace]
         [clojure.contrib.java-utils :only [as-str]]
         [clojure.contrib.str-utils :only [str-join]])
@@ -237,3 +238,65 @@
                       (deliver (:errored @resp) true)
                       (error-fn resp t)))))
     resp))
+
+(defn new-execute-request
+  "Executes provided requests.
+  Arguments:
+  - req        - request to be executed
+  - :status    - status callback
+  - :headers   - headers callback
+  - :part      - body part callback
+  - :completed - response completed
+  - :error     - error callback"
+  [#^Request req & {status    :status
+                    headers   :headers
+                    part      :part
+                    completed :completed
+                    error     :error}]
+  (let [resp {:id      (gensym "req-id__")
+              :status  (promise)
+              :headers (promise)
+              :body    (promise)
+              :done    (promise)
+              :error   (promise)}]
+    (.executeRequest
+     *ahc*
+     req
+     (proxy [AsyncHandler] []
+       (onStatusReceived
+        [#^HttpResponseStatus e]
+        (convert-action (status resp (convert-status-to-map e))))
+       (onHeadersReceived
+        [#^HttpResponseHeaders e]
+        (convert-action (headers resp (convert-headers-to-map e))))
+       (onBodyPartReceived
+        [#^HttpResponseBodyPart e]
+        (when-let [bytes (.getBodyPartBytes e)]
+          (let [length (alength bytes)
+                baos (ByteArrayOutputStream. length)]
+            (.write baos bytes 0 alength)
+            (convert-action (part resp baos)))))
+       (onCompleted
+        []
+        (deliver (:done resp) true))
+       (onThrowable
+        [#^Throwable t]
+        (do
+          (print-cause-trace t)
+          (error resp t)))))
+    ^{:started (System/currentTimeMillis)}
+    resp))
+
+(defn failed?
+  "Checks if request failed."
+  [resp]
+  (delivered? (:error resp)))
+
+(defn status
+  "Gets status if status was delivered."
+  [resp]
+  (let [p (:status resp)]
+    (if (or
+         (delivered? p)
+         (not (failed? resp)))
+      @p)))
