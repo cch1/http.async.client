@@ -47,4 +47,5 @@
   "Alpha - subject to change.
   Returns true if promise has been delivered, else false"
   [p]
-  ((:delivered? (meta p))))
+  (if-let [f (:delivered? (meta p))]
+   (f)))
