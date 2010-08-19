@@ -1,8 +1,8 @@
 (defproject ahc-clj "0.2.0-SNAPSHOT"
   :description      "Async Http Client for Clojure"
   :namespaces       [async.http.client]
-  :dependencies     [[org.clojure/clojure "1.2.0-RC2"]
-		     [org.clojure/clojure-contrib "1.2.0-RC2"]
+  :dependencies     [[org.clojure/clojure "1.2.0"]
+		     [org.clojure/clojure-contrib "1.2.0"]
 		     [com.ning/async-http-client "1.0.1-SNAPSHOT"]]
   :dev-dependencies [[swank-clojure "1.2.1"]
 		     [autodoc "0.7.1"]
