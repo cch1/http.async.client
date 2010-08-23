@@ -260,40 +260,34 @@
               :done    (promise)
               :error   (promise)}]
     (.executeRequest
-     *ahc*
-     req
+     *ahc* req
      (proxy [AsyncHandler] []
-       (onStatusReceived
-        [#^HttpResponseStatus e]
-        (let [[result action] (status resp (convert-status-to-map e))]
-          (deliver (:status resp) result)
-          (convert-action action)))
-       (onHeadersReceived
-        [#^HttpResponseHeaders e]
-        (let [[result action] (headers resp (convert-headers-to-map e))]
-          (deliver (:headers resp) result)
-         (convert-action action)))
-       (onBodyPartReceived
-        [#^HttpResponseBodyPart e]
-        (when-let [bytes (.getBodyPartBytes e)]
-          (let [length (alength bytes)
-                baos (ByteArrayOutputStream. length)]
-            (.write baos bytes 0 alength)
-            (let [[result action] (part resp baos)
-                  body (:body resp)]
-              (if-not (delivered? body)
-                (deliver body result))
-              (convert-action action)))))
-       (onCompleted
-        []
-        ;; TODO this is wrong, no call to completed
-        (deliver (:done resp) true))
-       (onThrowable
-        [#^Throwable t]
-        (do
-          (print-cause-trace t)
-          ;; TODO this needs to deliver as well
-          (error resp t)))))
+       (onStatusReceived [#^HttpResponseStatus e]
+                         (let [[result action] (status resp (convert-status-to-map e))]
+                           (deliver (:status resp) result)
+                           (convert-action action)))
+       (onHeadersReceived [#^HttpResponseHeaders e]
+                          (let [[result action] (headers resp (convert-headers-to-map e))]
+                            (deliver (:headers resp) result)
+                            (convert-action action)))
+       (onBodyPartReceived [#^HttpResponseBodyPart e]
+                           (when-let [bytes (.getBodyPartBytes e)]
+                             (let [length (alength bytes)
+                                   baos (ByteArrayOutputStream. length)]
+                               (.write baos bytes 0 alength)
+                               (let [[result action] (part resp baos)
+                                     body (:body resp)]
+                                 (if-not (delivered? body)
+                                   (deliver body result))
+                                 (convert-action action)))))
+       (onCompleted []
+                    (do
+                      (completed resp)
+                      (deliver (:done resp) true)))
+       (onThrowable [#^Throwable t]
+                    (do
+                      (print-cause-trace t)
+                      (deliver (:error resp) (error resp t))))))
     ^{:started (System/currentTimeMillis)}
     resp))
 
