@@ -19,11 +19,17 @@
   (:use async.http.client.request
         async.http.client.headers)
   (:import (java.io ByteArrayOutputStream)
-           (com.ning.http.client AsyncHttpClient)))
+           (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)))
 
 (defn create-client
   "Creates new Async Http Client"
-  [] (AsyncHttpClient.))
+  [& {user-agent :user-agent}]
+  (AsyncHttpClient.
+   (.build
+    (.setUserAgent (AsyncHttpClientConfig$Builder.)
+                   (if user-agent
+                     user-agent
+                     ahc-user-agent)))))
 
 (defn GET
   "GET resource from url. Returns promise, that is delivered once response is completed."

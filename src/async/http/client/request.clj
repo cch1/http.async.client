@@ -21,7 +21,8 @@
         [clojure.stacktrace]
         [clojure.contrib.java-utils :only [as-str]]
         [clojure.contrib.str-utils :only [str-join]])
-  (:import (com.ning.http.client AsyncHttpClient AsyncHandler Cookie
+  (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
+                                 AsyncHandler Cookie
                                  FluentCaseInsensitiveStringsMap
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart Request RequestBuilder
@@ -32,7 +33,12 @@
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
-(def *ahc* (AsyncHttpClient.))
+(def ahc-user-agent "ahc-clj/0.2.0-dev")
+
+(def *ahc*
+     (AsyncHttpClient.
+      (.build
+       (.setUserAgent (AsyncHttpClientConfig$Builder.) ahc-user-agent))))
 
 (defn- convert-method [method]
   "Converts clj method (:get, :put, ...) to Async Client specific.
