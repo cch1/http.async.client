@@ -31,6 +31,15 @@
                      user-agent
                      ahc-user-agent)))))
 
+(defmacro with-ahc
+  "Creates new Async Http Client with given configuration
+  than executes body and closes the client."
+  [{:as config} & body]
+  `(let [c (create-client ~config)]
+     (try ~@body
+          (finally
+           (.close c)))))
+
 (defn GET
   "GET resource from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
