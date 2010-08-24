@@ -34,7 +34,7 @@
 (defmacro with-ahc
   "Creates new Async Http Client with given configuration
   than executes body and closes the client."
-  [{:as config} & body]
+  [config & body]
   `(with-open [c# (create-client ~@(apply concat config))]
      (binding [*ahc* c#]
        ~@body)))
