@@ -84,9 +84,7 @@
                            (.addCookie hResp (Cookie. "foo" "bar"))
                            (doseq [c (.getCookies hReq)]
                              (.addCookie hResp c)))
-               "/branding" (let [ua (.getHeader hReq "User-Agent")]
-                             (println "User-Agent is " ua)
-                             (.setHeader hResp "X-User-Agent" ua))
+               "/branding" (.setHeader hResp "X-User-Agent" (.getHeader hReq "User-Agent"))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -324,7 +322,6 @@
   (let [ua-brand "Branded User Agent/1.0"]
     (with-ahc {:user-agent ua-brand}
       (let [headers (:headers @(GET "http://localhost:8123/branding"))]
-        (println "Received headers: " headers)
         (is (contains? headers :x-user-agent))
         (is (= (:x-user-agent headers) ua-brand))))))
 
