@@ -100,11 +100,11 @@
     (dosync (alter state assoc :body baos))))
 
 (defn new-body-collect [state baos]
-  (let [body (:body @state)]
+  (let [body (:body state)]
     (if (delivered? body)
       (do
         (.writeTo baos @body)
-        [body :continue])
+        [@body :continue])
       [baos :continue])))
 
 ;; completed callbacks
@@ -308,7 +308,7 @@
                            (when-let [bytes (.getBodyPartBytes e)]
                              (let [length (alength bytes)
                                    baos (ByteArrayOutputStream. length)]
-                               (.write baos bytes 0 alength)
+                               (.write baos bytes 0 length)
                                (let [[result action] (part resp baos)
                                      body (:body resp)]
                                  (if-not (delivered? body)

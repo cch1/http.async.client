@@ -42,12 +42,12 @@
 (defn GET
   "GET resource from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (apply prepare-request :get url (apply concat options))
-                   :status status-collect
-                   :headers headers-collect
-                   :part body-collect
-                   :completed body-completed
-                   :error error-collect))
+  (new-execute-request (apply prepare-request :get url (apply concat options))
+                       :status new-status-collect
+                       :headers new-headers-collect
+                       :part new-body-collect
+                       :completed new-body-completed
+                       :error new-error-collect))
 
 (defn POST
   "POST to resource. Returns promise, that is delivered once response is completed."
@@ -137,8 +137,14 @@
 (defn string
   "Converts response to string."
   [resp]
-  (let [enc (or (get-encoding (:headers @resp)) duck/*default-encoding*)
-        body (:body @resp)
+  ;; TODO remove instance? check once refactoring is complete and
+  ;; response is unified
+  (let [enc (or (get-encoding (if (instance? clojure.lang.IDeref resp)
+                                (:headers @resp)
+                                @(:headers resp))) duck/*default-encoding*)
+        body (if (instance? clojure.lang.IDeref resp)
+               (:body @resp)
+               @(:body resp))
         convert (fn [#^ByteArrayOutputStream baos] (.toString baos enc))]
     (if (seq? body)
       (map convert body)
