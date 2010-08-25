@@ -60,16 +60,23 @@
     (.toUpperCase (match 1))))
 
 ;; default set of callbacks
-(defn body-collect [state baos]
-  "Stores body parts under :body in state."
-  (if (:body @state)
-    (.writeTo baos (:body @state))
-    (dosync (alter state assoc :body baos))))
 
-(defn body-completed [state]
-  "Provides value that will be delivered to response promise."
-  @state)
+;; status callbacks
+(defn accept-ok [_ status]
+  (if (not (= (:code status) 200)) :abort))
 
+(defn status-collect [state status]
+  "Stores status map under :status in state."
+  (dosync (alter state assoc :status status)))
+
+(defn status-print [state st]
+  (println (str (:id @state) "< " (:protocol st) " " (:code st) " " (:msg st))))
+
+(defn new-status-collect [_ status]
+  "Returns all status and procides with execution"
+  [status :continue])
+
+;; header callbacks
 (defn headers-collect [state headers]
   "Stores headers under :headers in state."
   (if headers
@@ -81,19 +88,40 @@
 (defn print-headers [state headers]
   (doall (map #(println (str (:id @state) "< " % ": " (get headers %))) (keys headers))))
 
-(defn accept-ok [_ status]
-  (if (not (= (:code status) 200)) :abort))
+(defn new-headers-collect [_ headers]
+  "Reurns all headers, or aborts if no headers provided."
+  [headers (if-not headers :abort)])
 
-(defn status-collect [state status]
-  "Stores status map under :status in state."
-  (dosync (alter state assoc :status status)))
+;; body callbacks
+(defn body-collect [state baos]
+  "Stores body parts under :body in state."
+  (if (:body @state)
+    (.writeTo baos (:body @state))
+    (dosync (alter state assoc :body baos))))
 
-(defn status-print [state st]
-  (println (str (:id @state) "< " (:protocol st) " " (:code st) " " (:msg st))))
+(defn new-body-collect [state baos]
+  (let [body (:body @state)]
+    (if (delivered? body)
+      (do
+        (.writeTo baos @body)
+        [body :continue])
+      [baos :continue])))
 
+;; completed callbacks
+(defn body-completed [state]
+  "Provides value that will be delivered to response promise."
+  @state)
+
+(defn new-body-completed [state]
+  [true :continue])
+
+;; error callbacks
 (defn error-collect [state t]
   "Stores exception under :error in state"
   (dosync (alter state assoc :error t)))
+
+(defn new-error-collect [state t]
+  [t :continue])
 
 (defn url-encode
   "Taken from Clojure Http Client"
