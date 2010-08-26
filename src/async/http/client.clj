@@ -42,62 +42,44 @@
 (defn GET
   "GET resource from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (new-execute-request (apply prepare-request :get url (apply concat options))
-                       :status new-status-collect
-                       :headers new-headers-collect
-                       :part new-body-collect
-                       :completed new-body-completed
-                       :error new-error-collect))
+  (apply new-execute-request
+         (apply prepare-request :get url (apply concat options))
+         (apply concat *default-callbacks*)))
 
 (defn POST
   "POST to resource. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (apply prepare-request :post url (apply concat options))
-                   :status status-collect
-                   :headers headers-collect
-                   :part body-collect
-                   :completed body-completed
-                   :error error-collect))
+  (apply new-execute-request
+         (apply prepare-request :post url (apply concat options))
+         (apply concat *default-callbacks*)))
 
 (defn PUT
   "PUT to resource. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (apply prepare-request :put url (apply concat options))
-                   :status status-collect
-                   :headers headers-collect
-                   :part body-collect
-                   :completed body-completed
-                   :error error-collect))
+  (apply new-execute-request
+         (apply prepare-request :put url (apply concat options))
+         (apply concat *default-callbacks*)))
 
 (defn DELETE
   "DELETE resource from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (apply prepare-request :delete url (apply concat options))
-                   :status status-collect
-                   :headers headers-collect
-                   :part body-collect
-                   :completed body-completed
-                   :error error-collect))
+  (apply new-execute-request
+         (apply prepare-request :delete url (apply concat options))
+         (apply concat *default-callbacks*)))
 
 (defn HEAD
   "Request HEAD from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (apply prepare-request :head url (apply concat options))
-                   :status status-collect
-                   :headers headers-collect
-                   :part body-collect
-                   :completed body-completed
-                   :error error-collect))
+  (apply new-execute-request
+         (apply prepare-request :head url (apply concat options))
+         (apply concat *default-callbacks*)))
 
 (defn OPTIONS
   "Request OPTIONS from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (execute-request (apply prepare-request :options url (apply concat options))
-                   :status status-collect
-                   :headers headers-collect
-                   :part body-collect
-                   :completed body-completed
-                   :error error-collect))
+  (apply new-execute-request
+         (apply prepare-request :options url (apply concat options))
+         (apply concat *default-callbacks*)))
 
 (defn request-stream
   "Consumes stream from given url.
@@ -153,12 +135,4 @@
 (defn cookies
   "Gets cookies from response."
   [resp]
-  (if-let [headers-received (:headers-received @resp)]
-    (@headers-received))
-  (if-let [cookies (:cookies @resp)]
-    cookies
-    (let [cookies (create-cookies (:headers @resp))]
-      (if (instance? clojure.lang.Ref resp)
-        (dosync (alter resp assoc :cookies cookies))
-        (assoc @resp :cookies cookies))
-      cookies)))
+  (create-cookies @(:headers resp)))

@@ -123,6 +123,14 @@
 (defn new-error-collect [state t]
   [t :continue])
 
+;; default set of callbacks
+(def *default-callbacks*
+     {:status new-status-collect
+      :headers new-headers-collect
+      :part new-body-collect
+      :completed new-body-completed
+      :error new-error-collect})
+
 (defn url-encode
   "Taken from Clojure Http Client"
   [arg]

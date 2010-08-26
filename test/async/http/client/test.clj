@@ -15,9 +15,10 @@
 (ns async.http.client.test
   "Testing of ahc-clj"
   {:author "Hubert Iwaniuk"}
+  (refer-clojure :exclude [promise])
   (:use clojure.test
         async.http.client
-        async.http.client.request
+        [async.http.client request util]
         [clojure.stacktrace :only [print-stack-trace]]
         [clojure.contrib.str-utils2 :only [split]]
         [clojure.java.io :only [input-stream]]
@@ -151,10 +152,10 @@
 
 (deftest test-send-headers
   (let [resp (GET "http://localhost:8123/" :headers {:a 1 :b 2})
-        headers (:headers @resp)]
-    (if (contains? @resp :error)
-      (print-stack-trace (:error @resp)))
-    (is (not (contains? (keys @resp) :error)))
+        headers @(:headers resp)]
+    (if (delivered? (:error resp))
+      (print-stack-trace @(:error resp)))
+    (is (not (delivered? (:error resp))))
     (is (not (empty? headers)))
     (are [k v] (= (k headers) (str v))
          :a 1
@@ -162,8 +163,8 @@
 
 (deftest test-body
   (let [resp (GET "http://localhost:8123/body")
-        headers (:headers @resp)
-        body (:body @resp)]
+        headers @(:headers resp)
+        body @(:body resp)]
     (is (not (nil? body)))
     (is (= "Remember to checkout #clojure@freenode" (string resp)))
     (if (contains? headers :content-length)
@@ -171,7 +172,7 @@
 
 (deftest test-query-params
   (let [resp (GET "http://localhost:8123/" :query {:a 3 :b 4})
-        headers (:headers @resp)]
+        headers @(:headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
          :a 3
@@ -184,7 +185,7 @@
 
 (deftest test-post-params
   (let [resp (POST "http://localhost:8123/" :body {:a 5 :b 6})
-        headers (:headers @resp)]
+        headers @(:headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
          :a 5
@@ -192,13 +193,13 @@
 
 (deftest test-post-string-body
   (let [resp (POST "http://localhost:8123/body-str" :body "TestBody")
-        headers (:headers @resp)]
+        headers @(:headers resp)]
     (is (not (empty? headers)))
     (is (= "TestBody" (string resp)))))
 
 (deftest test-post-map-body
   (let [resp (POST "http://localhost:8123/" :body {:u "user" :p "s3cr3t"})
-        headers (:headers @resp)]
+        headers @(:headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= x (y headers))
          "user" :u
@@ -206,14 +207,14 @@
 
 (deftest test-post-input-stream-body
   (let [resp (POST "http://localhost:8123/body-str" :body (input-stream (.getBytes "TestContent" "UTF-8")))
-        headers (:headers @resp)]
+        headers @(:headers resp)]
     (is (not (empty? headers)))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-put
   (let [resp (PUT "http://localhost:8123/put" :body "TestContent")
-        status (:status @resp)
-        headers (:headers @resp)]
+        status @(:status resp)
+        headers @(:headers resp)]
     (are [x] (not (empty? x))
          status
          headers)
@@ -222,8 +223,8 @@
 
 (deftest test-delete
   (let [resp (DELETE "http://localhost:8123/delete")
-        status (:status @resp)
-        headers (:headers @resp)]
+        status @(:status resp)
+        headers @(:headers resp)]
     (are [x] (not (empty? x))
          status
          headers)
@@ -232,8 +233,8 @@
 
 (deftest test-head
   (let [resp (HEAD "http://localhost:8123/head")
-        status (:status @resp)
-        headers (:headers @resp)]
+        status @(:status resp)
+        headers @(:headers resp)]
     (are [x] (not (empty? x))
          status
          headers)
@@ -242,8 +243,8 @@
 
 (deftest test-options
   (let [resp (OPTIONS "http://localhost:8123/options")
-        status (:status @resp)
-        headers (:headers @resp)]
+        status @(:status resp)
+        headers @(:headers resp)]
     (are [x] (not (empty? x))
          status
          headers)
@@ -265,8 +266,10 @@
         (is (contains? #{"part1" "part2"} part))))))
 
 (deftest test-get-stream
-  (let [resp (GET "http://localhost:8123/stream")]
-    (is (= "part1part2" (string resp)))))
+  (let [resp (GET "http://localhost:8123/stream")
+        done @(:done resp)
+        body (string resp)]
+    (is (= "part1part2" body))))
 
 (deftest test-stream-seq
   (let [resp (stream-seq :get "http://localhost:8123/stream")
@@ -294,7 +297,7 @@
 (deftest get-via-proxy
   (let [target "http://localhost:8123/proxy-req"
         resp (GET target :proxy {:host "localhost" :port 8123})
-        headers (:headers @resp)]
+        headers @(:headers resp)]
     (is (= target (:target headers)))))
 
 (deftest get-with-cookie
@@ -306,7 +309,7 @@
                               :path "/cookie"
                               :max-age 10
                               :secure false}})
-        headers (:headers @resp)]
+        headers @(:headers resp)]
     (is (contains? headers :set-cookie))
     (let [cookies (cookies resp)]
       (is (not (empty? cookies)))
@@ -321,7 +324,7 @@
 (deftest get-with-user-agent-branding
   (let [ua-brand "Branded User Agent/1.0"]
     (with-ahc {:user-agent ua-brand}
-      (let [headers (:headers @(GET "http://localhost:8123/branding"))]
+      (let [headers @(:headers (GET "http://localhost:8123/branding"))]
         (is (contains? headers :x-user-agent))
         (is (= (:x-user-agent headers) ua-brand))))))
 
