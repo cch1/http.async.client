@@ -89,12 +89,9 @@
                        and received body part as vector of bytes
   options - are optional and can contain :headers, :param, and :query (see prepare-request)."
   [method #^String url body-part-callback & {:as options}]
-  (execute-request (apply prepare-request method url (apply concat options))
-                   :status status-collect
-                   :headers headers-collect
-                   :part body-part-callback
-                   :completed body-completed
-                   :error error-collect))
+  (apply new-execute-request
+         (apply prepare-request method url (apply concat options))
+         (apply concat (merge *default-callbacks* {:part body-part-callback}))))
 
 (defn stream-seq
   "Creates potentially infinite lazy sequence of Http Stream."

@@ -255,8 +255,9 @@
   (let [stream (ref #{})
         resp (request-stream :get "http://localhost:8123/stream"
                      (fn [_ baos]
-                       (dosync (alter stream conj (.toString baos duck/*default-encoding*)))))
-        status (:status @resp)]
+                       (dosync (alter stream conj (.toString baos duck/*default-encoding*)))
+                       [baos :continue]))
+        status @(:status resp)]
     (are [x] (not (empty? x))
          status
          @stream)
