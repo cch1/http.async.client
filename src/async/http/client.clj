@@ -42,42 +42,42 @@
 (defn GET
   "GET resource from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (apply new-execute-request
+  (apply execute-request
          (apply prepare-request :get url (apply concat options))
          (apply concat *default-callbacks*)))
 
 (defn POST
   "POST to resource. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (apply new-execute-request
+  (apply execute-request
          (apply prepare-request :post url (apply concat options))
          (apply concat *default-callbacks*)))
 
 (defn PUT
   "PUT to resource. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (apply new-execute-request
+  (apply execute-request
          (apply prepare-request :put url (apply concat options))
          (apply concat *default-callbacks*)))
 
 (defn DELETE
   "DELETE resource from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (apply new-execute-request
+  (apply execute-request
          (apply prepare-request :delete url (apply concat options))
          (apply concat *default-callbacks*)))
 
 (defn HEAD
   "Request HEAD from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (apply new-execute-request
+  (apply execute-request
          (apply prepare-request :head url (apply concat options))
          (apply concat *default-callbacks*)))
 
 (defn OPTIONS
   "Request OPTIONS from url. Returns promise, that is delivered once response is completed."
   [#^String url & {:as options}]
-  (apply new-execute-request
+  (apply execute-request
          (apply prepare-request :options url (apply concat options))
          (apply concat *default-callbacks*)))
 
@@ -89,7 +89,7 @@
                        and received body part as vector of bytes
   options - are optional and can contain :headers, :param, and :query (see prepare-request)."
   [method #^String url body-part-callback & {:as options}]
-  (apply new-execute-request
+  (apply execute-request
          (apply prepare-request method url (apply concat options))
          (apply concat (merge *default-callbacks* {:part body-part-callback}))))
 

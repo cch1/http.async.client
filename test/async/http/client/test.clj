@@ -123,13 +123,10 @@
 ;; testing
 (deftest test-status
   (let [status# (promise)
-	_ (execute-request
-	   (prepare-request :get "http://localhost:8123/")
-	   :status (fn [_ st] (do (deliver status# st) :abort))
-           :part body-collect
-           :completed body-completed
-           :headers headers-collect
-           :error error-collect)
+	_ (apply execute-request
+                 (prepare-request :get "http://localhost:8123/")
+                 (apply concat (merge *default-callbacks*
+                                      {:status (fn [_ st] (do (deliver status# st) [st :abort]))})))
 	status @status#]
     (are [k v] (= (k status) v)
          :code 200
@@ -140,13 +137,10 @@
 
 (deftest test-receive-headers
   (let [headers# (promise)
-        _ (execute-request
-           (prepare-request :get "http://localhost:8123/")
-           :status status-collect
-           :part body-collect
-           :completed body-completed
-           :headers (fn [_ hds] (do (deliver headers# hds) :abort))
-           :error error-collect)
+        _ (apply execute-request
+                 (prepare-request :get "http://localhost:8123/")
+                 (apply concat (merge *default-callbacks*
+                                      {:headers (fn [_ hds] (do (deliver headers# hds) [hds :abort]))})))
         headers @headers#]
     (is (= (:test-header headers) "test-value"))))
 

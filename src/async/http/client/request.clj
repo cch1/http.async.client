@@ -192,43 +192,6 @@
     com.ning.http.client.AsyncHandler$STATE/ABORT
     com.ning.http.client.AsyncHandler$STATE/CONTINUE))
 
-(defn execute-request
-  "Executes provided reqeust with given callback functions.
-  Options:
-    :status    - Status callback, fn called with state (ref {}) and status map.
-    :headers   - Headers callback, fn called with state (ref {}) and headers map.
-    :part      - Body part callback, fn called with state (ref {}) and vector of bytes.
-    :completed - Request completed callback, fn called with state (ref {}), result is delivered to response promise..
-    :error     - Error callback, fn called with state (ref {}) and Throwable."
-  [#^Request req & {st-cb :status
-                    hd-cb :headers
-                    pt-cb :part
-                    ct-cb :completed
-                    er-cb :error}]
-  (let [resp (promise)
-        state (ref {:id (gensym "req-id__")})]
-    (.executeRequest
-     *ahc* req
-     (proxy [AsyncHandler] []
-       (onStatusReceived [#^HttpResponseStatus e]
-                         (convert-action (st-cb state (convert-status-to-map e))))
-       (onHeadersReceived [#^HttpResponseHeaders e]
-                          (convert-action (hd-cb state (convert-headers-to-map e))))
-       (onBodyPartReceived  [#^HttpResponseBodyPart e]
-                            (when-let [bytes (.getBodyPartBytes e)]
-                              (let [bais (ByteArrayInputStream. bytes)
-                                    baos (ByteArrayOutputStream.)]
-                                (duck/copy bais baos)
-                                (convert-action (pt-cb state baos)))))
-       (onCompleted []
-                    (deliver resp (ct-cb state)))
-       (onThrowable [#^Throwable t]
-                    (do
-                      (print-cause-trace t)
-                      (er-cb state t)
-                      (deliver resp @state)))))
-    resp))
-
 (defn consume-stream
   "Executes provided request, assuming target will stream..
   Arguments:
@@ -281,7 +244,7 @@
                       (error-fn resp t)))))
     resp))
 
-(defn new-execute-request
+(defn execute-request
   "Executes provided request.
   Arguments:
   - req        - request to be executed
