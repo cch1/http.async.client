@@ -102,28 +102,22 @@
                   (let [v (.take que)]
                     (when-not (= ::done v)
                       (cons v (gen-next)))))))]
-    (consume-stream (apply prepare-request method url (apply concat options))
-                    :status status-collect
-                    :headers headers-collect
-                    :part (fn [state baos]
-                            (.put que baos)
-                            (if-not (contains? @state :body)
-                              (dosync (alter state assoc :body s-seq))))
-                    :completed (fn [state]
-                                 (.put que ::done))
-                    :error error-collect)))
+    (apply execute-request
+           (apply prepare-request method url (apply concat options))
+           (apply concat (merge
+                          *default-callbacks*
+                          {:part (fn [_ baos]
+                                   (.put que baos)
+                                   [s-seq :continue])
+                           :completed (fn [_] (.put que ::done))})))))
 
 (defn string
   "Converts response to string."
   [resp]
   ;; TODO remove instance? check once refactoring is complete and
   ;; response is unified
-  (let [enc (or (get-encoding (if (instance? clojure.lang.IDeref resp)
-                                (:headers @resp)
-                                @(:headers resp))) duck/*default-encoding*)
-        body (if (instance? clojure.lang.IDeref resp)
-               (:body @resp)
-               @(:body resp))
+  (let [enc (or (get-encoding (headers resp)) duck/*default-encoding*)
+        body  (body resp)
         convert (fn [#^ByteArrayOutputStream baos] (.toString baos enc))]
     (if (seq? body)
       (map convert body)
@@ -132,4 +126,4 @@
 (defn cookies
   "Gets cookies from response."
   [resp]
-  (create-cookies @(:headers resp)))
+  (create-cookies (headers resp)))

@@ -192,58 +192,6 @@
     com.ning.http.client.AsyncHandler$STATE/ABORT
     com.ning.http.client.AsyncHandler$STATE/CONTINUE))
 
-(defn consume-stream
-  "Executes provided request, assuming target will stream..
-  Arguments:
-  - req - prepared request
-  - options
-    - :status - status callback
-    - :headers - headers callback
-    - :part - body part callback
-    - :completed - request completed
-    - :error - error callback"
-  [#^Request req & {status-fn    :status
-                    headers-fn   :headers
-                    part-fn      :part
-                    completed-fn :completed
-                    error-fn     :error}]
-  (let [resp (ref {:id (gensym "req-id__")
-                   :status-received (promise)
-                   :headers-received (promise)
-                   :body-started (promise)
-                   :body-finished (promise)
-                   :errored (promise)})
-        body-started (ref false)]
-    (.executeRequest
-     *ahc* req
-     (proxy [AsyncHandler] []
-       (onStatusReceived [#^HttpResponseStatus e]
-                         (let [action (status-fn resp (convert-status-to-map e))]
-                           (deliver (:status-received @resp) true)
-                           (convert-action action)))
-       (onHeadersReceived [#^HttpResponseHeaders e]
-                          (let [action (headers-fn resp (convert-headers-to-map e))]
-                            (deliver (:headers-received @resp) true)
-                            (convert-action action)))
-       (onBodyPartReceived  [#^HttpResponseBodyPart e]
-                            (when-let [bytes (.getBodyPartBytes e)]
-                              (let [baos (ByteArrayOutputStream. (alength bytes))]
-                                (.write baos bytes 0 (alength bytes))
-                                (let [action (part-fn resp baos)]
-                                  (when-not @body-started
-                                    (dosync (alter body-started (fn [_ a] a) true)
-                                            (deliver (:body-started @resp) true)))
-                                  (convert-action action)))))
-       (onCompleted [] (do
-                         (deliver (:body-finished @resp) true)
-                         (completed-fn resp)))
-       (onThrowable [#^Throwable t]
-                    (do
-                      (print-cause-trace t)
-                      (deliver (:errored @resp) true)
-                      (error-fn resp t)))))
-    resp))
-
 (defn execute-request
   "Executes provided request.
   Arguments:
@@ -301,11 +249,37 @@
   [resp]
   (delivered? (:error resp)))
 
+(defn done?
+  "Checks if request is finished already (response receiving finished)."
+  [resp]
+  (delivered? (:done resp)))
+
+(defn- safe-get
+  [k r]
+  (let [p (k r)]
+    (if (or
+         (delivered? p)
+         (not (failed? r)))
+      @p)))
+
 (defn status
   "Gets status if status was delivered."
   [resp]
-  (let [p (:status resp)]
-    (if (or
-         (delivered? p)
-         (not (failed? resp)))
-      @p)))
+  (safe-get :status resp))
+
+(defn headers
+  "Gets headers.
+  If headers have not yet been delivered and request hasn't failed waits for headers."
+  [resp]
+  (safe-get :headers resp))
+
+(defn body
+  "Gets body.
+  If body have not yet been delivered and request hasn't failed waits for body."
+  [resp]
+  (safe-get :body resp))
+
+(defn await-response
+  "Awaits for response to be finished."
+  [resp]
+  (safe-get :done resp))
