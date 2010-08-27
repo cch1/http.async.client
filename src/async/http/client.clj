@@ -17,7 +17,8 @@
   {:author "Hubert Iwaniuk"}
   (:require [clojure.contrib.io :as duck])
   (:use async.http.client.request
-        async.http.client.headers)
+        async.http.client.headers
+        clojure.template)
   (:import (java.io ByteArrayOutputStream)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)))
 
@@ -39,47 +40,19 @@
      (binding [*ahc* c#]
        ~@body)))
 
-(defn GET
-  "GET resource from url. Returns promise, that is delivered once response is completed."
-  [#^String url & {:as options}]
-  (apply execute-request
-         (apply prepare-request :get url (apply concat options))
-         (apply concat *default-callbacks*)))
-
-(defn POST
-  "POST to resource. Returns promise, that is delivered once response is completed."
-  [#^String url & {:as options}]
-  (apply execute-request
-         (apply prepare-request :post url (apply concat options))
-         (apply concat *default-callbacks*)))
-
-(defn PUT
-  "PUT to resource. Returns promise, that is delivered once response is completed."
-  [#^String url & {:as options}]
-  (apply execute-request
-         (apply prepare-request :put url (apply concat options))
-         (apply concat *default-callbacks*)))
-
-(defn DELETE
-  "DELETE resource from url. Returns promise, that is delivered once response is completed."
-  [#^String url & {:as options}]
-  (apply execute-request
-         (apply prepare-request :delete url (apply concat options))
-         (apply concat *default-callbacks*)))
-
-(defn HEAD
-  "Request HEAD from url. Returns promise, that is delivered once response is completed."
-  [#^String url & {:as options}]
-  (apply execute-request
-         (apply prepare-request :head url (apply concat options))
-         (apply concat *default-callbacks*)))
-
-(defn OPTIONS
-  "Request OPTIONS from url. Returns promise, that is delivered once response is completed."
-  [#^String url & {:as options}]
-  (apply execute-request
-         (apply prepare-request :options url (apply concat options))
-         (apply concat *default-callbacks*)))
+(do-template
+ [fn-name method]
+ (defn fn-name
+   [#^String url & {:as options}]
+   (apply execute-request
+          (apply prepare-request method url (apply concat options))
+          (apply concat *default-callbacks*)))
+ GET :get
+ POST :post
+ PUT :put
+ DELETE :delete
+ HEAD :head
+ OPTIONS :options)
 
 (defn request-stream
   "Consumes stream from given url.
@@ -114,10 +87,8 @@
 (defn string
   "Converts response to string."
   [resp]
-  ;; TODO remove instance? check once refactoring is complete and
-  ;; response is unified
   (let [enc (or (get-encoding (headers resp)) duck/*default-encoding*)
-        body  (body resp)
+        body (body resp)
         convert (fn [#^ByteArrayOutputStream baos] (.toString baos enc))]
     (if (seq? body)
       (map convert body)
