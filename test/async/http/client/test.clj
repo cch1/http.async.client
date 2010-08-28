@@ -15,7 +15,7 @@
 (ns async.http.client.test
   "Testing of ahc-clj"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [promise])
+  (:refer-clojure :exclude [promise await])
   (:use clojure.test
         async.http.client
         [async.http.client request util]
@@ -252,7 +252,7 @@
                        (dosync (alter stream conj (.toString baos duck/*default-encoding*)))
                        [baos :continue]))
         status (status resp)]
-    (await-response resp)
+    (await resp)
     (are [x] (not (empty? x))
          status
          @stream)
@@ -263,7 +263,7 @@
 
 (deftest test-get-stream
   (let [resp (GET "http://localhost:8123/stream")]
-    (await-response resp)
+    (await resp)
     (is (= "part1part2" (string resp)))))
 
 (deftest test-stream-seq
@@ -271,7 +271,7 @@
         status (status resp)
         headers (headers resp)
         body (body resp)]
-    (await-response resp)
+    (await resp)
     (are [e p] (= e p)
          200 (:code status)
          "test-value" (:test-header headers)

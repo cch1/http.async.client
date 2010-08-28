@@ -15,6 +15,7 @@
 (ns async.http.client
   "Async HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
+  (:refer-clojure :exclude [await])
   (:require [clojure.contrib.io :as duck])
   (:use async.http.client.request
         async.http.client.headers
@@ -83,6 +84,11 @@
                                    (.put que baos)
                                    [s-seq :continue])
                            :completed (fn [_] (.put que ::done))})))))
+
+(defn await
+  "Waits for response finish."
+  [response]
+  (safe-get :done response))
 
 (defn string
   "Converts response to string."

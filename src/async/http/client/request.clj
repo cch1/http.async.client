@@ -254,7 +254,7 @@
   [resp]
   (delivered? (:done resp)))
 
-(defn- safe-get
+(defn safe-get
   [k r]
   (let [p (k r)]
     (if (or
@@ -278,8 +278,3 @@
   If body have not yet been delivered and request hasn't failed waits for body."
   [resp]
   (safe-get :body resp))
-
-(defn await-response
-  "Awaits for response to be finished."
-  [resp]
-  (safe-get :done resp))
