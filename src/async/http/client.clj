@@ -15,10 +15,9 @@
 (ns async.http.client
   "Async HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [await])
+  (:refer-clojure :exclude [await promise])
   (:require [clojure.contrib.io :as duck])
-  (:use async.http.client.request
-        async.http.client.headers
+  (:use [async.http.client request headers util]
         clojure.template)
   (:import (java.io ByteArrayOutputStream)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)))
@@ -85,10 +84,35 @@
                                    [s-seq :continue])
                            :completed (fn [_] (.put que ::done))})))))
 
+(defn failed?
+  "Checks if request failed."
+  [resp]
+  (delivered? (:error resp)))
+
+(defn- safe-get
+  [k r]
+  (let [p (k r)]
+    (if (or
+         (delivered? p)
+         (not (failed? r)))
+      @p)))
+
 (defn await
   "Waits for response finish."
   [response]
   (safe-get :done response))
+
+(defn headers
+  "Gets headers.
+  If headers have not yet been delivered and request hasn't failed waits for headers."
+  [resp]
+  (safe-get :headers resp))
+
+(defn body
+  "Gets body.
+  If body have not yet been delivered and request hasn't failed waits for body."
+  [resp]
+  (safe-get :body resp))
 
 (defn string
   "Converts response to string."
@@ -104,3 +128,13 @@
   "Gets cookies from response."
   [resp]
   (create-cookies (headers resp)))
+
+(defn done?
+  "Checks if request is finished already (response receiving finished)."
+  [resp]
+  (delivered? (:done resp)))
+
+(defn status
+  "Gets status if status was delivered."
+  [resp]
+  (safe-get :status resp))

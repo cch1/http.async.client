@@ -243,38 +243,3 @@
                       (deliver (:error resp) (error resp t))))))
     ^{:started (System/currentTimeMillis)}
     resp))
-
-(defn failed?
-  "Checks if request failed."
-  [resp]
-  (delivered? (:error resp)))
-
-(defn done?
-  "Checks if request is finished already (response receiving finished)."
-  [resp]
-  (delivered? (:done resp)))
-
-(defn safe-get
-  [k r]
-  (let [p (k r)]
-    (if (or
-         (delivered? p)
-         (not (failed? r)))
-      @p)))
-
-(defn status
-  "Gets status if status was delivered."
-  [resp]
-  (safe-get :status resp))
-
-(defn headers
-  "Gets headers.
-  If headers have not yet been delivered and request hasn't failed waits for headers."
-  [resp]
-  (safe-get :headers resp))
-
-(defn body
-  "Gets body.
-  If body have not yet been delivered and request hasn't failed waits for body."
-  [resp]
-  (safe-get :body resp))
