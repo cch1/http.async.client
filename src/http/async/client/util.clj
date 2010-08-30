@@ -12,8 +12,8 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client.util
-  "Async HTTP Client - Clojure - Utils"
+(ns http.async.client.util
+  "Asynchronous HTTP Client - Clojure - Utils"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [promise]))
 

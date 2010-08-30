@@ -12,12 +12,12 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client.request
-  "Async HTTP Client - Clojure - Requesting API"
+(ns http.async.client.request
+  "Asynchronous HTTP Client - Clojure - Requesting API"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [promise])
   (:require [clojure.contrib.io :as duck])
-  (:use [async.http.client status headers util]
+  (:use [http.async.client status headers util]
         [clojure.stacktrace]
         [clojure.contrib.java-utils :only [as-str]]
         [clojure.contrib.str-utils :only [str-join]])

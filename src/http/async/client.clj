@@ -12,12 +12,12 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client
-  "Async HTTP Client - Clojure"
+(ns http.async.client
+  "Asynchronous HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [await promise])
   (:require [clojure.contrib.io :as duck])
-  (:use [async.http.client request headers util]
+  (:use [http.async.client request headers util]
         clojure.template)
   (:import (java.io ByteArrayOutputStream)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)))

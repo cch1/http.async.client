@@ -12,13 +12,13 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client.test
-  "Testing of ahc-clj"
+(ns http.async.client.test
+  "Testing of http.async"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [promise await])
   (:use clojure.test
-        async.http.client
-        [async.http.client request util]
+        http.async.client
+        [http.async.client request util]
         [clojure.stacktrace :only [print-stack-trace]]
         [clojure.contrib.str-utils2 :only [split]]
         [clojure.java.io :only [input-stream]]

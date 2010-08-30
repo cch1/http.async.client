@@ -12,7 +12,9 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client.headers
+(ns http.async.client.headers
+  "Asynchrounous HTTP Client - Clojure - Lazy headers."
+  {:author "Hubert Iwaniuk"}
   (:import (com.ning.http.client HttpResponseHeaders FluentCaseInsensitiveStringsMap)))
 
 (defn- kn [k]
