@@ -271,7 +271,6 @@
         status (status resp)
         headers (headers resp)
         body (body resp)]
-    (await resp)
     (are [e p] (= e p)
          200 (:code status)
          "test-value" (:test-header headers)

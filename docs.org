@@ -4,165 +4,337 @@
 #+INFOJS_OPT: view:info toc:1
 #+OPTIONS: H:4
 
-* User Documentation [4/4]
-  How to use Async Http Client - Clojure a.k.a. *ahc-clj*.
-  : (ns your.ns (:require [async.http.client :as c]))
-** DONE HTTP methods                                                   :rel1:
-   HTTP methods and convenience functions to request them.
-*** GET
+* User Documentation
+  How to use Async Http Client - Clojure a.k.a. *http.async*.
+** Quick start
+   If you just want to use it already.
+*** Dependency
+    Declare dependency in your project.clj:
+#+BEGIN_SRC clojure
+  (defproject your-project "1.0.0-SNAPSHOT"
+    :description "Your project description"
+    :dependencies [[org.clojure/clojure "1.2.0"]
+                   [org.clojure/clojure-contrib "1.2.0"]
+                   [http.async "2.0.0"]])
+#+END_SRC
+    Make sure that your project depends on 1.2 Clojure as *http.async*
+    will not run in earlier versions.
+*** Require
+    Require it from your code:
+#+BEGIN_SRC clojure
+  (ns your.ns (:require [http.async.client :as c]))
+#+END_SRC
+*** GETting
+    To get HTTP resource:
+#+BEGIN_SRC clojure
+  (let [r (c/GET "http://github.com/neotyk/http.async/")]
+    (c/await r)
+    (c/string r))
+#+END_SRC
+** Detailed start
+*** Work modes
+**** Asynchronous operations
+     When you do:
+#+BEGIN_SRC clojure
+  (c/GET url)
+#+END_SRC
+     Result will be a map of http.async.client.util/promise called response.
+     Do not fear, this is [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][clojure.core/promise]] that was extended to be
+     able to check if it was delivered.
+
+     Following HTTP methods have been covered so far:
+     - GET
+     - POST
+     - PUT
+     - DELETE
+     - HEAD
+     - OPTIONS
+     For detailed description see [[*HTTP%20methods][HTTP methods]].
+
+     You can also submit options to HTTP methods like this:
+#+BEGIN_SRC clojure
+  (c/GET url :query {:key "value"})
+#+END_SRC
+     Options can be:
+     - *:query* :: query parameters
+     - *:headers* :: custom headers to be sent out
+     - *:body* :: body to be sent, allowed only with PUT/POST
+     - *:cookies* :: cookies to be sent
+     - *:proxy* :: proxy to be used
+     For detailed usage of options see [[*Request%20options][Request options]].
+
+     Response map contains following keys:
+     - *:status* :: promise of lazy map of status fields
+       - *:code* :: response code
+       - *:msg* :: response message
+       - *:protocol* :: protocol with version
+       - *:major* :: major version of protocol
+       - *:minor* :: minor version of protocol
+     - *:headers* :: promise of lazy map of headers where header names are
+       keyworded, like *:server* for example
+     - *:body* :: promise of response body, this is ByteArrayOutputStream, but you
+                  have convenience functions to convert it for example to string:
+       #+BEGIN_SRC clojure
+         (c/string (c/GET url))
+       #+END_SRC
+     - *:done* :: promise that is delivered once response receiving
+                  is done
+     - *:error* :: promise, if there was an error you will find Throwable here
+**** Streaming
+     When you do:
+#+BEGIN_SRC clojure
+  (c/stream-seq :get url)
+#+END_SRC
+     Response here is same as in [[*%20Asynchronous%20operations][Asynchronous operations]] but *:body*
+     will be lazy sequence of ByteArrayOutputStreams.
+    
+     You can still use convenience functions like *c/string* for body,
+     but remember that you are dealing now with *seq*.
+
+     For more details please see [[*Streaming][Streaming]].
+**** Raw mode
+     This allows you to provide callbacks that will get triggered on HTTP
+     response events like:
+      - received status line,
+      - received headers,
+      - received body part,
+      - completed request,
+      - handle error.
+      All callbacks are expected to return tuple with first element
+      been a value to be delivered for given response processing phase,
+      second element is controlling execution and if you make it
+      *:abort* than processing response is going to be terminated.
+
+      For detailed information on how to use this mode please see [[*Low%20level][Low
+      level]].
+*** HTTP methods
+    HTTP methods and convenience functions to request them.
+**** GET
     Most basic invocation of *GET* is only with *url* you want to get.
     Extended invocation includes options that can be any options
-    accepted by *prepare-request* (:headers :query ..).
+    accepted by *http.async.client.request/prepare-request* (:headers :query ..).
 
     Simple invocation:
-#+BEGIN_VERSE
-    (let [resp (GET "<your url>")
-          status (:status @resp)
-          headers (:headers @resp)]
-      (println (:code status))
-      (println (string resp)))
-#+END_VERSE
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "<your url>")
+        status (c/status resp)
+        headers (c/headers resp)]
+    (println (:code status))
+    (c/await resp)
+    (println (c/string resp)))
+#+END_SRC
 
     Invocation with query parameters:
-#+BEGIN_VERSE
-    (let [resp (GET "<your url>" :query {:param-name "some-value})
-          status (:status @resp)
-          headers (:headers @resp)]
-      (println (:code status))
-      (println (string (:body @resp))))
-#+END_VERSE
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "<your url>" :query {:param-name "some-value"})
+        status (c/status resp)
+        headers (c/headers resp)]
+    (println (:code status))
+    (c/await resp)
+    (println (c/string resp)))
+#+END_SRC
 
     Invocation with proxy:
-#+BEGIN_VERSE
-    (let [resp (GET "<your url>"
-                    :query {:param-name "some-value"}
-                    :proxy {:host host :port port})
-          status (:status @resp)]
-      (println (:code status))
-      (println (string (:body @resp))))
-#+END_VERSE
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "<your url>"
+               :query {:param-name "some-value"}
+               :proxy {:host host :port port})
+        status (c/status resp)]
+    (println (:code status))
+    (c/await resp)
+    (println (c/string resp)))
+#+END_SRC
 
     Invocation with cookies:
-#+BEGIN_VERSE
-    (let [resp (GET "http://localhost:8123/cookie"
-                    :cookies #{{:domain "http://localhost:8123/"
-                                :name "sample-name"
-                                :value "sample-value
-                                :path "/cookie"
-                                :max-age 10
-                                :secure false}})]
-      (doseq [cookie (cookies resp)]
-        (println "name:" (:name cookie) ", value:" (:value cookie)))
-#+END_VERSE
-    Notice *cookies* function that extracts cookies from response.
-*** PUT/POST
-    *PUT/POST* work the same way as *GET* but they also accept *body*.
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "http://localhost:8123/cookie"
+               :cookies #{{:domain "http://localhost:8123/"
+                           :name "sample-name"
+                           :value "sample-value"
+                           :path "/cookie"
+                           :max-age 10
+                           :secure false}})]
+    (doseq [cookie (c/cookies resp)]
+      (println "name:" (:name cookie) ", value:" (:value cookie))))
+#+END_SRC
+    Notice *c/cookies* function extracts cookies from response
+    headers, so to start processing it you don't need to wait for
+    whole response to arrive.
+**** PUT/POST
+     *PUT/POST* work the same way as *GET* but they also accept *body*.
 
-    *body* can be:
-    - String
-    - map, for easy form data submissions
-    - InputStream for any content
-**** Submitting body as String
-     You can send String as body with PUT/POST:
-#+BEGIN_VERSE
-(let [resp (POST "<your url>" :body "SampleBody")]
-  ; do something with @resp
-  )
-#+END_VERSE
-**** Submitting form parameters
-     Submitting parameters via body map:
-#+BEGIN_VERSE
-(let [resp (POST "<your url>" :body {:u "user" :p "s3cr3t"})]
-  ; do something with @resp
-  )
-#+END_VERSE
-**** Submitting body as InputStream
-     Last method to provide body is via InputStream:
-#+BEGIN_VERSE
-(use '[clojure.java.io :only [input-stream]])
-(let [resp (PUT "<your url>" :body (input-stream (.getBytes "SampleContent" "UTF-8")))]
-  ; do something with @resp
-  )
-#+END_VERSE
-*** DELETE
-    To call DELETE on a resource:
-#+BEGIN_VERSE
-(let [resp (DELETE "<your url>")]
-  ; do something with @resp
-  )
-#+END_VERSE
-*** HEAD
-    To call HEAD on a resource:
-#+BEGIN_VERSE
-(let [resp (HEAD "<your url>")]
-  ; do something with @resp
-  )
-#+END_VERSE
-*** OPTIONS
-    To call OPTIONS on a resource:
-#+BEGIN_VERSE
-(let [resp (OPTIONS "<your url>")]
-  ; do something with @resp
-  )
-#+END_VERSE
-** DONE Streaming                                                      :rel3:
-   Two ways of consuming a HTTP Stream are supported:
-   - Lazy sequence
-   - call-back
-*** Lazy sequence                                                      :rel3:
-    This is preferred way to consume a HTTP Stream.
-    *stream-seq* needs to know what HTTP Method to request
-    (:get, :post, ..), url and optionally keyworded arguments like:
-    - :query
-    - :headers
-    - :body
-    - :proxy
-    What it will return is a *(ref {})* consisting of:
-    - *:status-delivered* - promise that is delivered when status line
-      has been consumed and *:status* is available
-    - *:status* - same status lazy map as in standard request
-    - *:headers-received* - promise that is delivered when headers has
-      been received and *:headers* is available
-    - *:headers* - same headers lazy map as in standard request
-    - *:body-started* - promise that is delivered when first body part
-      has been received and *:body* is available
-    - *:body* - Lazy sequence of body parts that are
-      ByteArrayOutputStreams
-    - *:body-finished* - promise delivered when body consumption has
-      been finished, no more body parts will be received
-    Sample usage:
-#+BEGIN_VERSE
-(let [resp (stream-seq :get "<url>")
-      status-received @(:status-received @resp)
-      status (:status @resp)
-      body-started @(:body-started @resp)
-      body (:body @resp)]
-  (println (:code status))
-  (doseq [s (string resp)] (println s)))
-#+END_VERSE
-*** Call-back
+     *body* can be:
+     - String
+     - map, for easy form data submissions
+     - InputStream for any content
+***** Submitting body as String
+      You can send String as body with PUT/POST:
+#+BEGIN_SRC clojure
+  (let [resp (c/POST "<your url>" :body "SampleBody")]
+    ; do something with resp
+    )
+#+END_SRC
+***** Submitting form parameters
+      Submitting parameters via body map:
+#+BEGIN_SRC clojure
+  (let [resp (c/POST "<your url>" :body {:u "user" :p "s3cr3t"})]
+    ; do something with resp
+    )
+#+END_SRC
+***** Submitting body as InputStream
+      Last method to provide body is via InputStream:
+#+BEGIN_SRC clojure
+  (use '[clojure.java.io :only [input-stream]])
+  (let [resp (c/PUT "<your url>" :body (input-stream (.getBytes "SampleContent" "UTF-8")))]
+    ; do something with resp
+    )
+#+END_SRC
+**** DELETE
+     To call DELETE on a resource:
+#+BEGIN_SRC clojure
+  (let [resp (c/DELETE "<your url>")]
+    ; do something with resp
+    )
+#+END_SRC
+**** HEAD
+     To call HEAD on a resource:
+#+BEGIN_SRC clojure
+  (let [resp (c/HEAD "<your url>")]
+    ; do something with resp
+    )
+#+END_SRC
+**** OPTIONS
+     To call OPTIONS on a resource:
+#+BEGIN_SRC clojure
+  (let [resp (c/OPTIONS "<your url>")]
+    ; do something with resp
+    )
+#+END_SRC
+*** Request options
+    Following options can be provided to requests.
+    - [[*%20query][:query]] :: query parameters
+    - [[*%20headers][:headers]] :: custom headers to be sent out
+    - [[*%20body][:body]] :: body to be sent, allowed only with PUT/POST
+    - [[*%20cookies][:cookies]] :: cookies to be sent
+    - [[*%20proxy][:proxy]] :: proxy to be used
+**** :query
+     Query parameters is a map of keywords and their values. You use
+     it like so:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :query {:key1 "value1" :key2 "value2"})]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+**** :headers
+     Custom headers can be submitted same way as [[*%20query][:query]]:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :headers {:header-name1 "value1"
+                                  :header-name2 "value2"})]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+**** :body
+     Body can be provided with a message only with [[*PUT%20POST][PUT/POST]], it
+     doesn't make sense to have body with other [[*HTTP%20methods][HTTP methods]].
+#+BEGIN_SRC clojure
+  (let [resp (c/PUT url :body "sample body")]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+     *:body* can be String, form parameters or input stream, please see
+     [[*PUT%20POST][PUT/POST]] for more documentation.
+**** :cookies
+     Cookies can be provided to request as follows:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "http://localhost:8123/cookie"
+               :cookies #{{:domain "http://localhost:8123/"
+                           :name "sample-name"
+                           :value "sample-value"
+                           :path "/cookie"
+                           :max-age 10
+                           :secure false}})]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+     *:cookies* option takes sequence of cookie maps, in this example
+     it is a hash set.
+     Cookie map consist of:
+     - *:domain* :: Domain that cookie has been installed
+     - *:name* :: Cookie name
+     - *:value* :: Cookie value, note that there is no additional
+                   processing so you should encode it yourself if
+                   needed.
+     - *:path* :: Path on with cookie has been installed
+     - *:max-age* :: Max age that cookie was configured to live
+     - *:secure* :: If cookie is secure cookie
+
+     Cookie reading is described in [[*Reading%20cookies][Reading cookies]].
+**** :proxy
+     Proxy can be configured per request basis as follows:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :proxy {:host h :port p})]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+     Proxy expects a map with following keys:
+     - *:host* :: proxy host
+     - *:port* :: proxy port
+*** Streaming
+    HTTP Stream is response with chunked content encoding.
+    Those streams might not be meant to ever finish, see twitter.com
+    streams, so collecting those responses is impossible, they have to
+    be processed as soon as parts of it are received.
+
+    Two ways of consuming a HTTP Stream are supported:
+    - [[*Lazy%20sequence][Lazy sequence]]
+    - [[*Call%20back][Call-back]]
+**** Lazy sequence
+     You can get HTTP Stream as lazy sequence of it's body.
+     This is very convenient method as *seq* is native type of Clojure
+     so you can apply all mapping, filtering and any other standard
+     function that you like to it.
+#+BEGIN_SRC clojure
+  (let [resp (c/stream-seq :get url)]
+    (doseq [s (string resp)]
+      (println s)))
+#+END_SRC
+     *stream-seq* arguments:
+     - http method :: any of supported methods can be used, though it
+                      makes sense only to use *:get*, *:put* and
+                      *:post*
+     - url :: URL of HTTP resource
+     - options :: same as normal [[*Request%20options][Request options]].
+**** Call-back
    Consuming HTTP Stream with call-back is quite straight forward with
-   *ahc-clj*. You will need to know what HTTP Method you will call,
+   *http.async*. You will need to know what HTTP Method you will call,
    what URL and provide a call back function to handle body parts been
    received.
-#+BEGIN_VERSE
-(let [stream (ref #{})
-      resp (stream :get "<your url>"
-                   (fn [state body]
-                     (dosync (alter stream conj (string body)))))]
-  ; do something to @stream
-  ; @resp will not get delivered until streaming is done
+#+BEGIN_SRC clojure
+(let [parts (ref #{})
+      resp (c/request-stream :get url
+                             (fn [state body]
+                               (dosync (alter parts conj (string body)))
+                               [body :continue]))]
+  ; do something to @parts
   )
-#+END_VERSE
+#+END_SRC
+
   Few notes on implementing body part callback:
-  - state is *(ref {})* with *:status* and *:headers*,
+  - state is a *map* with *:status* and *:headers* as promises, at
+    stage when you get called for body part, both of them should be in
+    place already, though it is advised to use convenience methods to
+    read them, see [[*Reading%20status%20line][Reading status line]] and [[*Reading%20headers][Reading headers]],
+  - call-back has to follow guidelines described in [[*Body%20part][Body part]],
   - some streams are not meant to be finish, in that case don't
     collect body parts, as for sure you will run out of available
     resources,
   - try not to do any heavy lifting in this callback, better send it
     to agent,
-  - if you need to stop stream consumption just return *:abort* from
-    callback.
+*** TODO Response handling
+**** Reading status line
+**** Reading headers
+**** Reading cookies
+**** Reading body
 ** DONE Low level                                                      :rel1:
 *** DONE Requesting                                                    :rel1:
     This is lower level access to *ahc-clj*.

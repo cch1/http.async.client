@@ -44,7 +44,7 @@
 ** TODO Per request configuration [1/2]                                :rel4:
 *** DONE Proxy configuration                                           :rel3:
 *** TODO Timeout                                                       :rel4:
-* Tasks [7/10]
+* Tasks [8/10]
 ** DONE License                                                        :rel1:
 ** DONE Cleanup namespaces                                             :rel1:
 *** async.http.client
@@ -70,11 +70,11 @@
 ** DONE Use last argument as key worded map                            :rel3:
    As suggested by [[http://blog.licenser.net/][Licenser]] on #clojure [[http://clojure-log.n01se.net/date/2010-07-08.html#i25][here]].
 ** TODO Review documentation                                           :rel3:
-** TODO Refactoring [0/1]                                              :rel3:
-*** TODO Refactor *execute-request* [1/2]
+** DONE Refactoring [1/1]                                              :rel3:
+*** DONE Refactor *execute-request* [2/2]
 **** DONE Build checkable promise
      To check if promise was delivered use *delivered?*
-**** TODO Unify *execute-request* and *consume-stream* interfaces
+**** DONE Unify *execute-request* and *consume-stream* interfaces
      - Use new checkable *promise* for different parts of response
      - Use normal map for response instead of (ref {})
      - Provide helper functions to deal with metadata on response

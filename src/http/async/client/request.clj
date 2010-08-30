@@ -200,7 +200,23 @@
   - :headers   - headers callback
   - :part      - body part callback
   - :completed - response completed
-  - :error     - error callback"
+  - :error     - error callback
+
+  Returns a map:
+  - :id      - unique ID of request
+  - :status  - promise that once status is received is delivered, contains lazy map of:
+    - :code     - response code
+    - :msg      - response message
+    - :protocol - protocol with version
+    - :major    - major version of protocol
+    - :minor    - minor version of protocol
+  - :headers - promise that once headers are received is delivered, contains lazy map of:
+    - :server - header names are keyworded, values stay not changed
+  - :body    - body of response, depends on request type, might be ByteArrayOutputStream
+               or lazy sequence, use conveniece methods to extract it, like string
+  - :done    - promise that is delivered once receiving response has finished
+  - :error   - promise that is delivered if requesting resource failed, once delivered
+               will contain Throwable."
   [#^Request req & {status    :status
                     headers   :headers
                     part      :part
