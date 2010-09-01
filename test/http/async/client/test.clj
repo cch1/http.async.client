@@ -315,6 +315,11 @@
         (is (contains? headers :x-user-agent))
         (is (= (:x-user-agent headers) ua-brand))))))
 
+(deftest await-string
+  (let [resp (GET "http://localhost:8123/stream")
+        body (string (await resp))]
+    (is (= body "part1part2"))))
+
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET "http://localhost:8123/stream"))
 ;;        seqs (repeat (stream-seq :get "http://localhost:8123/stream"))
