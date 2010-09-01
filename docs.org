@@ -331,10 +331,89 @@
   - try not to do any heavy lifting in this callback, better send it
     to agent,
 *** TODO Response handling
+    *http.async.client* exposes some convenience functions for
+    response handling.
+**** Awaiting response
+     If you call any of [[*Asynchronous%20operations][Asynchronous operations]], [[*Streaming][Streaming]] or [[*Raw%20mode][Raw mode]]
+     you actually asynchronously execute HTTP request.
+     Some times you might need to wait for response processing to be
+     done before proceeding, in order to do so you call
+     *http.async.client/await*.
+     It takes only one argument, that is response and returns once
+     receiving has finished.
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/await resp))
+#+END_SRC
+     Sample above will behave like synchronous HTTP operation.
+     For convenience it returns same response so you can use it
+     further, for example like that:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/string (c/await resp)))
+#+END_SRC
 **** Reading status line
+     *http.async.client/status* returns status lazy map of response.
+     It will wait until HTTP Status has been received.
+#+BEGIN_SRC clojure
+  (let [resp   (c/GET url)
+        status (c/status resp)]
+    (:code status))
+#+END_SRC
+     Sample above will return HTTP response status code, notice that
+     after this returns headers and body, might not been delivered
+     yet.
 **** Reading headers
+     *http.async.client/headers* returns headers lazy map of response.
+     It will wait until HTTP Headers are received.
+#+BEGIN_SRC clojure
+  (let [resp    (c/GET url)
+        headers (c/headers resp)]
+    (:server headers))
+#+END_SRC
+     Again, like in case of status, body might not have been delivered
+     yet after this returns.
 **** Reading cookies
+     *http.async.client/cookies* returns seq of maps representing
+     cookies.
+     It will wait until HTTP Headers are received.
+#+BEGIN_SRC clojure
+  (let [resp    (c/GET url)
+        cookies (c/cookies resp)]
+    (map :name cookies))
+#+END_SRC
+     Sample above will return sequence of cookie names that server has
+     set.
 **** Reading body
+     *http.async.client/body* returns either ByteArrayOutputStream or
+     seq of it, depending if you used [[*Asynchronous%20operations][Asynchronous operations]] or
+     [[*Streaming][Streaming]] respectively.
+     It will *not* wait for response to be finished, it will return as
+     soon as first chunk of HTTP response body is received.
+**** Reading body as string
+     *http.async.client/string* returns either string or seq of
+     strings, again depending if you used [[*Asynchronous%20operations][Asynchronous operations]] or
+     [[*Streaming][Streaming]] respectively.
+     It will *not* wait for response to be finished, it will return as
+     soon as first chunk of HTTP response body is received.
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/string (c/await resp)))
+#+END_SRC
+     Sample above will return string of response body.
+     *http.async.client/string* is lazy so you can use it in case of
+     streams as well.
+#+BEGIN_SRC clojure
+  (let [resp    (c/stream-seq :get url)
+        strings (c/string resp)]
+    (doseq [part strings]
+      (println part)))
+#+BEGIN_SRC
+     Sample above will print parts as they are received, and will
+     return once response receiving is finished.
+**** Predicates
+***** done?
+***** failed?
 ** DONE Low level                                                      :rel1:
 *** DONE Requesting                                                    :rel1:
     This is lower level access to *ahc-clj*.

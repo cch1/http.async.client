@@ -98,9 +98,11 @@
       @p)))
 
 (defn await
-  "Waits for response finish."
+  "Waits for response processing to be finished.
+  Returns same response."
   [response]
-  (safe-get :done response))
+  (safe-get :done response)
+  response)
 
 (defn headers
   "Gets headers.
