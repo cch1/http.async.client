@@ -34,7 +34,7 @@ namespace.
     <a class="wiki_link" href="api-index.html">API Index</a><br />
     <a class="wiki_link" href="#">Namespaces:</a>
     <ul id="left-sidebar-list">
-      <li><a href="async.http.client-api.html" class="wiki_link">async.http.client</a></li>
+      <li><a href="http.async.client-api.html" class="wiki_link">http.async.client</a></li>
     </ul>
   </div>
 </div>
@@ -46,7 +46,7 @@ namespace.
                 <div id="right-sidebar"><div id="toc">
   <h1 class="nopad">Table of Contents</h1>
   <div style="margin-left: 1em;" class="toc-section">
-    <a href="#async.http.client">async.http.client</a>
+    <a href="#http.async.client">http.async.client</a>
     
     <br />
   </div>
@@ -59,27 +59,47 @@ namespace.
 <div id="namespace-entry">
   <br />
   <hr />
-  <h2 id="async.http.client">async.http.client</h2>
+  <h2 id="http.async.client">http.async.client</h2>
   by <span id="author">Hubert Iwaniuk</span><br />
-  <a href="async.http.client-api.html" id="api-link">Detailed API documentation</a><br />
-  <pre id="namespace-docstr">Async HTTP Client - Clojure</pre>
+  <a href="http.async.client-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Asynchronous HTTP Client - Clojure</pre>
   
   Public variables and functions:
-  <span id="var-link"><a href="async.http.client-api.html#async.http.client/DELETE" id="var-tag">DELETE</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/GET" id="var-tag">GET</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/HEAD" id="var-tag">HEAD</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/OPTIONS" id="var-tag">OPTIONS</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/POST" id="var-tag">POST</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/PUT" id="var-tag">PUT</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/cookies" id="var-tag">cookies</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/create-client" id="var-tag">create-client</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/request-stream" id="var-tag">request-stream</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/stream-seq" id="var-tag">stream-seq</a> </span><span id="var-link"><a href="async.http.client-api.html#async.http.client/string" id="var-tag">string</a> </span><br />
+  <span id="var-link"><a href="http.async.client-api.html#http.async.client/await" id="var-tag">await</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/body" id="var-tag">body</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/cookies" id="var-tag">cookies</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/create-client" id="var-tag">create-client</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/done?" id="var-tag">done?</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/failed?" id="var-tag">failed?</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/headers" id="var-tag">headers</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/request-stream" id="var-tag">request-stream</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/status" id="var-tag">status</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/stream-seq" id="var-tag">stream-seq</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/string" id="var-tag">string</a> </span><span id="var-link"><a href="http.async.client-api.html#http.async.client/with-ahc" id="var-tag">with-ahc</a> </span><br />
   <span id="subspace"><br />Variables and functions in
-    <span id="name">async.http.client.request</span>:
+    <span id="name">http.async.client.headers</span>:
     <span id="sub-var-link">
-      <a href="async.http.client-api.html#async.http.client.request/consume-stream">consume-stream</a>
+      <a href="http.async.client-api.html#http.async.client.headers/convert-headers-to-map">convert-headers-to-map</a>
     </span><span id="sub-var-link">
-      <a href="async.http.client-api.html#async.http.client.request/convert-action">convert-action</a>
+      <a href="http.async.client-api.html#http.async.client.headers/create-cookies">create-cookies</a>
+    </span>
+    <br />
+  </span><span id="subspace"><br />Variables and functions in
+    <span id="name">http.async.client.request</span>:
+    <span id="sub-var-link">
+      <a href="http.async.client-api.html#http.async.client.request/convert-action">convert-action</a>
     </span><span id="sub-var-link">
-      <a href="async.http.client-api.html#async.http.client.request/execute-request">execute-request</a>
+      <a href="http.async.client-api.html#http.async.client.request/execute-request">execute-request</a>
     </span><span id="sub-var-link">
-      <a href="async.http.client-api.html#async.http.client.request/get-encoding">get-encoding</a>
+      <a href="http.async.client-api.html#http.async.client.request/get-encoding">get-encoding</a>
     </span><span id="sub-var-link">
-      <a href="async.http.client-api.html#async.http.client.request/prepare-request">prepare-request</a>
+      <a href="http.async.client-api.html#http.async.client.request/prepare-request">prepare-request</a>
     </span><span id="sub-var-link">
-      <a href="async.http.client-api.html#async.http.client.request/url-encode">url-encode</a>
+      <a href="http.async.client-api.html#http.async.client.request/url-encode">url-encode</a>
+    </span>
+    <br />
+  </span><span id="subspace"><br />Variables and functions in
+    <span id="name">http.async.client.status</span>:
+    <span id="sub-var-link">
+      <a href="http.async.client-api.html#http.async.client.status/convert-status-to-map">convert-status-to-map</a>
+    </span>
+    <br />
+  </span><span id="subspace"><br />Variables and functions in
+    <span id="name">http.async.client.util</span>:
+    <span id="sub-var-link">
+      <a href="http.async.client-api.html#http.async.client.util/delivered?">delivered?</a>
+    </span><span id="sub-var-link">
+      <a href="http.async.client-api.html#http.async.client.util/promise">promise</a>
     </span>
     <br />
   </span>
