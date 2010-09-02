@@ -43,10 +43,11 @@
 (do-template
  [fn-name method]
  (defn fn-name
-   [#^String url & {:as options}]
-   (apply execute-request
-          (apply prepare-request method url (apply concat options))
-          (apply concat *default-callbacks*)))
+    {:doc "TODO: figure out way to document those generated functions."}
+    [#^String url & {:as options}]
+    (apply execute-request
+           (apply prepare-request method url (apply concat options))
+           (apply concat *default-callbacks*)))
  GET :get
  POST :post
  PUT :put
