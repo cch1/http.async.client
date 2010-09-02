@@ -13,7 +13,7 @@
 ; limitations under the License.
 
 (ns http.async.client.headers
-  "Asynchrounous HTTP Client - Clojure - Lazy headers."
+  "Asynchrounous HTTP Client - Clojure - Lazy headers"
   {:author "Hubert Iwaniuk"}
   (:import (com.ning.http.client HttpResponseHeaders FluentCaseInsensitiveStringsMap)))
 
@@ -26,8 +26,9 @@
       (first vals)
       (into [] vals))))
 
-(defn convert-headers-to-map [#^HttpResponseHeaders headers]
+(defn convert-headers-to-map
   "Converts Http Response Headers to lazy map."
+  [#^HttpResponseHeaders headers]
   (let [hds (.getHeaders headers)
         names (.keySet hds)]
     (proxy [clojure.lang.APersistentMap]
@@ -56,8 +57,9 @@
                              (thisfn (rest pseq)))))))
                names)))))
 
-(defn create-cookies [headers]
+(defn create-cookies
   "Creates cookies from headers."
+  [headers]
   (if (contains? headers :set-cookie)
     (for [cookie-string (:set-cookie headers)]
       (let [name-token (atom true)]
