@@ -5,7 +5,7 @@
 #+OPTIONS: H:4
 
 * User Documentation
-  How to use Async Http Client - Clojure a.k.a. *http.async*.
+  How to use Async Http Client - Clojure a.k.a. *http.async.client*.
 ** Quick start
    If you just want to use it already.
 *** Dependency
@@ -15,9 +15,9 @@
     :description "Your project description"
     :dependencies [[org.clojure/clojure "1.2.0"]
                    [org.clojure/clojure-contrib "1.2.0"]
-                   [http.async "2.0.0"]])
+                   [http.async.client "2.0.0"]])
 #+END_SRC
-    Make sure that your project depends on 1.2 Clojure as *http.async*
+    Make sure that your project depends on 1.2 Clojure as *http.async.client*
     will not run in earlier versions.
 *** Require
     Require it from your code:
@@ -306,7 +306,7 @@
      - options :: same as normal [[*Request%20options][Request options]].
 **** Call-back
    Consuming HTTP Stream with call-back is quite straight forward with
-   *http.async*. You will need to know what HTTP Method you will call,
+   *http.async.client*. You will need to know what HTTP Method you will call,
    what URL and provide a call back function to handle body parts been
    received.
 #+BEGIN_SRC clojure
@@ -411,11 +411,11 @@
 #+BEGIN_SRC
      Sample above will print parts as they are received, and will
      return once response receiving is finished.
-**** Predicates
-***** done?
-***** failed?
-** DONE Low level                                                      :rel1:
-*** DONE Requesting                                                    :rel1:
+**** TODO Response Predicates
+***** TODO done?
+***** TODO failed?
+** TODO Low level                                                      :rel1:
+*** TODO Requesting                                                    :rel1:
     This is lower level access to *ahc-clj*.
     It provides default set of callbacks and functions to create and
     execute requests.
@@ -512,3 +512,5 @@
      - *:error* error callback
 * Developer [0/1]
 ** TODO Building                                                       :rel2:
+
+* TODO Branding
