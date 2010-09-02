@@ -1,11 +1,12 @@
-#+TITLE: Async Http Client - Clojure - Documentation
+#+TITLE: Asynchronous HTTP Client - Clojure - Documentation
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
 #+INFOJS_OPT: view:info toc:1
 #+OPTIONS: H:4
 
 * User Documentation
-  How to use Async Http Client - Clojure a.k.a. *http.async.client*.
+  How to use Asynchronous HTTP Client for Clojure
+  a.k.a. *http.async.client*.
 ** Quick start
    If you just want to use it already.
 *** Dependency
@@ -38,17 +39,18 @@
 #+BEGIN_SRC clojure
   (c/GET url)
 #+END_SRC
-     Result will be a map of http.async.client.util/promise called response.
+     Result will be a map of [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.util/promise][*http.async.client.util/promise*]]s, and
+     represents response.
      Do not fear, this is [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][clojure.core/promise]] that was extended to be
      able to check if it was delivered.
 
      Following HTTP methods have been covered so far:
-     - GET
-     - POST
-     - PUT
-     - DELETE
-     - HEAD
-     - OPTIONS
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][GET]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/POST][POST]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/PUT][PUT]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/DELETE][DELETE]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/HEAD][HEAD]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/OPTIONS][OPTIONS]]
      For detailed description see [[*HTTP%20methods][HTTP methods]].
 
      You can also submit options to HTTP methods like this:
@@ -58,7 +60,7 @@
      Options can be:
      - *:query* :: query parameters
      - *:headers* :: custom headers to be sent out
-     - *:body* :: body to be sent, allowed only with PUT/POST
+     - *:body* :: body to be sent, allowed only with [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/PUT][PUT]]/[[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/POST][POST]]
      - *:cookies* :: cookies to be sent
      - *:proxy* :: proxy to be used
      For detailed usage of options see [[*Request%20options][Request options]].
@@ -109,10 +111,12 @@
       level]].
 *** HTTP methods
     HTTP methods and convenience functions to request them.
-**** GET
-    Most basic invocation of *GET* is only with *url* you want to get.
+**** [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][GET]]
+    Most basic invocation of [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]] is only with
+    *url* you want to get.
     Extended invocation includes options that can be any options
-    accepted by *http.async.client.request/prepare-request* (:headers :query ..).
+    accepted by [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request][*http.async.client.request/prepare-request*]]
+    (:headers :query ..).
 
     Simple invocation:
 #+BEGIN_SRC clojure
@@ -161,7 +165,7 @@
     headers, so to start processing it you don't need to wait for
     whole response to arrive.
 **** PUT/POST
-     *PUT/POST* work the same way as *GET* but they also accept *body*.
+     *PUT/POST* work the same way as [[*%20http%20neotyk%20github%20com%20http%20async%20client%20autodoc%20http%20async%20client%20api%20html%20http%20async%20client%20GET%20GET][*GET*]] but they also accept *body*.
 
      *body* can be:
      - String
