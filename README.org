@@ -1,9 +1,9 @@
-#+TITLE: http.async - Async Http Client - Clojure
+#+TITLE: http.async.client - Asynchronous HTTP Client - Clojure
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
 #+INFOJS_OPT: view:info toc:1
 
-*http.async* is Async Http Client for Clojure.
+*http.async.client* is Asynchronous HTTP Client for Clojure.
 
 * *tl;dr*
 
@@ -23,21 +23,21 @@
 
   GET resource:
 #+BEGIN_SRC clojure
-  (let [response (c/GET "http://github.com/neotyk/http.async/")]
+  (let [response (c/GET "http://github.com/neotyk/http.async.client/")]
     (c/await response)
     (c/string response))
 #+END_SRC
 
-* Information over *http.async*
+* Information over *http.async.client*
 
-  *http.async* is based on [[http://github.com/ning/async-http-client][Asynchronous Http Client for Java]] which runs on top
-  of [[http://jboss.org/netty][Netty Project]].
+  *http.async.client* is based on [[http://github.com/ning/async-http-client][Asynchronous Http Client for Java]]
+  which runs on top of [[http://jboss.org/netty][Netty Project]].
 
   It requires Clojure 1.2.
 
   For more documentation refer to [[./docs.org][docs]] and for API to [[http://neotyk.github.com/ahc-clj/autodoc/][autodoc]].
 
-  *http.async* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
+  *http.async.client* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
 
-  If you would like to help please look at [[./todo.org][to do]] or summit ticket
-  here.
+  If you would like to help please look at [[./todo.org][to do]] or submit ticket
+  [[http://github.com/neotyk/http.async.client/issues/][here]].
