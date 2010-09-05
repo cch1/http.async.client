@@ -24,8 +24,7 @@
         [clojure.java.io :only [input-stream]]
         [clojure.contrib.profile :only [prof profile]])
   (:require [clojure.contrib.io :as duck])
-  (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
-           (org.eclipse.jetty.server Server Request)
+  (:import (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
            (org.eclipse.jetty.continuation Continuation ContinuationSupport)
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
@@ -107,9 +106,6 @@
 
 (defn- once-fixture [f]
   "Configures Logger before test here are executed, and closes AHC after tests are done."
-  (doto (Logger/getRootLogger)
-    (.setLevel Level/WARN)
-    (.addAppender (ConsoleAppender. (PatternLayout. PatternLayout/TTCC_CONVERSION_PATTERN))))
   (def srv (start-jetty default-handler))
   (binding [*ahc* (create-client)]
     (try (f)

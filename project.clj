@@ -3,7 +3,7 @@
   :namespaces       [async.http.client]
   :dependencies     [[org.clojure/clojure "1.2.0"]
 		     [org.clojure/clojure-contrib "1.2.0"]
-		     [com.ning/async-http-client "1.0.1-SNAPSHOT"]]
+		     [com.ning/async-http-client "1.1.0"]]
   :dev-dependencies [[swank-clojure "1.2.1"]
 		     [autodoc "0.7.1"]
 		     [org.clojars.neotyk/lein-javac "1.0.1"]
