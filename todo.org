@@ -17,7 +17,7 @@
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
 ** DONE Cookies                                                        :rel3:
-*** TODO Describe                                                      :rel3:
+*** DONE Describe                                                      :rel3:
 ** DONE PUT/POST body [3/3]                                            :rel1:
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
@@ -29,7 +29,7 @@
 *** DONE DELETE                                                        :rel1:
 *** DONE HEAD                                                          :rel1:
 *** DONE OPTIONS                                                       :rel1:
-*** TODO Others, once supported by AHC-Java                            :rel2:
+*** TODO Others, once supported by AHC-Java                            :rel4:
 ** TODO PUT/POST streaming body                                        :rel4:
    That can be done with *clojure.core/add-watch*.
    Watcher in that scenario will grab new content and write it via
@@ -38,7 +38,8 @@
 ** TODO Multipart                                                      :rel4:
 ** TODO Authentication                                                 :rel3:
 * Configuration [0/2]
-** TODO Global configuration of AHC [0/3]                              :rel4:
+** TODO Global configuration of AHC [1/4]                              :rel4:
+*** DONE Branding User-agent                                           :rel3:
 *** TODO Connection limiting per host.
 *** TODO Global proxy.
 *** TODO Timeout settings
