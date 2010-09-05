@@ -12,12 +12,13 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client.test
-  "Testing of ahc-clj"
+(ns http.async.client.test
+  "Testing of http.async"
   {:author "Hubert Iwaniuk"}
+  (:refer-clojure :exclude [promise await])
   (:use clojure.test
-        async.http.client
-        async.http.client.request
+        http.async.client
+        [http.async.client request util]
         [clojure.stacktrace :only [print-stack-trace]]
         [clojure.contrib.str-utils2 :only [split]]
         [clojure.java.io :only [input-stream]]
@@ -84,6 +85,7 @@
                            (.addCookie hResp (Cookie. "foo" "bar"))
                            (doseq [c (.getCookies hReq)]
                              (.addCookie hResp c)))
+               "/branding" (.setHeader hResp "X-User-Agent" (.getHeader hReq "User-Agent"))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -121,13 +123,10 @@
 ;; testing
 (deftest test-status
   (let [status# (promise)
-	_ (execute-request
-	   (prepare-request :get "http://localhost:8123/")
-	   :status (fn [_ st] (do (deliver status# st) :abort))
-           :part body-collect
-           :completed body-completed
-           :headers headers-collect
-           :error error-collect)
+	_ (apply execute-request
+                 (prepare-request :get "http://localhost:8123/")
+                 (apply concat (merge *default-callbacks*
+                                      {:status (fn [_ st] (do (deliver status# st) [st :abort]))})))
 	status @status#]
     (are [k v] (= (k status) v)
          :code 200
@@ -138,22 +137,19 @@
 
 (deftest test-receive-headers
   (let [headers# (promise)
-        _ (execute-request
-           (prepare-request :get "http://localhost:8123/")
-           :status status-collect
-           :part body-collect
-           :completed body-completed
-           :headers (fn [_ hds] (do (deliver headers# hds) :abort))
-           :error error-collect)
+        _ (apply execute-request
+                 (prepare-request :get "http://localhost:8123/")
+                 (apply concat (merge *default-callbacks*
+                                      {:headers (fn [_ hds] (do (deliver headers# hds) [hds :abort]))})))
         headers @headers#]
     (is (= (:test-header headers) "test-value"))))
 
 (deftest test-send-headers
   (let [resp (GET "http://localhost:8123/" :headers {:a 1 :b 2})
-        headers (:headers @resp)]
-    (if (contains? @resp :error)
-      (print-stack-trace (:error @resp)))
-    (is (not (contains? (keys @resp) :error)))
+        headers (headers resp)]
+    (if (delivered? (:error resp))
+      (print-stack-trace @(:error resp)))
+    (is (not (delivered? (:error resp))))
     (is (not (empty? headers)))
     (are [k v] (= (k headers) (str v))
          :a 1
@@ -161,8 +157,8 @@
 
 (deftest test-body
   (let [resp (GET "http://localhost:8123/body")
-        headers (:headers @resp)
-        body (:body @resp)]
+        headers (headers resp)
+        body (body resp)]
     (is (not (nil? body)))
     (is (= "Remember to checkout #clojure@freenode" (string resp)))
     (if (contains? headers :content-length)
@@ -170,7 +166,7 @@
 
 (deftest test-query-params
   (let [resp (GET "http://localhost:8123/" :query {:a 3 :b 4})
-        headers (:headers @resp)]
+        headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
          :a 3
@@ -183,7 +179,7 @@
 
 (deftest test-post-params
   (let [resp (POST "http://localhost:8123/" :body {:a 5 :b 6})
-        headers (:headers @resp)]
+        headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
          :a 5
@@ -191,13 +187,13 @@
 
 (deftest test-post-string-body
   (let [resp (POST "http://localhost:8123/body-str" :body "TestBody")
-        headers (:headers @resp)]
+        headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "TestBody" (string resp)))))
 
 (deftest test-post-map-body
   (let [resp (POST "http://localhost:8123/" :body {:u "user" :p "s3cr3t"})
-        headers (:headers @resp)]
+        headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= x (y headers))
          "user" :u
@@ -205,14 +201,14 @@
 
 (deftest test-post-input-stream-body
   (let [resp (POST "http://localhost:8123/body-str" :body (input-stream (.getBytes "TestContent" "UTF-8")))
-        headers (:headers @resp)]
+        headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-put
   (let [resp (PUT "http://localhost:8123/put" :body "TestContent")
-        status (:status @resp)
-        headers (:headers @resp)]
+        status (status resp)
+        headers (headers resp)]
     (are [x] (not (empty? x))
          status
          headers)
@@ -221,8 +217,8 @@
 
 (deftest test-delete
   (let [resp (DELETE "http://localhost:8123/delete")
-        status (:status @resp)
-        headers (:headers @resp)]
+        status (status resp)
+        headers (headers resp)]
     (are [x] (not (empty? x))
          status
          headers)
@@ -231,8 +227,8 @@
 
 (deftest test-head
   (let [resp (HEAD "http://localhost:8123/head")
-        status (:status @resp)
-        headers (:headers @resp)]
+        status (status resp)
+        headers (headers resp)]
     (are [x] (not (empty? x))
          status
          headers)
@@ -241,8 +237,8 @@
 
 (deftest test-options
   (let [resp (OPTIONS "http://localhost:8123/options")
-        status (:status @resp)
-        headers (:headers @resp)]
+        status (status resp)
+        headers (headers resp)]
     (are [x] (not (empty? x))
          status
          headers)
@@ -253,8 +249,10 @@
   (let [stream (ref #{})
         resp (request-stream :get "http://localhost:8123/stream"
                      (fn [_ baos]
-                       (dosync (alter stream conj (.toString baos duck/*default-encoding*)))))
-        status (:status @resp)]
+                       (dosync (alter stream conj (.toString baos duck/*default-encoding*)))
+                       [baos :continue]))
+        status (status resp)]
+    (await resp)
     (are [x] (not (empty? x))
          status
          @stream)
@@ -265,25 +263,18 @@
 
 (deftest test-get-stream
   (let [resp (GET "http://localhost:8123/stream")]
+    (await resp)
     (is (= "part1part2" (string resp)))))
 
 (deftest test-stream-seq
   (let [resp (stream-seq :get "http://localhost:8123/stream")
-        status-received @(:status-received @resp)
-        status (:status @resp)
-        headers-received @(:headers-received @resp)
-        headers (:headers @resp)
-        body-started @(:body-started @resp)
-        body (:body @resp)
-        body-finished @(:body-finished @resp)]
+        status (status resp)
+        headers (headers resp)
+        body (body resp)]
     (are [e p] (= e p)
-         true status-received
          200 (:code status)
-         true headers-received
          "test-value" (:test-header headers)
-         true body-started
-         2 (count body)
-         true body-finished)
+         2 (count body))
     (doseq [s (string resp)]
       (is (or (= "part1" s) (= "part2" s))))))
 
@@ -293,7 +284,7 @@
 (deftest get-via-proxy
   (let [target "http://localhost:8123/proxy-req"
         resp (GET target :proxy {:host "localhost" :port 8123})
-        headers (:headers @resp)]
+        headers (headers resp)]
     (is (= target (:target headers)))))
 
 (deftest get-with-cookie
@@ -305,7 +296,7 @@
                               :path "/cookie"
                               :max-age 10
                               :secure false}})
-        headers (:headers @resp)]
+        headers (headers resp)]
     (is (contains? headers :set-cookie))
     (let [cookies (cookies resp)]
       (is (not (empty? cookies)))
@@ -316,6 +307,24 @@
                (if (= (:name cookie) "sample-name")
                  cv
                  "bar")))))))
+
+(deftest get-with-user-agent-branding
+  (let [ua-brand "Branded User Agent/1.0"]
+    (with-ahc {:user-agent ua-brand}
+      (let [headers (headers (GET "http://localhost:8123/branding"))]
+        (is (contains? headers :x-user-agent))
+        (is (= (:x-user-agent headers) ua-brand))))))
+
+(deftest await-string
+  (let [resp (GET "http://localhost:8123/stream")
+        body (string (await resp))]
+    (is (= body "part1part2"))))
+
+(deftest no-host
+  (let [resp (GET "http://notexisting/")]
+    (await resp)
+    (is (= (.getMessage (error resp)) "Connection refused to http://notexisting/"))
+    (is (true? (failed? resp)))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET "http://localhost:8123/stream"))

@@ -12,10 +12,14 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns async.http.client.status
+(ns http.async.client.status
+  "Asynchronous HTTP Client - Clojure - Lazy status."
+  {:author "Hubert Iwaniuk"}
   (:import (com.ning.http.client HttpResponseStatus)))
 
-(defn convert-status-to-map [st]
+(defn convert-status-to-map
+  "Convert HTTP Status line to lazy map."
+  [st]
   (let [lm {:code (delay (.getStatusCode st))
 	    :msg (delay (.getStatusText st))
 	    :protocol (delay (.getProtocolText st))

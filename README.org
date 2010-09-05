@@ -1,60 +1,43 @@
-#+TITLE: Async Http Client - Clojure
+#+TITLE: http.async.client - Asynchronous HTTP Client - Clojure
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
 #+INFOJS_OPT: view:info toc:1
 
-* Intro
-  *ahc-clj* is Async Http Client for Clojure.
+*http.async.client* is Asynchronous HTTP Client for Clojure.
 
-  It is based on [[http://github.com/ning/async-http-client][Asynchronous Http Client for Java]] which runs on top
-  of [[http://jboss.org/netty][Netty Project]].
+* *tl;dr*
 
-  There are three modes in witch it works:
-  - *Asynchronous operations*
-    When you do:
-    : (GET url)
-    Result will be a [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][clojure.core/promise]] that will be [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/deliver][deliver]]ed once
-    response is completed.
-    This promise is a map that contains following keys:
-    - *:status* - lazy map of status fields
-      - *:code* - response code
-      - *:msg* - response message
-      - *:protocol* - protocol with version
-      - *:major* - major version of protocol
-      - *:minor* - minor version of protocol
-    - *:headers* - lazy map of headers where header names are
-      keyworded, like *:server* for example
-    - *:body* - body of response, this is ByteArrayOutputStream, but you
-      have convenience functions to convert it to string for example
-    - *:error* if there was an error you will find Throwable here
-  - *Streaming*
-    When you do:
-    : (stream-seq :get url)
-    Result will be [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/ref][ref]] to a [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/map][map]] that contains [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][promise]]s for different
-    stages of request processing as well as contents of map returned
-    by functions like *GET* except *:body* will be lazy sequence of
-    ByteArrayOutputStreams.
-  - *Raw mode*
-    This allows you to provide callbacks that will get triggered on Http
-    Response events like:
-    - received status line,
-    - received headers,
-    - received body part,
-    - completed request,
-    - handle error.
+  Declare dependency:
+#+BEGIN_SRC clojure
+  (defproject your-project "1.0.0-SNAPSHOT"
+    :description "Your project description"
+    :dependencies [[org.clojure/clojure "1.2.0"]
+                   [org.clojure/clojure-contrib "1.2.0"]
+                   [http.async "2.0.0"]])
+#+END_SRC
 
-  *ahc-clj* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
-* Sample
-#+BEGIN_VERSE
-(let [resp (GET "http://localhost:8123/")
-      headers (:headers @resp)]
-  (println (:server headers))
-  (println (string resp)))
-#+END_VERSE
-* Requires
-  Clojure 1.2
-* Documentation
-  See [[./docs.org][docs]].
-  Also [[http://neotyk.github.com/ahc-clj/autodoc/][autodoc]] is available.
-* Progress
-  List of tasks [[./todo.org][to do]].
+  Require:
+#+BEGIN_SRC clojure
+  (ns sample (:require [http.async.client :as c]))
+#+END_SRC
+
+  GET resource:
+#+BEGIN_SRC clojure
+  (let [response (c/GET "http://github.com/neotyk/http.async.client/")]
+    (c/await response)
+    (c/string response))
+#+END_SRC
+
+* Information over *http.async.client*
+
+  *http.async.client* is based on [[http://github.com/ning/async-http-client][Asynchronous Http Client for Java]]
+  which runs on top of [[http://jboss.org/netty][Netty Project]].
+
+  It requires Clojure 1.2.
+
+  For more documentation refer to [[./docs.org][docs]] and for API to [[http://neotyk.github.com/ahc-clj/autodoc/][autodoc]].
+
+  *http.async.client* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
+
+  If you would like to help please look at [[./todo.org][to do]] or submit ticket
+  [[http://github.com/neotyk/http.async.client/issues/][here]].
