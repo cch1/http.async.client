@@ -12,7 +12,7 @@
 ** DONE Implement response *promise*                                   :rel1:
 ** DONE Consume stream                                                 :rel1:
 ** DONE Error function                                                 :rel1:
-* Send [5/8]                                                           :code:
+* Send [5/9]                                                           :code:
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
@@ -36,6 +36,7 @@
    AHC, or alternatively will *clojure.core/send-off* to execute
    IO operation in separate thread.
 ** TODO Multipart                                                      :rel4:
+** TODO Authentication                                                 :rel3:
 * Configuration [0/2]
 ** TODO Global configuration of AHC [0/3]                              :rel4:
 *** TODO Connection limiting per host.
