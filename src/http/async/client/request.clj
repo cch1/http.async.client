@@ -86,7 +86,7 @@
 
 ;; error callbacks
 (defn error-collect [state t]
-  [t :continue])
+  t)
 
 ;; default set of callbacks
 (def
@@ -222,7 +222,6 @@
                       (deliver (:done resp) true)))
        (onThrowable [#^Throwable t]
                     (do
-                      (print-cause-trace t)
                       (deliver (:error resp) (error resp t))
                       (deliver (:done resp) true)))))
     ^{:started (System/currentTimeMillis)}

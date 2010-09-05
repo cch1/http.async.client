@@ -320,6 +320,12 @@
         body (string (await resp))]
     (is (= body "part1part2"))))
 
+(deftest no-host
+  (let [resp (GET "http://notexisting/")]
+    (await resp)
+    (is (= (.getMessage (error resp)) "Connection refused to http://notexisting/"))
+    (is (true? (failed? resp)))))
+
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET "http://localhost:8123/stream"))
 ;;        seqs (repeat (stream-seq :get "http://localhost:8123/stream"))

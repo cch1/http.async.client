@@ -141,3 +141,9 @@
   "Gets status if status was delivered."
   [resp]
   (safe-get :status resp))
+
+(defn error
+  "Returns Throwable if request processing failed."
+  [resp]
+  (if (failed? resp)
+    @(:error resp)))
