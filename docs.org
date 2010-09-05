@@ -111,7 +111,7 @@
       level]].
 *** HTTP methods
     HTTP methods and convenience functions to request them.
-**** [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][GET]]
+**** GET
     Most basic invocation of [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]] is only with
     *url* you want to get.
     Extended invocation includes options that can be any options
@@ -161,11 +161,12 @@
     (doseq [cookie (c/cookies resp)]
       (println "name:" (:name cookie) ", value:" (:value cookie))))
 #+END_SRC
-    Notice *c/cookies* function extracts cookies from response
-    headers, so to start processing it you don't need to wait for
-    whole response to arrive.
+    Notice [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/cookies][*http.async.client/cookies*]] function extracts cookies from
+    response headers, so to start processing it you don't need to wait
+    for whole response to arrive.
 **** PUT/POST
-     *PUT/POST* work the same way as [[*%20http%20neotyk%20github%20com%20http%20async%20client%20autodoc%20http%20async%20client%20api%20html%20http%20async%20client%20GET%20GET][*GET*]] but they also accept *body*.
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/PUT][*http.async.client/PUT*]]/[[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/POST][*http.async.client/POST*]] work the same
+     way as [[*%20http%20neotyk%20github%20com%20http%20async%20client%20autodoc%20http%20async%20client%20api%20html%20http%20async%20client%20GET%20GET][*GET*]] but they also accept *body*.
 
      *body* can be:
      - String
@@ -194,28 +195,29 @@
     )
 #+END_SRC
 **** DELETE
-     To call DELETE on a resource:
+     To call [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/DELETE][*http.async.client/DELETE*]] on a resource:
 #+BEGIN_SRC clojure
   (let [resp (c/DELETE "<your url>")]
     ; do something with resp
     )
 #+END_SRC
 **** HEAD
-     To call HEAD on a resource:
+     To call [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/HEAD][*http.async.client/HEAD*]] on a resource:
 #+BEGIN_SRC clojure
   (let [resp (c/HEAD "<your url>")]
     ; do something with resp
     )
 #+END_SRC
 **** OPTIONS
-     To call OPTIONS on a resource:
+     To call [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/OPTIONS][*http.async.client/OPTIONS*]] on a resource:
 #+BEGIN_SRC clojure
   (let [resp (c/OPTIONS "<your url>")]
     ; do something with resp
     )
 #+END_SRC
 *** Request options
-    Following options can be provided to requests.
+    Following options can be provided to requests and are defined by
+    [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request][*http.async.client.request/prepare-request*]]:
     - [[*%20query][:query]] :: query parameters
     - [[*%20headers][:headers]] :: custom headers to be sent out
     - [[*%20body][:body]] :: body to be sent, allowed only with PUT/POST
@@ -334,7 +336,7 @@
     resources,
   - try not to do any heavy lifting in this callback, better send it
     to agent,
-*** TODO Response handling
+*** Response handling
     *http.async.client* exposes some convenience functions for
     response handling.
 **** Awaiting response
@@ -395,7 +397,7 @@
      It will *not* wait for response to be finished, it will return as
      soon as first chunk of HTTP response body is received.
 **** Reading body as string
-     *http.async.client/string* returns either string or seq of
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/string][*http.async.client/string*]] returns either string or seq of
      strings, again depending if you used [[*Asynchronous%20operations][Asynchronous operations]] or
      [[*Streaming][Streaming]] respectively.
      It will *not* wait for response to be finished, it will return as
@@ -405,116 +407,128 @@
     (c/string (c/await resp)))
 #+END_SRC
      Sample above will return string of response body.
-     *http.async.client/string* is lazy so you can use it in case of
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/string][*http.async.client/string*]] is lazy so you can use it in case of
      streams as well.
 #+BEGIN_SRC clojure
   (let [resp    (c/stream-seq :get url)
         strings (c/string resp)]
     (doseq [part strings]
       (println part)))
-#+BEGIN_SRC
+#+END_SRC
      Sample above will print parts as they are received, and will
      return once response receiving is finished.
-**** TODO Response Predicates
-***** TODO done?
-***** TODO failed?
-** TODO Low level                                                      :rel1:
-*** TODO Requesting                                                    :rel1:
-    This is lower level access to *ahc-clj*.
+**** Reading error
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/error][*http.async.client/error*]] will return Throwable that was cause of
+     request failure iff request failed, else *nil*.
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/await resp)
+    (when-let [err (c/error resp)]
+      (println "failed processing request: " err)))
+#+END_SRC
+**** Response Predicates
+     You can also check status of request.
+***** done?
+      [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/done?][*http.async.client/done?*]] will tell you if response processing
+      has finished:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (when-not (c/done? resp)
+      (c/await resp)
+      (c/done? resp)))
+#+END_SRC
+      Sample above will check if response was finished, if not - will
+      wait for it and return true as a result of call to done?.
+***** failed?
+      [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/failed?][*http.async.client/failed?*]] will return true iff request has
+      failed. If this return true you can [[*Reading%20error][read
+      error]].
+*** *http.async.client* configuration
+**** Branding
+     *http.async.client* con be configured, for now only with
+     User-Agent. To do so you use *http.async.client/create-client*.
+     It takes map of options, for now it only accepts *:user-agent*.
+     Once you've created client you need to use it via
+     *http.async.client/with-ahc*..
+#+BEGIN_SRC clojure
+  (c/with-ahc {:user-agent "Your User Agent/1.0"}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+    ))
+#+END_SRC
+** Low level
+*** Requesting
+    This is lower level access to *http.async.client*.
+    Mechanics here is based on asynchronous call-backs.
     It provides default set of callbacks and functions to create and
     execute requests.
 **** Preparing request
-    *prepare-request* is responsible for request preparation.
+    [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request][*http.async.client.request/prepare-request*]] is responsible for
+    request preparation, like name suggests.
     It takes following arguments:
     - HTTP Method like *:get* *:head*
     - *url* that you want to call
-    - and optional *options* keyworded map:
-      - *:query* is map of query parameters to be sent over
-      - *:headers* is map of headers to be send over
-      - *:body* can be map of request parameters, string or
-        InputStream to send over, keep in mind that those should be
-        send only with *PUT* and *POST* requests
-      - *:proxy* proxy configuration to be used (*:host* and *:port*)
+    - and *options*, a keyworded map described already in [[*Request%20options][Request options]].
     Sample:
-#+BEGIN_VERSE
-    (let [req (prepare-request
-                :get "http://google.com"
-                :headers {:my-header "value"})]
-      ...)
-#+END_VERSE
+#+BEGIN_SRC clojure
+  (let [req (prepare-request
+              :get "http://google.com"
+              :headers {:my-header "value"})]
+  ; now you have request, next thing to do would be to execute it
+  )
+#+END_SRC
 **** Executing request
-     *execute-request* returns a *promise* that will be *delivered*
-     once response is received.
-     *promise* to be delivered is result of call-back provided in
-     *options* under key *:completed*.
-     It takes request to be executed (result of *prepare-request*) and
-     *options* as keyworded arguments consisting of call-backs..
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/execute-request][*http.async.client/execute-request*]] returns same map of promises
+     as [[*Asynchronous%20operations][Asynchronous operations]].
+     Its arguments are: request to be executed (result of [[*Preparing%20request][Preparing
+     request]]) and *options* as keyworded map consisting of call-backs.
      Following *options* are recognized:
-     - *:status* status line received callback
-     - *:headers* headers received callback
-     - *:part* body part received callback
-     - *:completed* body receiving completed callback
-     - *:error* error callback
-     All callbacks take *(ref {})* as first argument, called *state*
-     further on. This is STM map per request, you can store here
-     whatever you want. Look at implementations of default callbacks
-     for more information.
+     - *:status* [[*Status%20line][Status line]]
+     - *:headers* [[*Headers][Headers]]
+     - *:part* [[*Body%20part][Body part]]
+     - *:completed* [[*Body%20completed][Body completed]]
+     - *:error* [[*Error][Error]]
+     All callbacks take response map as first argument and callback
+     specific argument if any.
+     Callbacks are expected to return tuple of *result* and *action*:
+     - *result* :: will be delivered to respective promise in response
+                   map
+     - *action* :: if its value is *:abort* than response processing
+                   will be aborted, anything else here will result in
+                   continuation.
 ***** Status line
-      Status line callback is called with *state* and lazy map
-      representing HTTP Response Status.
-      Status map has following keys:
-      - *:code* status code (200, 404, ..)
-      - *:msg* status message ("OK", ..)
-      - *:protocol* protocol with version ("HTTP/1.1")
-      - *:major* major protocol version (1)
-      - *:minor* minor protocol version (0, 1)
+      Status line callback gets called after status line has been
+      received with arguments:
+      - response map
+      - Status map has following keys:
+        - *:code* status code (200, 404, ..)
+        - *:msg* status message ("OK", ..)
+        - *:protocol* protocol with version ("HTTP/1.1")
+        - *:major* major protocol version (1)
+        - *:minor* minor protocol version (0, 1)
 ***** Headers
-      Headers callback is called with *state* and lazy map of headers.
-      Keys in that map are *(keyword (.toLowerCase <header name>))*, so
-      "Server" headers is *:server* and so on.
+      Headers callback gets called after headers have been received 
+      with arguments:
+      - response map
+      - lazy map of headers. Keys in that map are *(keyword
+        (.toLowerCase <header name>))*, so "Server" headers is
+        *:server* and so on.
 ***** Body part
-      Body part callback is called with *state* and
-      ByteArrayOutputStream that have been received.
+      Body part callback gets called after each part of body has been
+      received with arguments:
+      - response map
+      - ByteArrayOutputStream that contains body part received.
 ***** Body completed
-      This callback is called with *state* only and result of it is
-      delivered to response promise.
+      This callback gets called when receiving of response body has
+      finished with only one argument, i.e. response map.
 ***** Error
-      Error callback gets called with *state* and *Throwable*.
-**** Consuming a stream                                                :rel3:
-     *consume-stream* is quite similar to *execute-request* but is
-     targeted for HTTP Streams that are not meant to finish, or are
-     anticipated to be bigger than available resources (so you will
-     not be able to fit them in RAM).
-     It returns *(ref {})* not promise, as we don't expect it to
-     finish. This ref will be map with following keys:
-     - *:id* request unique id
-     - response state promises:
-       - *:status-received* is delivered once status has been received
-         and *:status* is available
-       - *:headers-received* is delivered once headers has been
-         received and *:headers* is available
-       - *:body-started* is delivered once first body part has been
-         received and is available under *:body* lazy sequence
-       - *:body-finished* is delivered once response body has been
-         finished, and no more elements will be added to *:body*
-         lazy-seq
-       - *:errored* is delivered once error receiving response
-         happened.
-     - response content:
-       - *:status* is lazy map containing status information as
-         explained in Intro
-       - *:headers* is lazy map of headers
-       - *:body* is lazy sequence of ByteArrayOutputStream
-       - *:error* is Throwable if error appeared
-     Callback are provided same way as for "Executing request" and
-     following are recognized:
-     - *:status* status line received call-back
-     - *:headers* headers received call-back
-     - *:part* body part received call-back, body part received is
-       ByteArrayOutputStream
-     - *:completed* response body completed
-     - *:error* error callback
-* Developer [0/1]
-** TODO Building                                                       :rel2:
-
-* TODO Branding
+      Error callback gets called when error while processing has been
+      encountered with arguments
+      - response map
+      - *Throwable* that was a cause of failure
+**** Default set of callbacks
+     *http.async.client.request/*default-callbacks** is a map of
+     default callbacks. This fill allow you to easy change only on
+     callback.
+     Please see source of *http.async.client/stream-seq* to see how to
+     do it.
