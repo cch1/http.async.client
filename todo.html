@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Async Http Client - Clojure - To Do</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-07-14 16:47:55 CEST"/>
+<meta name="generated" content="2010-09-06 01:04:11 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -102,40 +102,57 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-1.6">1.6 Error function</a></li>
 </ul>
 </li>
-<li><a href="#sec-2">2 Send [4/7]</a>
+<li><a href="#sec-2">2 Send [5/9]</a>
 <ul>
 <li><a href="#sec-2.1">2.1 Query parameters</a></li>
 <li><a href="#sec-2.2">2.2 Parameters</a></li>
 <li><a href="#sec-2.3">2.3 Parameters allowed only on PUT/POST</a></li>
-<li><a href="#sec-2.4">2.4 PUT/POST body [3/3]</a>
+<li><a href="#sec-2.4">2.4 Cookies</a>
 <ul>
-<li><a href="#sec-2.4.1">2.4.1 Support sending strings</a></li>
-<li><a href="#sec-2.4.2">2.4.2 Support sending map as form encoded data</a></li>
-<li><a href="#sec-2.4.3">2.4.3 Support InputStream body</a></li>
+<li><a href="#sec-2.4.1">2.4.1 Describe</a></li>
 </ul>
 </li>
-<li><a href="#sec-2.5">2.5 All HTTP verbs [6/7] </a>
+<li><a href="#sec-2.5">2.5 PUT/POST body [3/3]</a>
 <ul>
-<li><a href="#sec-2.5.1">2.5.1 GET</a></li>
-<li><a href="#sec-2.5.2">2.5.2 POST</a></li>
-<li><a href="#sec-2.5.3">2.5.3 PUT</a></li>
-<li><a href="#sec-2.5.4">2.5.4 DELETE</a></li>
-<li><a href="#sec-2.5.5">2.5.5 HEAD</a></li>
-<li><a href="#sec-2.5.6">2.5.6 OPTIONS</a></li>
-<li><a href="#sec-2.5.7">2.5.7 Others once supported by AHC-Java</a></li>
+<li><a href="#sec-2.5.1">2.5.1 Support sending strings</a></li>
+<li><a href="#sec-2.5.2">2.5.2 Support sending map as form encoded data</a></li>
+<li><a href="#sec-2.5.3">2.5.3 Support InputStream body</a></li>
 </ul>
 </li>
-<li><a href="#sec-2.6">2.6 PUT/POST streaming body</a></li>
-<li><a href="#sec-2.7">2.7 Multipart</a></li>
+<li><a href="#sec-2.6">2.6 All HTTP verbs [6/7] </a>
+<ul>
+<li><a href="#sec-2.6.1">2.6.1 GET</a></li>
+<li><a href="#sec-2.6.2">2.6.2 POST</a></li>
+<li><a href="#sec-2.6.3">2.6.3 PUT</a></li>
+<li><a href="#sec-2.6.4">2.6.4 DELETE</a></li>
+<li><a href="#sec-2.6.5">2.6.5 HEAD</a></li>
+<li><a href="#sec-2.6.6">2.6.6 OPTIONS</a></li>
+<li><a href="#sec-2.6.7">2.6.7 Others, once supported by AHC-Java</a></li>
+</ul>
+</li>
+<li><a href="#sec-2.7">2.7 PUT/POST streaming body</a></li>
+<li><a href="#sec-2.8">2.8 Multipart</a></li>
+<li><a href="#sec-2.9">2.9 Authentication</a></li>
 </ul>
 </li>
 <li><a href="#sec-3">3 Configuration [0/2] </a>
 <ul>
-<li><a href="#sec-3.1">3.1 Global configuration of AHC</a></li>
-<li><a href="#sec-3.2">3.2 Per request configuration</a></li>
+<li><a href="#sec-3.1">3.1 Global configuration of AHC [1/4]</a>
+<ul>
+<li><a href="#sec-3.1.1">3.1.1 Branding User-agent</a></li>
+<li><a href="#sec-3.1.2">3.1.2 Connection limiting per host. </a></li>
+<li><a href="#sec-3.1.3">3.1.3 Global proxy. </a></li>
+<li><a href="#sec-3.1.4">3.1.4 Timeout settings </a></li>
 </ul>
 </li>
-<li><a href="#sec-4">4 Tasks [5/6] </a>
+<li><a href="#sec-3.2">3.2 Per request configuration [1/2]</a>
+<ul>
+<li><a href="#sec-3.2.1">3.2.1 Proxy configuration</a></li>
+<li><a href="#sec-3.2.2">3.2.2 Timeout</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="#sec-4">4 Tasks [9/10] </a>
 <ul>
 <li><a href="#sec-4.1">4.1 License</a></li>
 <li><a href="#sec-4.2">4.2 Cleanup namespaces</a>
@@ -145,9 +162,17 @@ org_html_manager.setup();  // activate after the parameters are set
 </ul>
 </li>
 <li><a href="#sec-4.3">4.3 Release 0.1.0</a></li>
-<li><a href="#sec-4.4">4.4 Make tests stand-alone</a></li>
-<li><a href="#sec-4.5">4.5 Simplify request preparation</a></li>
-<li><a href="#sec-4.6">4.6 Use last argument as key worded map</a></li>
+<li><a href="#sec-4.4">4.4 Release 0.1.1</a></li>
+<li><a href="#sec-4.5">4.5 Release 0.2.0</a></li>
+<li><a href="#sec-4.6">4.6 Make tests stand-alone</a></li>
+<li><a href="#sec-4.7">4.7 Simplify request preparation</a></li>
+<li><a href="#sec-4.8">4.8 Use last argument as key worded map</a></li>
+<li><a href="#sec-4.9">4.9 Review documentation</a></li>
+<li><a href="#sec-4.10">4.10 Refactoring [1/1]</a>
+<ul>
+<li><a href="#sec-4.10.1">4.10.1 Refactor <b>execute-request</b> [2/2] </a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -213,7 +238,7 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Send [4/7] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="code">code</span></span></h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Send [5/9] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="code">code</span></span></h2>
 <div class="outline-text-2" id="text-2">
 
 
@@ -244,31 +269,15 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2.4" class="outline-3">
-<h3 id="sec-2.4"><span class="section-number-3">2.4</span> <span class="done DONE"> DONE</span> PUT/POST body [3/3] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<h3 id="sec-2.4"><span class="section-number-3">2.4</span> <span class="done DONE"> DONE</span> Cookies &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-2.4">
 
 
 </div>
 
 <div id="outline-container-2.4.1" class="outline-4">
-<h4 id="sec-2.4.1"><span class="section-number-4">2.4.1</span> <span class="done DONE"> DONE</span> Support sending strings &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<h4 id="sec-2.4.1"><span class="section-number-4">2.4.1</span> <span class="done DONE"> DONE</span> Describe &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
 <div class="outline-text-4" id="text-2.4.1">
-
-</div>
-
-</div>
-
-<div id="outline-container-2.4.2" class="outline-4">
-<h4 id="sec-2.4.2"><span class="section-number-4">2.4.2</span> <span class="done DONE"> DONE</span> Support sending map as form encoded data &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2.4.2">
-
-</div>
-
-</div>
-
-<div id="outline-container-2.4.3" class="outline-4">
-<h4 id="sec-2.4.3"><span class="section-number-4">2.4.3</span> <span class="done DONE"> DONE</span> Support InputStream body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2.4.3">
 
 </div>
 </div>
@@ -276,14 +285,14 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2.5" class="outline-3">
-<h3 id="sec-2.5"><span class="section-number-3">2.5</span> <span class="todo TODO"> TODO</span> All HTTP verbs [6/7] </h3>
+<h3 id="sec-2.5"><span class="section-number-3">2.5</span> <span class="done DONE"> DONE</span> PUT/POST body [3/3] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-2.5">
 
 
 </div>
 
 <div id="outline-container-2.5.1" class="outline-4">
-<h4 id="sec-2.5.1"><span class="section-number-4">2.5.1</span> <span class="done DONE"> DONE</span> GET &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<h4 id="sec-2.5.1"><span class="section-number-4">2.5.1</span> <span class="done DONE"> DONE</span> Support sending strings &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
 <div class="outline-text-4" id="text-2.5.1">
 
 </div>
@@ -291,7 +300,7 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2.5.2" class="outline-4">
-<h4 id="sec-2.5.2"><span class="section-number-4">2.5.2</span> <span class="done DONE"> DONE</span> POST &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<h4 id="sec-2.5.2"><span class="section-number-4">2.5.2</span> <span class="done DONE"> DONE</span> Support sending map as form encoded data &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
 <div class="outline-text-4" id="text-2.5.2">
 
 </div>
@@ -299,40 +308,8 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2.5.3" class="outline-4">
-<h4 id="sec-2.5.3"><span class="section-number-4">2.5.3</span> <span class="done DONE"> DONE</span> PUT &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<h4 id="sec-2.5.3"><span class="section-number-4">2.5.3</span> <span class="done DONE"> DONE</span> Support InputStream body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
 <div class="outline-text-4" id="text-2.5.3">
-
-</div>
-
-</div>
-
-<div id="outline-container-2.5.4" class="outline-4">
-<h4 id="sec-2.5.4"><span class="section-number-4">2.5.4</span> <span class="done DONE"> DONE</span> DELETE &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2.5.4">
-
-</div>
-
-</div>
-
-<div id="outline-container-2.5.5" class="outline-4">
-<h4 id="sec-2.5.5"><span class="section-number-4">2.5.5</span> <span class="done DONE"> DONE</span> HEAD &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2.5.5">
-
-</div>
-
-</div>
-
-<div id="outline-container-2.5.6" class="outline-4">
-<h4 id="sec-2.5.6"><span class="section-number-4">2.5.6</span> <span class="done DONE"> DONE</span> OPTIONS &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2.5.6">
-
-</div>
-
-</div>
-
-<div id="outline-container-2.5.7" class="outline-4">
-<h4 id="sec-2.5.7"><span class="section-number-4">2.5.7</span> <span class="todo TODO"> TODO</span> Others once supported by AHC-Java &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h4>
-<div class="outline-text-4" id="text-2.5.7">
 
 </div>
 </div>
@@ -340,8 +317,72 @@ STM ref'ed map.
 </div>
 
 <div id="outline-container-2.6" class="outline-3">
-<h3 id="sec-2.6"><span class="section-number-3">2.6</span> <span class="todo TODO"> TODO</span> PUT/POST streaming body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<h3 id="sec-2.6"><span class="section-number-3">2.6</span> <span class="todo TODO"> TODO</span> All HTTP verbs [6/7] </h3>
 <div class="outline-text-3" id="text-2.6">
+
+
+</div>
+
+<div id="outline-container-2.6.1" class="outline-4">
+<h4 id="sec-2.6.1"><span class="section-number-4">2.6.1</span> <span class="done DONE"> DONE</span> GET &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.6.1">
+
+</div>
+
+</div>
+
+<div id="outline-container-2.6.2" class="outline-4">
+<h4 id="sec-2.6.2"><span class="section-number-4">2.6.2</span> <span class="done DONE"> DONE</span> POST &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.6.2">
+
+</div>
+
+</div>
+
+<div id="outline-container-2.6.3" class="outline-4">
+<h4 id="sec-2.6.3"><span class="section-number-4">2.6.3</span> <span class="done DONE"> DONE</span> PUT &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.6.3">
+
+</div>
+
+</div>
+
+<div id="outline-container-2.6.4" class="outline-4">
+<h4 id="sec-2.6.4"><span class="section-number-4">2.6.4</span> <span class="done DONE"> DONE</span> DELETE &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.6.4">
+
+</div>
+
+</div>
+
+<div id="outline-container-2.6.5" class="outline-4">
+<h4 id="sec-2.6.5"><span class="section-number-4">2.6.5</span> <span class="done DONE"> DONE</span> HEAD &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.6.5">
+
+</div>
+
+</div>
+
+<div id="outline-container-2.6.6" class="outline-4">
+<h4 id="sec-2.6.6"><span class="section-number-4">2.6.6</span> <span class="done DONE"> DONE</span> OPTIONS &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2.6.6">
+
+</div>
+
+</div>
+
+<div id="outline-container-2.6.7" class="outline-4">
+<h4 id="sec-2.6.7"><span class="section-number-4">2.6.7</span> <span class="todo TODO"> TODO</span> Others, once supported by AHC-Java &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div class="outline-text-4" id="text-2.6.7">
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2.7" class="outline-3">
+<h3 id="sec-2.7"><span class="section-number-3">2.7</span> <span class="todo TODO"> TODO</span> PUT/POST streaming body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div class="outline-text-3" id="text-2.7">
 
 <p>That can be done with <b>clojure.core/add-watch</b>.
 Watcher in that scenario will grab new content and write it via
@@ -351,9 +392,17 @@ IO operation in separate thread.
 
 </div>
 
-<div id="outline-container-2.7" class="outline-3">
-<h3 id="sec-2.7"><span class="section-number-3">2.7</span> <span class="todo TODO"> TODO</span> Multipart &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
-<div class="outline-text-3" id="text-2.7">
+<div id="outline-container-2.8" class="outline-3">
+<h3 id="sec-2.8"><span class="section-number-3">2.8</span> <span class="todo TODO"> TODO</span> Multipart &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div class="outline-text-3" id="text-2.8">
+
+</div>
+
+</div>
+
+<div id="outline-container-2.9" class="outline-3">
+<h3 id="sec-2.9"><span class="section-number-3">2.9</span> <span class="todo TODO"> TODO</span> Authentication &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-2.9">
 
 </div>
 </div>
@@ -368,27 +417,72 @@ IO operation in separate thread.
 </div>
 
 <div id="outline-container-3.1" class="outline-3">
-<h3 id="sec-3.1"><span class="section-number-3">3.1</span> <span class="todo TODO"> TODO</span> Global configuration of AHC &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<h3 id="sec-3.1"><span class="section-number-3">3.1</span> <span class="todo TODO"> TODO</span> Global configuration of AHC [1/4] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-3.1">
 
-<p>Connection limiting per host.
-Global proxy.
-</p></div>
+
+</div>
+
+<div id="outline-container-3.1.1" class="outline-4">
+<h4 id="sec-3.1.1"><span class="section-number-4">3.1.1</span> <span class="done DONE"> DONE</span> Branding User-agent &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
+<div class="outline-text-4" id="text-3.1.1">
+
+</div>
+
+</div>
+
+<div id="outline-container-3.1.2" class="outline-4">
+<h4 id="sec-3.1.2"><span class="section-number-4">3.1.2</span> <span class="todo TODO"> TODO</span> Connection limiting per host. </h4>
+<div class="outline-text-4" id="text-3.1.2">
+
+</div>
+
+</div>
+
+<div id="outline-container-3.1.3" class="outline-4">
+<h4 id="sec-3.1.3"><span class="section-number-4">3.1.3</span> <span class="todo TODO"> TODO</span> Global proxy. </h4>
+<div class="outline-text-4" id="text-3.1.3">
+
+</div>
+
+</div>
+
+<div id="outline-container-3.1.4" class="outline-4">
+<h4 id="sec-3.1.4"><span class="section-number-4">3.1.4</span> <span class="todo TODO"> TODO</span> Timeout settings </h4>
+<div class="outline-text-4" id="text-3.1.4">
+
+</div>
+</div>
 
 </div>
 
 <div id="outline-container-3.2" class="outline-3">
-<h3 id="sec-3.2"><span class="section-number-3">3.2</span> <span class="todo TODO"> TODO</span> Per request configuration &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<h3 id="sec-3.2"><span class="section-number-3">3.2</span> <span class="todo TODO"> TODO</span> Per request configuration [1/2] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-3.2">
 
-<p>For stuff like proxy, timeout.
-</p></div>
+
+</div>
+
+<div id="outline-container-3.2.1" class="outline-4">
+<h4 id="sec-3.2.1"><span class="section-number-4">3.2.1</span> <span class="done DONE"> DONE</span> Proxy configuration &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
+<div class="outline-text-4" id="text-3.2.1">
+
+</div>
+
+</div>
+
+<div id="outline-container-3.2.2" class="outline-4">
+<h4 id="sec-3.2.2"><span class="section-number-4">3.2.2</span> <span class="todo TODO"> TODO</span> Timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div class="outline-text-4" id="text-3.2.2">
+
+</div>
+</div>
 </div>
 
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Tasks [5/6] </h2>
+<h2 id="sec-4"><span class="section-number-2">4</span> Tasks [9/10] </h2>
 <div class="outline-text-2" id="text-4">
 
 
@@ -446,17 +540,45 @@ prepare-request
 </div>
 
 <div id="outline-container-4.4" class="outline-3">
-<h3 id="sec-4.4"><span class="section-number-3">4.4</span> <span class="done DONE"> DONE</span> Make tests stand-alone &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<h3 id="sec-4.4"><span class="section-number-3">4.4</span> <span class="done DONE"> DONE</span> Release 0.1.1 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
 <div class="outline-text-3" id="text-4.4">
+
+</div>
+
+</div>
+
+<div id="outline-container-4.5" class="outline-3">
+<h3 id="sec-4.5"><span class="section-number-3">4.5</span> <span class="todo TODO"> TODO</span> Release 0.2.0 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4.5">
+
+<p>Changes:
+</p><ul>
+<li>
+Stream as seq
+</li>
+<li>
+Streams used instead of byte vectors (issue-1)
+</li>
+<li>
+keyworded maps are used in api
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-4.6" class="outline-3">
+<h3 id="sec-4.6"><span class="section-number-3">4.6</span> <span class="done DONE"> DONE</span> Make tests stand-alone &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4.6">
 
 <p>Test suite should not fail when there is now hello-www on port 8080.
 </p></div>
 
 </div>
 
-<div id="outline-container-4.5" class="outline-3">
-<h3 id="sec-4.5"><span class="section-number-3">4.5</span> <span class="done DONE"> DONE</span> Simplify request preparation &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-4.5">
+<div id="outline-container-4.7" class="outline-3">
+<h3 id="sec-4.7"><span class="section-number-3">4.7</span> <span class="done DONE"> DONE</span> Simplify request preparation &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4.7">
 
 <p>For now fns like GET will call prepare-get that will call
 prepare-reqeust. I don't think prepare-get is necessary,
@@ -465,19 +587,61 @@ should be quite fine to only use <b>prepare-request</b>.
 
 </div>
 
-<div id="outline-container-4.6" class="outline-3">
-<h3 id="sec-4.6"><span class="section-number-3">4.6</span> <span class="todo TODO"> TODO</span> Use last argument as key worded map &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
-<div class="outline-text-3" id="text-4.6">
+<div id="outline-container-4.8" class="outline-3">
+<h3 id="sec-4.8"><span class="section-number-3">4.8</span> <span class="done DONE"> DONE</span> Use last argument as key worded map &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4.8">
 
 <p>As suggested by <a href="http://blog.licenser.net/">Licenser</a> on #clojure <a href="http://clojure-log.n01se.net/date/2010-07-08.html#i25">here</a>.
 </p></div>
+
+</div>
+
+<div id="outline-container-4.9" class="outline-3">
+<h3 id="sec-4.9"><span class="section-number-3">4.9</span> <span class="done DONE"> DONE</span> Review documentation &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4.9">
+
+</div>
+
+</div>
+
+<div id="outline-container-4.10" class="outline-3">
+<h3 id="sec-4.10"><span class="section-number-3">4.10</span> <span class="done DONE"> DONE</span> Refactoring [1/1] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4.10">
+
+
+</div>
+
+<div id="outline-container-4.10.1" class="outline-4">
+<h4 id="sec-4.10.1"><span class="section-number-4">4.10.1</span> <span class="done DONE"> DONE</span> Refactor <b>execute-request</b> [2/2] </h4>
+<div class="outline-text-4" id="text-4.10.1">
+
+<ul>
+<li id="sec-4.10.1.1"><span class="done DONE"> DONE</span> Build checkable promise <br/>
+To check if promise was delivered use <b>delivered?</b>
+</li>
+<li id="sec-4.10.1.2"><span class="done DONE"> DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces <br/>
+<ul>
+<li>
+Use new checkable <b>promise</b> for different parts of response
+</li>
+<li>
+Use normal map for response instead of (ref {})
+</li>
+<li>
+Provide helper functions to deal with metadata on response
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble">
 <p class="author"> Author: Hubert Iwaniuk
 <a href="mailto:neotyk@kungfoo.pl">&lt;neotyk@kungfoo.pl&gt;</a>
 </p>
-<p class="date"> Date: 2010-07-14 16:47:55 CEST</p>
+<p class="date"> Date: 2010-09-06 01:04:11 CEST</p>
 <p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
 </div>
 </div>
