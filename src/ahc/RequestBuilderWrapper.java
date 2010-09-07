@@ -1,5 +1,6 @@
 package ahc;
 import java.io.InputStream;
+import com.ning.http.client.Realm;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.ProxyServer;
 import com.ning.http.client.Cookie;
@@ -29,5 +30,8 @@ public class RequestBuilderWrapper {
         return this;}
     public RequestBuilderWrapper addCookie(Cookie cookie) {
         rb.addCookie(cookie);
+        return this;}
+    public RequestBuilderWrapper setRealm(Realm realm) {
+        rb.setRealm(realm);
         return this;}
     public RequestBuilder getRequestBuilder() { return rb; }}

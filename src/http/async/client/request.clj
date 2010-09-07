@@ -25,7 +25,9 @@
                                  AsyncHandler Cookie
                                  FluentCaseInsensitiveStringsMap
 				 HttpResponseStatus HttpResponseHeaders
-				 HttpResponseBodyPart Request RequestBuilder
+				 HttpResponseBodyPart
+                                 Realm$RealmBuilder Realm$AuthScheme
+                                 Request RequestBuilder
 				 RequestType ProxyServer)
            (ahc RequestBuilderWrapper)
            (java.net URLEncoder)
@@ -112,21 +114,29 @@
     :headers - map of headers
     :body    - body
     :cookies - cookies to send
-    :proxy   - map with proxy configuration to be used (:host and :port)"
+    :proxy   - map with proxy configuration to be used (:host and :port)
+    :auth    - map with authentication to be used
+      :type     - either :basic or :digest
+      :user     - user name to be used
+      :password - password to be used
+      :realm    - realm name to authenticate in"
   {:tag Request}
   [method #^String url & {headers :headers
                           query :query
                           body :body
                           cookies :cookies
-                          proxy :proxy}]
+                          proxy :proxy
+                          auth :auth}]
   ;; RequestBuilderWrapper is needed for now, until RequestBuilder
   ;; is able to be used directly from Clojure.
   (let [#^RequestBuilderWrapper rbw
         (RequestBuilderWrapper.
          (RequestBuilder. (convert-method method)))]
+    ;; headers
     (doseq [[k v] headers] (.addHeader rbw
                                        (if (keyword? k) (name k) k)
                                        (str v)))
+    ;; cookies
     (doseq [{domain :domain
              name :name
              value :value
@@ -137,9 +147,11 @@
                   max-age 30
                   secure false}} cookies]
       (.addCookie rbw (Cookie. domain name value path max-age secure)))
+    ;; query parameters
     (doseq [[k v] query] (.addQueryParameter rbw
                                              (if (keyword? k) (name k) k)
                                              (str v)))
+    ;; message body
     (cond
      (map? body) (doseq [[k v] body]
                    (.addParameter rbw
@@ -147,8 +159,33 @@
                                   (str v)))
      (string? body) (.setBody rbw (.getBytes (url-encode body) "UTF-8"))
      (instance? InputStream body) (.setBody rbw body))
+    ;; authentication
+    (when-let [{type :type
+                user :user
+                password :password
+                realm :realm
+                :or {:type :basic}} auth]
+      (let [rbld (Realm$RealmBuilder.)]
+        (if (nil? user)
+          (if (nil? password)
+            (throw (IllegalArgumentException. "For authentication user and password is required"))
+            (throw (IllegalArgumentException. "For authentication user is required"))))
+        (if (nil? password)
+          (throw (IllegalArgumentException. "For authentication password is required")))
+        (if (= :digest type)
+          (do
+            (if (nil? realm) (throw (IllegalArgumentException.
+                                     "For DIGEST authentication realm is required")))
+            (.setRealmName rbld realm)
+            (.setScheme rbld Realm$AuthScheme/DIGEST)))
+        (doto rbld
+          (.setPrincipal user)
+          (.setPassword password))
+        (.setRealm rbw (.build rbld))))
+    ;; proxy
     (if proxy
       (.setProxyServer rbw (ProxyServer. (:host proxy) (:port proxy))))
+    ;; fine
     (.. (.getRequestBuilder rbw) (setUrl url) (build))))
 
 (defn convert-action

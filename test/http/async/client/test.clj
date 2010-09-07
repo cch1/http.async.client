@@ -85,6 +85,12 @@
                            (doseq [c (.getCookies hReq)]
                              (.addCookie hResp c)))
                "/branding" (.setHeader hResp "X-User-Agent" (.getHeader hReq "User-Agent"))
+               "/basic-auth" (let [auth (.getHeader hReq "Authorization")]
+                               (.setStatus
+                                hResp
+                                (if (= auth "Basic YmVhc3RpZTpib3lz")
+                                  200
+                                  401)))
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -322,6 +328,30 @@
     (is (= (.getMessage (error resp)) "Connection refused to http://notexisting/"))
     (is (true? (failed? resp)))))
 
+(deftest no-real-for-digest
+  (is (thrown-with-msg? IllegalArgumentException #"For DIGEST authentication realm is required"
+        (GET "http://not-important/"
+             :auth {:type :digest
+                    :user "user"
+                    :password "secret"}))))
+
+(deftest authentication-without-user-or-password
+  (is (thrown-with-msg? IllegalArgumentException #"For authentication user is required"
+        (GET "http://not-important/"
+             :auth {:password "secret"})))
+  (is (thrown-with-msg? IllegalArgumentException #"For authentication password is required"
+        (GET "http://not-important/"
+             :auth {:user "user"})))
+  (is (thrown-with-msg? IllegalArgumentException #"For authentication user and password is required"
+        (GET "http://not-important/"
+             :auth {:type :basic}))))
+
+(deftest basic-authentication
+  (is (=
+       (:code (status (GET "http://localhost:8123/basic-auth"
+                           :auth {:user "beastie"
+                                  :password "boys"})))
+       200)))
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET "http://localhost:8123/stream"))
 ;;        seqs (repeat (stream-seq :get "http://localhost:8123/stream"))
