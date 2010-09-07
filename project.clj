@@ -9,7 +9,7 @@
 		     [org.clojars.neotyk/lein-javac "1.0.1"]
                      [lein-difftest "1.2.2"]
                      [org.eclipse.jetty/jetty-server "7.1.4.v20100610"]]
-  :autodoc {:name "ahc-clj"
-            :web-src-dir "http://github.com/neotyk/ahc-clj/blob/"
-            :web-home "http://neotyk.github.com/ahc-clj/autodoc/"
+  :autodoc {:name "http.async.client"
+            :web-src-dir "http://github.com/neotyk/http.async.client/blob/"
+            :web-home "http://neotyk.github.com/http.async.client/autodoc/"
             :copyright "Copyright 2010 Hubert Iwaniuk"})

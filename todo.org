@@ -1,4 +1,4 @@
-#+TITLE: Async Http Client - Clojure - To Do
+#+TITLE: Asynchronous HTTP Client - Clojure - To Do
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
 #+INFOJS_OPT: view:info toc:1
@@ -47,7 +47,7 @@
 ** TODO Per request configuration [1/2]                                :rel4:
 *** DONE Proxy configuration                                           :rel3:
 *** TODO Timeout                                                       :rel4:
-* Tasks [9/10]
+* Tasks [9/11]
 ** DONE License                                                        :rel1:
 ** DONE Cleanup namespaces                                             :rel1:
 *** async.http.client
@@ -81,3 +81,4 @@
      - Use new checkable *promise* for different parts of response
      - Use normal map for response instead of (ref {})
      - Provide helper functions to deal with metadata on response
+** TODO Rename to *http.async.client*                                  :rel3:
