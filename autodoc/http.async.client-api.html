@@ -34,7 +34,7 @@ namespace.
     <a class="wiki_link" href="api-index.html">API Index</a><br />
     <a class="wiki_link" href="#">Namespaces:</a>
     <ul id="left-sidebar-list">
-      <li><a href="async.http.client.request-api.html" class="wiki_link">async.http.client.request</a></li><li><a href="http.async.client-api.html" class="wiki_link">http.async.client</a></li>
+      <li><a href="http.async.client-api.html" class="wiki_link">http.async.client</a></li>
     </ul>
   </div>
 </div>
@@ -321,7 +321,7 @@ than executes body and closes the client.</pre>
   <a href="http://github.com/neotyk/ahc-clj/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L35" id="var-source">Source</a>
 </div>
 <h2 id="namespace-name">http.async.client.headers</h2>
-<pre id="namespace-docstr">Asynchrounous HTTP Client - Clojure - Lazy headers</pre>
+<pre id="namespace-docstr"></pre>
 <br />
 <div id="var-entry">
   <hr />
@@ -349,7 +349,7 @@ than executes body and closes the client.</pre>
   <span id="var-type">var</span><br />
   <pre id="var-usage"></pre>
   <pre id="var-docstr">Default set of callbacks.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client/request.clj#L92" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/7c2f820550e693ab3ce0805c2edf9afd6fa79118/src/http/async/client/request.clj#L94" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="http.async.client.request/convert-action">convert-action</h2>
@@ -357,7 +357,7 @@ than executes body and closes the client.</pre>
   <pre id="var-usage">Usage: (convert-action action)
 </pre>
   <pre id="var-docstr">Converts action (:abort, nil) to Async client STATE.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client/request.clj#L154" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/7c2f820550e693ab3ce0805c2edf9afd6fa79118/src/http/async/client/request.clj#L191" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="http.async.client.request/execute-request">execute-request</h2>
@@ -388,7 +388,7 @@ Returns a map:
 - :done    - promise that is delivered once receiving response has finished
 - :error   - promise that is delivered if requesting resource failed, once delivered
              will contain Throwable.</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client/request.clj#L162" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/7c2f820550e693ab3ce0805c2edf9afd6fa79118/src/http/async/client/request.clj#L199" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="http.async.client.request/get-encoding">get-encoding</h2>
@@ -397,12 +397,12 @@ Returns a map:
 </pre>
   <pre id="var-docstr">Gets content encoding from headers, if Content-Type header not present
 or media-type in it is missing =&gt; nil</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client/request.clj#L55" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/7c2f820550e693ab3ce0805c2edf9afd6fa79118/src/http/async/client/request.clj#L57" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="http.async.client.request/prepare-request">prepare-request</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (prepare-request method url &amp; {headers :headers, query :query, body :body, cookies :cookies, proxy :proxy})
+  <pre id="var-usage">Usage: (prepare-request method url &amp; {headers :headers, query :query, body :body, cookies :cookies, proxy :proxy, auth :auth})
 </pre>
   <pre id="var-docstr">Prepares method (GET, POST, ..) request to url.
 Options:
@@ -410,8 +410,13 @@ Options:
   :headers - map of headers
   :body    - body
   :cookies - cookies to send
-  :proxy   - map with proxy configuration to be used (:host and :port)</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client/request.clj#L108" id="var-source">Source</a>
+  :proxy   - map with proxy configuration to be used (:host and :port)
+  :auth    - map with authentication to be used
+    :type     - either :basic or :digest
+    :user     - user name to be used
+    :password - password to be used
+    :realm    - realm name to authenticate in</pre>
+  <a href="http://github.com/neotyk/ahc-clj/blob/7c2f820550e693ab3ce0805c2edf9afd6fa79118/src/http/async/client/request.clj#L110" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="http.async.client.request/url-encode">url-encode</h2>
@@ -419,10 +424,10 @@ Options:
   <pre id="var-usage">Usage: (url-encode arg)
 </pre>
   <pre id="var-docstr">Taken from Clojure Http Client</pre>
-  <a href="http://github.com/neotyk/ahc-clj/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client/request.clj#L101" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/ahc-clj/blob/7c2f820550e693ab3ce0805c2edf9afd6fa79118/src/http/async/client/request.clj#L103" id="var-source">Source</a>
 </div>
 <h2 id="namespace-name">http.async.client.status</h2>
-<pre id="namespace-docstr">Asynchronous HTTP Client - Clojure - Lazy status.</pre>
+<pre id="namespace-docstr"></pre>
 <br />
 <div id="var-entry">
   <hr />
@@ -434,7 +439,7 @@ Options:
   <a href="http://github.com/neotyk/ahc-clj/blob/ff583ea675216a2ae92e23a797cb4609f884aaa4/src/http/async/client/status.clj#L20" id="var-source">Source</a>
 </div>
 <h2 id="namespace-name">http.async.client.util</h2>
-<pre id="namespace-docstr">Asynchronous HTTP Client - Clojure - Utils</pre>
+<pre id="namespace-docstr"></pre>
 <br />
 <div id="var-entry">
   <hr />
