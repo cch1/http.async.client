@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Asynchronous HTTP Client - Clojure - Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-09-06 01:00:45 CEST"/>
+<meta name="generated" content="2010-09-07 10:30:13 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -126,6 +126,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-1.2.3.3">1.2.3.3 :body </a></li>
 <li><a href="#sec-1.2.3.4">1.2.3.4 :cookies </a></li>
 <li><a href="#sec-1.2.3.5">1.2.3.5 :proxy </a></li>
+<li><a href="#sec-1.2.3.6">1.2.3.6 :auth </a></li>
 </ul>
 </li>
 <li><a href="#sec-1.2.4">1.2.4 Streaming </a>
@@ -143,7 +144,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-1.2.5.5">1.2.5.5 Reading body </a></li>
 <li><a href="#sec-1.2.5.6">1.2.5.6 Reading body as string </a></li>
 <li><a href="#sec-1.2.5.7">1.2.5.7 Reading error </a></li>
-<li><a href="#sec-1.2.5.8">1.2.5.8 Response Predicates </a></li>
+<li><a href="#sec-1.2.5.8">1.2.5.8 Response predicates </a></li>
 </ul>
 </li>
 <li><a href="#sec-1.2.6">1.2.6 <b>http.async.client</b> configuration </a>
@@ -688,6 +689,9 @@ cookies to be sent
 <dt><a href="#sec-1.2.3.5">:proxy</a></dt><dd>
 proxy to be used
 </dd>
+<dt><a href="#sec-1.2.3.6">:auth</a></dt><dd>
+authentication map
+</dd>
 </dl>
 
 </div>
@@ -835,6 +839,54 @@ proxy port
 </dd>
 </dl>
 </div>
+
+</div>
+
+<div id="outline-container-1.2.3.6" class="outline-5">
+<h5 id="sec-1.2.3.6"><span class="section-number-5">1.2.3.6</span> :auth </h5>
+<div class="outline-text-5" id="text-1.2.3.6">
+
+<p>Authentication can be configured per request basis.
+For now BASIC and DIGEST methods are supported.
+</p>
+<p>
+Basic method is default, so you don't have to specify it:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url <span style="color: #8cd0d3;">:auth</span> {<span style="color: #8cd0d3;">:user</span> u <span style="color: #8cd0d3;">:password</span> p}<span style="color: #7f7f7f;">)</span>]
+  <span style="color: #708070;">;; </span><span style="color: #7f9f7f;">Check if response is not 401 or so and process response
+</span>  <span style="color: #7f7f7f;">)</span>
+</pre>
+
+
+
+<p>
+Though you can:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url <span style="color: #8cd0d3;">:auth</span> {<span style="color: #8cd0d3;">:type</span> <span style="color: #8cd0d3;">:basic</span> <span style="color: #8cd0d3;">:user</span> u <span style="color: #8cd0d3;">:password</span> p}<span style="color: #7f7f7f;">)</span>]
+  <span style="color: #708070;">;; </span><span style="color: #7f9f7f;">Check if response is not 401 or so and process response
+</span>  <span style="color: #7f7f7f;">)</span>
+</pre>
+
+
+
+<p>
+And for digest method you will need realm as well:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url
+                  <span style="color: #8cd0d3;">:auth</span> {<span style="color: #8cd0d3;">:type</span> <span style="color: #8cd0d3;">:digest</span> <span style="color: #8cd0d3;">:user</span> u <span style="color: #8cd0d3;">:password</span> p <span style="color: #8cd0d3;">:realm</span> r}<span style="color: #7f7f7f;">)</span>]
+  <span style="color: #708070;">;; </span><span style="color: #7f9f7f;">Check if response is not 401 or so and process response
+</span>  <span style="color: #7f7f7f;">)</span>
+</pre>
+
+
+
+</div>
 </div>
 
 </div>
@@ -965,7 +1017,7 @@ response handling.
 you actually asynchronously execute HTTP request.
 Some times you might need to wait for response processing to be
 done before proceeding, in order to do so you call
-<b>http.async.client/await</b>.
+<a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/await"><b>http.async.client/await</b></a>.
 It takes only one argument, that is response and returns once
 receiving has finished.
 </p>
@@ -998,7 +1050,7 @@ further, for example like that:
 <h5 id="sec-1.2.5.2"><span class="section-number-5">1.2.5.2</span> Reading status line </h5>
 <div class="outline-text-5" id="text-1.2.5.2">
 
-<p><b>http.async.client/status</b> returns status lazy map of response.
+<p><a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/status"><b>http.async.client/status</b></a> returns status lazy map of response.
 It will wait until HTTP Status has been received.
 </p>
 
@@ -1022,7 +1074,7 @@ yet.
 <h5 id="sec-1.2.5.3"><span class="section-number-5">1.2.5.3</span> Reading headers </h5>
 <div class="outline-text-5" id="text-1.2.5.3">
 
-<p><b>http.async.client/headers</b> returns headers lazy map of response.
+<p><a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/headers"><b>http.async.client/headers</b></a> returns headers lazy map of response.
 It will wait until HTTP Headers are received.
 </p>
 
@@ -1045,7 +1097,7 @@ yet after this returns.
 <h5 id="sec-1.2.5.4"><span class="section-number-5">1.2.5.4</span> Reading cookies </h5>
 <div class="outline-text-5" id="text-1.2.5.4">
 
-<p><b>http.async.client/cookies</b> returns seq of maps representing
+<p><a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/cookies"><b>http.async.client/cookies</b></a> returns seq of maps representing
 cookies.
 It will wait until HTTP Headers are received.
 </p>
@@ -1069,7 +1121,7 @@ set.
 <h5 id="sec-1.2.5.5"><span class="section-number-5">1.2.5.5</span> Reading body </h5>
 <div class="outline-text-5" id="text-1.2.5.5">
 
-<p><b>http.async.client/body</b> returns either ByteArrayOutputStream or
+<p><a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/body"><b>http.async.client/body</b></a> returns either ByteArrayOutputStream or
 seq of it, depending if you used <a href="#sec-1.2.1.1">Asynchronous operations</a> or
 <a href="#sec-1.2.1.2">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
@@ -1140,7 +1192,7 @@ request failure iff request failed, else <b>nil</b>.
 </div>
 
 <div id="outline-container-1.2.5.8" class="outline-5">
-<h5 id="sec-1.2.5.8"><span class="section-number-5">1.2.5.8</span> Response Predicates </h5>
+<h5 id="sec-1.2.5.8"><span class="section-number-5">1.2.5.8</span> Response predicates </h5>
 <div class="outline-text-5" id="text-1.2.5.8">
 
 <p>You can also check status of request.
@@ -1185,10 +1237,10 @@ failed. If this return true you can <a href="#sec-1.2.5.7">read error</a>.
 <div class="outline-text-5" id="text-1.2.6.1">
 
 <p><b>http.async.client</b> con be configured, for now only with
-User-Agent. To do so you use <b>http.async.client/create-client</b>.
+User-Agent. To do so you use <a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/create-client"><b>http.async.client/create-client</b></a>.
 It takes map of options, for now it only accepts <b>:user-agent</b>.
 Once you've created client you need to use it via
-<b>http.async.client/with-ahc</b>..
+<a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/with-ahc"><b>http.async.client/with-ahc</b></a>.
 </p>
 
 
@@ -1380,11 +1432,13 @@ response map
 <h5 id="sec-1.3.1.3"><span class="section-number-5">1.3.1.3</span> Default set of callbacks </h5>
 <div class="outline-text-5" id="text-1.3.1.3">
 
-<p><b>http.async.client.request/*default-callbacks*</b> is a map of
-default callbacks. This fill allow you to easy change only on
-callback.
-Please see source of <b>http.async.client/stream-seq</b> to see how to
-do it.
+<p><a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client.request/*default-callbacks*"><b>http.async.client.request/*default-callbacks*</b></a> is a map of
+default callbacks. This fill allow you to easy change only few
+callbacks and reuse default for the rest.
+</p>
+<p>
+Please look at source of <a href="http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/stream-seq"><b>http.async.client/stream-seq</b></a> to see
+how to do it.
 </p></div>
 </div>
 </div>
@@ -1394,7 +1448,7 @@ do it.
 <p class="author"> Author: Hubert Iwaniuk
 <a href="mailto:neotyk@kungfoo.pl">&lt;neotyk@kungfoo.pl&gt;</a>
 </p>
-<p class="date"> Date: 2010-09-06 01:00:45 CEST</p>
+<p class="date"> Date: 2010-09-07 10:30:13 CEST</p>
 <p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
 </div>
 </div>
