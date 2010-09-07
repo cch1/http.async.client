@@ -368,7 +368,7 @@
      you actually asynchronously execute HTTP request.
      Some times you might need to wait for response processing to be
      done before proceeding, in order to do so you call
-     [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/await][*http.async.client/await*]].
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/await][*http.async.client/await*]].
      It takes only one argument, that is response and returns once
      receiving has finished.
 #+BEGIN_SRC clojure
@@ -383,7 +383,7 @@
     (c/string (c/await resp)))
 #+END_SRC
 **** Reading status line
-     [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/status][*http.async.client/status*]] returns status lazy map of response.
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/status][*http.async.client/status*]] returns status lazy map of response.
      It will wait until HTTP Status has been received.
 #+BEGIN_SRC clojure
   (let [resp   (c/GET url)
@@ -394,7 +394,7 @@
      after this returns headers and body, might not been delivered
      yet.
 **** Reading headers
-     [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/headers][*http.async.client/headers*]] returns headers lazy map of response.
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/headers][*http.async.client/headers*]] returns headers lazy map of response.
      It will wait until HTTP Headers are received.
 #+BEGIN_SRC clojure
   (let [resp    (c/GET url)
@@ -404,7 +404,7 @@
      Again, like in case of status, body might not have been delivered
      yet after this returns.
 **** Reading cookies
-     [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/cookies][*http.async.client/cookies*]] returns seq of maps representing
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/cookies][*http.async.client/cookies*]] returns seq of maps representing
      cookies.
      It will wait until HTTP Headers are received.
 #+BEGIN_SRC clojure
@@ -415,7 +415,7 @@
      Sample above will return sequence of cookie names that server has
      set.
 **** Reading body
-     [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/body][*http.async.client/body*]] returns either ByteArrayOutputStream or
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/body][*http.async.client/body*]] returns either ByteArrayOutputStream or
      seq of it, depending if you used [[*Asynchronous%20operations][Asynchronous operations]] or
      [[*Streaming][Streaming]] respectively.
      It will *not* wait for response to be finished, it will return as
@@ -470,10 +470,10 @@
 *** *http.async.client* configuration
 **** Branding
      *http.async.client* con be configured, for now only with
-     User-Agent. To do so you use [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]].
+     User-Agent. To do so you use [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]].
      It takes map of options, for now it only accepts *:user-agent*.
      Once you've created client you need to use it via
-     [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]].
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]].
 #+BEGIN_SRC clojure
   (c/with-ahc {:user-agent "Your User Agent/1.0"}
     (let [resp (GET url)]
@@ -551,9 +551,9 @@
       - response map
       - *Throwable* that was a cause of failure
 **** Default set of callbacks
-     [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client.request/*default-callbacks*][*http.async.client.request/*default-callbacks**]] is a map of
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/*default-callbacks*][*http.async.client.request/*default-callbacks**]] is a map of
      default callbacks. This fill allow you to easy change only few
      callbacks and reuse default for the rest.
 
-     Please look at source of [[http://neotyk.github.com/ahc-clj/autodoc/http.async.client-api.html#http.async.client/stream-seq][*http.async.client/stream-seq*]] to see
+     Please look at source of [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/stream-seq][*http.async.client/stream-seq*]] to see
      how to do it.
