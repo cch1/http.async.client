@@ -450,7 +450,7 @@
     (when-let [err (c/error resp)]
       (println "failed processing request: " err)))
 #+END_SRC
-**** Response Predicates
+**** Response predicates
      You can also check status of request.
 ***** done?
       [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/done?][*http.async.client/done?*]] will tell you if response processing
@@ -552,7 +552,8 @@
       - *Throwable* that was a cause of failure
 **** Default set of callbacks
      *http.async.client.request/*default-callbacks** is a map of
-     default callbacks. This fill allow you to easy change only on
-     callback.
+     default callbacks. This fill allow you to easy change only few
+     callbacks and reuse default for the rest.
+
      Please see source of *http.async.client/stream-seq* to see how to
      do it.
