@@ -40,20 +40,17 @@
      (binding [*ahc* c#]
        ~@body)))
 
-(do-template
- [fn-name method]
- (defn fn-name
-    {:doc "TODO: figure out way to document those generated functions."}
-    [#^String url & {:as options}]
-    (apply execute-request
-           (apply prepare-request method url (apply concat options))
-           (apply concat *default-callbacks*)))
- GET :get
- POST :post
- PUT :put
- DELETE :delete
- HEAD :head
- OPTIONS :options)
+(defmacro gen-method [methods]
+  `(do
+     ~@(for [method methods]
+         (let [fn-name (symbol (.toUpperCase (name method)))
+               fn-doc (str "Here goes docs for " fn-name)]
+           `(defn ~fn-name ~fn-doc [#^String ~'url & {:as ~'options}]
+              (apply execute-request
+                     (apply prepare-request ~method ~'url (apply concat ~'options))
+                     (apply concat *default-callbacks*)))))))
+
+(gen-method [:get :post :put :delete :head :options])
 
 (defn request-stream
   "Consumes stream from given url.
