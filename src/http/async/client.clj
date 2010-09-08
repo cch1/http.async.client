@@ -40,18 +40,7 @@
      (binding [*ahc* c#]
        ~@body)))
 
-(defmacro gen-method [& methods]
-  (list* 'do
-     (map (fn [method#]
-            (let [fn-name (symbol (.toUpperCase (name method#)))
-                  fn-doc (str "Here goes docs for --- " fn-name)]
-              `(defn ~fn-name ~fn-doc [#^String ~'url & {:as ~'options}]
-                 (apply execute-request
-                        (apply prepare-request ~method# ~'url (apply concat ~'options))
-                        (apply concat *default-callbacks*)))))
-          methods)))
-
-(gen-method :get :post :put :delete :head :options)
+(gen-methods :get :post :put :delete :head :options)
 
 (defn request-stream
   "Consumes stream from given url.

@@ -47,7 +47,7 @@
 ** TODO Per request configuration [1/2]                                :rel4:
 *** DONE Proxy configuration                                           :rel3:
 *** TODO Timeout                                                       :rel4:
-* Tasks [9/11]
+* Tasks [10/11]
 ** DONE License                                                        :rel1:
 ** DONE Cleanup namespaces                                             :rel1:
 *** async.http.client
@@ -64,6 +64,7 @@
    - Stream as seq
    - Streams used instead of byte vectors (issue-1)
    - keyworded maps are used in api
+*** TODO Create a changelog                                            :rel3:
 ** DONE Make tests stand-alone                                         :rel1:
    Test suite should not fail when there is now hello-www on port 8080.
 ** DONE Simplify request preparation                                   :rel1:
@@ -81,4 +82,4 @@
      - Use new checkable *promise* for different parts of response
      - Use normal map for response instead of (ref {})
      - Provide helper functions to deal with metadata on response
-** TODO Rename to *http.async.client*                                  :rel3:
+** DONE Rename to *http.async.client*                                  :rel3:
