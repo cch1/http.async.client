@@ -1,5 +1,5 @@
 (ns sample
-  (:require [async.http.client :as c]))
+  (:require [http.async.client :as c]))
 
 (let [r (c/GET "http://example.com/")]
   (println "done?" (c/done? r))
