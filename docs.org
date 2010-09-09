@@ -470,10 +470,11 @@
 *** *http.async.client* configuration
 **** Branding
      *http.async.client* con be configured, for now only with
-     User-Agent. To do so you use [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]].
-     It takes map of options, for now it only accepts *:user-agent*.
-     Once you've created client you need to use it via
-     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]].
+     User-Agent. To do so you can use
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and remember to close created
+     client yourself, or [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]] this will close
+     client by itself, though make sure that body of it will wait for
+     whore response to finish.
 #+BEGIN_SRC clojure
   (c/with-ahc {:user-agent "Your User Agent/1.0"}
     (let [resp (GET url)]
