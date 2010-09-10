@@ -30,7 +30,7 @@
 
 * Information over *http.async.client*
 
-  *http.async.client* is based on [[http://github.com/ning/async-http-client][Asynchronous Http Client for Java]]
+  [[http://github.com/neotyk/http.async.client][*http.async.client*]] is based on [[http://github.com/ning/async-http-client][Asynchronous Http Client for Java]]
   which runs on top of [[http://jboss.org/netty][Netty Project]].
 
   It requires Clojure 1.2.
