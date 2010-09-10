@@ -35,7 +35,7 @@
 
   It requires Clojure 1.2.
 
-  For more documentation refer to [[./docs.org][docs]] and for API to [[http://neotyk.github.com/ahc-clj/autodoc/][autodoc]].
+  For more documentation refer to [[./docs.org][docs]] and for API to [[http://neotyk.github.com/http.async.client/autodoc/][autodoc]].
 
   *http.async.client* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
 
