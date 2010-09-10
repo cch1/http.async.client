@@ -146,8 +146,36 @@ by <span id="author">Hubert Iwaniuk</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (DELETE url &amp; {:as options})
 </pre>
-  <pre id="var-docstr">TODO: figure out way to document those generated functions.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L43" id="var-source">Source</a>
+  <pre id="var-docstr">Sends asynchronously HTTP DELETE request to url.
+Returns a map:
+- :id      - unique ID of request
+- :status  - promise that once status is received is delivered, contains lazy map of:
+  - :code     - response code
+  - :msg      - response message
+  - :protocol - protocol with version
+  - :major    - major version of protocol
+  - :minor    - minor version of protocol
+- :headers - promise that once headers are received is delivered, contains lazy map of:
+  - :server - header names are keyworded, values stay not changed
+- :body    - body of response, depends on request type, might be ByteArrayOutputStream
+             or lazy sequence, use conveniece methods to extract it, like string
+- :done    - promise that is delivered once receiving response has finished
+- :error   - promise that is delivered if requesting resource failed, once delivered
+             will contain Throwable.
+Arguments:
+- url     - URL to request
+- options - keyworded arguments:
+  :query   - map of query parameters
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used (:host and :port)
+  :auth    - map with authentication to be used
+    :type     - either :basic or :digest
+    :user     - user name to be used
+    :password - password to be used
+    :realm    - realm name to authenticate in</pre>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L43" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -155,8 +183,36 @@ by <span id="author">Hubert Iwaniuk</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (GET url &amp; {:as options})
 </pre>
-  <pre id="var-docstr">TODO: figure out way to document those generated functions.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L43" id="var-source">Source</a>
+  <pre id="var-docstr">Sends asynchronously HTTP GET request to url.
+Returns a map:
+- :id      - unique ID of request
+- :status  - promise that once status is received is delivered, contains lazy map of:
+  - :code     - response code
+  - :msg      - response message
+  - :protocol - protocol with version
+  - :major    - major version of protocol
+  - :minor    - minor version of protocol
+- :headers - promise that once headers are received is delivered, contains lazy map of:
+  - :server - header names are keyworded, values stay not changed
+- :body    - body of response, depends on request type, might be ByteArrayOutputStream
+             or lazy sequence, use conveniece methods to extract it, like string
+- :done    - promise that is delivered once receiving response has finished
+- :error   - promise that is delivered if requesting resource failed, once delivered
+             will contain Throwable.
+Arguments:
+- url     - URL to request
+- options - keyworded arguments:
+  :query   - map of query parameters
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used (:host and :port)
+  :auth    - map with authentication to be used
+    :type     - either :basic or :digest
+    :user     - user name to be used
+    :password - password to be used
+    :realm    - realm name to authenticate in</pre>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L43" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -164,8 +220,36 @@ by <span id="author">Hubert Iwaniuk</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (HEAD url &amp; {:as options})
 </pre>
-  <pre id="var-docstr">TODO: figure out way to document those generated functions.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L43" id="var-source">Source</a>
+  <pre id="var-docstr">Sends asynchronously HTTP HEAD request to url.
+Returns a map:
+- :id      - unique ID of request
+- :status  - promise that once status is received is delivered, contains lazy map of:
+  - :code     - response code
+  - :msg      - response message
+  - :protocol - protocol with version
+  - :major    - major version of protocol
+  - :minor    - minor version of protocol
+- :headers - promise that once headers are received is delivered, contains lazy map of:
+  - :server - header names are keyworded, values stay not changed
+- :body    - body of response, depends on request type, might be ByteArrayOutputStream
+             or lazy sequence, use conveniece methods to extract it, like string
+- :done    - promise that is delivered once receiving response has finished
+- :error   - promise that is delivered if requesting resource failed, once delivered
+             will contain Throwable.
+Arguments:
+- url     - URL to request
+- options - keyworded arguments:
+  :query   - map of query parameters
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used (:host and :port)
+  :auth    - map with authentication to be used
+    :type     - either :basic or :digest
+    :user     - user name to be used
+    :password - password to be used
+    :realm    - realm name to authenticate in</pre>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L43" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -173,8 +257,36 @@ by <span id="author">Hubert Iwaniuk</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (OPTIONS url &amp; {:as options})
 </pre>
-  <pre id="var-docstr">TODO: figure out way to document those generated functions.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L43" id="var-source">Source</a>
+  <pre id="var-docstr">Sends asynchronously HTTP OPTIONS request to url.
+Returns a map:
+- :id      - unique ID of request
+- :status  - promise that once status is received is delivered, contains lazy map of:
+  - :code     - response code
+  - :msg      - response message
+  - :protocol - protocol with version
+  - :major    - major version of protocol
+  - :minor    - minor version of protocol
+- :headers - promise that once headers are received is delivered, contains lazy map of:
+  - :server - header names are keyworded, values stay not changed
+- :body    - body of response, depends on request type, might be ByteArrayOutputStream
+             or lazy sequence, use conveniece methods to extract it, like string
+- :done    - promise that is delivered once receiving response has finished
+- :error   - promise that is delivered if requesting resource failed, once delivered
+             will contain Throwable.
+Arguments:
+- url     - URL to request
+- options - keyworded arguments:
+  :query   - map of query parameters
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used (:host and :port)
+  :auth    - map with authentication to be used
+    :type     - either :basic or :digest
+    :user     - user name to be used
+    :password - password to be used
+    :realm    - realm name to authenticate in</pre>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L43" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -182,8 +294,36 @@ by <span id="author">Hubert Iwaniuk</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (POST url &amp; {:as options})
 </pre>
-  <pre id="var-docstr">TODO: figure out way to document those generated functions.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L43" id="var-source">Source</a>
+  <pre id="var-docstr">Sends asynchronously HTTP POST request to url.
+Returns a map:
+- :id      - unique ID of request
+- :status  - promise that once status is received is delivered, contains lazy map of:
+  - :code     - response code
+  - :msg      - response message
+  - :protocol - protocol with version
+  - :major    - major version of protocol
+  - :minor    - minor version of protocol
+- :headers - promise that once headers are received is delivered, contains lazy map of:
+  - :server - header names are keyworded, values stay not changed
+- :body    - body of response, depends on request type, might be ByteArrayOutputStream
+             or lazy sequence, use conveniece methods to extract it, like string
+- :done    - promise that is delivered once receiving response has finished
+- :error   - promise that is delivered if requesting resource failed, once delivered
+             will contain Throwable.
+Arguments:
+- url     - URL to request
+- options - keyworded arguments:
+  :query   - map of query parameters
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used (:host and :port)
+  :auth    - map with authentication to be used
+    :type     - either :basic or :digest
+    :user     - user name to be used
+    :password - password to be used
+    :realm    - realm name to authenticate in</pre>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L43" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -191,8 +331,36 @@ by <span id="author">Hubert Iwaniuk</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (PUT url &amp; {:as options})
 </pre>
-  <pre id="var-docstr">TODO: figure out way to document those generated functions.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L43" id="var-source">Source</a>
+  <pre id="var-docstr">Sends asynchronously HTTP PUT request to url.
+Returns a map:
+- :id      - unique ID of request
+- :status  - promise that once status is received is delivered, contains lazy map of:
+  - :code     - response code
+  - :msg      - response message
+  - :protocol - protocol with version
+  - :major    - major version of protocol
+  - :minor    - minor version of protocol
+- :headers - promise that once headers are received is delivered, contains lazy map of:
+  - :server - header names are keyworded, values stay not changed
+- :body    - body of response, depends on request type, might be ByteArrayOutputStream
+             or lazy sequence, use conveniece methods to extract it, like string
+- :done    - promise that is delivered once receiving response has finished
+- :error   - promise that is delivered if requesting resource failed, once delivered
+             will contain Throwable.
+Arguments:
+- url     - URL to request
+- options - keyworded arguments:
+  :query   - map of query parameters
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used (:host and :port)
+  :auth    - map with authentication to be used
+    :type     - either :basic or :digest
+    :user     - user name to be used
+    :password - password to be used
+    :realm    - realm name to authenticate in</pre>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L43" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -202,7 +370,7 @@ by <span id="author">Hubert Iwaniuk</span><br />
 </pre>
   <pre id="var-docstr">Waits for response processing to be finished.
 Returns same response.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L101" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L88" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -212,7 +380,7 @@ Returns same response.</pre>
 </pre>
   <pre id="var-docstr">Gets body.
 If body have not yet been delivered and request hasn't failed waits for body.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L114" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L101" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -221,7 +389,7 @@ If body have not yet been delivered and request hasn't failed waits for body.</p
   <pre id="var-usage">Usage: (cookies resp)
 </pre>
   <pre id="var-docstr">Gets cookies from response.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L130" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L117" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -230,7 +398,7 @@ If body have not yet been delivered and request hasn't failed waits for body.</p
   <pre id="var-usage">Usage: (create-client &amp; {user-agent :user-agent})
 </pre>
   <pre id="var-docstr">Creates new Async Http Client</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L25" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L25" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -239,7 +407,7 @@ If body have not yet been delivered and request hasn't failed waits for body.</p
   <pre id="var-usage">Usage: (done? resp)
 </pre>
   <pre id="var-docstr">Checks if request is finished already (response receiving finished).</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L135" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L122" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -248,7 +416,7 @@ If body have not yet been delivered and request hasn't failed waits for body.</p
   <pre id="var-usage">Usage: (error resp)
 </pre>
   <pre id="var-docstr">Returns Throwable if request processing failed.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L145" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L132" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -257,7 +425,7 @@ If body have not yet been delivered and request hasn't failed waits for body.</p
   <pre id="var-usage">Usage: (failed? resp)
 </pre>
   <pre id="var-docstr">Checks if request failed.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L88" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L75" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -267,7 +435,7 @@ If body have not yet been delivered and request hasn't failed waits for body.</p
 </pre>
   <pre id="var-docstr">Gets headers.
 If headers have not yet been delivered and request hasn't failed waits for headers.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L108" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L95" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -281,7 +449,7 @@ url - URL to set request to
 body-part-callback - callback that takes status (ref {}) of request
                      and received body part as vector of bytes
 options - are optional and can contain :headers, :param, and :query (see prepare-request).</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L58" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L45" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -290,7 +458,7 @@ options - are optional and can contain :headers, :param, and :query (see prepare
   <pre id="var-usage">Usage: (status resp)
 </pre>
   <pre id="var-docstr">Gets status if status was delivered.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L140" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L127" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -299,7 +467,7 @@ options - are optional and can contain :headers, :param, and :query (see prepare
   <pre id="var-usage">Usage: (stream-seq method url &amp; {:as options})
 </pre>
   <pre id="var-docstr">Creates potentially infinite lazy sequence of Http Stream.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L70" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L57" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -308,7 +476,7 @@ options - are optional and can contain :headers, :param, and :query (see prepare
   <pre id="var-usage">Usage: (string resp)
 </pre>
   <pre id="var-docstr">Converts response to string.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L120" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L107" id="var-source">Source</a>
 </div><div id="var-entry">
   <br />
   <hr />
@@ -318,7 +486,7 @@ options - are optional and can contain :headers, :param, and :query (see prepare
 </pre>
   <pre id="var-docstr">Creates new Async Http Client with given configuration
 than executes body and closes the client.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/a45b5e4a68fc46f2832be4c9182eff4bd3a7c41e/src/http/async/client.clj#L35" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client.clj#L35" id="var-source">Source</a>
 </div>
 <h2 id="namespace-name">http.async.client.headers</h2>
 <pre id="namespace-docstr">Asynchrounous HTTP Client - Clojure - Lazy headers</pre>
@@ -449,7 +617,7 @@ Options:
 </pre>
   <pre id="var-docstr">Alpha - subject to change.
 Returns true if promise has been delivered, else false</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/572f1b82ad8551a393c494bd057dcf6b3f4bc335/src/http/async/client/util.clj#L46" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client/util.clj#L47" id="var-source">Source</a>
 </div><div id="var-entry">
   <hr />
   <h2 id="http.async.client.util/promise">promise</h2>
@@ -461,7 +629,7 @@ Returns a promise object that can be read with deref/@, and set,
 once only, with deliver. Calls to deref/@ prior to delivery will
 block. All subsequent derefs will return the same delivered value
 without blocking.</pre>
-  <a href="http://github.com/neotyk/http.async.client/blob/572f1b82ad8551a393c494bd057dcf6b3f4bc335/src/http/async/client/util.clj#L20" id="var-source">Source</a>
+  <a href="http://github.com/neotyk/http.async.client/blob/1e06b0fae33497f592258f65b66fb54d6d8fb4dd/src/http/async/client/util.clj#L21" id="var-source">Source</a>
 </div>
 
 
