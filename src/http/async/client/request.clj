@@ -231,35 +231,37 @@
               :headers (promise)
               :body    (promise)
               :done    (promise)
-              :error   (promise)}]
-    (.executeRequest
-     *ahc* req
-     (proxy [AsyncHandler] []
-       (onStatusReceived [#^HttpResponseStatus e]
-                         (let [[result action] (status resp (convert-status-to-map e))]
-                           (deliver (:status resp) result)
-                           (convert-action action)))
-       (onHeadersReceived [#^HttpResponseHeaders e]
-                          (let [[result action] (headers resp (convert-headers-to-map e))]
-                            (deliver (:headers resp) result)
-                            (convert-action action)))
-       (onBodyPartReceived [#^HttpResponseBodyPart e]
-                           (when-let [bytes (.getBodyPartBytes e)]
-                             (let [length (alength bytes)
-                                   baos (ByteArrayOutputStream. length)]
-                               (.write baos bytes 0 length)
-                               (let [[result action] (part resp baos)
-                                     body (:body resp)]
-                                 (if-not (delivered? body)
-                                   (deliver body result))
-                                 (convert-action action)))))
-       (onCompleted []
-                    (do
-                      (completed resp)
-                      (deliver (:done resp) true)))
-       (onThrowable [#^Throwable t]
-                    (do
-                      (deliver (:error resp) (error resp t))
-                      (deliver (:done resp) true)))))
-    ^{:started (System/currentTimeMillis)}
-    resp))
+              :error   (promise)}
+        resp-future
+        (.executeRequest
+         *ahc* req
+         (proxy [AsyncHandler] []
+           (onStatusReceived [#^HttpResponseStatus e]
+                             (let [[result action] (status resp (convert-status-to-map e))]
+                               (deliver (:status resp) result)
+                               (convert-action action)))
+           (onHeadersReceived [#^HttpResponseHeaders e]
+                              (let [[result action] (headers resp (convert-headers-to-map e))]
+                                (deliver (:headers resp) result)
+                                (convert-action action)))
+           (onBodyPartReceived [#^HttpResponseBodyPart e]
+                               (when-let [bytes (.getBodyPartBytes e)]
+                                 (let [length (alength bytes)
+                                       baos (ByteArrayOutputStream. length)]
+                                   (.write baos bytes 0 length)
+                                   (let [[result action] (part resp baos)
+                                         body (:body resp)]
+                                     (if-not (delivered? body)
+                                       (deliver body result))
+                                     (convert-action action)))))
+           (onCompleted []
+                        (do
+                          (completed resp)
+                          (deliver (:done resp) true)))
+           (onThrowable [#^Throwable t]
+                        (do
+                          (deliver (:error resp) (error resp t))
+                          (deliver (:done resp) true)))))]
+    (with-meta resp {:started (System/currentTimeMillis)
+                     :cancelled? (fn [] (.isCancelled resp-future))
+                     :cancel (fn [] (.cancel resp-future true))})))

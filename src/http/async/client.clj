@@ -134,3 +134,15 @@
   [resp]
   (if (failed? resp)
     @(:error resp)))
+
+(defn cancelled?
+  "Checks if response has been cancelled."
+  [resp]
+  (when-let [f (:cancelled? (meta resp))]
+    (f)))
+
+(defn cancel
+  "Cancels response."
+  [resp]
+  (when-let [f (:cancel (meta resp))]
+    (f)))

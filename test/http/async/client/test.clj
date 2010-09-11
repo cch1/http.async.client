@@ -352,6 +352,13 @@
                            :auth {:user "beastie"
                                   :password "boys"})))
        200)))
+
+(deftest canceling-request
+  (let [resp (GET "http://localhost:8123/")]
+    (is (false? (cancelled? resp)))
+    (is (true? (cancel resp)))
+    (is (true? (cancelled? resp)))))
+
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET "http://localhost:8123/stream"))
 ;;        seqs (repeat (stream-seq :get "http://localhost:8123/stream"))
