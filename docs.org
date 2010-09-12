@@ -1,0 +1,560 @@
+#+TITLE: Asynchronous HTTP Client - Clojure - Documentation
+#+AUTHOR: Hubert Iwaniuk
+#+EMAIL: neotyk@kungfoo.pl
+#+INFOJS_OPT: view:info toc:1
+#+OPTIONS: H:4
+
+* User Documentation
+  How to use Asynchronous HTTP Client for Clojure
+  a.k.a. *http.async.client*.
+** Quick start
+   If you just want to use it already.
+*** Dependency
+    Declare dependency in your project.clj:
+#+BEGIN_SRC clojure
+  (defproject your-project "1.0.0-SNAPSHOT"
+    :description "Your project description"
+    :dependencies [[org.clojure/clojure "1.2.0"]
+                   [org.clojure/clojure-contrib "1.2.0"]
+                   [http.async.client "0.2.0"]])
+#+END_SRC
+    Make sure that your project depends on 1.2 Clojure as *http.async.client*
+    will not run in earlier versions.
+*** Require
+    Require it from your code:
+#+BEGIN_SRC clojure
+  (ns your.ns (:require [http.async.client :as c]))
+#+END_SRC
+*** GETting
+    To get HTTP resource:
+#+BEGIN_SRC clojure
+  (let [r (c/GET "http://github.com/neotyk/http.async.client/")]
+    (c/await r)
+    (c/string r))
+#+END_SRC
+** Detailed start
+*** Work modes
+**** Asynchronous operations
+     When you do:
+#+BEGIN_SRC clojure
+  (c/GET url)
+#+END_SRC
+     Result will be a map of [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.util/promise][*http.async.client.util/promise*]]s, and
+     represents response.
+     Do not fear, this is [[http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/promise][clojure.core/promise]] that was extended to be
+     able to check if it was delivered.
+
+     Following HTTP methods have been covered so far:
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][GET]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/POST][POST]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/PUT][PUT]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/DELETE][DELETE]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/HEAD][HEAD]]
+     - [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/OPTIONS][OPTIONS]]
+     For detailed description see [[*HTTP%20methods][HTTP methods]].
+
+     You can also submit options to HTTP methods like this:
+#+BEGIN_SRC clojure
+  (c/GET url :query {:key "value"})
+#+END_SRC
+     Options can be:
+     - *:query* :: query parameters
+     - *:headers* :: custom headers to be sent out
+     - *:body* :: body to be sent, allowed only with [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/PUT][PUT]]/[[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/POST][POST]]
+     - *:cookies* :: cookies to be sent
+     - *:proxy* :: proxy to be used
+     For detailed usage of options see [[*Request%20options][Request options]].
+
+     Response map contains following keys:
+     - *:status* :: promise of lazy map of status fields
+       - *:code* :: response code
+       - *:msg* :: response message
+       - *:protocol* :: protocol with version
+       - *:major* :: major version of protocol
+       - *:minor* :: minor version of protocol
+     - *:headers* :: promise of lazy map of headers where header names are
+       keyworded, like *:server* for example
+     - *:body* :: promise of response body, this is ByteArrayOutputStream, but you
+                  have convenience functions to convert it for example to string:
+       #+BEGIN_SRC clojure
+         (c/string (c/GET url))
+       #+END_SRC
+     - *:done* :: promise that is delivered once response receiving
+                  is done
+     - *:error* :: promise, if there was an error you will find Throwable here
+**** Streaming
+     When you do:
+#+BEGIN_SRC clojure
+  (c/stream-seq :get url)
+#+END_SRC
+     Response here is same as in [[*%20Asynchronous%20operations][Asynchronous operations]] but *:body*
+     will be lazy sequence of ByteArrayOutputStreams.
+    
+     You can still use convenience functions like *c/string* for body,
+     but remember that you are dealing now with *seq*.
+
+     For more details please see [[*Streaming][Streaming]].
+**** Raw mode
+     This allows you to provide callbacks that will get triggered on HTTP
+     response events like:
+      - received status line,
+      - received headers,
+      - received body part,
+      - completed request,
+      - handle error.
+      All callbacks are expected to return tuple with first element
+      been a value to be delivered for given response processing phase,
+      second element is controlling execution and if you make it
+      *:abort* than processing response is going to be terminated.
+
+      For detailed information on how to use this mode please see [[*Low%20level][Low
+      level]].
+*** HTTP methods
+    HTTP methods and convenience functions to request them.
+**** GET
+    Most basic invocation of [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]] is only with
+    *url* you want to get.
+    Extended invocation includes options that can be any options
+    accepted by [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request][*http.async.client.request/prepare-request*]]
+    (:headers :query ..).
+
+    Simple invocation:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "<your url>")
+        status (c/status resp)
+        headers (c/headers resp)]
+    (println (:code status))
+    (c/await resp)
+    (println (c/string resp)))
+#+END_SRC
+
+    Invocation with query parameters:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "<your url>" :query {:param-name "some-value"})
+        status (c/status resp)
+        headers (c/headers resp)]
+    (println (:code status))
+    (c/await resp)
+    (println (c/string resp)))
+#+END_SRC
+
+    Invocation with proxy:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "<your url>"
+               :query {:param-name "some-value"}
+               :proxy {:host host :port port})
+        status (c/status resp)]
+    (println (:code status))
+    (c/await resp)
+    (println (c/string resp)))
+#+END_SRC
+
+    Invocation with cookies:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "http://localhost:8123/cookie"
+               :cookies #{{:domain "http://localhost:8123/"
+                           :name "sample-name"
+                           :value "sample-value"
+                           :path "/cookie"
+                           :max-age 10
+                           :secure false}})]
+    (doseq [cookie (c/cookies resp)]
+      (println "name:" (:name cookie) ", value:" (:value cookie))))
+#+END_SRC
+    Notice [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/cookies][*http.async.client/cookies*]] function extracts cookies from
+    response headers, so to start processing it you don't need to wait
+    for whole response to arrive.
+**** PUT/POST
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/PUT][*http.async.client/PUT*]]/[[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/POST][*http.async.client/POST*]] work the same
+     way as [[*%20http%20neotyk%20github%20com%20http%20async%20client%20autodoc%20http%20async%20client%20api%20html%20http%20async%20client%20GET%20GET][*GET*]] but they also accept *body*.
+
+     *body* can be:
+     - String
+     - map, for easy form data submissions
+     - InputStream for any content
+***** Submitting body as String
+      You can send String as body with PUT/POST:
+#+BEGIN_SRC clojure
+  (let [resp (c/POST "<your url>" :body "SampleBody")]
+    ; do something with resp
+    )
+#+END_SRC
+***** Submitting form parameters
+      Submitting parameters via body map:
+#+BEGIN_SRC clojure
+  (let [resp (c/POST "<your url>" :body {:u "user" :p "s3cr3t"})]
+    ; do something with resp
+    )
+#+END_SRC
+***** Submitting body as InputStream
+      Last method to provide body is via InputStream:
+#+BEGIN_SRC clojure
+  (use '[clojure.java.io :only [input-stream]])
+  (let [resp (c/PUT "<your url>" :body (input-stream (.getBytes "SampleContent" "UTF-8")))]
+    ; do something with resp
+    )
+#+END_SRC
+**** DELETE
+     To call [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/DELETE][*http.async.client/DELETE*]] on a resource:
+#+BEGIN_SRC clojure
+  (let [resp (c/DELETE "<your url>")]
+    ; do something with resp
+    )
+#+END_SRC
+**** HEAD
+     To call [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/HEAD][*http.async.client/HEAD*]] on a resource:
+#+BEGIN_SRC clojure
+  (let [resp (c/HEAD "<your url>")]
+    ; do something with resp
+    )
+#+END_SRC
+**** OPTIONS
+     To call [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/OPTIONS][*http.async.client/OPTIONS*]] on a resource:
+#+BEGIN_SRC clojure
+  (let [resp (c/OPTIONS "<your url>")]
+    ; do something with resp
+    )
+#+END_SRC
+*** Request options
+    Following options can be provided to requests and are defined by
+    [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request][*http.async.client.request/prepare-request*]]:
+    - [[*%20query][:query]] :: query parameters
+    - [[*%20headers][:headers]] :: custom headers to be sent out
+    - [[*%20body][:body]] :: body to be sent, allowed only with PUT/POST
+    - [[*%20cookies][:cookies]] :: cookies to be sent
+    - [[*%20proxy][:proxy]] :: proxy to be used
+    - [[*%20auth][:auth]] :: authentication map
+**** :query
+     Query parameters is a map of keywords and their values. You use
+     it like so:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :query {:key1 "value1" :key2 "value2"})]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+**** :headers
+     Custom headers can be submitted same way as [[*%20query][:query]]:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :headers {:header-name1 "value1"
+                                  :header-name2 "value2"})]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+**** :body
+     Body can be provided with a message only with [[*PUT%20POST][PUT/POST]], it
+     doesn't make sense to have body with other [[*HTTP%20methods][HTTP methods]].
+#+BEGIN_SRC clojure
+  (let [resp (c/PUT url :body "sample body")]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+     *:body* can be String, form parameters or input stream, please see
+     [[*PUT%20POST][PUT/POST]] for more documentation.
+**** :cookies
+     Cookies can be provided to request as follows:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET "http://localhost:8123/cookie"
+               :cookies #{{:domain "http://localhost:8123/"
+                           :name "sample-name"
+                           :value "sample-value"
+                           :path "/cookie"
+                           :max-age 10
+                           :secure false}})]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+     *:cookies* option takes sequence of cookie maps, in this example
+     it is a hash set.
+     Cookie map consist of:
+     - *:domain* :: Domain that cookie has been installed
+     - *:name* :: Cookie name
+     - *:value* :: Cookie value, note that there is no additional
+                   processing so you should encode it yourself if
+                   needed.
+     - *:path* :: Path on with cookie has been installed
+     - *:max-age* :: Max age that cookie was configured to live
+     - *:secure* :: If cookie is secure cookie
+
+     Cookie reading is described in [[*Reading%20cookies][Reading cookies]].
+**** :proxy
+     Proxy can be configured per request basis as follows:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :proxy {:host h :port p})]
+    (c/await resp)
+    (c/string resp))
+#+END_SRC
+     Proxy expects a map with following keys:
+     - *:host* :: proxy host
+     - *:port* :: proxy port
+**** :auth
+     Authentication can be configured per request basis.
+     For now BASIC and DIGEST methods are supported.
+     
+     Basic method is default, so you don't have to specify it:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :auth {:user u :password p})]
+    ;; Check if response is not 401 or so and process response
+    )
+#+END_SRC
+     Though you can:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :auth {:type :basic :user u :password p})]
+    ;; Check if response is not 401 or so and process response
+    )
+#+END_SRC
+     And for digest method you will need realm as well:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url
+                    :auth {:type :digest :user u :password p :realm r})]
+    ;; Check if response is not 401 or so and process response
+    )
+#+END_SRC
+*** Streaming
+    HTTP Stream is response with chunked content encoding.
+    Those streams might not be meant to ever finish, see twitter.com
+    streams, so collecting those responses is impossible, they have to
+    be processed as soon as parts of it are received.
+
+    Two ways of consuming a HTTP Stream are supported:
+    - [[*Lazy%20sequence][Lazy sequence]]
+    - [[*Call%20back][Call-back]]
+**** Lazy sequence
+     You can get HTTP Stream as lazy sequence of it's body.
+     This is very convenient method as *seq* is native type of Clojure
+     so you can apply all mapping, filtering and any other standard
+     function that you like to it.
+#+BEGIN_SRC clojure
+  (let [resp (c/stream-seq :get url)]
+    (doseq [s (string resp)]
+      (println s)))
+#+END_SRC
+     *stream-seq* arguments:
+     - http method :: any of supported methods can be used, though it
+                      makes sense only to use *:get*, *:put* and
+                      *:post*
+     - url :: URL of HTTP resource
+     - options :: same as normal [[*Request%20options][Request options]].
+**** Call-back
+   Consuming HTTP Stream with call-back is quite straight forward with
+   *http.async.client*. You will need to know what HTTP Method you will call,
+   what URL and provide a call back function to handle body parts been
+   received.
+#+BEGIN_SRC clojure
+(let [parts (ref #{})
+      resp (c/request-stream :get url
+                             (fn [state body]
+                               (dosync (alter parts conj (string body)))
+                               [body :continue]))]
+  ; do something to @parts
+  )
+#+END_SRC
+
+  Few notes on implementing body part callback:
+  - state is a *map* with *:status* and *:headers* as promises, at
+    stage when you get called for body part, both of them should be in
+    place already, though it is advised to use convenience methods to
+    read them, see [[*Reading%20status%20line][Reading status line]] and [[*Reading%20headers][Reading headers]],
+  - call-back has to follow guidelines described in [[*Body%20part][Body part]],
+  - some streams are not meant to be finish, in that case don't
+    collect body parts, as for sure you will run out of available
+    resources,
+  - try not to do any heavy lifting in this callback, better send it
+    to agent,
+*** Response handling
+    *http.async.client* exposes some convenience functions for
+    response handling.
+**** Awaiting response
+     If you call any of [[*Asynchronous%20operations][Asynchronous operations]], [[*Streaming][Streaming]] or [[*Raw%20mode][Raw mode]]
+     you actually asynchronously execute HTTP request.
+     Some times you might need to wait for response processing to be
+     done before proceeding, in order to do so you call
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/await][*http.async.client/await*]].
+     It takes only one argument, that is response and returns once
+     receiving has finished.
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/await resp))
+#+END_SRC
+     Sample above will behave like synchronous HTTP operation.
+     For convenience it returns same response so you can use it
+     further, for example like that:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/string (c/await resp)))
+#+END_SRC
+**** Reading status line
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/status][*http.async.client/status*]] returns status lazy map of response.
+     It will wait until HTTP Status has been received.
+#+BEGIN_SRC clojure
+  (let [resp   (c/GET url)
+        status (c/status resp)]
+    (:code status))
+#+END_SRC
+     Sample above will return HTTP response status code, notice that
+     after this returns headers and body, might not been delivered
+     yet.
+**** Reading headers
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/headers][*http.async.client/headers*]] returns headers lazy map of response.
+     It will wait until HTTP Headers are received.
+#+BEGIN_SRC clojure
+  (let [resp    (c/GET url)
+        headers (c/headers resp)]
+    (:server headers))
+#+END_SRC
+     Again, like in case of status, body might not have been delivered
+     yet after this returns.
+**** Reading cookies
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/cookies][*http.async.client/cookies*]] returns seq of maps representing
+     cookies.
+     It will wait until HTTP Headers are received.
+#+BEGIN_SRC clojure
+  (let [resp    (c/GET url)
+        cookies (c/cookies resp)]
+    (map :name cookies))
+#+END_SRC
+     Sample above will return sequence of cookie names that server has
+     set.
+**** Reading body
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/body][*http.async.client/body*]] returns either ByteArrayOutputStream or
+     seq of it, depending if you used [[*Asynchronous%20operations][Asynchronous operations]] or
+     [[*Streaming][Streaming]] respectively.
+     It will *not* wait for response to be finished, it will return as
+     soon as first chunk of HTTP response body is received.
+**** Reading body as string
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/string][*http.async.client/string*]] returns either string or seq of
+     strings, again depending if you used [[*Asynchronous%20operations][Asynchronous operations]] or
+     [[*Streaming][Streaming]] respectively.
+     It will *not* wait for response to be finished, it will return as
+     soon as first chunk of HTTP response body is received.
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/string (c/await resp)))
+#+END_SRC
+     Sample above will return string of response body.
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/string][*http.async.client/string*]] is lazy so you can use it in case of
+     streams as well.
+#+BEGIN_SRC clojure
+  (let [resp    (c/stream-seq :get url)
+        strings (c/string resp)]
+    (doseq [part strings]
+      (println part)))
+#+END_SRC
+     Sample above will print parts as they are received, and will
+     return once response receiving is finished.
+**** Reading error
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/error][*http.async.client/error*]] will return Throwable that was cause of
+     request failure iff request failed, else *nil*.
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/await resp)
+    (when-let [err (c/error resp)]
+      (println "failed processing request: " err)))
+#+END_SRC
+**** Response predicates
+     You can also check status of request.
+***** done?
+      [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/done?][*http.async.client/done?*]] will tell you if response processing
+      has finished:
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (when-not (c/done? resp)
+      (c/await resp)
+      (c/done? resp)))
+#+END_SRC
+      Sample above will check if response was finished, if not - will
+      wait for it and return true as a result of call to done?.
+***** failed?
+      [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/failed?][*http.async.client/failed?*]] will return true iff request has
+      failed. If this return true you can [[*Reading%20error][read
+      error]].
+*** *http.async.client* configuration
+**** Branding
+     *http.async.client* con be configured, for now only with
+     User-Agent. To do so you can use
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and remember to close created
+     client yourself, or [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]] this will close
+     client by itself, though make sure that body of it will wait for
+     whore response to finish.
+#+BEGIN_SRC clojure
+  (c/with-ahc {:user-agent "Your User Agent/1.0"}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+    ))
+#+END_SRC
+** Low level
+*** Requesting
+    This is lower level access to *http.async.client*.
+    Mechanics here is based on asynchronous call-backs.
+    It provides default set of callbacks and functions to create and
+    execute requests.
+**** Preparing request
+    [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request][*http.async.client.request/prepare-request*]] is responsible for
+    request preparation, like name suggests.
+    It takes following arguments:
+    - HTTP Method like *:get* *:head*
+    - *url* that you want to call
+    - and *options*, a keyworded map described already in [[*Request%20options][Request options]].
+    Sample:
+#+BEGIN_SRC clojure
+  (let [req (prepare-request
+              :get "http://google.com"
+              :headers {:my-header "value"})]
+  ; now you have request, next thing to do would be to execute it
+  )
+#+END_SRC
+**** Executing request
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/execute-request][*http.async.client/execute-request*]] returns same map of promises
+     as [[*Asynchronous%20operations][Asynchronous operations]].
+     Its arguments are: request to be executed (result of [[*Preparing%20request][Preparing
+     request]]) and *options* as keyworded map consisting of call-backs.
+     Following *options* are recognized:
+     - *:status* [[*Status%20line][Status line]]
+     - *:headers* [[*Headers][Headers]]
+     - *:part* [[*Body%20part][Body part]]
+     - *:completed* [[*Body%20completed][Body completed]]
+     - *:error* [[*Error][Error]]
+     All callbacks take response map as first argument and callback
+     specific argument if any.
+     Callbacks are expected to return tuple of *result* and *action*:
+     - *result* :: will be delivered to respective promise in response
+                   map
+     - *action* :: if its value is *:abort* than response processing
+                   will be aborted, anything else here will result in
+                   continuation.
+***** Status line
+      Status line callback gets called after status line has been
+      received with arguments:
+      - response map
+      - Status map has following keys:
+        - *:code* status code (200, 404, ..)
+        - *:msg* status message ("OK", ..)
+        - *:protocol* protocol with version ("HTTP/1.1")
+        - *:major* major protocol version (1)
+        - *:minor* minor protocol version (0, 1)
+***** Headers
+      Headers callback gets called after headers have been received 
+      with arguments:
+      - response map
+      - lazy map of headers. Keys in that map are *(keyword
+        (.toLowerCase <header name>))*, so "Server" headers is
+        *:server* and so on.
+***** Body part
+      Body part callback gets called after each part of body has been
+      received with arguments:
+      - response map
+      - ByteArrayOutputStream that contains body part received.
+***** Body completed
+      This callback gets called when receiving of response body has
+      finished with only one argument, i.e. response map.
+***** Error
+      Error callback gets called when error while processing has been
+      encountered with arguments
+      - response map
+      - *Throwable* that was a cause of failure
+**** Default set of callbacks
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/*default-callbacks*][*http.async.client.request/*default-callbacks**]] is a map of
+     default callbacks. This fill allow you to easy change only few
+     callbacks and reuse default for the rest.
+
+     Please look at source of [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/stream-seq][*http.async.client/stream-seq*]] to see
+     how to do it.

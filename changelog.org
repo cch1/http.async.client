@@ -1,0 +1,21 @@
+#+TITLE: Asynchronous HTTP Client - Clojure - Changelog
+#+AUTHOR: Hubert Iwaniuk
+#+EMAIL: neotyk@kungfoo.pl
+#+INFOJS_OPT: view:info toc:1
+#+OPTIONS: H:4
+
+* Release 0.2.0
+** Stream as seq
+   Response body can be seq, this allows for easy HTTP Stream
+   handling. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.4][Documentation]].
+** Cookies
+   Added cookies support. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.4][Sending]] and [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.5.4][receiving]].
+** Authentication support
+   Basic and Digest from rfc2617 are supported. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.6][Documentation]].
+** Proxy per request
+   Proxy can be specified per request. [[http://neotyk.github.com/http.async.client/http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
+** Branding User-Agent
+   Specifying User-Agent per client.
+   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]].
+** Keyworded maps in API
+   Like *:options* in [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].
