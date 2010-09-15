@@ -331,7 +331,7 @@
     (is (= (.getMessage (error resp)) "Connection refused to http://notexisting/"))
     (is (true? (failed? resp)))))
 
-(deftest no-real-for-digest
+(deftest no-realm-for-digest
   (is (thrown-with-msg? IllegalArgumentException #"For DIGEST authentication realm is required"
         (GET "http://not-important/"
              :auth {:type :digest
