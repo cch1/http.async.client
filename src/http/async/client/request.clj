@@ -26,6 +26,7 @@
                                  FluentCaseInsensitiveStringsMap
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart
+                                 PerRequestConfig
                                  Realm$RealmBuilder Realm$AuthScheme
                                  Request RequestBuilder
 				 RequestType ProxyServer)
@@ -119,14 +120,16 @@
       :type     - either :basic or :digest
       :user     - user name to be used
       :password - password to be used
-      :realm    - realm name to authenticate in"
+      :realm    - realm name to authenticate in
+    :timeout - request timeout in ms"
   {:tag Request}
   [method #^String url & {headers :headers
                           query :query
                           body :body
                           cookies :cookies
                           proxy :proxy
-                          auth :auth}]
+                          auth :auth
+                          timeout :timeout}]
   ;; RequestBuilderWrapper is needed for now, until RequestBuilder
   ;; is able to be used directly from Clojure.
   (let [#^RequestBuilderWrapper rbw
@@ -185,6 +188,11 @@
     ;; proxy
     (if proxy
       (.setProxyServer rbw (ProxyServer. (:host proxy) (:port proxy))))
+    ;; request timeout
+    (if timeout
+      (let [prc (PerRequestConfig.)]
+        (.setRequestTimeoutInMs prc timeout)
+        (.setPerRequestConfig rbw prc)))
     ;; fine
     (.. (.getRequestBuilder rbw) (setUrl url) (build))))
 

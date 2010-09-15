@@ -83,7 +83,8 @@
       :type     - either :basic or :digest
       :user     - user name to be used
       :password - password to be used
-      :realm    - realm name to authenticate in")]
+      :realm    - realm name to authenticate in
+    :timeout - request timeout in ms")]
               `(defn ~fn-name ~fn-doc [#^String ~'url & {:as ~'options}]
                  (apply r/execute-request
                         (apply r/prepare-request ~method# ~'url (apply concat ~'options))

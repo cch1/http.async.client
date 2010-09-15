@@ -28,7 +28,9 @@
            (org.eclipse.jetty.server.handler AbstractHandler)
            (org.eclipse.jetty.continuation Continuation ContinuationSupport)
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
-           (java.io ByteArrayOutputStream)))
+           (java.io ByteArrayOutputStream)
+           (java.util.concurrent TimeoutException)))
+(set! *warn-on-reflection* true)
 
 ;; test suite setup
 (def default-handler
@@ -91,6 +93,7 @@
                                 (if (= auth "Basic YmVhc3RpZTpib3lz")
                                   200
                                   401)))
+               "/timeout" (Thread/sleep 200)
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -358,6 +361,12 @@
     (is (false? (cancelled? resp)))
     (is (true? (cancel resp)))
     (is (true? (cancelled? resp)))))
+
+(deftest reqeust-timeout
+  (let [resp (GET "http://localhost:8123/timeout" :timeout 100)]
+    (await resp)
+    (is (true? (failed? resp)))
+    (is (instance? TimeoutException (error resp)))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET "http://localhost:8123/stream"))

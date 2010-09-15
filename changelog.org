@@ -19,3 +19,11 @@
    [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]].
 ** Keyworded maps in API
    Like *:options* in [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].
+* Release 0.2.1
+** Canceling request
+   *http.async.client/cancel* and *http.async.client/canceled?*
+** Request timeout
+   Per request configuration of request timeout in ms.
+   #+BEGIN_SRC clojure
+   (GET url :timeout 100)
+   #+END_SRC
