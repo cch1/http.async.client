@@ -70,7 +70,10 @@
                           {:part (fn [_ baos]
                                    (.put que baos)
                                    [s-seq :continue])
-                           :completed (fn [_] (.put que ::done))})))))
+                           :completed (fn [_] (.put que ::done))
+                           :error (fn [_ t]
+                                    (.put que ::done)
+                                    t)})))))
 
 (defn failed?
   "Checks if request failed."
