@@ -16,14 +16,22 @@
    Proxy can be specified per request. [[http://neotyk.github.com/http.async.client/http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
 ** Branding User-Agent
    Specifying User-Agent per client.
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]].
+   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]].
 ** Keyworded maps in API
    Like *:options* in [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].
 * Release 0.2.1
+** Terminate body seq if errored                                        :bug:
 ** Canceling request
    *http.async.client/cancel* and *http.async.client/canceled?*
 ** Request timeout
    Per request configuration of request timeout in ms.
    #+BEGIN_SRC clojure
    (GET url :timeout 100)
+   #+END_SRC
+** Close client
+   *http.async.client/close*.
+   #+BEGIN_SRC clojure
+   (c/close)
+   ;; or
+   (c/close hac)
    #+END_SRC

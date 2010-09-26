@@ -149,3 +149,8 @@
   [resp]
   (when-let [f (:cancel (meta resp))]
     (f)))
+
+(defn close
+  "Closes client."
+  ([] (close *client*))
+  ([client] (.close client)))
