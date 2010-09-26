@@ -288,10 +288,9 @@
   (is (= "глава" (string (GET "http://localhost:8123/issue-1")))))
 
 (deftest get-via-proxy
-  (let [target "http://localhost:8123/proxy-req"
-        resp (GET target :proxy {:host "localhost" :port 8123})
+  (let [resp (GET "http://localhost:8123/proxy-req" :proxy {:host "localhost" :port 8123})
         headers (headers resp)]
-    (is (= target (:target headers)))))
+    (is (= "/proxy-req" (:target headers)))))
 
 (deftest get-with-cookie
   (let [cv "sample-value"
@@ -368,7 +367,8 @@
     (let [resp (GET "http://localhost:8123/timeout" :timeout 100)]
       (await resp)
       (is (true? (failed? resp)))
-      (is (instance? TimeoutException (error resp)))))
+      (if (failed? resp)
+        (is (instance? TimeoutException (error resp))))))
   (testing "infinite timeout"
     (let [resp (GET "http://localhost:8123/timeout" :timeout -1)]
       (await resp)
@@ -396,17 +396,10 @@
       (let [resp (GET "http://localhost:8123/timeout")]
         (await resp)
         (is (failed? resp))
-        (if (failed? resp)
-          (is (instance? TimeoutException (error resp)))))))
-  (testing "global connection timeout"
-    (with-client {:connection-timeout 100}
-      (let [start# (System/currentTimeMillis)
-            resp (await (GET (str "http://localhost:8124")))
-            t (- (System/currentTimeMillis) start#)]
-        (is (failed? resp))
-        (if (failed? resp)
-          (is (instance? TimeoutException (error resp))))
-        (is (< t 120))))))
+        (when (failed? resp)
+          (let [err (error resp)]
+            (is (instance? IOException err))
+            (is (= "No response received. Connection timed out after 100" (.getMessage err)))))))))
 
 (deftest closing-client
   (binding [*client* (create-client)]
