@@ -28,7 +28,8 @@
            (org.eclipse.jetty.server.handler AbstractHandler)
            (org.eclipse.jetty.continuation Continuation ContinuationSupport)
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
-           (java.io ByteArrayOutputStream)
+           (java.io ByteArrayOutputStream IOException)
+           (java.net ServerSocket)
            (java.util.concurrent TimeoutException)))
 (set! *warn-on-reflection* true)
 
@@ -116,11 +117,11 @@
 (defn- once-fixture [f]
   "Configures Logger before test here are executed, and closes AHC after tests are done."
   (def srv (start-jetty default-handler))
-  (binding [*ahc* (create-client)]
+  (binding [*client* (create-client)]
     (try (f)
          (finally
           (do
-            (.close *ahc*)
+            (.close *client*)
             (.stop srv))))))
 
 (use-fixtures :once once-fixture)
@@ -315,7 +316,7 @@
 
 (deftest get-with-user-agent-branding
   (let [ua-brand "Branded User Agent/1.0"]
-    (with-ahc {:user-agent ua-brand}
+    (with-client {:user-agent ua-brand}
       (let [headers (headers (GET "http://localhost:8123/branding"))]
         (is (contains? headers :x-user-agent))
         (is (= (:x-user-agent headers) ua-brand))))))
@@ -363,10 +364,55 @@
     (is (true? (cancelled? resp)))))
 
 (deftest reqeust-timeout
-  (let [resp (GET "http://localhost:8123/timeout" :timeout 100)]
-    (await resp)
-    (is (true? (failed? resp)))
-    (is (instance? TimeoutException (error resp)))))
+  (testing "timing out"
+    (let [resp (GET "http://localhost:8123/timeout" :timeout 100)]
+      (await resp)
+      (is (true? (failed? resp)))
+      (is (instance? TimeoutException (error resp)))))
+  (testing "infinite timeout"
+    (let [resp (GET "http://localhost:8123/timeout" :timeout -1)]
+      (await resp)
+      (is (not (failed? resp)))
+      (if (failed? resp)
+        (do
+          (println "Delivered error:" (delivered? (:error resp)))
+          (print-stack-trace (error resp))))
+      (is (true? (done? resp)))))
+  (testing "global timeout"
+    (with-client {:request-timeout 100}
+      (let [resp (GET "http://localhost:8123/timeout")]
+        (await resp)
+        (is (true? (failed? resp)))
+        (if (failed? resp)
+          (is (instance? TimeoutException (error resp)))))))
+  (testing "global timeout overwritten by local infinite"
+    (with-client {:request-timeout 100}
+      (let [resp (GET "http://localhost:8123/timeout" :timeout -1)]
+        (await resp)
+        (is (false? (failed? resp)))
+        (is (done? resp)))))
+  (testing "global idle timeout"
+    (with-client {:idle-timeout 100}
+      (let [resp (GET "http://localhost:8123/timeout")]
+        (await resp)
+        (is (failed? resp))
+        (if (failed? resp)
+          (is (instance? TimeoutException (error resp)))))))
+  (testing "global connection timeout"
+    (with-client {:connection-timeout 100}
+      (let [start# (System/currentTimeMillis)
+            resp (await (GET (str "http://localhost:8124")))
+            t (- (System/currentTimeMillis) start#)]
+        (is (failed? resp))
+        (if (failed? resp)
+          (is (instance? TimeoutException (error resp))))
+        (is (< t 120))))))
+
+(deftest closing-client
+  (binding [*client* (create-client)]
+    (let [_ (await (GET "http://localhost:8123/"))]
+      (close *client*)
+      (is (thrown-with-msg? IOException #"Closed" (GET "http://localhost:8123/"))))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET "http://localhost:8123/stream"))

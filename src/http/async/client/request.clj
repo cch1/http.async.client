@@ -36,12 +36,12 @@
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
-(def ahc-user-agent "ahc-clj/0.2.0-dev")
+(def *user-agent* "http.async.client/0.2.1-dev")
 
-(def *ahc*
+(def *client*
      (AsyncHttpClient.
       (.build
-       (.setUserAgent (AsyncHttpClientConfig$Builder.) ahc-user-agent))))
+       (.setUserAgent (AsyncHttpClientConfig$Builder.) *user-agent*))))
 
 (defn- convert-method [method]
   "Converts clj method (:get, :put, ...) to Async Client specific.
@@ -84,12 +84,10 @@
       [baos :continue])))
 
 ;; completed callbacks
-(defn body-completed [state]
-  [true :continue])
+(defn body-completed [_] [true :continue])
 
 ;; error callbacks
-(defn error-collect [state t]
-  t)
+(defn error-collect [_ t] t)
 
 ;; default set of callbacks
 (def
@@ -242,7 +240,7 @@
               :error   (promise)}
         resp-future
         (.executeRequest
-         *ahc* req
+         *client* req
          (proxy [AsyncHandler] []
            (onStatusReceived [#^HttpResponseStatus e]
                              (let [[result action] (status resp (convert-status-to-map e))]

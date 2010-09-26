@@ -23,21 +23,38 @@
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)))
 
 (defn create-client
-  "Creates new Async Http Client"
-  [& {user-agent :user-agent}]
-  (AsyncHttpClient.
-   (.build
-    (.setUserAgent (AsyncHttpClientConfig$Builder.)
-                   (if user-agent
-                     user-agent
-                     ahc-user-agent)))))
+  "Creates new Async Http Client.
+  Arguments:
+  - :user-agent - User-Agent branding string
+  - :request-timeout - global request timeout in ms
+  - :connection-timeout - global connections timeout in ms
+  - :idle-timeout - global idle connection timeout in ms"
+  [& {user-agent :user-agent
+      request-timeout :request-timeout
+      connection-timeout :connection-timeout
+      idle-timeout :idle-timeout}]
+  (let [b (AsyncHttpClientConfig$Builder.)]
+    ;; set User-Agent
+    (.setUserAgent b (if user-agent
+                       user-agent
+                       *user-agent*))
+    ;; global request timeout
+    (when request-timeout
+      (.setRequestTimeoutInMs b request-timeout))
+    ;; global connection timeout
+    (when connection-timeout
+      (.setConnectionTimeoutInMs b connection-timeout))
+    ;; idle connection timeout
+    (when idle-timeout
+      (.setIdleConnectionTimeoutInMs b idle-timeout))
+    (AsyncHttpClient. (.build b))))
 
-(defmacro with-ahc
+(defmacro with-client
   "Creates new Async Http Client with given configuration
   than executes body and closes the client."
   [config & body]
   `(with-open [c# (create-client ~@(apply concat config))]
-     (binding [*ahc* c#]
+     (binding [*client* c#]
        ~@body)))
 
 (gen-methods :get :post :put :delete :head :options)

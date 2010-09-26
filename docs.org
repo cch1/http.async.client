@@ -472,15 +472,18 @@
      *http.async.client* con be configured, for now only with
      User-Agent. To do so you can use
      [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and remember to close created
-     client yourself, or [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]] this will close
+     client yourself, or [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]] this will close
      client by itself, though make sure that body of it will wait for
      whore response to finish.
 #+BEGIN_SRC clojure
-  (c/with-ahc {:user-agent "Your User Agent/1.0"}
+  (c/with-client {:user-agent "Your User Agent/1.0"}
     (let [resp (GET url)]
       ;; do stuff with resp
     ))
 #+END_SRC
+**** TODO Timeouts
+     With *http.async.client* you can globally configure *connection*,
+     *request* and *idle* timeouts.
 ** Low level
 *** Requesting
     This is lower level access to *http.async.client*.

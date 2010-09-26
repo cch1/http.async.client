@@ -44,6 +44,9 @@
 *** TODO Connection limiting per host.
 *** TODO Global proxy.
 *** TODO Timeout settings
+**** TODO Request timeout
+**** TODO Connection timeout
+**** TODO Idle connection timeout
 ** TODO Per request configuration [1/2]                                :rel4:
 *** DONE Proxy configuration                                           :rel3:
 *** TODO Timeout                                                       :rel4:
