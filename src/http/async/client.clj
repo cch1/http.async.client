@@ -97,12 +97,20 @@
   [resp]
   (delivered? (:error resp)))
 
+(defn done?
+  "Checks if request is finished already (response receiving finished)."
+  [resp]
+  (delivered? (:done resp)))
+
 (defn- safe-get
   [k r]
   (let [p (k r)]
     (if (or
          (delivered? p)
-         (not (failed? r)))
+         (not
+          (or
+           (failed? r)
+           (done? r))))
       @p)))
 
 (defn await
@@ -128,21 +136,16 @@
   "Converts response to string."
   [resp]
   (let [enc (or (get-encoding (headers resp)) duck/*default-encoding*)
-        body (body resp)
         convert (fn [#^ByteArrayOutputStream baos] (.toString baos enc))]
-    (if (seq? body)
-      (map convert body)
-      (convert body))))
+    (when-let [body (body resp)]
+      (if (seq? body)
+        (map convert body)
+        (convert body)))))
 
 (defn cookies
   "Gets cookies from response."
   [resp]
   (create-cookies (headers resp)))
-
-(defn done?
-  "Checks if request is finished already (response receiving finished)."
-  [resp]
-  (delivered? (:done resp)))
 
 (defn status
   "Gets status if status was delivered."

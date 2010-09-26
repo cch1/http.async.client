@@ -95,6 +95,7 @@
                                   200
                                   401)))
                "/timeout" (Thread/sleep 200)
+               "/empty" (.setHeader hResp "Nothing" "Yep")
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
                    (.addHeader hResp n v))))
@@ -406,6 +407,10 @@
     (let [_ (await (GET "http://localhost:8123/"))]
       (close *client*)
       (is (thrown-with-msg? IOException #"Closed" (GET "http://localhost:8123/"))))))
+
+(deftest extract-empty-body
+  (let [resp (await (GET "http://localhost:8123/empty"))]
+    (is (nil? (string resp)))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET "http://localhost:8123/stream"))
