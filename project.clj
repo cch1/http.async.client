@@ -11,6 +11,7 @@
                      [org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
                      [org.danlarkin/clojure-json "1.1"]
                      [lein-run "1.0.0"]]
+  :repository {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
   :autodoc {:name "http.async.client"
             :web-src-dir "http://github.com/neotyk/http.async.client/blob/"
             :web-home "http://neotyk.github.com/http.async.client/autodoc/"
