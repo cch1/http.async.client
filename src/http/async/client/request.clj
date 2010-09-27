@@ -29,7 +29,7 @@
                                  PerRequestConfig
                                  Realm$RealmBuilder Realm$AuthScheme
                                  Request RequestBuilder
-				 RequestType ProxyServer)
+                                 ProxyServer)
            (ahc RequestBuilderWrapper)
            (java.net URLEncoder)
            (java.io InputStream
@@ -47,13 +47,13 @@
   "Converts clj method (:get, :put, ...) to Async Client specific.
    Defaults to :get"
   (cond
-   (= method :get) RequestType/GET
-   (= method :post) RequestType/POST
-   (= method :put) RequestType/PUT
-   (= method :delete) RequestType/DELETE
-   (= method :head) RequestType/HEAD
-   (= method :options) RequestType/OPTIONS
-   :default RequestType/GET))
+   (= method :get) "GET"
+   (= method :post) "POST"
+   (= method :put) "PUT"
+   (= method :delete) "DELETE"
+   (= method :head) "HEAD"
+   (= method :options) "OPTIONS"
+   :default "GET"))
 
 (defn get-encoding
   "Gets content encoding from headers, if Content-Type header not present
