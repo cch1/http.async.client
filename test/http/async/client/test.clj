@@ -24,9 +24,14 @@
         [clojure.java.io :only [input-stream]]
         [clojure.contrib.profile :only [prof profile]])
   (:require [clojure.contrib.io :as duck])
-  (:import (org.eclipse.jetty.server Server Request)
+  (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
+           (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
            (org.eclipse.jetty.continuation Continuation ContinuationSupport)
+           (org.eclipse.jetty.http.security Constraint)
+           (org.eclipse.jetty.security ConstraintMapping ConstraintSecurityHandler
+                                            HashLoginService LoginService)
+           (org.eclipse.jetty.security.authentication BasicAuthenticator)
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
            (java.io ByteArrayOutputStream IOException)
            (java.net ServerSocket)
@@ -110,9 +115,31 @@
      (start-jetty handler {:port 8123}))
   ([handler {port :port :as opts :or {:port 8123}}]
      (let [srv (Server. port)]
-       (doto srv
-         (.setHandler handler)
-         (.start))
+       (doto (Logger/getRootLogger)
+         (.setLevel Level/DEBUG)
+         (.addAppender (ConsoleAppender. (PatternLayout. PatternLayout/TTCC_CONVERSION_PATTERN))))
+
+       (let [loginSrv (HashLoginService. "MyRealm" "test-resources/realm.properties")
+             constraint (Constraint.)
+             mapping (ConstraintMapping.)
+             security (ConstraintSecurityHandler.)]
+         (.addBean srv loginSrv)
+         (doto constraint
+           (.setName Constraint/__BASIC_AUTH)
+           (.setRoles (into-array #{"user"}))
+           (.setAuthenticate true))
+         (doto mapping
+           (.setConstraint constraint)
+           (.setPathSpec "/basic-auth"))
+         (doto security
+           (.setConstraintMappings (into-array #{mapping}) #{"user"})
+           (.setAuthenticator (BasicAuthenticator.))
+           (.setLoginService loginSrv)
+           (.setStrict false)
+           (.setHandler handler))
+         (doto srv
+           (.setHandler security)
+           (.start)))
        srv)))
 
 (defn- once-fixture [f]
@@ -291,7 +318,7 @@
 (deftest get-via-proxy
   (let [resp (GET "http://localhost:8123/proxy-req" :proxy {:host "localhost" :port 8123})
         headers (headers resp)]
-    (is (= "/proxy-req" (:target headers)))))
+    (is (= "http://localhost:8123/proxy-req" (:target headers)))))
 
 (deftest get-with-cookie
   (let [cv "sample-value"
@@ -329,7 +356,7 @@
 (deftest no-host
   (let [resp (GET "http://notexisting/")]
     (await resp)
-    (is (= (.getMessage (error resp)) "Connection refused to http://notexisting/"))
+    (is (= (.getMessage (error resp)) "[main] Connection refused to http://notexisting/"))
     (is (true? (failed? resp)))))
 
 (deftest no-realm-for-digest
