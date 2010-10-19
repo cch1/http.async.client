@@ -220,10 +220,18 @@
          :b 6)))
 
 (deftest test-post-string-body
-  (let [resp (POST "http://localhost:8123/body-str" :body "TestBody")
+  (let [resp (POST "http://localhost:8123/body-str" :body "TestBody  Encoded?")
         headers (headers resp)]
     (is (not (empty? headers)))
-    (is (= "TestBody" (string resp)))))
+    (is (= "TestBody  Encoded?" (string resp)))))
+
+(deftest test-post-string-body-content-type-encoded
+  (let [resp (POST "http://localhost:8123/body-str"
+                   :headers {:content-type "application/x-www-form-urlencoded"}
+                   :body "Encode this & string?")
+        headers (headers resp)]
+    (is (not (empty? headers)))
+    (is (= "Encode+this+%26+string%3F" (string resp)))))
 
 (deftest test-post-map-body
   (let [resp (POST "http://localhost:8123/" :body {:u "user" :p "s3cr3t"})

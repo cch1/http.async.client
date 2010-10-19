@@ -158,7 +158,10 @@
                    (.addParameter rbw
                                   (if (keyword? k) (name k) k)
                                   (str v)))
-     (string? body) (.setBody rbw (.getBytes (url-encode body) "UTF-8"))
+     (string? body) (.setBody rbw (.getBytes (if (= "application/x-www-form-urlencoded" (:content-type headers))
+                                               (url-encode body)
+                                               body)
+                                             "UTF-8"))
      (instance? InputStream body) (.setBody rbw body))
     ;; authentication
     (when-let [{type :type
