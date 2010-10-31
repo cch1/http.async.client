@@ -1,4 +1,4 @@
-(defproject http.async.client "0.2.1"
+(defproject http.async.client "0.2.2-SNAPSHOT"
   :description      "Asynchronous HTTP Client for Clojure"
   :namespaces       [http.async.client]
   :dependencies     [[org.clojure/clojure "1.2.0"]
