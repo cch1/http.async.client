@@ -1,9 +1,9 @@
-(defproject http.async.client "0.2.1-SNAPSHOT"
+(defproject http.async.client "0.2.1"
   :description      "Asynchronous HTTP Client for Clojure"
   :namespaces       [http.async.client]
   :dependencies     [[org.clojure/clojure "1.2.0"]
 		     [org.clojure/clojure-contrib "1.2.0"]
-		     [com.ning/async-http-client "1.2.0"]]
+		     [com.ning/async-http-client "1.3.2"]]
   :dev-dependencies [[swank-clojure "1.2.1"]
 		     [autodoc "0.7.1"]
 		     [org.clojars.neotyk/lein-javac "1.0.2"]

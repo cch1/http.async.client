@@ -35,6 +35,7 @@
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
            (java.io ByteArrayOutputStream IOException)
            (java.net ServerSocket)
+           (java.nio.channels UnresolvedAddressException)
            (java.util.concurrent TimeoutException)))
 (set! *warn-on-reflection* true)
 
@@ -364,7 +365,7 @@
 (deftest no-host
   (let [resp (GET "http://notexisting/")]
     (await resp)
-    (is (= (.getMessage (error resp)) "[main] Connection refused to http://notexisting/"))
+    (is (= (class (.getCause (error resp))) UnresolvedAddressException))
     (is (true? (failed? resp)))))
 
 (deftest no-realm-for-digest
