@@ -16,7 +16,7 @@
     :description "Your project description"
     :dependencies [[org.clojure/clojure "1.2.0"]
                    [org.clojure/clojure-contrib "1.2.0"]
-                   [http.async.client "0.2.0"]])
+                   [http.async.client "0.2.1"]])
 #+END_SRC
     Make sure that your project depends on 1.2 Clojure as *http.async.client*
     will not run in earlier versions.
@@ -450,6 +450,14 @@
     (when-let [err (c/error resp)]
       (println "failed processing request: " err)))
 #+END_SRC
+**** Canceling request
+     At any given time of processing HTTP Response you can *cancel* it
+     by calling [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/cancel][*http.async.client/cancel*]].
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url)]
+    (c/cancel resp))
+#+END_SRC
+     Please see *canceling-request* test.
 **** Response predicates
      You can also check status of request.
 ***** done?
@@ -465,8 +473,10 @@
       wait for it and return true as a result of call to done?.
 ***** failed?
       [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/failed?][*http.async.client/failed?*]] will return true iff request has
-      failed. If this return true you can [[*Reading%20error][read
-      error]].
+      failed. If this return true you can [[*Reading%20error][read error]].
+***** canceled?
+      [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/canceled?][*http.async.client/canceled?*]] will return true iff request has
+      been [[*Canceling%20request][canceled]], else false is return.
 *** *http.async.client* configuration
 **** Branding
      *http.async.client* con be configured, for now only with
