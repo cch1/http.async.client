@@ -35,3 +35,4 @@
    ;; or
    (c/close hac)
    #+END_SRC
+** Upgrade to v1.3.2 of async-http-client
