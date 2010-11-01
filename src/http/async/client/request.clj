@@ -58,7 +58,8 @@
 (defn get-encoding
   "Gets content encoding from headers, if Content-Type header not present
   or media-type in it is missing => nil"
-  [{ct :content-type}]
+  [{ct :content-type
+    :or {ct ""}}]
   (when-let [match (re-matches #".*charset\s*=\s*(.*)\s*" ct)]
     (.toUpperCase (match 1))))
 
