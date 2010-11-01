@@ -39,18 +39,21 @@
 ** DONE Authentication                                                 :rel3:
 *** DONE Test Authentication
 * Configuration [0/2]
-** TODO Global configuration of AHC [1/4]                              :rel4:
+** TODO Global configuration of AHC [2/4]                              :rel4:
 *** DONE Branding User-agent                                           :rel3:
-*** TODO Connection limiting per host.
-*** TODO Global proxy.
-*** TODO Timeout settings
-**** TODO Request timeout
-**** TODO Connection timeout
-**** TODO Idle connection timeout
+*** TODO Connection limiting per host.                                 :rel4:
+*** TODO Global proxy.                                                 :rel4:
+*** DONE Timeout settings                                              :rel4:
+**** DONE Request timeout                                              :rel4:
+**** DONE Connection timeout                                           :rel4:
+**** DONE Idle connection timeout                                      :rel4:
 ** TODO Per request configuration [1/2]                                :rel4:
 *** DONE Proxy configuration                                           :rel3:
 *** TODO Timeout                                                       :rel4:
-* Tasks [10/11]
+**** DONE Request timeout                                              :rel4:
+**** TODO Connection timeout                                           :rel4:
+**** TODO Idle connection timeout                                      :rel4:
+* Tasks [12/12]
 ** DONE License                                                        :rel1:
 ** DONE Cleanup namespaces                                             :rel1:
 *** async.http.client
@@ -62,12 +65,14 @@
     - prepare-request
 ** DONE Release 0.1.0                                                  :rel1:
 ** DONE Release 0.1.1                                                  :rel2:
-** TODO Release 0.2.0                                                  :rel3:
+** DONE Release 0.2.0                                                  :rel3:
    Changes:
    - Stream as seq
    - Streams used instead of byte vectors (issue-1)
    - keyworded maps are used in api
-*** TODO Create a changelog                                            :rel3:
+*** DONE Create a changelog                                            :rel3:
+** DONE Release 0.2.1
+   Release bumps version of async-http-client to v1.3.2.
 ** DONE Make tests stand-alone                                         :rel1:
    Test suite should not fail when there is now hello-www on port 8080.
 ** DONE Simplify request preparation                                   :rel1:
