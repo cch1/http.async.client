@@ -504,7 +504,7 @@
 ***** canceled?
       [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/canceled?][*http.async.client/canceled?*]] will return true iff request has
       been [[*Canceling%20request][canceled]], else false is return.
-*** *http.async.client* configuration
+*** Managing *http.async.client*
 **** Branding
      *http.async.client* can be configured with User-Agent. To do so
      you can use [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and remember to
@@ -517,7 +517,7 @@
       ;; do stuff with resp
     ))
 #+END_SRC
-**** TODO Timeouts
+**** Timeouts
      With *http.async.client* apart from per connection [[*:timeout][:timeout]] you
      can globally configure *connection*, *request* and *idle*
      timeouts. All timeout values are in milliseconds and magic value
@@ -533,6 +533,18 @@
      Example above will timeout connection if it was not established
      in 10ms, request if it was not received in 1sec, or was idle for
      more than 100ms.
+**** Closing *http.async.client*
+     Whenever you've created *http.async.client* via
+     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] you will need to close it.
+     To do so you call [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/close][*http.async.client/close*]], *http.async.client*
+     relies on client been bound to **client**.
+#+BEGIN_SRC clojure
+  (binding [*client* (c/create-client)]
+    (let [resp (c/GET url)]
+      ;; process response
+    )
+    (c/close *client*))
+#+END_SRC
 ** Low level
 *** Requesting
     This is lower level access to *http.async.client*.
