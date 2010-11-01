@@ -224,6 +224,7 @@
     - [[*%20cookies][:cookies]] :: cookies to be sent
     - [[*%20proxy][:proxy]] :: proxy to be used
     - [[*%20auth][:auth]] :: authentication map
+    - [[*:timeout][:timeout]] :: timeout configuration
 **** :query
      Query parameters is a map of keywords and their values. You use
      it like so:
@@ -309,6 +310,32 @@
     ;; Check if response is not 401 or so and process response
     )
 #+END_SRC
+**** :timeout
+     Response timeout can be configured per request as well.
+     Timeout value is time in milliseconds in which response has to be
+     received.
+     There is special value *-1* that indicates infinite timeout.
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :timeout -1)]
+    (c/await resp)
+    ;; process response
+    )
+#+END_SRC
+     Sample above will wait until response is fully received, as long
+     as it takes (-1 timeout).
+#+BEGIN_SRC clojure
+  (let [resp (c/GET url :timeout 100)]
+    (c/await resp)
+    (if (c/failed? resp)
+      ;; did not get response in configured timeout
+      ;; process response
+    ))
+#+END_SRC
+     Example above configures timeout to 100ms, so *await* will only
+     wait for 100ms, after that response is done.
+     Which doesn't necessarily mean that it was delivered to client
+     successfully, because it was restricted by timeout, that is why
+     example contains check if response has failed.
 *** Streaming
     HTTP Stream is response with chunked content encoding.
     Those streams might not be meant to ever finish, see twitter.com
@@ -479,12 +506,11 @@
       been [[*Canceling%20request][canceled]], else false is return.
 *** *http.async.client* configuration
 **** Branding
-     *http.async.client* con be configured, for now only with
-     User-Agent. To do so you can use
-     [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and remember to close created
-     client yourself, or [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]] this will close
-     client by itself, though make sure that body of it will wait for
-     whore response to finish.
+     *http.async.client* can be configured with User-Agent. To do so
+     you can use [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and remember to
+     close created client yourself, or [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]]
+     this will close client by itself, though make sure that body of
+     it will wait for whore response to finish.
 #+BEGIN_SRC clojure
   (c/with-client {:user-agent "Your User Agent/1.0"}
     (let [resp (GET url)]
@@ -492,8 +518,21 @@
     ))
 #+END_SRC
 **** TODO Timeouts
-     With *http.async.client* you can globally configure *connection*,
-     *request* and *idle* timeouts.
+     With *http.async.client* apart from per connection [[*:timeout][:timeout]] you
+     can globally configure *connection*, *request* and *idle*
+     timeouts. All timeout values are in milliseconds and magic value
+     *-1* is interpreted as infinite wait.
+#+BEGIN_SRC clojure
+  (c/with-client {:connection-timeout 10
+                  :request-timeout 1000
+                  :idle-timeout 100}
+    (let [resp (c/GET url)]
+      ;; request processing
+      ))
+#+END_SRC
+     Example above will timeout connection if it was not established
+     in 10ms, request if it was not received in 1sec, or was idle for
+     more than 100ms.
 ** Low level
 *** Requesting
     This is lower level access to *http.async.client*.
