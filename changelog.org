@@ -36,5 +36,5 @@
    (c/close hac)
    #+END_SRC
 ** Upgrade to v1.3.2 of async-http-client
-* Release 0.2.1
+* Release 0.2.2
 ** get-encoding helper works w/o Content-Type header                    :bug:

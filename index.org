@@ -13,7 +13,7 @@
     :description "Your project description"
     :dependencies [[org.clojure/clojure "1.2.0"]
                    [org.clojure/clojure-contrib "1.2.0"]
-                   [http.async.client "0.2.0"]])
+                   [http.async.client "0.2.1"]])
 #+END_SRC
 
   Require:
@@ -41,3 +41,5 @@
 
   If you would like to help please look at [[./todo.org][to do]] or submit ticket
   [[http://github.com/neotyk/http.async.client/issues/][here]].
+
+  [[./changelog.org][Changelog]].
