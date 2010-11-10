@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Asynchronous HTTP Client - Clojure - Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-09-09 09:01:29 CEST"/>
+<meta name="generated" content="2010-11-10 09:42:57 CET"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -35,6 +35,7 @@ lang="en" xml:lang="en">
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
+  textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
   .org-info-js_info-navigation { border-style:none; }
@@ -81,6 +82,7 @@ org_html_manager.setup();  // activate after the parameters are set
  }
 /*]]>*///-->
 </script>
+
 </head>
 <body>
 <div id="content">
@@ -94,72 +96,76 @@ org_html_manager.setup();  // activate after the parameters are set
 <ul>
 <li><a href="#sec-1">1 User Documentation </a>
 <ul>
-<li><a href="#sec-1.1">1.1 Quick start </a>
+<li><a href="#sec-1_1">1.1 Quick start </a>
 <ul>
-<li><a href="#sec-1.1.1">1.1.1 Dependency </a></li>
-<li><a href="#sec-1.1.2">1.1.2 Require </a></li>
-<li><a href="#sec-1.1.3">1.1.3 GETting </a></li>
+<li><a href="#sec-1_1_1">1.1.1 Dependency </a></li>
+<li><a href="#sec-1_1_2">1.1.2 Require </a></li>
+<li><a href="#sec-1_1_3">1.1.3 GETting </a></li>
 </ul>
 </li>
-<li><a href="#sec-1.2">1.2 Detailed start </a>
+<li><a href="#sec-1_2">1.2 Detailed start </a>
 <ul>
-<li><a href="#sec-1.2.1">1.2.1 Work modes </a>
+<li><a href="#sec-1_2_1">1.2.1 Work modes </a>
 <ul>
-<li><a href="#sec-1.2.1.1">1.2.1.1 Asynchronous operations </a></li>
-<li><a href="#sec-1.2.1.2">1.2.1.2 Streaming </a></li>
-<li><a href="#sec-1.2.1.3">1.2.1.3 Raw mode </a></li>
+<li><a href="#sec-1_2_1_1">1.2.1.1 Asynchronous operations </a></li>
+<li><a href="#sec-1_2_1_2">1.2.1.2 Streaming </a></li>
+<li><a href="#sec-1_2_1_3">1.2.1.3 Raw mode </a></li>
 </ul>
 </li>
-<li><a href="#sec-1.2.2">1.2.2 HTTP methods </a>
+<li><a href="#sec-1_2_2">1.2.2 HTTP methods </a>
 <ul>
-<li><a href="#sec-1.2.2.1">1.2.2.1 GET </a></li>
-<li><a href="#sec-1.2.2.2">1.2.2.2 PUT/POST </a></li>
-<li><a href="#sec-1.2.2.3">1.2.2.3 DELETE </a></li>
-<li><a href="#sec-1.2.2.4">1.2.2.4 HEAD </a></li>
-<li><a href="#sec-1.2.2.5">1.2.2.5 OPTIONS </a></li>
+<li><a href="#sec-1_2_2_1">1.2.2.1 GET </a></li>
+<li><a href="#sec-1_2_2_2">1.2.2.2 PUT/POST </a></li>
+<li><a href="#sec-1_2_2_3">1.2.2.3 DELETE </a></li>
+<li><a href="#sec-1_2_2_4">1.2.2.4 HEAD </a></li>
+<li><a href="#sec-1_2_2_5">1.2.2.5 OPTIONS </a></li>
 </ul>
 </li>
-<li><a href="#sec-1.2.3">1.2.3 Request options </a>
+<li><a href="#sec-1_2_3">1.2.3 Request options </a>
 <ul>
-<li><a href="#sec-1.2.3.1">1.2.3.1 :query </a></li>
-<li><a href="#sec-1.2.3.2">1.2.3.2 :headers </a></li>
-<li><a href="#sec-1.2.3.3">1.2.3.3 :body </a></li>
-<li><a href="#sec-1.2.3.4">1.2.3.4 :cookies </a></li>
-<li><a href="#sec-1.2.3.5">1.2.3.5 :proxy </a></li>
-<li><a href="#sec-1.2.3.6">1.2.3.6 :auth </a></li>
+<li><a href="#sec-1_2_3_1">1.2.3.1 :query </a></li>
+<li><a href="#sec-1_2_3_2">1.2.3.2 :headers </a></li>
+<li><a href="#sec-1_2_3_3">1.2.3.3 :body </a></li>
+<li><a href="#sec-1_2_3_4">1.2.3.4 :cookies </a></li>
+<li><a href="#sec-1_2_3_5">1.2.3.5 :proxy </a></li>
+<li><a href="#sec-1_2_3_6">1.2.3.6 :auth </a></li>
+<li><a href="#sec-1_2_3_7">1.2.3.7 :timeout </a></li>
 </ul>
 </li>
-<li><a href="#sec-1.2.4">1.2.4 Streaming </a>
+<li><a href="#sec-1_2_4">1.2.4 Streaming </a>
 <ul>
-<li><a href="#sec-1.2.4.1">1.2.4.1 Lazy sequence </a></li>
-<li><a href="#sec-1.2.4.2">1.2.4.2 Call-back </a></li>
+<li><a href="#sec-1_2_4_1">1.2.4.1 Lazy sequence </a></li>
+<li><a href="#sec-1_2_4_2">1.2.4.2 Call-back </a></li>
 </ul>
 </li>
-<li><a href="#sec-1.2.5">1.2.5 Response handling </a>
+<li><a href="#sec-1_2_5">1.2.5 Response handling </a>
 <ul>
-<li><a href="#sec-1.2.5.1">1.2.5.1 Awaiting response </a></li>
-<li><a href="#sec-1.2.5.2">1.2.5.2 Reading status line </a></li>
-<li><a href="#sec-1.2.5.3">1.2.5.3 Reading headers </a></li>
-<li><a href="#sec-1.2.5.4">1.2.5.4 Reading cookies </a></li>
-<li><a href="#sec-1.2.5.5">1.2.5.5 Reading body </a></li>
-<li><a href="#sec-1.2.5.6">1.2.5.6 Reading body as string </a></li>
-<li><a href="#sec-1.2.5.7">1.2.5.7 Reading error </a></li>
-<li><a href="#sec-1.2.5.8">1.2.5.8 Response predicates </a></li>
+<li><a href="#sec-1_2_5_1">1.2.5.1 Awaiting response </a></li>
+<li><a href="#sec-1_2_5_2">1.2.5.2 Reading status line </a></li>
+<li><a href="#sec-1_2_5_3">1.2.5.3 Reading headers </a></li>
+<li><a href="#sec-1_2_5_4">1.2.5.4 Reading cookies </a></li>
+<li><a href="#sec-1_2_5_5">1.2.5.5 Reading body </a></li>
+<li><a href="#sec-1_2_5_6">1.2.5.6 Reading body as string </a></li>
+<li><a href="#sec-1_2_5_7">1.2.5.7 Reading error </a></li>
+<li><a href="#sec-1_2_5_8">1.2.5.8 Canceling request </a></li>
+<li><a href="#sec-1_2_5_9">1.2.5.9 Response predicates </a></li>
 </ul>
 </li>
-<li><a href="#sec-1.2.6">1.2.6 <b>http.async.client</b> configuration </a>
+<li><a href="#sec-1_2_6">1.2.6 Managing <b>http.async.client</b> </a>
 <ul>
-<li><a href="#sec-1.2.6.1">1.2.6.1 Branding </a></li>
+<li><a href="#sec-1_2_6_1">1.2.6.1 Branding </a></li>
+<li><a href="#sec-1_2_6_2">1.2.6.2 Timeouts </a></li>
+<li><a href="#sec-1_2_6_3">1.2.6.3 Closing <b>http.async.client</b> </a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-1.3">1.3 Low level </a>
+<li><a href="#sec-1_3">1.3 Low level </a>
 <ul>
-<li><a href="#sec-1.3.1">1.3.1 Requesting </a>
+<li><a href="#sec-1_3_1">1.3.1 Requesting </a>
 <ul>
-<li><a href="#sec-1.3.1.1">1.3.1.1 Preparing request </a></li>
-<li><a href="#sec-1.3.1.2">1.3.1.2 Executing request </a></li>
-<li><a href="#sec-1.3.1.3">1.3.1.3 Default set of callbacks </a></li>
+<li><a href="#sec-1_3_1_1">1.3.1.1 Preparing request </a></li>
+<li><a href="#sec-1_3_1_2">1.3.1.2 Executing request </a></li>
+<li><a href="#sec-1_3_1_3">1.3.1.3 Default set of callbacks </a></li>
 </ul>
 </li>
 </ul>
@@ -179,29 +185,28 @@ a.k.a. <b>http.async.client</b>.
 </p>
 </div>
 
-<div id="outline-container-1.1" class="outline-3">
-<h3 id="sec-1.1"><span class="section-number-3">1.1</span> Quick start </h3>
-<div class="outline-text-3" id="text-1.1">
+<div id="outline-container-1_1" class="outline-3">
+<h3 id="sec-1_1"><span class="section-number-3">1.1</span> Quick start </h3>
+<div class="outline-text-3" id="text-1_1">
 
 <p>If you just want to use it already.
 </p>
 </div>
 
-<div id="outline-container-1.1.1" class="outline-4">
-<h4 id="sec-1.1.1"><span class="section-number-4">1.1.1</span> Dependency </h4>
-<div class="outline-text-4" id="text-1.1.1">
+<div id="outline-container-1_1_1" class="outline-4">
+<h4 id="sec-1_1_1"><span class="section-number-4">1.1.1</span> Dependency </h4>
+<div class="outline-text-4" id="text-1_1_1">
 
 <p>Declare dependency in your project.clj:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span>defproject your-project <span style="color: #cc9393;">"1.0.0-SNAPSHOT"</span>
-  <span style="color: #8cd0d3;">:description</span> <span style="color: #cc9393;">"Your project description"</span>
-  <span style="color: #8cd0d3;">:dependencies</span> [[org.clojure/clojure <span style="color: #cc9393;">"1.2.0"</span>]
-                 [org.clojure/clojure-contrib <span style="color: #cc9393;">"1.2.0"</span>]
-                 [http.async.client <span style="color: #cc9393;">"0.2.0"</span>]]<span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>defproject your-project <span style="color: #8b2252;">"1.0.0-SNAPSHOT"</span>
+  <span style="color: #7a378b;">:description</span> <span style="color: #8b2252;">"Your project description"</span>
+  <span style="color: #7a378b;">:dependencies</span> [[org.clojure/clojure <span style="color: #8b2252;">"1.2.0"</span>]
+                 [org.clojure/clojure-contrib <span style="color: #8b2252;">"1.2.0"</span>]
+                 [http.async.client <span style="color: #8b2252;">"0.2.1"</span>]]<span style="color: #8c8c8c;">)</span>
 </pre>
-
 
 
 <p>
@@ -211,68 +216,65 @@ will not run in earlier versions.
 
 </div>
 
-<div id="outline-container-1.1.2" class="outline-4">
-<h4 id="sec-1.1.2"><span class="section-number-4">1.1.2</span> Require </h4>
-<div class="outline-text-4" id="text-1.1.2">
+<div id="outline-container-1_1_2" class="outline-4">
+<h4 id="sec-1_1_2"><span class="section-number-4">1.1.2</span> Require </h4>
+<div class="outline-text-4" id="text-1_1_2">
 
 <p>Require it from your code:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">ns</span> your.ns <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">:require</span> [http.async.client <span style="color: #8cd0d3;">:as</span> c]<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">ns</span> your.ns <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:require</span> [http.async.client <span style="color: #7a378b;">:as</span> c]<span style="color: #8c8c8c;">))</span>
 </pre>
 
 
-
 </div>
 
 </div>
 
-<div id="outline-container-1.1.3" class="outline-4">
-<h4 id="sec-1.1.3"><span class="section-number-4">1.1.3</span> GETting </h4>
-<div class="outline-text-4" id="text-1.1.3">
+<div id="outline-container-1_1_3" class="outline-4">
+<h4 id="sec-1_1_3"><span class="section-number-4">1.1.3</span> GETting </h4>
+<div class="outline-text-4" id="text-1_1_3">
 
 <p>To get HTTP resource:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [r <span style="color: #7f7f7f;">(</span>c/GET <span style="color: #cc9393;">"http://github.com/neotyk/http.async.client/"</span><span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/await r<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span>c/string r<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [r <span style="color: #8c8c8c;">(</span>c/GET <span style="color: #8b2252;">"http://github.com/neotyk/http.async.client/"</span><span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await r<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span>c/string r<span style="color: #8c8c8c;">))</span>
 </pre>
 
 
-
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-1.2" class="outline-3">
-<h3 id="sec-1.2"><span class="section-number-3">1.2</span> Detailed start </h3>
-<div class="outline-text-3" id="text-1.2">
+<div id="outline-container-1_2" class="outline-3">
+<h3 id="sec-1_2"><span class="section-number-3">1.2</span> Detailed start </h3>
+<div class="outline-text-3" id="text-1_2">
 
 
 </div>
 
-<div id="outline-container-1.2.1" class="outline-4">
-<h4 id="sec-1.2.1"><span class="section-number-4">1.2.1</span> Work modes </h4>
-<div class="outline-text-4" id="text-1.2.1">
+<div id="outline-container-1_2_1" class="outline-4">
+<h4 id="sec-1_2_1"><span class="section-number-4">1.2.1</span> Work modes </h4>
+<div class="outline-text-4" id="text-1_2_1">
 
 
 </div>
 
-<div id="outline-container-1.2.1.1" class="outline-5">
-<h5 id="sec-1.2.1.1"><span class="section-number-5">1.2.1.1</span> Asynchronous operations </h5>
-<div class="outline-text-5" id="text-1.2.1.1">
+<div id="outline-container-1_2_1_1" class="outline-5">
+<h5 id="sec-1_2_1_1"><span class="section-number-5">1.2.1.1</span> Asynchronous operations </h5>
+<div class="outline-text-5" id="text-1_2_1_1">
 
 <p>When you do:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>
 </pre>
-
 
 
 <p>
@@ -304,16 +306,15 @@ Following HTTP methods have been covered so far:
 </li>
 </ul>
 
-<p>For detailed description see <a href="#sec-1.2.2">HTTP methods</a>.
+<p>For detailed description see <a href="#*HTTP==methods">HTTP methods</a>.
 </p>
 <p>
 You can also submit options to HTTP methods like this:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span>c/GET url <span style="color: #8cd0d3;">:query</span> {<span style="color: #8cd0d3;">:key</span> <span style="color: #cc9393;">"value"</span>}<span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/GET url <span style="color: #7a378b;">:query</span> {<span style="color: #7a378b;">:key</span> <span style="color: #8b2252;">"value"</span>}<span style="color: #8c8c8c;">)</span>
 </pre>
-
 
 
 <p>
@@ -336,7 +337,7 @@ proxy to be used
 </dd>
 </dl>
 
-<p>For detailed usage of options see <a href="#sec-1.2.3">Request options</a>.
+<p>For detailed usage of options see <a href="#*Request==options">Request options</a>.
 </p>
 <p>
 Response map contains following keys:
@@ -371,9 +372,8 @@ have convenience functions to convert it for example to string:
 
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span>c/string <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/string <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">))</span>
 </pre>
-
 
 
 </dd>
@@ -385,25 +385,25 @@ is done
 promise, if there was an error you will find Throwable here
 </dd>
 </dl>
-</div>
 
 </div>
 
-<div id="outline-container-1.2.1.2" class="outline-5">
-<h5 id="sec-1.2.1.2"><span class="section-number-5">1.2.1.2</span> Streaming </h5>
-<div class="outline-text-5" id="text-1.2.1.2">
+</div>
+
+<div id="outline-container-1_2_1_2" class="outline-5">
+<h5 id="sec-1_2_1_2"><span class="section-number-5">1.2.1.2</span> Streaming </h5>
+<div class="outline-text-5" id="text-1_2_1_2">
 
 <p>When you do:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span>c/stream-seq <span style="color: #8cd0d3;">:get</span> url<span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/stream-seq <span style="color: #7a378b;">:get</span> url<span style="color: #8c8c8c;">)</span>
 </pre>
 
 
-
 <p>
-Response here is same as in <a href="#sec-1.2.1.1">Asynchronous operations</a> but <b>:body</b>
+Response here is same as in <a href="#*==Asynchronous==operations">Asynchronous operations</a> but <b>:body</b>
 will be lazy sequence of ByteArrayOutputStreams.
 </p>
 <p>
@@ -411,14 +411,14 @@ You can still use convenience functions like <b>c/string</b> for body,
 but remember that you are dealing now with <b>seq</b>.
 </p>
 <p>
-For more details please see <a href="#sec-1.2.1.2">Streaming</a>.
+For more details please see <a href="#*Streaming">Streaming</a>.
 </p></div>
 
 </div>
 
-<div id="outline-container-1.2.1.3" class="outline-5">
-<h5 id="sec-1.2.1.3"><span class="section-number-5">1.2.1.3</span> Raw mode </h5>
-<div class="outline-text-5" id="text-1.2.1.3">
+<div id="outline-container-1_2_1_3" class="outline-5">
+<h5 id="sec-1_2_1_3"><span class="section-number-5">1.2.1.3</span> Raw mode </h5>
+<div class="outline-text-5" id="text-1_2_1_3">
 
 <p>This allows you to provide callbacks that will get triggered on HTTP
 response events like:
@@ -446,23 +446,23 @@ second element is controlling execution and if you make it
 <b>:abort</b> than processing response is going to be terminated.
 </p>
 <p>
-For detailed information on how to use this mode please see <a href="#sec-1.3">Low level</a>.
+For detailed information on how to use this mode please see <a href="#*Low==level">Low level</a>.
 </p></div>
 </div>
 
 </div>
 
-<div id="outline-container-1.2.2" class="outline-4">
-<h4 id="sec-1.2.2"><span class="section-number-4">1.2.2</span> HTTP methods </h4>
-<div class="outline-text-4" id="text-1.2.2">
+<div id="outline-container-1_2_2" class="outline-4">
+<h4 id="sec-1_2_2"><span class="section-number-4">1.2.2</span> HTTP methods </h4>
+<div class="outline-text-4" id="text-1_2_2">
 
 <p>HTTP methods and convenience functions to request them.
 </p>
 </div>
 
-<div id="outline-container-1.2.2.1" class="outline-5">
-<h5 id="sec-1.2.2.1"><span class="section-number-5">1.2.2.1</span> GET </h5>
-<div class="outline-text-5" id="text-1.2.2.1">
+<div id="outline-container-1_2_2_1" class="outline-5">
+<h5 id="sec-1_2_2_1"><span class="section-number-5">1.2.2.1</span> GET </h5>
+<div class="outline-text-5" id="text-1_2_2_1">
 
 <p>Most basic invocation of <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET"><b>http.async.client/GET</b></a> is only with
 <b>url</b> you want to get.
@@ -475,14 +475,13 @@ Simple invocation:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET <span style="color: #cc9393;">"&lt;your url&gt;"</span><span style="color: #7f7f7f;">)</span>
-      status <span style="color: #7f7f7f;">(</span>c/status resp<span style="color: #7f7f7f;">)</span>
-      headers <span style="color: #7f7f7f;">(</span>c/headers resp<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">:code</span> status<span style="color: #7f7f7f;">))</span>
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET <span style="color: #8b2252;">"&lt;your url&gt;"</span><span style="color: #8c8c8c;">)</span>
+      status <span style="color: #8c8c8c;">(</span>c/status resp<span style="color: #8c8c8c;">)</span>
+      headers <span style="color: #8c8c8c;">(</span>c/headers resp<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:code</span> status<span style="color: #8c8c8c;">))</span>
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">)))</span>
 </pre>
-
 
 
 
@@ -491,14 +490,13 @@ Invocation with query parameters:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET <span style="color: #cc9393;">"&lt;your url&gt;"</span> <span style="color: #8cd0d3;">:query</span> {<span style="color: #8cd0d3;">:param-name</span> <span style="color: #cc9393;">"some-value"</span>}<span style="color: #7f7f7f;">)</span>
-      status <span style="color: #7f7f7f;">(</span>c/status resp<span style="color: #7f7f7f;">)</span>
-      headers <span style="color: #7f7f7f;">(</span>c/headers resp<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">:code</span> status<span style="color: #7f7f7f;">))</span>
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #7a378b;">:query</span> {<span style="color: #7a378b;">:param-name</span> <span style="color: #8b2252;">"some-value"</span>}<span style="color: #8c8c8c;">)</span>
+      status <span style="color: #8c8c8c;">(</span>c/status resp<span style="color: #8c8c8c;">)</span>
+      headers <span style="color: #8c8c8c;">(</span>c/headers resp<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:code</span> status<span style="color: #8c8c8c;">))</span>
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">)))</span>
 </pre>
-
 
 
 
@@ -507,15 +505,14 @@ Invocation with proxy:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET <span style="color: #cc9393;">"&lt;your url&gt;"</span>
-             <span style="color: #8cd0d3;">:query</span> {<span style="color: #8cd0d3;">:param-name</span> <span style="color: #cc9393;">"some-value"</span>}
-             <span style="color: #8cd0d3;">:proxy</span> {<span style="color: #8cd0d3;">:host</span> host <span style="color: #8cd0d3;">:port</span> port}<span style="color: #7f7f7f;">)</span>
-      status <span style="color: #7f7f7f;">(</span>c/status resp<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">:code</span> status<span style="color: #7f7f7f;">))</span>
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET <span style="color: #8b2252;">"&lt;your url&gt;"</span>
+             <span style="color: #7a378b;">:query</span> {<span style="color: #7a378b;">:param-name</span> <span style="color: #8b2252;">"some-value"</span>}
+             <span style="color: #7a378b;">:proxy</span> {<span style="color: #7a378b;">:host</span> host <span style="color: #7a378b;">:port</span> port}<span style="color: #8c8c8c;">)</span>
+      status <span style="color: #8c8c8c;">(</span>c/status resp<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:code</span> status<span style="color: #8c8c8c;">))</span>
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">)))</span>
 </pre>
-
 
 
 
@@ -524,17 +521,16 @@ Invocation with cookies:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET <span style="color: #cc9393;">"http://localhost:8123/cookie"</span>
-             <span style="color: #8cd0d3;">:cookies</span> #{{<span style="color: #8cd0d3;">:domain</span> <span style="color: #cc9393;">"http://localhost:8123/"</span>
-                         <span style="color: #8cd0d3;">:name</span> <span style="color: #cc9393;">"sample-name"</span>
-                         <span style="color: #8cd0d3;">:value</span> <span style="color: #cc9393;">"sample-value"</span>
-                         <span style="color: #8cd0d3;">:path</span> <span style="color: #cc9393;">"/cookie"</span>
-                         <span style="color: #8cd0d3;">:max-age</span> 10
-                         <span style="color: #8cd0d3;">:secure</span> false}}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">doseq</span> [cookie <span style="color: #7f7f7f;">(</span>c/cookies resp<span style="color: #7f7f7f;">)</span>]
-    <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> <span style="color: #cc9393;">"name:"</span> <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">:name</span> cookie<span style="color: #7f7f7f;">)</span> <span style="color: #cc9393;">", value:"</span> <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">:value</span> cookie<span style="color: #7f7f7f;">))))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET <span style="color: #8b2252;">"http://localhost:8123/cookie"</span>
+             <span style="color: #7a378b;">:cookies</span> #{{<span style="color: #7a378b;">:domain</span> <span style="color: #8b2252;">"http://localhost:8123/"</span>
+                         <span style="color: #7a378b;">:name</span> <span style="color: #8b2252;">"sample-name"</span>
+                         <span style="color: #7a378b;">:value</span> <span style="color: #8b2252;">"sample-value"</span>
+                         <span style="color: #7a378b;">:path</span> <span style="color: #8b2252;">"/cookie"</span>
+                         <span style="color: #7a378b;">:max-age</span> 10
+                         <span style="color: #7a378b;">:secure</span> false}}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">doseq</span> [cookie <span style="color: #8c8c8c;">(</span>c/cookies resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8b2252;">"name:"</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:name</span> cookie<span style="color: #8c8c8c;">)</span> <span style="color: #8b2252;">", value:"</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:value</span> cookie<span style="color: #8c8c8c;">))))</span>
 </pre>
-
 
 
 <p>
@@ -545,9 +541,9 @@ for whole response to arrive.
 
 </div>
 
-<div id="outline-container-1.2.2.2" class="outline-5">
-<h5 id="sec-1.2.2.2"><span class="section-number-5">1.2.2.2</span> PUT/POST </h5>
-<div class="outline-text-5" id="text-1.2.2.2">
+<div id="outline-container-1_2_2_2" class="outline-5">
+<h5 id="sec-1_2_2_2"><span class="section-number-5">1.2.2.2</span> PUT/POST </h5>
+<div class="outline-text-5" id="text-1_2_2_2">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/PUT"><b>http.async.client/PUT</b></a>/<a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/POST"><b>http.async.client/POST</b></a> work the same
 way as <a href="#*==http==neotyk==github==com==http==async==client==autodoc==http==async==client==api==html==http==async==client==GET==GET"><b>GET</b></a> but they also accept <b>body</b>.
@@ -564,43 +560,47 @@ map, for easy form data submissions
 <li>
 InputStream for any content
 </li>
-<li id="sec-1.2.2.2.1">Submitting body as String <br/>
+</ul>
+
+<ul>
+<li id="sec-1_2_2_2_1">Submitting body as String <br/>
 You can send String as body with PUT/POST:
 
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/POST <span style="color: #cc9393;">"&lt;your url&gt;"</span> <span style="color: #8cd0d3;">:body</span> <span style="color: #cc9393;">"SampleBody"</span><span style="color: #7f7f7f;">)</span>]
-  <span style="color: #708070;">; </span><span style="color: #7f9f7f;">do something with resp
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/POST <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #7a378b;">:body</span> <span style="color: #8b2252;">"SampleBody"</span><span style="color: #8c8c8c;">)</span>]
+  <span style="color: #b22222;">; </span><span style="color: #b22222;">do something with resp
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
 
 
-
 </li>
-<li id="sec-1.2.2.2.2">Submitting form parameters <br/>
+</ul>
+<ul>
+<li id="sec-1_2_2_2_2">Submitting form parameters <br/>
 Submitting parameters via body map:
 
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/POST <span style="color: #cc9393;">"&lt;your url&gt;"</span> <span style="color: #8cd0d3;">:body</span> {<span style="color: #8cd0d3;">:u</span> <span style="color: #cc9393;">"user"</span> <span style="color: #8cd0d3;">:p</span> <span style="color: #cc9393;">"s3cr3t"</span>}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #708070;">; </span><span style="color: #7f9f7f;">do something with resp
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/POST <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #7a378b;">:body</span> {<span style="color: #7a378b;">:u</span> <span style="color: #8b2252;">"user"</span> <span style="color: #7a378b;">:p</span> <span style="color: #8b2252;">"s3cr3t"</span>}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #b22222;">; </span><span style="color: #b22222;">do something with resp
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
 
 
-
 </li>
-<li id="sec-1.2.2.2.3">Submitting body as InputStream <br/>
+</ul>
+<ul>
+<li id="sec-1_2_2_2_3">Submitting body as InputStream <br/>
 Last method to provide body is via InputStream:
 
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">use</span> '[clojure.java.io <span style="color: #8cd0d3;">:only</span> [input-stream]]<span style="color: #7f7f7f;">)</span>
-<span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/PUT <span style="color: #cc9393;">"&lt;your url&gt;"</span> <span style="color: #8cd0d3;">:body</span> <span style="color: #7f7f7f;">(</span>input-stream <span style="color: #7f7f7f;">(</span>.getBytes <span style="color: #cc9393;">"SampleContent"</span> <span style="color: #cc9393;">"UTF-8"</span><span style="color: #7f7f7f;">)))</span>]
-  <span style="color: #708070;">; </span><span style="color: #7f9f7f;">do something with resp
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">use</span> '[clojure.java.io <span style="color: #7a378b;">:only</span> [input-stream]]<span style="color: #8c8c8c;">)</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/PUT <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #7a378b;">:body</span> <span style="color: #8c8c8c;">(</span>input-stream <span style="color: #8c8c8c;">(</span>.getBytes <span style="color: #8b2252;">"SampleContent"</span> <span style="color: #8b2252;">"UTF-8"</span><span style="color: #8c8c8c;">)))</span>]
+  <span style="color: #b22222;">; </span><span style="color: #b22222;">do something with resp
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
-
 
 
 </li>
@@ -609,175 +609,172 @@ Last method to provide body is via InputStream:
 
 </div>
 
-<div id="outline-container-1.2.2.3" class="outline-5">
-<h5 id="sec-1.2.2.3"><span class="section-number-5">1.2.2.3</span> DELETE </h5>
-<div class="outline-text-5" id="text-1.2.2.3">
+<div id="outline-container-1_2_2_3" class="outline-5">
+<h5 id="sec-1_2_2_3"><span class="section-number-5">1.2.2.3</span> DELETE </h5>
+<div class="outline-text-5" id="text-1_2_2_3">
 
 <p>To call <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/DELETE"><b>http.async.client/DELETE</b></a> on a resource:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/DELETE <span style="color: #cc9393;">"&lt;your url&gt;"</span><span style="color: #7f7f7f;">)</span>]
-  <span style="color: #708070;">; </span><span style="color: #7f9f7f;">do something with resp
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/DELETE <span style="color: #8b2252;">"&lt;your url&gt;"</span><span style="color: #8c8c8c;">)</span>]
+  <span style="color: #b22222;">; </span><span style="color: #b22222;">do something with resp
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
 
 
-
 </div>
 
 </div>
 
-<div id="outline-container-1.2.2.4" class="outline-5">
-<h5 id="sec-1.2.2.4"><span class="section-number-5">1.2.2.4</span> HEAD </h5>
-<div class="outline-text-5" id="text-1.2.2.4">
+<div id="outline-container-1_2_2_4" class="outline-5">
+<h5 id="sec-1_2_2_4"><span class="section-number-5">1.2.2.4</span> HEAD </h5>
+<div class="outline-text-5" id="text-1_2_2_4">
 
 <p>To call <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/HEAD"><b>http.async.client/HEAD</b></a> on a resource:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/HEAD <span style="color: #cc9393;">"&lt;your url&gt;"</span><span style="color: #7f7f7f;">)</span>]
-  <span style="color: #708070;">; </span><span style="color: #7f9f7f;">do something with resp
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/HEAD <span style="color: #8b2252;">"&lt;your url&gt;"</span><span style="color: #8c8c8c;">)</span>]
+  <span style="color: #b22222;">; </span><span style="color: #b22222;">do something with resp
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
 
 
-
 </div>
 
 </div>
 
-<div id="outline-container-1.2.2.5" class="outline-5">
-<h5 id="sec-1.2.2.5"><span class="section-number-5">1.2.2.5</span> OPTIONS </h5>
-<div class="outline-text-5" id="text-1.2.2.5">
+<div id="outline-container-1_2_2_5" class="outline-5">
+<h5 id="sec-1_2_2_5"><span class="section-number-5">1.2.2.5</span> OPTIONS </h5>
+<div class="outline-text-5" id="text-1_2_2_5">
 
 <p>To call <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/OPTIONS"><b>http.async.client/OPTIONS</b></a> on a resource:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/OPTIONS <span style="color: #cc9393;">"&lt;your url&gt;"</span><span style="color: #7f7f7f;">)</span>]
-  <span style="color: #708070;">; </span><span style="color: #7f9f7f;">do something with resp
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/OPTIONS <span style="color: #8b2252;">"&lt;your url&gt;"</span><span style="color: #8c8c8c;">)</span>]
+  <span style="color: #b22222;">; </span><span style="color: #b22222;">do something with resp
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
 
 
-
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-1.2.3" class="outline-4">
-<h4 id="sec-1.2.3"><span class="section-number-4">1.2.3</span> Request options </h4>
-<div class="outline-text-4" id="text-1.2.3">
+<div id="outline-container-1_2_3" class="outline-4">
+<h4 id="sec-1_2_3"><span class="section-number-4">1.2.3</span> Request options </h4>
+<div class="outline-text-4" id="text-1_2_3">
 
 <p>Following options can be provided to requests and are defined by
 <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request"><b>http.async.client.request/prepare-request</b></a>:
 </p><dl>
-<dt><a href="#sec-1.2.3.1">:query</a></dt><dd>
+<dt><a href="#*==query">:query</a></dt><dd>
 query parameters
 </dd>
-<dt><a href="#sec-1.2.5.3">:headers</a></dt><dd>
+<dt><a href="#*==headers">:headers</a></dt><dd>
 custom headers to be sent out
 </dd>
-<dt><a href="#sec-1.2.5.5">:body</a></dt><dd>
+<dt><a href="#*==body">:body</a></dt><dd>
 body to be sent, allowed only with PUT/POST
 </dd>
-<dt><a href="#sec-1.2.5.4">:cookies</a></dt><dd>
+<dt><a href="#*==cookies">:cookies</a></dt><dd>
 cookies to be sent
 </dd>
-<dt><a href="#sec-1.2.3.5">:proxy</a></dt><dd>
+<dt><a href="#*==proxy">:proxy</a></dt><dd>
 proxy to be used
 </dd>
-<dt><a href="#sec-1.2.3.6">:auth</a></dt><dd>
+<dt><a href="#*==auth">:auth</a></dt><dd>
 authentication map
+</dd>
+<dt><a href="#*:timeout">:timeout</a></dt><dd>
+timeout configuration
 </dd>
 </dl>
 
+
 </div>
 
-<div id="outline-container-1.2.3.1" class="outline-5">
-<h5 id="sec-1.2.3.1"><span class="section-number-5">1.2.3.1</span> :query </h5>
-<div class="outline-text-5" id="text-1.2.3.1">
+<div id="outline-container-1_2_3_1" class="outline-5">
+<h5 id="sec-1_2_3_1"><span class="section-number-5">1.2.3.1</span> :query </h5>
+<div class="outline-text-5" id="text-1_2_3_1">
 
 <p>Query parameters is a map of keywords and their values. You use
 it like so:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url <span style="color: #8cd0d3;">:query</span> {<span style="color: #8cd0d3;">:key1</span> <span style="color: #cc9393;">"value1"</span> <span style="color: #8cd0d3;">:key2</span> <span style="color: #cc9393;">"value2"</span>}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url <span style="color: #7a378b;">:query</span> {<span style="color: #7a378b;">:key1</span> <span style="color: #8b2252;">"value1"</span> <span style="color: #7a378b;">:key2</span> <span style="color: #8b2252;">"value2"</span>}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">))</span>
 </pre>
 
 
-
 </div>
 
 </div>
 
-<div id="outline-container-1.2.3.2" class="outline-5">
-<h5 id="sec-1.2.3.2"><span class="section-number-5">1.2.3.2</span> :headers </h5>
-<div class="outline-text-5" id="text-1.2.3.2">
+<div id="outline-container-1_2_3_2" class="outline-5">
+<h5 id="sec-1_2_3_2"><span class="section-number-5">1.2.3.2</span> :headers </h5>
+<div class="outline-text-5" id="text-1_2_3_2">
 
-<p>Custom headers can be submitted same way as <a href="#sec-1.2.3.1">:query</a>:
+<p>Custom headers can be submitted same way as <a href="#*==query">:query</a>:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url <span style="color: #8cd0d3;">:headers</span> {<span style="color: #8cd0d3;">:header-name1</span> <span style="color: #cc9393;">"value1"</span>
-                                <span style="color: #8cd0d3;">:header-name2</span> <span style="color: #cc9393;">"value2"</span>}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url <span style="color: #7a378b;">:headers</span> {<span style="color: #7a378b;">:header-name1</span> <span style="color: #8b2252;">"value1"</span>
+                                <span style="color: #7a378b;">:header-name2</span> <span style="color: #8b2252;">"value2"</span>}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">))</span>
 </pre>
 
 
-
 </div>
 
 </div>
 
-<div id="outline-container-1.2.3.3" class="outline-5">
-<h5 id="sec-1.2.3.3"><span class="section-number-5">1.2.3.3</span> :body </h5>
-<div class="outline-text-5" id="text-1.2.3.3">
+<div id="outline-container-1_2_3_3" class="outline-5">
+<h5 id="sec-1_2_3_3"><span class="section-number-5">1.2.3.3</span> :body </h5>
+<div class="outline-text-5" id="text-1_2_3_3">
 
-<p>Body can be provided with a message only with <a href="#sec-1.2.2.2">PUT/POST</a>, it
-doesn't make sense to have body with other <a href="#sec-1.2.2">HTTP methods</a>.
+<p>Body can be provided with a message only with <a href="#*PUT==POST">PUT/POST</a>, it
+doesn't make sense to have body with other <a href="#*HTTP==methods">HTTP methods</a>.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/PUT url <span style="color: #8cd0d3;">:body</span> <span style="color: #cc9393;">"sample body"</span><span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/PUT url <span style="color: #7a378b;">:body</span> <span style="color: #8b2252;">"sample body"</span><span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">))</span>
 </pre>
-
 
 
 <p>
 <b>:body</b> can be String, form parameters or input stream, please see
-<a href="#sec-1.2.2.2">PUT/POST</a> for more documentation.
+<a href="#*PUT==POST">PUT/POST</a> for more documentation.
 </p></div>
 
 </div>
 
-<div id="outline-container-1.2.3.4" class="outline-5">
-<h5 id="sec-1.2.3.4"><span class="section-number-5">1.2.3.4</span> :cookies </h5>
-<div class="outline-text-5" id="text-1.2.3.4">
+<div id="outline-container-1_2_3_4" class="outline-5">
+<h5 id="sec-1_2_3_4"><span class="section-number-5">1.2.3.4</span> :cookies </h5>
+<div class="outline-text-5" id="text-1_2_3_4">
 
 <p>Cookies can be provided to request as follows:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET <span style="color: #cc9393;">"http://localhost:8123/cookie"</span>
-             <span style="color: #8cd0d3;">:cookies</span> #{{<span style="color: #8cd0d3;">:domain</span> <span style="color: #cc9393;">"http://localhost:8123/"</span>
-                         <span style="color: #8cd0d3;">:name</span> <span style="color: #cc9393;">"sample-name"</span>
-                         <span style="color: #8cd0d3;">:value</span> <span style="color: #cc9393;">"sample-value"</span>
-                         <span style="color: #8cd0d3;">:path</span> <span style="color: #cc9393;">"/cookie"</span>
-                         <span style="color: #8cd0d3;">:max-age</span> 10
-                         <span style="color: #8cd0d3;">:secure</span> false}}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET <span style="color: #8b2252;">"http://localhost:8123/cookie"</span>
+             <span style="color: #7a378b;">:cookies</span> #{{<span style="color: #7a378b;">:domain</span> <span style="color: #8b2252;">"http://localhost:8123/"</span>
+                         <span style="color: #7a378b;">:name</span> <span style="color: #8b2252;">"sample-name"</span>
+                         <span style="color: #7a378b;">:value</span> <span style="color: #8b2252;">"sample-value"</span>
+                         <span style="color: #7a378b;">:path</span> <span style="color: #8b2252;">"/cookie"</span>
+                         <span style="color: #7a378b;">:max-age</span> 10
+                         <span style="color: #7a378b;">:secure</span> false}}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">))</span>
 </pre>
-
 
 
 <p>
@@ -808,24 +805,23 @@ If cookie is secure cookie
 </dd>
 </dl>
 
-<p>Cookie reading is described in <a href="#sec-1.2.5.4">Reading cookies</a>.
+<p>Cookie reading is described in <a href="#*Reading==cookies">Reading cookies</a>.
 </p></div>
 
 </div>
 
-<div id="outline-container-1.2.3.5" class="outline-5">
-<h5 id="sec-1.2.3.5"><span class="section-number-5">1.2.3.5</span> :proxy </h5>
-<div class="outline-text-5" id="text-1.2.3.5">
+<div id="outline-container-1_2_3_5" class="outline-5">
+<h5 id="sec-1_2_3_5"><span class="section-number-5">1.2.3.5</span> :proxy </h5>
+<div class="outline-text-5" id="text-1_2_3_5">
 
 <p>Proxy can be configured per request basis as follows:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url <span style="color: #8cd0d3;">:proxy</span> {<span style="color: #8cd0d3;">:host</span> h <span style="color: #8cd0d3;">:port</span> p}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url <span style="color: #7a378b;">:proxy</span> {<span style="color: #7a378b;">:host</span> h <span style="color: #7a378b;">:port</span> p}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">))</span>
 </pre>
-
 
 
 <p>
@@ -838,13 +834,14 @@ proxy host
 proxy port
 </dd>
 </dl>
-</div>
 
 </div>
 
-<div id="outline-container-1.2.3.6" class="outline-5">
-<h5 id="sec-1.2.3.6"><span class="section-number-5">1.2.3.6</span> :auth </h5>
-<div class="outline-text-5" id="text-1.2.3.6">
+</div>
+
+<div id="outline-container-1_2_3_6" class="outline-5">
+<h5 id="sec-1_2_3_6"><span class="section-number-5">1.2.3.6</span> :auth </h5>
+<div class="outline-text-5" id="text-1_2_3_6">
 
 <p>Authentication can be configured per request basis.
 For now BASIC and DIGEST methods are supported.
@@ -854,11 +851,10 @@ Basic method is default, so you don't have to specify it:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url <span style="color: #8cd0d3;">:auth</span> {<span style="color: #8cd0d3;">:user</span> u <span style="color: #8cd0d3;">:password</span> p}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #708070;">;; </span><span style="color: #7f9f7f;">Check if response is not 401 or so and process response
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url <span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
-
 
 
 <p>
@@ -866,11 +862,10 @@ Though you can:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url <span style="color: #8cd0d3;">:auth</span> {<span style="color: #8cd0d3;">:type</span> <span style="color: #8cd0d3;">:basic</span> <span style="color: #8cd0d3;">:user</span> u <span style="color: #8cd0d3;">:password</span> p}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #708070;">;; </span><span style="color: #7f9f7f;">Check if response is not 401 or so and process response
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url <span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:basic</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
-
 
 
 <p>
@@ -878,22 +873,64 @@ And for digest method you will need realm as well:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url
-                  <span style="color: #8cd0d3;">:auth</span> {<span style="color: #8cd0d3;">:type</span> <span style="color: #8cd0d3;">:digest</span> <span style="color: #8cd0d3;">:user</span> u <span style="color: #8cd0d3;">:password</span> p <span style="color: #8cd0d3;">:realm</span> r}<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #708070;">;; </span><span style="color: #7f9f7f;">Check if response is not 401 or so and process response
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url
+                  <span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:digest</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p <span style="color: #7a378b;">:realm</span> r}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
 
 
-
-</div>
 </div>
 
 </div>
 
-<div id="outline-container-1.2.4" class="outline-4">
-<h4 id="sec-1.2.4"><span class="section-number-4">1.2.4</span> Streaming </h4>
-<div class="outline-text-4" id="text-1.2.4">
+<div id="outline-container-1_2_3_7" class="outline-5">
+<h5 id="sec-1_2_3_7"><span class="section-number-5">1.2.3.7</span> :timeout </h5>
+<div class="outline-text-5" id="text-1_2_3_7">
+
+<p>Response timeout can be configured per request as well.
+Timeout value is time in milliseconds in which response has to be
+received.
+There is special value <b>-1</b> that indicates infinite timeout.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url <span style="color: #7a378b;">:timeout</span> -1<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response
+</span>  <span style="color: #8c8c8c;">)</span>
+</pre>
+
+
+<p>
+Sample above will wait until response is fully received, as long
+as it takes (-1 timeout).
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url <span style="color: #7a378b;">:timeout</span> 100<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">if</span> <span style="color: #8c8c8c;">(</span>c/failed? resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">did not get response in configured timeout
+</span>    <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response
+</span>  <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+<p>
+Example above configures timeout to 100ms, so <b>await</b> will only
+wait for 100ms, after that response is done.
+Which doesn't necessarily mean that it was delivered to client
+successfully, because it was restricted by timeout, that is why
+example contains check if response has failed.
+</p></div>
+</div>
+
+</div>
+
+<div id="outline-container-1_2_4" class="outline-4">
+<h4 id="sec-1_2_4"><span class="section-number-4">1.2.4</span> Streaming </h4>
+<div class="outline-text-4" id="text-1_2_4">
 
 <p>HTTP Stream is response with chunked content encoding.
 Those streams might not be meant to ever finish, see twitter.com
@@ -904,18 +941,19 @@ be processed as soon as parts of it are received.
 Two ways of consuming a HTTP Stream are supported:
 </p><ul>
 <li>
-<a href="#sec-1.2.4.1">Lazy sequence</a>
+<a href="#*Lazy==sequence">Lazy sequence</a>
 </li>
 <li>
-<a href="#sec-1.2.4.2">Call-back</a>
+<a href="#*Call==back">Call-back</a>
 </li>
 </ul>
 
+
 </div>
 
-<div id="outline-container-1.2.4.1" class="outline-5">
-<h5 id="sec-1.2.4.1"><span class="section-number-5">1.2.4.1</span> Lazy sequence </h5>
-<div class="outline-text-5" id="text-1.2.4.1">
+<div id="outline-container-1_2_4_1" class="outline-5">
+<h5 id="sec-1_2_4_1"><span class="section-number-5">1.2.4.1</span> Lazy sequence </h5>
+<div class="outline-text-5" id="text-1_2_4_1">
 
 <p>You can get HTTP Stream as lazy sequence of it's body.
 This is very convenient method as <b>seq</b> is native type of Clojure
@@ -924,11 +962,10 @@ function that you like to it.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/stream-seq <span style="color: #8cd0d3;">:get</span> url<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">doseq</span> [s <span style="color: #7f7f7f;">(</span>string resp<span style="color: #7f7f7f;">)</span>]
-    <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> s<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/stream-seq <span style="color: #7a378b;">:get</span> url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">doseq</span> [s <span style="color: #8c8c8c;">(</span>string resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> s<span style="color: #8c8c8c;">)))</span>
 </pre>
-
 
 
 <p>
@@ -943,16 +980,17 @@ makes sense only to use <b>:get</b>, <b>:put</b> and
 URL of HTTP resource
 </dd>
 <dt>options</dt><dd>
-same as normal <a href="#sec-1.2.3">Request options</a>.
+same as normal <a href="#*Request==options">Request options</a>.
 </dd>
 </dl>
-</div>
 
 </div>
 
-<div id="outline-container-1.2.4.2" class="outline-5">
-<h5 id="sec-1.2.4.2"><span class="section-number-5">1.2.4.2</span> Call-back </h5>
-<div class="outline-text-5" id="text-1.2.4.2">
+</div>
+
+<div id="outline-container-1_2_4_2" class="outline-5">
+<h5 id="sec-1_2_4_2"><span class="section-number-5">1.2.4.2</span> Call-back </h5>
+<div class="outline-text-5" id="text-1_2_4_2">
 
 <p>Consuming HTTP Stream with call-back is quite straight forward with
 <b>http.async.client</b>. You will need to know what HTTP Method you will call,
@@ -961,15 +999,14 @@ received.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [parts <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">ref</span> #{}<span style="color: #7f7f7f;">)</span>
-      resp <span style="color: #7f7f7f;">(</span>c/request-stream <span style="color: #8cd0d3;">:get</span> url
-                             <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">fn</span> [state body]
-                               <span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">dosync</span> <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">alter</span> parts conj <span style="color: #7f7f7f;">(</span>string body<span style="color: #7f7f7f;">)))</span>
-                               [body <span style="color: #8cd0d3;">:continue</span>]<span style="color: #7f7f7f;">))</span>]
-  <span style="color: #708070;">; </span><span style="color: #7f9f7f;">do something to @parts
-</span>  <span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [parts <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">ref</span> #{}<span style="color: #8c8c8c;">)</span>
+      resp <span style="color: #8c8c8c;">(</span>c/request-stream <span style="color: #7a378b;">:get</span> url
+                             <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">fn</span> [state body]
+                               <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">dosync</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">alter</span> parts conj <span style="color: #8c8c8c;">(</span>string body<span style="color: #8c8c8c;">)))</span>
+                               [body <span style="color: #7a378b;">:continue</span>]<span style="color: #8c8c8c;">))</span>]
+  <span style="color: #b22222;">; </span><span style="color: #b22222;">do something to @parts
+</span>  <span style="color: #8c8c8c;">)</span>
 </pre>
-
 
 
 
@@ -980,10 +1017,10 @@ Few notes on implementing body part callback:
 state is a <b>map</b> with <b>:status</b> and <b>:headers</b> as promises, at
 stage when you get called for body part, both of them should be in
 place already, though it is advised to use convenience methods to
-read them, see <a href="#sec-1.2.5.2">Reading status line</a> and <a href="#sec-1.2.5.3">Reading headers</a>,
+read them, see <a href="#*Reading==status==line">Reading status line</a> and <a href="#*Reading==headers">Reading headers</a>,
 </li>
 <li>
-call-back has to follow guidelines described in <a href="#sec-1.3.1.2.3">Body part</a>,
+call-back has to follow guidelines described in <a href="#*Body==part">Body part</a>,
 </li>
 <li>
 some streams are not meant to be finish, in that case don't
@@ -995,25 +1032,26 @@ try not to do any heavy lifting in this callback, better send it
 to agent,
 </li>
 </ul>
+
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-1.2.5" class="outline-4">
-<h4 id="sec-1.2.5"><span class="section-number-4">1.2.5</span> Response handling </h4>
-<div class="outline-text-4" id="text-1.2.5">
+<div id="outline-container-1_2_5" class="outline-4">
+<h4 id="sec-1_2_5"><span class="section-number-4">1.2.5</span> Response handling </h4>
+<div class="outline-text-4" id="text-1_2_5">
 
 <p><b>http.async.client</b> exposes some convenience functions for
 response handling.
 </p>
 </div>
 
-<div id="outline-container-1.2.5.1" class="outline-5">
-<h5 id="sec-1.2.5.1"><span class="section-number-5">1.2.5.1</span> Awaiting response </h5>
-<div class="outline-text-5" id="text-1.2.5.1">
+<div id="outline-container-1_2_5_1" class="outline-5">
+<h5 id="sec-1_2_5_1"><span class="section-number-5">1.2.5.1</span> Awaiting response </h5>
+<div class="outline-text-5" id="text-1_2_5_1">
 
-<p>If you call any of <a href="#sec-1.2.1.1">Asynchronous operations</a>, <a href="#sec-1.2.1.2">Streaming</a> or <a href="#sec-1.2.1.3">Raw mode</a>
+<p>If you call any of <a href="#*Asynchronous==operations">Asynchronous operations</a>, <a href="#*Streaming">Streaming</a> or <a href="#*Raw==mode">Raw mode</a>
 you actually asynchronously execute HTTP request.
 Some times you might need to wait for response processing to be
 done before proceeding, in order to do so you call
@@ -1023,10 +1061,9 @@ receiving has finished.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">))</span>
 </pre>
-
 
 
 <p>
@@ -1036,30 +1073,28 @@ further, for example like that:
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/string <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/string <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 
-
 </div>
 
 </div>
 
-<div id="outline-container-1.2.5.2" class="outline-5">
-<h5 id="sec-1.2.5.2"><span class="section-number-5">1.2.5.2</span> Reading status line </h5>
-<div class="outline-text-5" id="text-1.2.5.2">
+<div id="outline-container-1_2_5_2" class="outline-5">
+<h5 id="sec-1_2_5_2"><span class="section-number-5">1.2.5.2</span> Reading status line </h5>
+<div class="outline-text-5" id="text-1_2_5_2">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/status"><b>http.async.client/status</b></a> returns status lazy map of response.
 It will wait until HTTP Status has been received.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp   <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>
-      status <span style="color: #7f7f7f;">(</span>c/status resp<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">:code</span> status<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp   <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>
+      status <span style="color: #8c8c8c;">(</span>c/status resp<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:code</span> status<span style="color: #8c8c8c;">))</span>
 </pre>
-
 
 
 <p>
@@ -1070,20 +1105,19 @@ yet.
 
 </div>
 
-<div id="outline-container-1.2.5.3" class="outline-5">
-<h5 id="sec-1.2.5.3"><span class="section-number-5">1.2.5.3</span> Reading headers </h5>
-<div class="outline-text-5" id="text-1.2.5.3">
+<div id="outline-container-1_2_5_3" class="outline-5">
+<h5 id="sec-1_2_5_3"><span class="section-number-5">1.2.5.3</span> Reading headers </h5>
+<div class="outline-text-5" id="text-1_2_5_3">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/headers"><b>http.async.client/headers</b></a> returns headers lazy map of response.
 It will wait until HTTP Headers are received.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp    <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>
-      headers <span style="color: #7f7f7f;">(</span>c/headers resp<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">:server</span> headers<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp    <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>
+      headers <span style="color: #8c8c8c;">(</span>c/headers resp<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:server</span> headers<span style="color: #8c8c8c;">))</span>
 </pre>
-
 
 
 <p>
@@ -1093,9 +1127,9 @@ yet after this returns.
 
 </div>
 
-<div id="outline-container-1.2.5.4" class="outline-5">
-<h5 id="sec-1.2.5.4"><span class="section-number-5">1.2.5.4</span> Reading cookies </h5>
-<div class="outline-text-5" id="text-1.2.5.4">
+<div id="outline-container-1_2_5_4" class="outline-5">
+<h5 id="sec-1_2_5_4"><span class="section-number-5">1.2.5.4</span> Reading cookies </h5>
+<div class="outline-text-5" id="text-1_2_5_4">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/cookies"><b>http.async.client/cookies</b></a> returns seq of maps representing
 cookies.
@@ -1103,11 +1137,10 @@ It will wait until HTTP Headers are received.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp    <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>
-      cookies <span style="color: #7f7f7f;">(</span>c/cookies resp<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">map</span> <span style="color: #8cd0d3;">:name</span> cookies<span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp    <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>
+      cookies <span style="color: #8c8c8c;">(</span>c/cookies resp<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">map</span> <span style="color: #7a378b;">:name</span> cookies<span style="color: #8c8c8c;">))</span>
 </pre>
-
 
 
 <p>
@@ -1117,35 +1150,34 @@ set.
 
 </div>
 
-<div id="outline-container-1.2.5.5" class="outline-5">
-<h5 id="sec-1.2.5.5"><span class="section-number-5">1.2.5.5</span> Reading body </h5>
-<div class="outline-text-5" id="text-1.2.5.5">
+<div id="outline-container-1_2_5_5" class="outline-5">
+<h5 id="sec-1_2_5_5"><span class="section-number-5">1.2.5.5</span> Reading body </h5>
+<div class="outline-text-5" id="text-1_2_5_5">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/body"><b>http.async.client/body</b></a> returns either ByteArrayOutputStream or
-seq of it, depending if you used <a href="#sec-1.2.1.1">Asynchronous operations</a> or
-<a href="#sec-1.2.1.2">Streaming</a> respectively.
+seq of it, depending if you used <a href="#*Asynchronous==operations">Asynchronous operations</a> or
+<a href="#*Streaming">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
 soon as first chunk of HTTP response body is received.
 </p></div>
 
 </div>
 
-<div id="outline-container-1.2.5.6" class="outline-5">
-<h5 id="sec-1.2.5.6"><span class="section-number-5">1.2.5.6</span> Reading body as string </h5>
-<div class="outline-text-5" id="text-1.2.5.6">
+<div id="outline-container-1_2_5_6" class="outline-5">
+<h5 id="sec-1_2_5_6"><span class="section-number-5">1.2.5.6</span> Reading body as string </h5>
+<div class="outline-text-5" id="text-1_2_5_6">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/string"><b>http.async.client/string</b></a> returns either string or seq of
-strings, again depending if you used <a href="#sec-1.2.1.1">Asynchronous operations</a> or
-<a href="#sec-1.2.1.2">Streaming</a> respectively.
+strings, again depending if you used <a href="#*Asynchronous==operations">Asynchronous operations</a> or
+<a href="#*Streaming">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
 soon as first chunk of HTTP response body is received.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/string <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/string <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)))</span>
 </pre>
-
 
 
 <p>
@@ -1155,12 +1187,11 @@ streams as well.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp    <span style="color: #7f7f7f;">(</span>c/stream-seq <span style="color: #8cd0d3;">:get</span> url<span style="color: #7f7f7f;">)</span>
-      strings <span style="color: #7f7f7f;">(</span>c/string resp<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">doseq</span> [part strings]
-    <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> part<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp    <span style="color: #8c8c8c;">(</span>c/stream-seq <span style="color: #7a378b;">:get</span> url<span style="color: #8c8c8c;">)</span>
+      strings <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">doseq</span> [part strings]
+    <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> part<span style="color: #8c8c8c;">)))</span>
 </pre>
-
 
 
 <p>
@@ -1170,54 +1201,80 @@ return once response receiving is finished.
 
 </div>
 
-<div id="outline-container-1.2.5.7" class="outline-5">
-<h5 id="sec-1.2.5.7"><span class="section-number-5">1.2.5.7</span> Reading error </h5>
-<div class="outline-text-5" id="text-1.2.5.7">
+<div id="outline-container-1_2_5_7" class="outline-5">
+<h5 id="sec-1_2_5_7"><span class="section-number-5">1.2.5.7</span> Reading error </h5>
+<div class="outline-text-5" id="text-1_2_5_7">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/error"><b>http.async.client/error</b></a> will return Throwable that was cause of
 request failure iff request failed, else <b>nil</b>.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-  <span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">when-let</span> [err <span style="color: #7f7f7f;">(</span>c/error resp<span style="color: #7f7f7f;">)</span>]
-    <span style="color: #7f7f7f;">(</span><span style="color: #8cd0d3;">println</span> <span style="color: #cc9393;">"failed processing request: "</span> err<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">when-let</span> [err <span style="color: #8c8c8c;">(</span>c/error resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8b2252;">"failed processing request: "</span> err<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 
-
 </div>
 
 </div>
 
-<div id="outline-container-1.2.5.8" class="outline-5">
-<h5 id="sec-1.2.5.8"><span class="section-number-5">1.2.5.8</span> Response predicates </h5>
-<div class="outline-text-5" id="text-1.2.5.8">
+<div id="outline-container-1_2_5_8" class="outline-5">
+<h5 id="sec-1_2_5_8"><span class="section-number-5">1.2.5.8</span> Canceling request </h5>
+<div class="outline-text-5" id="text-1_2_5_8">
+
+<p>At any given time of processing HTTP Response you can <b>cancel</b> it
+by calling <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/cancel"><b>http.async.client/cancel</b></a>.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>c/cancel resp<span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+<p>
+Please see <b>canceling-request</b> test.
+</p></div>
+
+</div>
+
+<div id="outline-container-1_2_5_9" class="outline-5">
+<h5 id="sec-1_2_5_9"><span class="section-number-5">1.2.5.9</span> Response predicates </h5>
+<div class="outline-text-5" id="text-1_2_5_9">
 
 <p>You can also check status of request.
 </p><ul>
-<li id="sec-1.2.5.8.1">done ? <br/>
+<li id="sec-1_2_5_9_1">done ? <br/>
 <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/done?"><b>http.async.client/done?</b></a> will tell you if response processing
 has finished:
 
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>c/GET url<span style="color: #7f7f7f;">)</span>]
-  <span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">when-not</span> <span style="color: #7f7f7f;">(</span>c/done? resp<span style="color: #7f7f7f;">)</span>
-    <span style="color: #7f7f7f;">(</span>c/await resp<span style="color: #7f7f7f;">)</span>
-    <span style="color: #7f7f7f;">(</span>c/done? resp<span style="color: #7f7f7f;">)))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">when-not</span> <span style="color: #8c8c8c;">(</span>c/done? resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span>c/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span>c/done? resp<span style="color: #8c8c8c;">)))</span>
 </pre>
-
 
 
 <p>
 Sample above will check if response was finished, if not - will
 wait for it and return true as a result of call to done?.
 </p></li>
-<li id="sec-1.2.5.8.2">failed? <br/>
+</ul>
+<ul>
+<li id="sec-1_2_5_9_2">failed? <br/>
 <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/failed?"><b>http.async.client/failed?</b></a> will return true iff request has
-failed. If this return true you can <a href="#sec-1.2.5.7">read error</a>.
+failed. If this return true you can <a href="#*Reading==error">read error</a>.
+</li>
+</ul>
+<ul>
+<li id="sec-1_2_5_9_3">canceled? <br/>
+<a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/canceled?"><b>http.async.client/canceled?</b></a> will return true iff request has
+been <a href="#*Canceling==request">canceled</a>, else false is return.
 </li>
 </ul>
 </div>
@@ -1225,33 +1282,82 @@ failed. If this return true you can <a href="#sec-1.2.5.7">read error</a>.
 
 </div>
 
-<div id="outline-container-1.2.6" class="outline-4">
-<h4 id="sec-1.2.6"><span class="section-number-4">1.2.6</span> <b>http.async.client</b> configuration </h4>
-<div class="outline-text-4" id="text-1.2.6">
+<div id="outline-container-1_2_6" class="outline-4">
+<h4 id="sec-1_2_6"><span class="section-number-4">1.2.6</span> Managing <b>http.async.client</b> </h4>
+<div class="outline-text-4" id="text-1_2_6">
 
 
 </div>
 
-<div id="outline-container-1.2.6.1" class="outline-5">
-<h5 id="sec-1.2.6.1"><span class="section-number-5">1.2.6.1</span> Branding </h5>
-<div class="outline-text-5" id="text-1.2.6.1">
+<div id="outline-container-1_2_6_1" class="outline-5">
+<h5 id="sec-1_2_6_1"><span class="section-number-5">1.2.6.1</span> Branding </h5>
+<div class="outline-text-5" id="text-1_2_6_1">
 
-<p><b>http.async.client</b> con be configured, for now only with
-User-Agent. To do so you can use
-<a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client"><b>http.async.client/create-client</b></a> and remember to close created
-client yourself, or <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc"><b>http.async.client/with-ahc</b></a> this will close
-client by itself, though make sure that body of it will wait for
-whore response to finish.
+<p><b>http.async.client</b> can be configured with User-Agent. To do so
+you can use <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client"><b>http.async.client/create-client</b></a> and remember to
+close created client yourself, or <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client"><b>http.async.client/with-client</b></a>
+this will close client by itself, though make sure that body of
+it will wait for whore response to finish.
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span>c/with-ahc {<span style="color: #8cd0d3;">:user-agent</span> <span style="color: #cc9393;">"Your User Agent/1.0"</span>}
-  <span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [resp <span style="color: #7f7f7f;">(</span>GET url<span style="color: #7f7f7f;">)</span>]
-    <span style="color: #708070;">;; </span><span style="color: #7f9f7f;">do stuff with resp
-</span>  <span style="color: #7f7f7f;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:user-agent</span> <span style="color: #8b2252;">"Your User Agent/1.0"</span>}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp
+</span>  <span style="color: #8c8c8c;">))</span>
 </pre>
 
 
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_2" class="outline-5">
+<h5 id="sec-1_2_6_2"><span class="section-number-5">1.2.6.2</span> Timeouts </h5>
+<div class="outline-text-5" id="text-1_2_6_2">
+
+<p>With <b>http.async.client</b> apart from per connection <a href="#*:timeout">:timeout</a> you
+can globally configure <b>connection</b>, <b>request</b> and <b>idle</b>
+timeouts. All timeout values are in milliseconds and magic value
+<b>-1</b> is interpreted as infinite wait.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:connection-timeout</span> 10
+                <span style="color: #7a378b;">:request-timeout</span> 1000
+                <span style="color: #7a378b;">:idle-timeout</span> 100}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">request processing
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+<p>
+Example above will timeout connection if it was not established
+in 10ms, request if it was not received in 1sec, or was idle for
+more than 100ms.
+</p></div>
+
+</div>
+
+<div id="outline-container-1_2_6_3" class="outline-5">
+<h5 id="sec-1_2_6_3"><span class="section-number-5">1.2.6.3</span> Closing <b>http.async.client</b> </h5>
+<div class="outline-text-5" id="text-1_2_6_3">
+
+<p>Whenever you've created <b>http.async.client</b> via
+<a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client"><b>http.async.client/create-client</b></a> you will need to close it.
+To do so you call <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/close"><b>http.async.client/close</b></a>, <b>http.async.client</b>
+relies on client been bound to **client**.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">binding</span> [*client* <span style="color: #8c8c8c;">(</span>c/create-client<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response
+</span>  <span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span>c/close *client*<span style="color: #8c8c8c;">))</span>
+</pre>
+
 
 </div>
 </div>
@@ -1259,16 +1365,16 @@ whore response to finish.
 
 </div>
 
-<div id="outline-container-1.3" class="outline-3">
-<h3 id="sec-1.3"><span class="section-number-3">1.3</span> Low level </h3>
-<div class="outline-text-3" id="text-1.3">
+<div id="outline-container-1_3" class="outline-3">
+<h3 id="sec-1_3"><span class="section-number-3">1.3</span> Low level </h3>
+<div class="outline-text-3" id="text-1_3">
 
 
 </div>
 
-<div id="outline-container-1.3.1" class="outline-4">
-<h4 id="sec-1.3.1"><span class="section-number-4">1.3.1</span> Requesting </h4>
-<div class="outline-text-4" id="text-1.3.1">
+<div id="outline-container-1_3_1" class="outline-4">
+<h4 id="sec-1_3_1"><span class="section-number-4">1.3.1</span> Requesting </h4>
+<div class="outline-text-4" id="text-1_3_1">
 
 <p>This is lower level access to <b>http.async.client</b>.
 Mechanics here is based on asynchronous call-backs.
@@ -1277,9 +1383,9 @@ execute requests.
 </p>
 </div>
 
-<div id="outline-container-1.3.1.1" class="outline-5">
-<h5 id="sec-1.3.1.1"><span class="section-number-5">1.3.1.1</span> Preparing request </h5>
-<div class="outline-text-5" id="text-1.3.1.1">
+<div id="outline-container-1_3_1_1" class="outline-5">
+<h5 id="sec-1_3_1_1"><span class="section-number-5">1.3.1.1</span> Preparing request </h5>
+<div class="outline-text-5" id="text-1_3_1_1">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request"><b>http.async.client.request/prepare-request</b></a> is responsible for
 request preparation, like name suggests.
@@ -1292,7 +1398,7 @@ HTTP Method like <b>:get</b> <b>:head</b>
 <b>url</b> that you want to call
 </li>
 <li>
-and <b>options</b>, a keyworded map described already in <a href="#sec-1.2.3">Request options</a>.
+and <b>options</b>, a keyworded map described already in <a href="#*Request==options">Request options</a>.
 </li>
 </ul>
 
@@ -1300,42 +1406,41 @@ and <b>options</b>, a keyworded map described already in <a href="#sec-1.2.3">Re
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #7f7f7f;">(</span><span style="color: #f0dfaf; font-weight: bold;">let</span> [req <span style="color: #7f7f7f;">(</span>prepare-request
-            <span style="color: #8cd0d3;">:get</span> <span style="color: #cc9393;">"http://google.com"</span>
-            <span style="color: #8cd0d3;">:headers</span> {<span style="color: #8cd0d3;">:my-header</span> <span style="color: #cc9393;">"value"</span>}<span style="color: #7f7f7f;">)</span>]
-<span style="color: #708070;">; </span><span style="color: #7f9f7f;">now you have request, next thing to do would be to execute it
-</span><span style="color: #7f7f7f;">)</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [req <span style="color: #8c8c8c;">(</span>prepare-request
+            <span style="color: #7a378b;">:get</span> <span style="color: #8b2252;">"http://google.com"</span>
+            <span style="color: #7a378b;">:headers</span> {<span style="color: #7a378b;">:my-header</span> <span style="color: #8b2252;">"value"</span>}<span style="color: #8c8c8c;">)</span>]
+<span style="color: #b22222;">; </span><span style="color: #b22222;">now you have request, next thing to do would be to execute it
+</span><span style="color: #8c8c8c;">)</span>
 </pre>
 
 
-
 </div>
 
 </div>
 
-<div id="outline-container-1.3.1.2" class="outline-5">
-<h5 id="sec-1.3.1.2"><span class="section-number-5">1.3.1.2</span> Executing request </h5>
-<div class="outline-text-5" id="text-1.3.1.2">
+<div id="outline-container-1_3_1_2" class="outline-5">
+<h5 id="sec-1_3_1_2"><span class="section-number-5">1.3.1.2</span> Executing request </h5>
+<div class="outline-text-5" id="text-1_3_1_2">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/execute-request"><b>http.async.client/execute-request</b></a> returns same map of promises
-as <a href="#sec-1.2.1.1">Asynchronous operations</a>.
-Its arguments are: request to be executed (result of <a href="#sec-1.3.1.1">Preparing request</a>) and <b>options</b> as keyworded map consisting of call-backs.
+as <a href="#*Asynchronous==operations">Asynchronous operations</a>.
+Its arguments are: request to be executed (result of <a href="#*Preparing==request">Preparing request</a>) and <b>options</b> as keyworded map consisting of call-backs.
 Following <b>options</b> are recognized:
 </p><ul>
 <li>
-<b>:status</b> <a href="#sec-1.2.5.2">Status line</a>
+<b>:status</b> <a href="#*Status==line">Status line</a>
 </li>
 <li>
-<b>:headers</b> <a href="#sec-1.2.5.3">Headers</a>
+<b>:headers</b> <a href="#*Headers">Headers</a>
 </li>
 <li>
-<b>:part</b> <a href="#sec-1.3.1.2.3">Body part</a>
+<b>:part</b> <a href="#*Body==part">Body part</a>
 </li>
 <li>
-<b>:completed</b> <a href="#sec-1.3.1.2.4">Body completed</a>
+<b>:completed</b> <a href="#*Body==completed">Body completed</a>
 </li>
 <li>
-<b>:error</b> <a href="#sec-1.2.5.7">Error</a>
+<b>:error</b> <a href="#*Error">Error</a>
 </li>
 </ul>
 
@@ -1353,8 +1458,9 @@ will be aborted, anything else here will result in
 continuation.
 </dd>
 </dl>
+
 <ul>
-<li id="sec-1.3.1.2.1">Status line <br/>
+<li id="sec-1_3_1_2_1">Status line <br/>
 Status line callback gets called after status line has been
 received with arguments:
 <ul>
@@ -1382,8 +1488,11 @@ Status map has following keys:
 </ul>
 </li>
 </ul>
+
 </li>
-<li id="sec-1.3.1.2.2">Headers <br/>
+</ul>
+<ul>
+<li id="sec-1_3_1_2_2">Headers <br/>
 Headers callback gets called after headers have been received 
 with arguments:
 <ul>
@@ -1395,8 +1504,11 @@ lazy map of headers. Keys in that map are <b>(keyword         (.toLowerCase &lt;
 <b>:server</b> and so on.
 </li>
 </ul>
+
 </li>
-<li id="sec-1.3.1.2.3">Body part <br/>
+</ul>
+<ul>
+<li id="sec-1_3_1_2_3">Body part <br/>
 Body part callback gets called after each part of body has been
 received with arguments:
 <ul>
@@ -1407,12 +1519,17 @@ response map
 ByteArrayOutputStream that contains body part received.
 </li>
 </ul>
+
 </li>
-<li id="sec-1.3.1.2.4">Body completed <br/>
+</ul>
+<ul>
+<li id="sec-1_3_1_2_4">Body completed <br/>
 This callback gets called when receiving of response body has
 finished with only one argument, i.e. response map.
 </li>
-<li id="sec-1.3.1.2.5">Error <br/>
+</ul>
+<ul>
+<li id="sec-1_3_1_2_5">Error <br/>
 Error callback gets called when error while processing has been
 encountered with arguments
 <ul>
@@ -1423,15 +1540,16 @@ response map
 <b>Throwable</b> that was a cause of failure
 </li>
 </ul>
+
 </li>
 </ul>
 </div>
 
 </div>
 
-<div id="outline-container-1.3.1.3" class="outline-5">
-<h5 id="sec-1.3.1.3"><span class="section-number-5">1.3.1.3</span> Default set of callbacks </h5>
-<div class="outline-text-5" id="text-1.3.1.3">
+<div id="outline-container-1_3_1_3" class="outline-5">
+<h5 id="sec-1_3_1_3"><span class="section-number-5">1.3.1.3</span> Default set of callbacks </h5>
+<div class="outline-text-5" id="text-1_3_1_3">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/*default-callbacks*"><b>http.async.client.request/*default-callbacks*</b></a> is a map of
 default callbacks. This fill allow you to easy change only few
@@ -1447,10 +1565,9 @@ how to do it.
 </div>
 <div id="postamble">
 <p class="author"> Author: Hubert Iwaniuk
-<a href="mailto:neotyk@kungfoo.pl">&lt;neotyk@kungfoo.pl&gt;</a>
 </p>
-<p class="date"> Date: 2010-09-09 09:01:29 CEST</p>
-<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
+<p class="date"> Date: 2010-11-10 09:42:57 CET</p>
+<p class="creator">HTML generated by org-mode 7.01trans in emacs 23</p>
 </div>
 </div>
 </body>
