@@ -38,3 +38,5 @@ For more documentation refer to
 If you would like to help please look at
 [to do](http://neotyk.github.com/http.async.client/todo.html) or submit
 ticket [here](http://github.com/neotyk/http.async.client/issues).
+
+[Changelog](http://neotyk.github.com/http.async.client/changelog.html).
