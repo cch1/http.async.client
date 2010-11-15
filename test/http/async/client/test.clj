@@ -362,7 +362,7 @@
                 :max-conns-total 1}
     (let [url "http://localhost:8123/body"
           r1 (GET url)]
-      (is (thrown? java.io.IOException (GET url)))
+      (is (thrown-with-msg? java.io.IOException #"Too many connections 1" (GET url)))
       (is (not (failed? (await r1)))))))
 
 (deftest await-string
