@@ -357,6 +357,14 @@
         (is (contains? headers :x-user-agent))
         (is (= (:x-user-agent headers) ua-brand))))))
 
+(deftest connection-limiting
+  (with-client {:max-conns-per-host 1
+                :max-conns-total 1}
+    (let [url "http://localhost:8123/body"
+          r1 (GET url)]
+      (is (thrown? java.io.IOException (GET url)))
+      (is (not (failed? (await r1)))))))
+
 (deftest await-string
   (let [resp (GET "http://localhost:8123/stream")
         body (string (await resp))]

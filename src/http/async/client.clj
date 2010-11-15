@@ -32,22 +32,19 @@
   [& {user-agent :user-agent
       request-timeout :request-timeout
       connection-timeout :connection-timeout
-      idle-timeout :idle-timeout}]
-  (let [b (AsyncHttpClientConfig$Builder.)]
-    ;; set User-Agent
-    (.setUserAgent b (if user-agent
-                       user-agent
-                       *user-agent*))
-    ;; global request timeout
-    (when request-timeout
-      (.setRequestTimeoutInMs b request-timeout))
-    ;; global connection timeout
-    (when connection-timeout
-      (.setConnectionTimeoutInMs b connection-timeout))
-    ;; idle connection timeout
-    (when idle-timeout
-      (.setIdleConnectionTimeoutInMs b idle-timeout))
-    (AsyncHttpClient. (.build b))))
+      idle-timeout :idle-timeout
+      max-conns-per-host :max-conns-per-host
+      max-conns-total :max-conns-total}]
+  (AsyncHttpClient.
+   (.build
+    (let [b (AsyncHttpClientConfig$Builder.)]
+      (.setUserAgent b (if user-agent user-agent *user-agent*))
+      (when request-timeout (.setRequestTimeoutInMs b request-timeout))
+      (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
+      (when idle-timeout (.setIdleConnectionTimeoutInMs b idle-timeout))
+      (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
+      (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
+      b))))
 
 (defmacro with-client
   "Creates new Async Http Client with given configuration
