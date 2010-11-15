@@ -25,30 +25,47 @@
 (defn create-client
   "Creates new Async Http Client.
   Arguments:
-  - :user-agent - User-Agent branding string
-  - :request-timeout - global request timeout in ms
-  - :connection-timeout - global connections timeout in ms
-  - :idle-timeout - global idle connection timeout in ms"
-  [& {user-agent :user-agent
-      request-timeout :request-timeout
-      connection-timeout :connection-timeout
-      idle-timeout :idle-timeout
-      max-conns-per-host :max-conns-per-host
-      max-conns-total :max-conns-total}]
+  - :compression-enabled :: enable HTTP compression
+  - :connection-timeout :: connections timeout in ms
+  - :follow-redirects :: enable following HTTP redirects
+  - :idle-timeout :: idle connection timeout in ms
+  - :keep-alive :: enable HTTP keep alive, enabled by default
+  - :max-conns-per-host :: max number of polled connections per host
+  - :max-conns-total :: max number of total connections held open by client
+  - :max-redirects :: max nuber of redirects to follow
+  - :request-timeout :: request timeout in ms
+  - :user-agent :: User-Agent branding string"
+  [& {:keys [compression-enabled
+             connection-timeout
+             follow-redirects             
+             idle-timeout
+             keep-alive
+             max-conns-per-host
+             max-conns-total
+             max-redirects
+             ;; proxy-server
+             ;; realm
+             request-timeout
+             user-agent]}]
   (AsyncHttpClient.
    (.build
     (let [b (AsyncHttpClientConfig$Builder.)]
-      (.setUserAgent b (if user-agent user-agent *user-agent*))
-      (when request-timeout (.setRequestTimeoutInMs b request-timeout))
+      (when compression-enabled (.setCompressionEnabled b compression-enabled))
       (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
+      (when follow-redirects (.setFollowRedirects b follow-redirects))
       (when idle-timeout (.setIdleConnectionTimeoutInMs b idle-timeout))
+      (when keep-alive (.setKeepAlive b keep-alive))
       (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
+      (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
+      (when request-timeout (.setRequestTimeoutInMs b request-timeout))
+      (.setUserAgent b (if user-agent user-agent *user-agent*))
       b))))
 
 (defmacro with-client
   "Creates new Async Http Client with given configuration
-  than executes body and closes the client."
+  than executes body and closes the client.
+  Config accepts same configuration options as create-client."
   [config & body]
   `(with-open [c# (create-client ~@(apply concat config))]
      (binding [*client* c#]
