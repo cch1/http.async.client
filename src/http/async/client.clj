@@ -43,8 +43,8 @@
              max-conns-per-host
              max-conns-total
              max-redirects
-             ;; proxy-server
-             ;; realm
+             proxy
+             realm
              request-timeout
              user-agent]}]
   (AsyncHttpClient.
@@ -58,6 +58,9 @@
       (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
       (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
+      (set-proxy proxy b)
+      (when realm
+        (set-realm realm b))
       (when request-timeout (.setRequestTimeoutInMs b request-timeout))
       (.setUserAgent b (if user-agent user-agent *user-agent*))
       b))))

@@ -16,7 +16,10 @@
   "Asynchronous HTTP Client - Clojure - Utils"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [promise])
-  (:require [http.async.client.request :as r]))
+  (:require [http.async.client.request :as r])
+  (:import (com.ning.http.client ProxyServer
+                                 Realm$AuthScheme
+                                 Realm$RealmBuilder)))
 
 (defn promise
   "Alpha - subject to change.
@@ -90,3 +93,34 @@
                         (apply r/prepare-request ~method# ~'url (apply concat ~'options))
                         (apply concat r/*default-callbacks*)))))
           methods)))
+
+(defn set-proxy
+  "Sets proxy on builder."
+  [{host :host port :port} b]
+  (when (and host port)
+    (.setProxyServer b (ProxyServer. host port))))
+
+(defn set-realm
+  "Sets realm on builder."
+  [{type :type
+    user :user
+    password :password
+    realm :realm
+    :or {:type :basic}}
+   b]
+  (let [rbld (Realm$RealmBuilder.)]
+    (when (nil? user)
+      (if (nil? password)
+        (throw (IllegalArgumentException. "For authentication user and password is required"))
+        (throw (IllegalArgumentException. "For authentication user is required"))))
+    (when (nil? password)
+      (throw (IllegalArgumentException. "For authentication password is required")))
+    (when (= :digest type)
+      (when (nil? realm) (throw (IllegalArgumentException.
+                                 "For DIGEST authentication realm is required")))
+      (.setRealmName rbld realm)
+      (.setScheme rbld Realm$AuthScheme/DIGEST))
+    (doto rbld
+      (.setPrincipal user)
+      (.setPassword password))
+    (.setRealm b (.build rbld))))

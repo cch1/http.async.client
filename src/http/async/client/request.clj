@@ -27,9 +27,7 @@
 				 HttpResponseStatus HttpResponseHeaders
 				 HttpResponseBodyPart
                                  PerRequestConfig
-                                 Realm$RealmBuilder Realm$AuthScheme
-                                 Request RequestBuilder
-                                 ProxyServer)
+                                 Request RequestBuilder)
            (ahc RequestBuilderWrapper)
            (java.net URLEncoder)
            (java.io InputStream
@@ -164,34 +162,11 @@
                                                body)
                                              "UTF-8"))
      (instance? InputStream body) (.setBody rbw body))
-    ;; authentication
-    (when-let [{type :type
-                user :user
-                password :password
-                realm :realm
-                :or {:type :basic}} auth]
-      (let [rbld (Realm$RealmBuilder.)]
-        (if (nil? user)
-          (if (nil? password)
-            (throw (IllegalArgumentException. "For authentication user and password is required"))
-            (throw (IllegalArgumentException. "For authentication user is required"))))
-        (if (nil? password)
-          (throw (IllegalArgumentException. "For authentication password is required")))
-        (if (= :digest type)
-          (do
-            (if (nil? realm) (throw (IllegalArgumentException.
-                                     "For DIGEST authentication realm is required")))
-            (.setRealmName rbld realm)
-            (.setScheme rbld Realm$AuthScheme/DIGEST)))
-        (doto rbld
-          (.setPrincipal user)
-          (.setPassword password))
-        (.setRealm rbw (.build rbld))))
-    ;; proxy
-    (if proxy
-      (.setProxyServer rbw (ProxyServer. (:host proxy) (:port proxy))))
+    (when auth
+      (set-realm auth rbw))
+    (set-proxy proxy rbw)
     ;; request timeout
-    (if timeout
+    (when timeout
       (let [prc (PerRequestConfig.)]
         (.setRequestTimeoutInMs prc timeout)
         (.setPerRequestConfig rbw prc)))
