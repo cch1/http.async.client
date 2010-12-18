@@ -50,11 +50,11 @@
   (AsyncHttpClient.
    (.build
     (let [b (AsyncHttpClientConfig$Builder.)]
-      (when compression-enabled (.setCompressionEnabled b compression-enabled))
+      (when (not (nil? compression-enabled)) (.setCompressionEnabled b compression-enabled))
       (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
-      (when follow-redirects (.setFollowRedirects b follow-redirects))
+      (when (not (nil? follow-redirects)) (.setFollowRedirects b follow-redirects))
       (when idle-timeout (.setIdleConnectionTimeoutInMs b idle-timeout))
-      (when keep-alive (.setKeepAlive b keep-alive))
+      (when (not (nil? keep-alive)) (.setKeepAlive b keep-alive))
       (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
       (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
