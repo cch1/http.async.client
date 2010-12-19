@@ -30,7 +30,8 @@
                                  Request RequestBuilder)
            (ahc RequestBuilderWrapper)
            (java.net URLEncoder)
-           (java.io InputStream
+           (java.io File
+                    InputStream
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
@@ -120,13 +121,13 @@
       :realm    - realm name to authenticate in
     :timeout - request timeout in ms"
   {:tag Request}
-  [method #^String url & {headers :headers
-                          query :query
-                          body :body
-                          cookies :cookies
-                          proxy :proxy
-                          auth :auth
-                          timeout :timeout}]
+  [method #^String url & {:keys [headers
+                                 query
+                                 body
+                                 cookies
+                                 proxy
+                                 auth
+                                 timeout]}]
   ;; RequestBuilderWrapper is needed for now, until RequestBuilder
   ;; is able to be used directly from Clojure.
   (let [#^RequestBuilderWrapper rbw
@@ -137,12 +138,12 @@
                                        (if (keyword? k) (name k) k)
                                        (str v)))
     ;; cookies
-    (doseq [{domain :domain
-             name :name
-             value :value
-             path :path
-             max-age :max-age
-             secure :secure
+    (doseq [{:keys [domain
+                    name
+                    value
+                    path
+                    max-age
+                    secure]
              :or {path "/"
                   max-age 30
                   secure false}} cookies]
@@ -161,7 +162,8 @@
                                                (url-encode body)
                                                body)
                                              "UTF-8"))
-     (instance? InputStream body) (.setBody rbw body))
+     (instance? InputStream body) (.setBody rbw body)
+     (instance? File body) (.setBody rbw body))
     (when auth
       (set-realm auth rbw))
     (set-proxy proxy rbw)

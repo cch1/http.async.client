@@ -28,17 +28,18 @@
   - :compression-enabled :: enable HTTP compression
   - :connection-timeout :: connections timeout in ms
   - :follow-redirects :: enable following HTTP redirects
-  - :idle-timeout :: idle connection timeout in ms
+  - :idle-in-pool-timeout :: idle connection in pool timeout in ms
   - :keep-alive :: enable HTTP keep alive, enabled by default
   - :max-conns-per-host :: max number of polled connections per host
   - :max-conns-total :: max number of total connections held open by client
   - :max-redirects :: max nuber of redirects to follow
   - :request-timeout :: request timeout in ms
   - :user-agent :: User-Agent branding string"
+  {:tag AsyncHttpClient}
   [& {:keys [compression-enabled
              connection-timeout
              follow-redirects             
-             idle-timeout
+             idle-in-pool-timeout
              keep-alive
              max-conns-per-host
              max-conns-total
@@ -53,7 +54,7 @@
       (when compression-enabled (.setCompressionEnabled b compression-enabled))
       (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
       (when follow-redirects (.setFollowRedirects b follow-redirects))
-      (when idle-timeout (.setIdleConnectionTimeoutInMs b idle-timeout))
+      (when idle-in-pool-timeout (.setIdleConnectionInPoolTimeoutInMs b idle-in-pool-timeout))
       (when keep-alive (.setKeepAlive b keep-alive))
       (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))

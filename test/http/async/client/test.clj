@@ -24,7 +24,8 @@
         [clojure.java.io :only [input-stream]]
         [clojure.contrib.profile :only [prof profile]])
   (:require [clojure.contrib.io :as duck])
-  (:import (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
+  (:import (com.ning.http.client AsyncHttpClient)
+           (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
            (org.eclipse.jetty.continuation Continuation ContinuationSupport)
@@ -33,7 +34,9 @@
                                             HashLoginService LoginService)
            (org.eclipse.jetty.security.authentication BasicAuthenticator)
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
-           (java.io ByteArrayOutputStream IOException)
+           (java.io ByteArrayOutputStream
+                    File
+                    IOException)
            (java.net ServerSocket)
            (java.nio.channels UnresolvedAddressException)
            (java.util.concurrent TimeoutException)))
@@ -100,7 +103,7 @@
                                 (if (= auth "Basic YmVhc3RpZTpib3lz")
                                   200
                                   401)))
-               "/timeout" (Thread/sleep 200)
+               "/timeout" (Thread/sleep 2000)
                "/empty" (.setHeader hResp "Nothing" "Yep")
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
                  (doseq [v (.getParameterValues hReq n)]
@@ -248,6 +251,11 @@
     (is (not (empty? headers)))
     (is (= "TestContent" (string resp)))))
 
+(deftest test-post-file-body
+  (let [resp (POST "http://localhost:8123/body-str" :body (File. "test-resources/test.txt"))]
+    (is (false? (empty? (headers resp))))
+    (is (= "TestContent" (string resp)))))
+
 (deftest test-put
   (let [resp (PUT "http://localhost:8123/put" :body "TestContent")
         status (status resp)
@@ -360,7 +368,7 @@
 (deftest connection-limiting
   (with-client {:max-conns-per-host 1
                 :max-conns-total 1}
-    (let [url "http://localhost:8123/body"
+    (let [url "http://localhost:8123/timeout"
           r1 (GET url)]
       (is (thrown-with-msg? java.io.IOException #"Too many connections 1" (GET url)))
       (is (not (failed? (await r1)))))))
@@ -413,7 +421,8 @@
       (await resp)
       (is (true? (failed? resp)))
       (if (failed? resp)
-        (is (instance? TimeoutException (error resp))))))
+        (is (instance? TimeoutException (error resp)))
+        (println "headers of response that was supposed to timeout." (headers resp)))))
   (testing "infinite timeout"
     (let [resp (GET "http://localhost:8123/timeout" :timeout -1)]
       (await resp)
@@ -429,22 +438,21 @@
         (await resp)
         (is (true? (failed? resp)))
         (if (failed? resp)
-          (is (instance? TimeoutException (error resp)))))))
+          (is (instance? TimeoutException (error resp)))
+          (println "headers of response that was supposed to timeout" (headers resp))))))
   (testing "global timeout overwritten by local infinite"
     (with-client {:request-timeout 100}
       (let [resp (GET "http://localhost:8123/timeout" :timeout -1)]
         (await resp)
         (is (false? (failed? resp)))
         (is (done? resp)))))
-  (testing "global idle timeout"
-    (with-client {:idle-timeout 100}
+  (testing "global idle connection in pool timeout"
+    (with-client {:idle-in-pool-timeout 100}
       (let [resp (GET "http://localhost:8123/timeout")]
         (await resp)
-        (is (failed? resp))
+        (is (false? (failed? resp)))
         (when (failed? resp)
-          (let [err (error resp)]
-            (is (instance? IOException err))
-            (is (= "No response received. Connection timed out after 100" (.getMessage err)))))))))
+          (println "No response received, while excepting it." (.getMessage (error resp))))))))
 
 (deftest closing-client
   (binding [*client* (create-client)]
