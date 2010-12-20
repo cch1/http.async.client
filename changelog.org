@@ -38,3 +38,10 @@
 ** Upgrade to v1.3.2 of async-http-client
 * Release 0.2.2
 ** get-encoding helper works w/o Content-Type header                    :bug:
+** Upgrade async-http-client to v.1.5.0
+** Exposed more global configuration options
+*** Timeouts
+*** Proxy
+*** Authentication
+** Zero byte copy mode
+   If sending File as body, zero byte copy is used.

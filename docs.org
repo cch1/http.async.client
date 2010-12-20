@@ -172,6 +172,7 @@
      - String
      - map, for easy form data submissions
      - InputStream for any content
+     - File for zero byte copy
 ***** Submitting body as String
       You can send String as body with PUT/POST:
 #+BEGIN_SRC clojure
@@ -187,13 +188,21 @@
     )
 #+END_SRC
 ***** Submitting body as InputStream
-      Last method to provide body is via InputStream:
+      Another method to provide body is via InputStream:
 #+BEGIN_SRC clojure
   (use '[clojure.java.io :only [input-stream]])
   (let [resp (c/PUT "<your url>" :body (input-stream (.getBytes "SampleContent" "UTF-8")))]
     ; do something with resp
     )
 #+END_SRC
+***** Submitting body as File, a.k.a. zero byte copy
+      To use zero byte copy future, provide a File as :body
+#+begin_src clojure
+  (import '(java.io File))
+  (let [resp (c/PUT "<your url>" :body (File. "<path to file>"))]
+    ;; do something with resp
+    )
+#+end_src
 **** DELETE
      To call [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/DELETE][*http.async.client/DELETE*]] on a resource:
 #+BEGIN_SRC clojure
@@ -249,8 +258,8 @@
     (c/await resp)
     (c/string resp))
 #+END_SRC
-     *:body* can be String, form parameters or input stream, please see
-     [[*PUT%20POST][PUT/POST]] for more documentation.
+     *:body* can be String, form parameters, input stream or
+      java.io.File, please see [[*PUT%20POST][PUT/POST]] for more documentation.
 **** :cookies
      Cookies can be provided to request as follows:
 #+BEGIN_SRC clojure
@@ -517,22 +526,113 @@
       ;; do stuff with resp
     ))
 #+END_SRC
+**** Enabling HTTP compression
+     *http.async.client* can be configured to allow, or not, HTTP
+      compression.
+#+begin_src clojure
+  (c/with-client {:compression-enabled true}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+      ))
+#+end_src
+**** Follow redirects
+     Enabling HTTP redirects following.
+#+begin_src clojure
+  (c/with-client {:follow-redirects true}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+      ))
+#+end_src
+**** Keep alive
+     Keep Alive is enabled by default. This implies using pool for
+     connections.
+#+begin_src clojure
+  (c/with-client {:keep-alive true}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+      ))
+#+end_src
+**** Max connections per host
+     Maximum number of connections to be cached per host.
+     Above this number connections will still be created but will not
+     be kept alive.
+#+begin_src clojure
+  (c/with-client {:max-conns-per-host 10}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+      ))
+#+end_src
+**** Max connections total count
+     Maximum number of total connections opened, submitting new
+     request while all allowed connections are active, will result in
+     rejection.
+#+begin_src clojure
+  (c/with-client {:max-conns-total 100}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+      ))
+#+end_src
+**** Max redirects to follow
+     Maximum number of redirects to follow.
+#+begin_src clojure
+  (c/with-client {:max-redirects 3}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+      ))
+#+end_src
 **** Timeouts
      With *http.async.client* apart from per connection [[*:timeout][:timeout]] you
      can globally configure *connection*, *request* and *idle*
      timeouts. All timeout values are in milliseconds and magic value
      *-1* is interpreted as infinite wait.
+     *idle* connection in pool timeout works only on connections in
+     pool, connections idle, for configured time, in pool will be
+     closed.
 #+BEGIN_SRC clojure
   (c/with-client {:connection-timeout 10
                   :request-timeout 1000
-                  :idle-timeout 100}
+                  :idle-in-pool-timeout 100}
     (let [resp (c/GET url)]
       ;; request processing
       ))
 #+END_SRC
      Example above will timeout connection if it was not established
-     in 10ms, request if it was not received in 1sec, or was idle for
-     more than 100ms.
+     in 10ms, request if it was not received in 1sec, or connection
+     when it was idling in pool for more than 100ms.
+**** Proxy
+     Client can be also configured with global HTTP Proxy settings.
+#+begin_src clojure
+  (c/with-client {:proxy {:host h :port p}}
+    (let [resp (GET url)]
+      ;; do stuff with resp
+      ))
+#+end_src
+**** Authentication
+     Default authentication realm to be used globally can be
+     configured.
+     For now BASIC and DIGEST methods are supported.
+     
+     Basic method is default, so you don't have to specify it:
+#+BEGIN_SRC clojure
+  (c/with-client {:auth {:user u :password p}}
+    (let [resp (GET url)]
+      ;; Check if response is not 401 or so and process response
+      ))
+#+END_SRC
+     Though you can:
+#+BEGIN_SRC clojure
+  (c/with-client {:auth {:type :basic :user u :password p}}
+    (let [resp (GET url)]
+      ;; Check if response is not 401 or so and process response
+      ))
+#+END_SRC
+     And for digest method you will need realm as well:
+#+BEGIN_SRC clojure
+  (c/with-client {:auth {:type :digest :user u :password p :realm r}}
+    (let [resp (GET url)]
+      ;; Check if response is not 401 or so and process response
+      ))
+#+END_SRC
 **** Closing *http.async.client*
      Whenever you've created *http.async.client* via
      [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] you will need to close it.

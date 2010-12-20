@@ -1,4 +1,5 @@
 package ahc;
+import java.io.File;
 import java.io.InputStream;
 import com.ning.http.client.Realm;
 import com.ning.http.client.RequestBuilder;
@@ -25,6 +26,9 @@ public class RequestBuilderWrapper {
         return this;}
     public RequestBuilderWrapper setBody(InputStream stream) {
         rb.setBody(stream);
+        return this;}
+    public RequestBuilderWrapper setBody(File f) {
+        rb.setBody(f);
         return this;}
     public RequestBuilderWrapper setProxyServer(ProxyServer proxy) {
         rb.setProxyServer(proxy);

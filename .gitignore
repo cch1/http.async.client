@@ -4,3 +4,7 @@ classes/
 ahc-clj*jar
 pom.xml
 .cake
+/http.async.client-0.2.2-SNAPSHOT.jar
+/target/http.async.client-0.2.2-SNAPSHOT.jar
+/target/maven-archiver/pom.properties
+/target/test-classes/realm.properties
