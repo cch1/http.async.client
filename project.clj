@@ -6,7 +6,7 @@
   :min-lein-version "1.4.1"
   :dependencies     [[org.clojure/clojure "1.2.0"]
 		     [org.clojure/clojure-contrib "1.2.0"]
-		     [com.ning/async-http-client "1.5.0-SNAPSHOT"]]
+		     [org.clojars.vgeshel/async-http-client "1.5.0-SNAPSHOT"]]
   :dev-dependencies [[swank-clojure "1.2.1"]
 		     ;[autodoc "0.7.1"]
                      [org.danlarkin/clojure-json "1.1"]
