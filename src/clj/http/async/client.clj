@@ -49,7 +49,8 @@
              realm
              request-timeout
              user-agent
-             async-connect]}]
+             async-connect
+             executor-service]}]
   (AsyncHttpClient.
    (.build
     (let [b (AsyncHttpClientConfig$Builder.)]
@@ -68,6 +69,7 @@
                                 (.removeProperty NettyAsyncHttpProviderConfig/USE_BLOCKING_IO)
                                 (.addProperty NettyAsyncHttpProviderConfig/EXECUTE_ASYNC_CONNECT true))]
           (.setAsyncHttpClientProviderConfig b provider-config)))
+      (when executor-service (.setExecutorService b executor-service))
       (set-proxy proxy b)
       (when realm
         (set-realm realm b))
