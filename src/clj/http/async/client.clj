@@ -20,7 +20,8 @@
   (:use [http.async.client request headers util]
         clojure.template)
   (:import (java.io ByteArrayOutputStream)
-           (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)))
+           (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
+           (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
 
 (defn create-client
   "Creates new Async Http Client.
@@ -47,7 +48,8 @@
              proxy
              realm
              request-timeout
-             user-agent]}]
+             user-agent
+             async-connect]}]
   (AsyncHttpClient.
    (.build
     (let [b (AsyncHttpClientConfig$Builder.)]
@@ -55,10 +57,17 @@
       (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
       (when (not (nil? follow-redirects)) (.setFollowRedirects b follow-redirects))
       (when idle-in-pool-timeout (.setConnectionTimeoutInMs b idle-in-pool-timeout))
-      (when (not (nil? keep-alive)) (.setKeepAlive b keep-alive))
+      (when (not (nil? keep-alive)) (.setAllowPoolingConnection b keep-alive))
       (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
       (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
+      (when (or connection-timeout      ;; connection timeout is not enforced by the underlying library
+                ;; unless it's in the async connect mode, which is not the default
+                (not (nil? async-connect)))
+        (let [provider-config (doto (NettyAsyncHttpProviderConfig.)
+                                (.removeProperty NettyAsyncHttpProviderConfig/USE_BLOCKING_IO)
+                                (.addProperty NettyAsyncHttpProviderConfig/EXECUTE_ASYNC_CONNECT true))]
+          (.setAsyncHttpClientProviderConfig b provider-config)))
       (set-proxy proxy b)
       (when realm
         (set-realm realm b))
