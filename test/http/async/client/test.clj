@@ -326,7 +326,7 @@
          200 (:code status)
          "test-value" (:test-header headers)
          2 (count body))
-    (doseq [s (string resp)]
+    (doseq [s (string headers body)]
       (is (or (= "part1" s) (= "part2" s))))))
 
 (deftest issue-1

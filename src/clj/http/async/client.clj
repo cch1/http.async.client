@@ -19,6 +19,7 @@
   (:require [clojure.contrib.io :as duck])
   (:use [http.async.client request headers util])
   (:import (java.io ByteArrayOutputStream)
+           (java.util.concurrent LinkedBlockingQueue)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
            (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
 
@@ -104,19 +105,14 @@
 (defn stream-seq
   "Creates potentially infinite lazy sequence of Http Stream."
   [method #^String url & {:as options}]
-  (let [que (java.util.concurrent.LinkedBlockingQueue.)
-        s-seq ((fn gen-next []
-                 (lazy-seq
-                  (let [v (.take que)]
-                    (when-not (= ::done v)
-                      (cons v (gen-next)))))))]
+  (let [que (LinkedBlockingQueue.)]
     (apply execute-request
            (apply prepare-request method url (apply concat options))
            (apply concat (merge
                           *default-callbacks*
                           {:part (fn [_ baos]
                                    (.put que baos)
-                                   [s-seq :continue])
+                                   [que :continue])
                            :completed (fn [_] (.put que ::done))
                            :error (fn [_ t]
                                     (.put que ::done)
@@ -160,17 +156,31 @@
   "Gets body.
   If body have not yet been delivered and request hasn't failed waits for body."
   [resp]
-  (safe-get :body resp))
+  (let [b (safe-get :body resp)]
+    (if (instance? LinkedBlockingQueue b)
+      ((fn gen-next []
+         (lazy-seq
+          (let [v (.take b)]
+            (when-not (= ::done v)
+              (cons v (gen-next)))))))
+      b)))
+
+(defn- convert [#^ByteArrayOutputStream baos enc]
+  (.toString baos enc))
+
+(defn- convert-body [body enc]
+  (if (seq? body)
+    (map #(convert % enc) body)
+    (convert body enc)))
 
 (defn string
-  "Converts response to string."
-  [resp]
-  (let [enc (or (get-encoding (headers resp)) duck/*default-encoding*)
-        convert (fn [#^ByteArrayOutputStream baos] (.toString baos enc))]
-    (when-let [body (body resp)]
-      (if (seq? body)
-        (map convert body)
-        (convert body)))))
+  "Converts response to string.
+  Or converts body taking encoding from response."
+  ([resp]
+     (when-let [body (body resp)]
+       (convert-body body (or (get-encoding (headers resp)) duck/*default-encoding*))))
+  ([headers body]
+     (convert-body body (or (get-encoding headers) duck/*default-encoding*))))
 
 (defn cookies
   "Gets cookies from response."
