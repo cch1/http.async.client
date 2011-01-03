@@ -17,9 +17,9 @@
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [await promise])
   (:require [clojure.contrib.io :as duck])
-  (:use [http.async.client request headers util]
-        clojure.template)
+  (:use [http.async.client request headers util])
   (:import (java.io ByteArrayOutputStream)
+           (java.util.concurrent LinkedBlockingQueue)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
            (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
 
@@ -35,7 +35,9 @@
   - :max-conns-total :: max number of total connections held open by client
   - :max-redirects :: max nuber of redirects to follow
   - :request-timeout :: request timeout in ms
-  - :user-agent :: User-Agent branding string"
+  - :user-agent :: User-Agent branding string
+  - :async-connect :: Execute connect asynchronously
+  - :executor-service :: provide your own executor service for callbacks to be executed on"
   {:tag AsyncHttpClient}
   [& {:keys [compression-enabled
              connection-timeout
@@ -54,11 +56,11 @@
   (AsyncHttpClient.
    (.build
     (let [b (AsyncHttpClientConfig$Builder.)]
-      (when (not (nil? compression-enabled)) (.setCompressionEnabled b compression-enabled))
+      (when-not (nil? compression-enabled) (.setCompressionEnabled b compression-enabled))
       (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
-      (when (not (nil? follow-redirects)) (.setFollowRedirects b follow-redirects))
+      (when-not (nil? follow-redirects) (.setFollowRedirects b follow-redirects))
       (when idle-in-pool-timeout (.setConnectionTimeoutInMs b idle-in-pool-timeout))
-      (when (not (nil? keep-alive)) (.setAllowPoolingConnection b keep-alive))
+      (when-not (nil? keep-alive) (.setAllowPoolingConnection b keep-alive))
       (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
       (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
@@ -101,19 +103,14 @@
 (defn stream-seq
   "Creates potentially infinite lazy sequence of Http Stream."
   [method #^String url & {:as options}]
-  (let [que (java.util.concurrent.LinkedBlockingQueue.)
-        s-seq ((fn gen-next []
-                 (lazy-seq
-                  (let [v (.take que)]
-                    (when-not (= ::done v)
-                      (cons v (gen-next)))))))]
+  (let [que (LinkedBlockingQueue.)]
     (apply execute-request
            (apply prepare-request method url (apply concat options))
            (apply concat (merge
                           *default-callbacks*
                           {:part (fn [_ baos]
                                    (.put que baos)
-                                   [s-seq :continue])
+                                   [que :continue])
                            :completed (fn [_] (.put que ::done))
                            :error (fn [_ t]
                                     (.put que ::done)
@@ -157,17 +154,31 @@
   "Gets body.
   If body have not yet been delivered and request hasn't failed waits for body."
   [resp]
-  (safe-get :body resp))
+  (let [b (safe-get :body resp)]
+    (if (instance? LinkedBlockingQueue b)
+      ((fn gen-next []
+         (lazy-seq
+          (let [v (.take b)]
+            (when-not (= ::done v)
+              (cons v (gen-next)))))))
+      b)))
+
+(defn- convert [#^ByteArrayOutputStream baos enc]
+  (.toString baos enc))
+
+(defn- convert-body [body enc]
+  (if (seq? body)
+    (map #(convert % enc) body)
+    (convert body enc)))
 
 (defn string
-  "Converts response to string."
-  [resp]
-  (let [enc (or (get-encoding (headers resp)) duck/*default-encoding*)
-        convert (fn [#^ByteArrayOutputStream baos] (.toString baos enc))]
-    (when-let [body (body resp)]
-      (if (seq? body)
-        (map convert body)
-        (convert body)))))
+  "Converts response to string.
+  Or converts body taking encoding from response."
+  ([resp]
+     (when-let [body (body resp)]
+       (convert-body body (or (get-encoding (headers resp)) duck/*default-encoding*))))
+  ([headers body]
+     (convert-body body (or (get-encoding headers) duck/*default-encoding*))))
 
 (defn cookies
   "Gets cookies from response."
