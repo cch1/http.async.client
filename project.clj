@@ -13,7 +13,6 @@
                      [org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
                      [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
                      [lein-difftest "1.2.2"]
-                     [lein-run "1.0.0"]
                      [log4j "1.2.13"]]
   :repository {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
   :autodoc {:name "http.async.client"
