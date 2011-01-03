@@ -233,12 +233,11 @@
                                 (convert-action action)))
            (onBodyPartReceived [#^HttpResponseBodyPart e]
                                (when-let [bytes (.getBodyPartBytes e)]
-                                 (let [length (alength bytes)
-                                       baos (ByteArrayOutputStream. length)]
-                                   (.write baos bytes 0 length)
+                                 (let [baos (ByteArrayOutputStream. (alength bytes))]
+                                   (.write baos bytes 0 (alength bytes))
                                    (let [[result action] (part resp baos)
                                          body (:body resp)]
-                                     (if-not (delivered? body)
+                                     (when-not (delivered? body)
                                        (deliver body result))
                                      (convert-action action)))))
            (onCompleted []
