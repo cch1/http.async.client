@@ -17,8 +17,7 @@
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [await promise])
   (:require [clojure.contrib.io :as duck])
-  (:use [http.async.client request headers util]
-        clojure.template)
+  (:use [http.async.client request headers util])
   (:import (java.io ByteArrayOutputStream)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
            (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
