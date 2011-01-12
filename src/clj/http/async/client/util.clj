@@ -18,6 +18,7 @@
   (:refer-clojure :exclude [promise])
   (:require [http.async.client.request :as r])
   (:import (com.ning.http.client ProxyServer
+                                 ProxyServer$Protocol
                                  Realm$AuthScheme
                                  Realm$RealmBuilder)))
 
@@ -94,11 +95,23 @@
                         (apply concat r/*default-callbacks*)))))
           methods)))
 
+(defn- proto-map [proto]
+  (if proto
+    ({:http  ProxyServer$Protocol/HTTP
+      :https ProxyServer$Protocol/HTTPS} proto)
+    ProxyServer$Protocol/HTTP))
+
 (defn set-proxy
   "Sets proxy on builder."
-  [{host :host port :port} b]
-  (when (and host port)
-    (.setProxyServer b (ProxyServer. host port))))
+  [{:keys [protocol host port user password]} b]
+  {:pre [(or (nil? protocol)
+             (contains? #{:http :https} protocol))
+         host port
+         (or (and (nil? user) (nil? password))
+             (and user password))]}
+  (.setProxyServer b (if user
+                       (ProxyServer. (proto-map protocol) host port user password)
+                       (ProxyServer. (proto-map protocol) host port))))
 
 (defn set-realm
   "Sets realm on builder."

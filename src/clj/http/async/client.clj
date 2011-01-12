@@ -72,7 +72,8 @@
                                 (.addProperty NettyAsyncHttpProviderConfig/EXECUTE_ASYNC_CONNECT true))]
           (.setAsyncHttpClientProviderConfig b provider-config)))
       (when executor-service (.setExecutorService b executor-service))
-      (set-proxy proxy b)
+      (when proxy
+        (set-proxy proxy b))
       (when realm
         (set-realm realm b))
       (when request-timeout (.setRequestTimeoutInMs b request-timeout))

@@ -166,7 +166,8 @@
      (instance? File body) (.setBody rbw body))
     (when auth
       (set-realm auth rbw))
-    (set-proxy proxy rbw)
+    (when proxy
+      (set-proxy proxy rbw))
     ;; request timeout
     (when timeout
       (let [prc (PerRequestConfig.)]

@@ -120,7 +120,7 @@
   ([handler {port :port :as opts :or {:port 8123}}]
      (let [srv (Server. port)]
        (doto (Logger/getRootLogger)
-         (.setLevel Level/DEBUG)
+         (.setLevel Level/INFO)
          (.addAppender (ConsoleAppender. (PatternLayout. PatternLayout/TTCC_CONVERSION_PATTERN))))
 
        (let [loginSrv (HashLoginService. "MyRealm" "test-resources/realm.properties")
@@ -336,6 +336,62 @@
   (let [resp (GET "http://localhost:8123/proxy-req" :proxy {:host "localhost" :port 8123})
         headers (headers resp)]
     (is (= "http://localhost:8123/proxy-req" (:target headers)))))
+
+(deftest proxy-creation
+  (testing "host and port missing"
+    (is (thrown-with-msg? AssertionError #"Assert failed: host"
+          (prepare-request :get "http://not-important/" :proxy {:meaning :less}))))
+  (testing "host missing"
+    (is (thrown-with-msg? AssertionError #"Assert failed: host"
+          (prepare-request :get "http://not-important/" :proxy {:port 8080}))))
+  (testing "port missing"
+    (is (thrown-with-msg? AssertionError #"Assert failed: port"
+          (prepare-request :get "http://not-important/" :proxy {:host "localhost"}))))
+  (testing "only host and port"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:host "localhost"
+                                                                  :port 8080})]
+      (is (isa? (class r) com.ning.http.client.Request))))
+  (testing "wrong protocol"
+    (is (thrown-with-msg? AssertionError #"Assert failed:.*protocol.*"
+          (prepare-request :get "http://not-important/" :proxy {:protocol :wrong
+                                                                :host "localhost"
+                                                                :port 8080}))))
+  (testing "http protocol"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :http
+                                                                  :host "localhost"
+                                                                  :port 8080})]
+      (is (isa? (class r) com.ning.http.client.Request))))
+  (testing "https protocol"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :https
+                                                                  :host "localhost"
+                                                                  :port 8383})]
+      (is (isa? (class r) com.ning.http.client.Request))))
+  (testing "protocol but no host nor port"
+    (is (thrown-with-msg? AssertionError #"Assert failed: host"
+          (prepare-request :get "http://not-important/" :proxy {:protocol :http}))))
+  (testing "host, port, user but no password"
+    (is (thrown-with-msg? AssertionError #"Assert failed:.*password.*"
+          (prepare-request :get "http://not-important/" :proxy {:host "localhost"
+                                                                :port 8080
+                                                                :user "name"}))))
+  (testing "host, port, password but no user"
+    (is (thrown-with-msg? AssertionError #"Assert failed:.*user.*"
+          (prepare-request :get "http://not-important/" :proxy {:host "localhost"
+                                                                :port 8080
+                                                                :password "..."}))))
+  (testing "host, port, user and password"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:host "localhost"
+                                                                  :port 8080
+                                                                  :user "name"
+                                                                  :password "..."})]
+      (is (isa? (class r) com.ning.http.client.Request))))
+  (testing "protocol, host, port, user and password"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :http
+                                                                  :host "localhost"
+                                                                  :port 8080
+                                                                  :user "name"
+                                                                  :password "..."})]
+      (is (isa? (class r) com.ning.http.client.Request)))))
 
 (deftest get-with-cookie
   (let [cv "sample-value"
