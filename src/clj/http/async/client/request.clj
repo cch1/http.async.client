@@ -113,7 +113,15 @@
     :headers - map of headers
     :body    - body
     :cookies - cookies to send
-    :proxy   - map with proxy configuration to be used (:host and :port)
+    :proxy   - map with proxy configuration to be used
+      :host     - proxy host
+      :port     - proxy port
+      :protocol - (optional) protocol to communicate with proxy,
+                  :http (default, if you provide no value) and :https are allowed
+      :user     - (optional) user name to use for proxy authentication,
+                  has to be provided with :password
+      :password - (optional) password to use for proxy authentication,
+                  has to be provided with :user
     :auth    - map with authentication to be used
       :type     - either :basic or :digest
       :user     - user name to be used

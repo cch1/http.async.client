@@ -296,6 +296,13 @@
      Proxy expects a map with following keys:
      - *:host* :: proxy host
      - *:port* :: proxy port
+     - *:protocol* :: /optional/ protocol to communicate with proxy.
+                      Can be *:http* (default) or *:https*.
+     - *:user* :: /optional/ user name to use for proxy authentication.
+                  Must be provided with :password.
+     - *:password* :: /optional/ password to use for proxy
+                      authentication.
+                      Must be provided with :user.
 **** :auth
      Authentication can be configured per request basis.
      For now BASIC and DIGEST methods are supported.
@@ -607,6 +614,16 @@
       ;; do stuff with resp
       ))
 #+end_src
+     Proxy expects a map with following keys:
+     - *:host* :: proxy host
+     - *:port* :: proxy port
+     - *:protocol* :: /optional/ protocol to communicate with proxy.
+                      Can be *:http* (default) or *:https*.
+     - *:user* :: /optional/ user name to use for proxy authentication.
+                  Must be provided with :password.
+     - *:password* :: /optional/ password to use for proxy
+                      authentication.
+                      Must be provided with :user.
 **** Authentication
      Default authentication realm to be used globally can be
      configured.
