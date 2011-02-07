@@ -39,10 +39,10 @@
 ** DONE Authentication                                                 :rel3:
 *** DONE Test Authentication
 * Configuration [0/2]
-** TODO Global configuration of AHC [2/4]                              :rel4:
+** TODO Global configuration of AHC [4/4]                              :rel4:
 *** DONE Branding User-agent                                           :rel3:
-*** TODO Connection limiting per host.                                 :rel4:
-*** TODO Global proxy.                                                 :rel4:
+*** DONE Connection limiting per host.                                 :rel4:
+*** DONE Global proxy.                                                 :rel4:
 *** DONE Timeout settings                                              :rel4:
 **** DONE Request timeout                                              :rel4:
 **** DONE Connection timeout                                           :rel4:
