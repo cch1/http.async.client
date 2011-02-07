@@ -78,9 +78,7 @@
       (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
       (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
-      (when (or connection-timeout      ;; connection timeout is not enforced by the underlying library
-                ;; unless it's in the async connect mode, which is not the default
-                (not (nil? async-connect)))
+      (when async-connect
         (let [provider-config (doto (NettyAsyncHttpProviderConfig.)
                                 (.removeProperty NettyAsyncHttpProviderConfig/USE_BLOCKING_IO)
                                 (.addProperty NettyAsyncHttpProviderConfig/EXECUTE_ASYNC_CONNECT true))]
