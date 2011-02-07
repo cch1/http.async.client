@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Asynchronous HTTP Client - Clojure - Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-11-10 09:42:57 CET"/>
+<meta name="generated" content="2011-02-07 18:16:42 CET"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -21,6 +21,9 @@ lang="en" xml:lang="en">
   .target { }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -31,7 +34,13 @@ lang="en" xml:lang="en">
         overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
@@ -154,8 +163,16 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-1_2_6">1.2.6 Managing <b>http.async.client</b> </a>
 <ul>
 <li><a href="#sec-1_2_6_1">1.2.6.1 Branding </a></li>
-<li><a href="#sec-1_2_6_2">1.2.6.2 Timeouts </a></li>
-<li><a href="#sec-1_2_6_3">1.2.6.3 Closing <b>http.async.client</b> </a></li>
+<li><a href="#sec-1_2_6_2">1.2.6.2 Enabling HTTP compression </a></li>
+<li><a href="#sec-1_2_6_3">1.2.6.3 Follow redirects </a></li>
+<li><a href="#sec-1_2_6_4">1.2.6.4 Keep alive </a></li>
+<li><a href="#sec-1_2_6_5">1.2.6.5 Max connections per host </a></li>
+<li><a href="#sec-1_2_6_6">1.2.6.6 Max connections total count </a></li>
+<li><a href="#sec-1_2_6_7">1.2.6.7 Max redirects to follow </a></li>
+<li><a href="#sec-1_2_6_8">1.2.6.8 Timeouts </a></li>
+<li><a href="#sec-1_2_6_9">1.2.6.9 Proxy </a></li>
+<li><a href="#sec-1_2_6_10">1.2.6.10 Authentication </a></li>
+<li><a href="#sec-1_2_6_11">1.2.6.11 Closing <b>http.async.client</b> </a></li>
 </ul></li>
 </ul>
 </li>
@@ -306,7 +323,9 @@ Following HTTP methods have been covered so far:
 </li>
 </ul>
 
-<p>For detailed description see <a href="#*HTTP==methods">HTTP methods</a>.
+
+<p>
+For detailed description see <a href="#sec-1_2_2">HTTP methods</a>.
 </p>
 <p>
 You can also submit options to HTTP methods like this:
@@ -337,7 +356,9 @@ proxy to be used
 </dd>
 </dl>
 
-<p>For detailed usage of options see <a href="#*Request==options">Request options</a>.
+
+<p>
+For detailed usage of options see <a href="#sec-1_2_3">Request options</a>.
 </p>
 <p>
 Response map contains following keys:
@@ -386,6 +407,7 @@ promise, if there was an error you will find Throwable here
 </dd>
 </dl>
 
+
 </div>
 
 </div>
@@ -403,7 +425,7 @@ promise, if there was an error you will find Throwable here
 
 
 <p>
-Response here is same as in <a href="#*==Asynchronous==operations">Asynchronous operations</a> but <b>:body</b>
+Response here is same as in <a href="#sec-1_2_1_1">Asynchronous operations</a> but <b>:body</b>
 will be lazy sequence of ByteArrayOutputStreams.
 </p>
 <p>
@@ -411,7 +433,7 @@ You can still use convenience functions like <b>c/string</b> for body,
 but remember that you are dealing now with <b>seq</b>.
 </p>
 <p>
-For more details please see <a href="#*Streaming">Streaming</a>.
+For more details please see <a href="#sec-1_2_4_1">Lazy sequence</a>.
 </p></div>
 
 </div>
@@ -440,13 +462,15 @@ handle error.
 </li>
 </ul>
 
-<p>All callbacks are expected to return tuple with first element
+
+<p>
+All callbacks are expected to return tuple with first element
 been a value to be delivered for given response processing phase,
 second element is controlling execution and if you make it
 <b>:abort</b> than processing response is going to be terminated.
 </p>
 <p>
-For detailed information on how to use this mode please see <a href="#*Low==level">Low level</a>.
+For detailed information on how to use this mode please see <a href="#sec-1_3">Low level</a>.
 </p></div>
 </div>
 
@@ -560,7 +584,11 @@ map, for easy form data submissions
 <li>
 InputStream for any content
 </li>
+<li>
+File for zero byte copy
+</li>
 </ul>
+
 
 <ul>
 <li id="sec-1_2_2_2_1">Submitting body as String <br/>
@@ -592,13 +620,28 @@ Submitting parameters via body map:
 </ul>
 <ul>
 <li id="sec-1_2_2_2_3">Submitting body as InputStream <br/>
-Last method to provide body is via InputStream:
+Another method to provide body is via InputStream:
 
 
 
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">use</span> '[clojure.java.io <span style="color: #7a378b;">:only</span> [input-stream]]<span style="color: #8c8c8c;">)</span>
-<span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/PUT <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #7a378b;">:body</span> <span style="color: #8c8c8c;">(</span>input-stream <span style="color: #8c8c8c;">(</span>.getBytes <span style="color: #8b2252;">"SampleContent"</span> <span style="color: #8b2252;">"UTF-8"</span><span style="color: #8c8c8c;">)))</span>]
+<span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/PUT <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #7a378b;">:body</span> <span style="color: #8c8c8c;">(</span>input-stream <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">.getBytes</span> <span style="color: #8b2252;">"SampleContent"</span> <span style="color: #8b2252;">"UTF-8"</span><span style="color: #8c8c8c;">)))</span>]
   <span style="color: #b22222;">; </span><span style="color: #b22222;">do something with resp
+</span>  <span style="color: #8c8c8c;">)</span>
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-1_2_2_2_4">Submitting body as File, a.k.a. zero byte copy <br/>
+To use zero byte copy future, provide a File as :body
+
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">import</span> '<span style="color: #8c8c8c;">(</span>java.io <span style="color: #7a378b;">File</span><span style="color: #8c8c8c;">))</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/PUT <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #7a378b;">:body</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">File.</span> <span style="color: #8b2252;">"&lt;path to file&gt;"</span><span style="color: #8c8c8c;">))</span>]
+  <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp
 </span>  <span style="color: #8c8c8c;">)</span>
 </pre>
 
@@ -689,10 +732,11 @@ proxy to be used
 <dt><a href="#*==auth">:auth</a></dt><dd>
 authentication map
 </dd>
-<dt><a href="#*:timeout">:timeout</a></dt><dd>
+<dt><a href="#sec-1_2_3_7">:timeout</a></dt><dd>
 timeout configuration
 </dd>
 </dl>
+
 
 
 </div>
@@ -740,7 +784,7 @@ it like so:
 <div class="outline-text-5" id="text-1_2_3_3">
 
 <p>Body can be provided with a message only with <a href="#*PUT==POST">PUT/POST</a>, it
-doesn't make sense to have body with other <a href="#*HTTP==methods">HTTP methods</a>.
+doesn't make sense to have body with other <a href="#sec-1_2_2">HTTP methods</a>.
 </p>
 
 
@@ -751,8 +795,8 @@ doesn't make sense to have body with other <a href="#*HTTP==methods">HTTP method
 
 
 <p>
-<b>:body</b> can be String, form parameters or input stream, please see
-<a href="#*PUT==POST">PUT/POST</a> for more documentation.
+<b>:body</b> can be String, form parameters, input stream or
+java.io.File, please see <a href="#*PUT==POST">PUT/POST</a> for more documentation.
 </p></div>
 
 </div>
@@ -801,11 +845,12 @@ Max age that cookie was configured to live
 </dd>
 <dt><b>:secure</b></dt><dd>
 If cookie is secure cookie
-
 </dd>
 </dl>
 
-<p>Cookie reading is described in <a href="#*Reading==cookies">Reading cookies</a>.
+
+<p>
+Cookie reading is described in <a href="#sec-1_2_5_4">Reading cookies</a>.
 </p></div>
 
 </div>
@@ -833,7 +878,21 @@ proxy host
 <dt><b>:port</b></dt><dd>
 proxy port
 </dd>
+<dt><b>:protocol</b></dt><dd>
+<i>optional</i> protocol to communicate with proxy.
+Can be <b>:http</b> (default) or <b>:https</b>.
+</dd>
+<dt><b>:user</b></dt><dd>
+<i>optional</i> user name to use for proxy authentication.
+Must be provided with :password.
+</dd>
+<dt><b>:password</b></dt><dd>
+<i>optional</i> password to use for proxy
+authentication.
+Must be provided with :user.
+</dd>
 </dl>
+
 
 </div>
 
@@ -934,19 +993,20 @@ example contains check if response has failed.
 
 <p>HTTP Stream is response with chunked content encoding.
 Those streams might not be meant to ever finish, see twitter.com
-streams, so collecting those responses is impossible, they have to
-be processed as soon as parts of it are received.
+streams, so collecting those responses is impossible, they should
+be processed by response parts (chunks) as they are received.
 </p>
 <p>
 Two ways of consuming a HTTP Stream are supported:
 </p><ul>
 <li>
-<a href="#*Lazy==sequence">Lazy sequence</a>
+<a href="#sec-1_2_4_1">Lazy sequence</a>
 </li>
 <li>
 <a href="#*Call==back">Call-back</a>
 </li>
 </ul>
+
 
 
 </div>
@@ -963,7 +1023,7 @@ function that you like to it.
 
 
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/stream-seq <span style="color: #7a378b;">:get</span> url<span style="color: #8c8c8c;">)</span>]
-  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">doseq</span> [s <span style="color: #8c8c8c;">(</span>string resp<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">doseq</span> [s <span style="color: #8c8c8c;">(</span>s/string resp<span style="color: #8c8c8c;">)</span>]
     <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> s<span style="color: #8c8c8c;">)))</span>
 </pre>
 
@@ -980,11 +1040,43 @@ makes sense only to use <b>:get</b>, <b>:put</b> and
 URL of HTTP resource
 </dd>
 <dt>options</dt><dd>
-same as normal <a href="#*Request==options">Request options</a>.
+same as normal <a href="#sec-1_2_3">Request options</a>.
 </dd>
 </dl>
 
-</div>
+
+<p>
+It is important to understand that seqs returned by <b>body</b> or
+<b>string</b> (which in turn calls body) are backed by queue.
+One of consequences of it is that once you consumed some body
+parts they will not be available anymore.
+Let's see code speak for itself.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/stream-seq <span style="color: #7a378b;">:get</span> url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8b2252;">"1: "</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">first</span> <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">)))</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">println</span> <span style="color: #8b2252;">"2: "</span> <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">first</span> <span style="color: #8c8c8c;">(</span>c/string resp<span style="color: #8c8c8c;">))))</span>
+</pre>
+
+
+<p>
+This code will print following:
+</p><pre class="example">
+1: part1
+2: part2
+</pre>
+
+<p>Assuming that part1 is first chunk and part2 is second.
+</p>
+<p>
+Second consequence of been directly backed by queue is that you
+can have multiple consumers of same response and non of them will
+get same body part.
+</p>
+<p>
+And finally this implementation is not holding to it's head.
+</p></div>
 
 </div>
 
@@ -1017,10 +1109,10 @@ Few notes on implementing body part callback:
 state is a <b>map</b> with <b>:status</b> and <b>:headers</b> as promises, at
 stage when you get called for body part, both of them should be in
 place already, though it is advised to use convenience methods to
-read them, see <a href="#*Reading==status==line">Reading status line</a> and <a href="#*Reading==headers">Reading headers</a>,
+read them, see <a href="#sec-1_2_5_2">Reading status line</a> and <a href="#sec-1_2_5_3">Reading headers</a>,
 </li>
 <li>
-call-back has to follow guidelines described in <a href="#*Body==part">Body part</a>,
+call-back has to follow guidelines described in <a href="#sec-1_3_1_2_3">Body part</a>,
 </li>
 <li>
 some streams are not meant to be finish, in that case don't
@@ -1032,6 +1124,7 @@ try not to do any heavy lifting in this callback, better send it
 to agent,
 </li>
 </ul>
+
 
 </div>
 </div>
@@ -1051,7 +1144,7 @@ response handling.
 <h5 id="sec-1_2_5_1"><span class="section-number-5">1.2.5.1</span> Awaiting response </h5>
 <div class="outline-text-5" id="text-1_2_5_1">
 
-<p>If you call any of <a href="#*Asynchronous==operations">Asynchronous operations</a>, <a href="#*Streaming">Streaming</a> or <a href="#*Raw==mode">Raw mode</a>
+<p>If you call any of <a href="#sec-1_2_1_1">Asynchronous operations</a>, <a href="#sec-1_2_1_2">Streaming</a> or <a href="#sec-1_2_1_3">Raw mode</a>
 you actually asynchronously execute HTTP request.
 Some times you might need to wait for response processing to be
 done before proceeding, in order to do so you call
@@ -1155,8 +1248,8 @@ set.
 <div class="outline-text-5" id="text-1_2_5_5">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/body"><b>http.async.client/body</b></a> returns either ByteArrayOutputStream or
-seq of it, depending if you used <a href="#*Asynchronous==operations">Asynchronous operations</a> or
-<a href="#*Streaming">Streaming</a> respectively.
+seq of it, depending if you used <a href="#sec-1_2_1_1">Asynchronous operations</a> or
+<a href="#sec-1_2_1_2">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
 soon as first chunk of HTTP response body is received.
 </p></div>
@@ -1168,8 +1261,8 @@ soon as first chunk of HTTP response body is received.
 <div class="outline-text-5" id="text-1_2_5_6">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/string"><b>http.async.client/string</b></a> returns either string or seq of
-strings, again depending if you used <a href="#*Asynchronous==operations">Asynchronous operations</a> or
-<a href="#*Streaming">Streaming</a> respectively.
+strings, again depending if you used <a href="#sec-1_2_1_1">Asynchronous operations</a> or
+<a href="#sec-1_2_1_2">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
 soon as first chunk of HTTP response body is received.
 </p>
@@ -1268,13 +1361,13 @@ wait for it and return true as a result of call to done?.
 <ul>
 <li id="sec-1_2_5_9_2">failed? <br/>
 <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/failed?"><b>http.async.client/failed?</b></a> will return true iff request has
-failed. If this return true you can <a href="#*Reading==error">read error</a>.
+failed. If this return true you can <a href="#sec-1_2_5_7">read error</a>.
 </li>
 </ul>
 <ul>
 <li id="sec-1_2_5_9_3">canceled? <br/>
 <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/canceled?"><b>http.async.client/canceled?</b></a> will return true iff request has
-been <a href="#*Canceling==request">canceled</a>, else false is return.
+been <a href="#sec-1_2_5_8">canceled</a>, else false is return.
 </li>
 </ul>
 </div>
@@ -1313,19 +1406,142 @@ it will wait for whore response to finish.
 </div>
 
 <div id="outline-container-1_2_6_2" class="outline-5">
-<h5 id="sec-1_2_6_2"><span class="section-number-5">1.2.6.2</span> Timeouts </h5>
+<h5 id="sec-1_2_6_2"><span class="section-number-5">1.2.6.2</span> Enabling HTTP compression </h5>
 <div class="outline-text-5" id="text-1_2_6_2">
 
-<p>With <b>http.async.client</b> apart from per connection <a href="#*:timeout">:timeout</a> you
+<p><b>http.async.client</b> can be configured to allow, or not, HTTP
+compression.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:compression-enabled</span> true}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_3" class="outline-5">
+<h5 id="sec-1_2_6_3"><span class="section-number-5">1.2.6.3</span> Follow redirects </h5>
+<div class="outline-text-5" id="text-1_2_6_3">
+
+<p>Enabling HTTP redirects following.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:follow-redirects</span> true}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_4" class="outline-5">
+<h5 id="sec-1_2_6_4"><span class="section-number-5">1.2.6.4</span> Keep alive </h5>
+<div class="outline-text-5" id="text-1_2_6_4">
+
+<p>Keep Alive is enabled by default. This implies using pool for
+connections.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:keep-alive</span> true}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_5" class="outline-5">
+<h5 id="sec-1_2_6_5"><span class="section-number-5">1.2.6.5</span> Max connections per host </h5>
+<div class="outline-text-5" id="text-1_2_6_5">
+
+<p>Maximum number of connections to be cached per host.
+Above this number connections will still be created but will not
+be kept alive.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:max-conns-per-host</span> 10}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_6" class="outline-5">
+<h5 id="sec-1_2_6_6"><span class="section-number-5">1.2.6.6</span> Max connections total count </h5>
+<div class="outline-text-5" id="text-1_2_6_6">
+
+<p>Maximum number of total connections opened, submitting new
+request while all allowed connections are active, will result in
+rejection.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:max-conns-total</span> 100}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_7" class="outline-5">
+<h5 id="sec-1_2_6_7"><span class="section-number-5">1.2.6.7</span> Max redirects to follow </h5>
+<div class="outline-text-5" id="text-1_2_6_7">
+
+<p>Maximum number of redirects to follow.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:max-redirects</span> 3}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_8" class="outline-5">
+<h5 id="sec-1_2_6_8"><span class="section-number-5">1.2.6.8</span> Timeouts </h5>
+<div class="outline-text-5" id="text-1_2_6_8">
+
+<p>With <b>http.async.client</b> apart from per connection <a href="#sec-1_2_3_7">:timeout</a> you
 can globally configure <b>connection</b>, <b>request</b> and <b>idle</b>
 timeouts. All timeout values are in milliseconds and magic value
 <b>-1</b> is interpreted as infinite wait.
+<b>idle</b> connection in pool timeout works only on connections in
+pool, connections idle, for configured time, in pool will be
+closed.
 </p>
 
 
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:connection-timeout</span> 10
                 <span style="color: #7a378b;">:request-timeout</span> 1000
-                <span style="color: #7a378b;">:idle-timeout</span> 100}
+                <span style="color: #7a378b;">:idle-in-pool-timeout</span> 100}
   <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>c/GET url<span style="color: #8c8c8c;">)</span>]
     <span style="color: #b22222;">;; </span><span style="color: #b22222;">request processing
 </span>    <span style="color: #8c8c8c;">))</span>
@@ -1334,15 +1550,107 @@ timeouts. All timeout values are in milliseconds and magic value
 
 <p>
 Example above will timeout connection if it was not established
-in 10ms, request if it was not received in 1sec, or was idle for
-more than 100ms.
+in 10ms, request if it was not received in 1sec, or connection
+when it was idling in pool for more than 100ms.
 </p></div>
 
 </div>
 
-<div id="outline-container-1_2_6_3" class="outline-5">
-<h5 id="sec-1_2_6_3"><span class="section-number-5">1.2.6.3</span> Closing <b>http.async.client</b> </h5>
-<div class="outline-text-5" id="text-1_2_6_3">
+<div id="outline-container-1_2_6_9" class="outline-5">
+<h5 id="sec-1_2_6_9"><span class="section-number-5">1.2.6.9</span> Proxy </h5>
+<div class="outline-text-5" id="text-1_2_6_9">
+
+<p>Client can be also configured with global HTTP Proxy settings.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:proxy</span> {<span style="color: #7a378b;">:host</span> h <span style="color: #7a378b;">:port</span> p}}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+<p>
+Proxy expects a map with following keys:
+</p><dl>
+<dt><b>:host</b></dt><dd>
+proxy host
+</dd>
+<dt><b>:port</b></dt><dd>
+proxy port
+</dd>
+<dt><b>:protocol</b></dt><dd>
+<i>optional</i> protocol to communicate with proxy.
+Can be <b>:http</b> (default) or <b>:https</b>.
+</dd>
+<dt><b>:user</b></dt><dd>
+<i>optional</i> user name to use for proxy authentication.
+Must be provided with :password.
+</dd>
+<dt><b>:password</b></dt><dd>
+<i>optional</i> password to use for proxy
+authentication.
+Must be provided with :user.
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_10" class="outline-5">
+<h5 id="sec-1_2_6_10"><span class="section-number-5">1.2.6.10</span> Authentication </h5>
+<div class="outline-text-5" id="text-1_2_6_10">
+
+<p>Default authentication realm to be used globally can be
+configured.
+For now BASIC and DIGEST methods are supported.
+</p>
+<p>
+Basic method is default, so you don't have to specify it:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p}}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+<p>
+Though you can:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:basic</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p}}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+<p>
+And for digest method you will need realm as well:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>c/with-client {<span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:digest</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p <span style="color: #7a378b;">:realm</span> r}}
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>GET url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response
+</span>    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_6_11" class="outline-5">
+<h5 id="sec-1_2_6_11"><span class="section-number-5">1.2.6.11</span> Closing <b>http.async.client</b> </h5>
+<div class="outline-text-5" id="text-1_2_6_11">
 
 <p>Whenever you've created <b>http.async.client</b> via
 <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client"><b>http.async.client/create-client</b></a> you will need to close it.
@@ -1398,11 +1706,13 @@ HTTP Method like <b>:get</b> <b>:head</b>
 <b>url</b> that you want to call
 </li>
 <li>
-and <b>options</b>, a keyworded map described already in <a href="#*Request==options">Request options</a>.
+and <b>options</b>, a keyworded map described already in <a href="#sec-1_2_3">Request options</a>.
 </li>
 </ul>
 
-<p>Sample:
+
+<p>
+Sample:
 </p>
 
 
@@ -1423,28 +1733,30 @@ and <b>options</b>, a keyworded map described already in <a href="#*Request==opt
 <div class="outline-text-5" id="text-1_3_1_2">
 
 <p><a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/execute-request"><b>http.async.client/execute-request</b></a> returns same map of promises
-as <a href="#*Asynchronous==operations">Asynchronous operations</a>.
-Its arguments are: request to be executed (result of <a href="#*Preparing==request">Preparing request</a>) and <b>options</b> as keyworded map consisting of call-backs.
+as <a href="#sec-1_2_1_1">Asynchronous operations</a>.
+Its arguments are: request to be executed (result of <a href="#sec-1_3_1_1">Preparing request</a>) and <b>options</b> as keyworded map consisting of call-backs.
 Following <b>options</b> are recognized:
 </p><ul>
 <li>
-<b>:status</b> <a href="#*Status==line">Status line</a>
+<b>:status</b> <a href="#sec-1_3_1_2_1">Status line</a>
 </li>
 <li>
-<b>:headers</b> <a href="#*Headers">Headers</a>
+<b>:headers</b> <a href="#sec-1_3_1_2_2">Headers</a>
 </li>
 <li>
-<b>:part</b> <a href="#*Body==part">Body part</a>
+<b>:part</b> <a href="#sec-1_3_1_2_3">Body part</a>
 </li>
 <li>
-<b>:completed</b> <a href="#*Body==completed">Body completed</a>
+<b>:completed</b> <a href="#sec-1_3_1_2_4">Body completed</a>
 </li>
 <li>
-<b>:error</b> <a href="#*Error">Error</a>
+<b>:error</b> <a href="#sec-1_3_1_2_5">Error</a>
 </li>
 </ul>
 
-<p>All callbacks take response map as first argument and callback
+
+<p>
+All callbacks take response map as first argument and callback
 specific argument if any.
 Callbacks are expected to return tuple of <b>result</b> and <b>action</b>:
 </p><dl>
@@ -1458,6 +1770,7 @@ will be aborted, anything else here will result in
 continuation.
 </dd>
 </dl>
+
 
 <ul>
 <li id="sec-1_3_1_2_1">Status line <br/>
@@ -1489,6 +1802,7 @@ Status map has following keys:
 </li>
 </ul>
 
+
 </li>
 </ul>
 <ul>
@@ -1505,6 +1819,7 @@ lazy map of headers. Keys in that map are <b>(keyword         (.toLowerCase &lt;
 </li>
 </ul>
 
+
 </li>
 </ul>
 <ul>
@@ -1519,6 +1834,7 @@ response map
 ByteArrayOutputStream that contains body part received.
 </li>
 </ul>
+
 
 </li>
 </ul>
@@ -1540,6 +1856,7 @@ response map
 <b>Throwable</b> that was a cause of failure
 </li>
 </ul>
+
 
 </li>
 </ul>
@@ -1566,8 +1883,8 @@ how to do it.
 <div id="postamble">
 <p class="author"> Author: Hubert Iwaniuk
 </p>
-<p class="date"> Date: 2010-11-10 09:42:57 CET</p>
-<p class="creator">HTML generated by org-mode 7.01trans in emacs 23</p>
+<p class="date"> Date: 2011-02-07 18:16:42 CET</p>
+<p class="creator">HTML generated by org-mode 7.4 in emacs 23</p>
 </div>
 </div>
 </body>
