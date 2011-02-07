@@ -93,7 +93,7 @@
      You can still use convenience functions like *c/string* for body,
      but remember that you are dealing now with *seq*.
 
-     For more details please see [[*Streaming][Streaming]].
+     For more details please see [[*Lazy%20sequence][Lazy sequence]].
 **** Raw mode
      This allows you to provide callbacks that will get triggered on HTTP
      response events like:
@@ -355,8 +355,8 @@
 *** Streaming
     HTTP Stream is response with chunked content encoding.
     Those streams might not be meant to ever finish, see twitter.com
-    streams, so collecting those responses is impossible, they have to
-    be processed as soon as parts of it are received.
+    streams, so collecting those responses is impossible, they should
+    be processed by response parts (chunks) as they are received.
 
     Two ways of consuming a HTTP Stream are supported:
     - [[*Lazy%20sequence][Lazy sequence]]
@@ -368,7 +368,7 @@
      function that you like to it.
 #+BEGIN_SRC clojure
   (let [resp (c/stream-seq :get url)]
-    (doseq [s (string resp)]
+    (doseq [s (s/string resp)]
       (println s)))
 #+END_SRC
      *stream-seq* arguments:
@@ -377,6 +377,27 @@
                       *:post*
      - url :: URL of HTTP resource
      - options :: same as normal [[*Request%20options][Request options]].
+
+     It is important to understand that seqs returned by *body* or
+     *string* (which in turn calls body) are backed by queue.
+     One of consequences of it is that once you consumed some body
+     parts they will not be available anymore.
+     Let's see code speak for itself.
+#+BEGIN_SRC clojure
+  (let [resp (c/stream-seq :get url)]
+    (println "1: " (first (c/string resp)))
+    (println "2: " (first (c/string resp))))
+#+END_SRC
+     This code will print following:
+     : 1: part1
+     : 2: part2
+     Assuming that part1 is first chunk and part2 is second.
+
+     Second consequence of been directly backed by queue is that you
+     can have multiple consumers of same response and non of them will
+     get same body part.
+
+     And finally this implementation is not holding to it's head.
 **** Call-back
    Consuming HTTP Stream with call-back is quite straight forward with
    *http.async.client*. You will need to know what HTTP Method you will call,
