@@ -213,7 +213,7 @@
 (deftest test-get-params-not-allowed
   (is (thrown?
        IllegalArgumentException
-       (GET "http://localhost:8123/" :body {:a 5 :b 6}))))
+       (GET "http://localhost:8123/" :body "Boo!"))))
 
 (deftest test-post-params
   (let [resp (POST "http://localhost:8123/" :body {:a 5 :b 6})
@@ -318,16 +318,26 @@
     (is (= "part1part2" (string resp)))))
 
 (deftest test-stream-seq
-  (let [resp (stream-seq :get "http://localhost:8123/stream")
-        status (status resp)
-        headers (headers resp)
-        body (body resp)]
-    (are [e p] (= e p)
-         200 (:code status)
-         "test-value" (:test-header headers)
-         2 (count body))
-    (doseq [s (string headers body)]
-      (is (or (= "part1" s) (= "part2" s))))))
+  (testing "Simple stream."
+    (let [resp (stream-seq :get "http://localhost:8123/stream")
+          status (status resp)
+          headers (headers resp)
+          body (body resp)]
+      (are [e p] (= e p)
+           200 (:code status)
+           "test-value" (:test-header headers)
+           2 (count body))
+      (doseq [s (string headers body)]
+        (is (or (= "part1" s) (= "part2" s))))))
+  (testing "Backed by queue contract."
+    (let [resp (stream-seq :get "http://localhost:8123/stream")
+          status (status resp)
+          headers (headers resp)]
+      (are [e p] (= e p)
+           200 (:code status)
+           "test-value" (:test-header headers))
+      (is (= "part1" (first (string resp))))
+      (is (= "part2" (first (string resp)))))))
 
 (deftest issue-1
   (is (= "глава" (string (GET "http://localhost:8123/issue-1")))))
@@ -469,6 +479,7 @@
   (let [resp (GET "http://localhost:8123/")]
     (is (false? (cancelled? resp)))
     (is (true? (cancel resp)))
+    (await resp)
     (is (true? (cancelled? resp)))))
 
 (deftest reqeust-timeout

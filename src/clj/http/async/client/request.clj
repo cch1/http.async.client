@@ -256,7 +256,8 @@
            (onThrowable [#^Throwable t]
                         (do
                           (deliver (:error resp) (error resp t))
-                          (deliver (:done resp) true)))))]
+                          (when-not (delivered? (:done resp))
+                            (deliver (:done resp) true))))))]
     (with-meta resp {:started (System/currentTimeMillis)
                      :cancelled? (fn [] (.isCancelled resp-future))
                      :cancel (fn [] (.cancel resp-future true))})))
