@@ -3,6 +3,7 @@
   :url              "http://github.com/neotyk/http.async.client/"
   :source-path      "src/clj"
   :java-source-path "src/jvm"
+  :javac-options {:deprecation "true"}
   :min-lein-version "1.4.1"
   :dependencies     [[org.clojure/clojure "1.2.0"]
 		     [org.clojure/clojure-contrib "1.2.0"]
