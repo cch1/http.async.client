@@ -6,10 +6,10 @@
   :min-lein-version "1.4.1"
   :dependencies     [[org.clojure/clojure "1.2.0"]
 		     [org.clojure/clojure-contrib "1.2.0"]
-		     [com.ning/async-http-client "1.5.0"]]
+		     [com.ning/async-http-client "1.6.0"]]
   :dev-dependencies [[swank-clojure "1.2.1"]
 		     ;;[autodoc "0.7.1"]
-                     [marginalia "0.2.3"]
+                     [marginalia "0.5.0"]
                      [org.danlarkin/clojure-json "1.1"]
                      [org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
                      [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
