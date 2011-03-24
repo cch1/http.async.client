@@ -123,12 +123,8 @@
 
 (defn set-realm
   "Sets realm on builder."
-  [{type :type
-    user :user
-    password :password
-    realm :realm
-    :or {:type :basic}}
-   b]
+  [{:keys [type user password realm preemptive]
+    :or {:type :basic}} b]
   (let [rbld (Realm$RealmBuilder.)]
     (when (nil? user)
       (if (nil? password)
@@ -141,6 +137,8 @@
                                  "For DIGEST authentication realm is required")))
       (.setRealmName rbld realm)
       (.setScheme rbld Realm$AuthScheme/DIGEST))
+    (when (not (nil? preemptive))
+      (.setUsePreemptiveAuth rbld preemptive))
     (doto rbld
       (.setPrincipal user)
       (.setPassword password))

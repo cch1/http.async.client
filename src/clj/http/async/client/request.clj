@@ -123,10 +123,11 @@
       :password - (optional) password to use for proxy authentication,
                   has to be provided with :user
     :auth    - map with authentication to be used
-      :type     - either :basic or :digest
-      :user     - user name to be used
-      :password - password to be used
-      :realm    - realm name to authenticate in
+      :type       - either :basic or :digest
+      :user       - user name to be used
+      :password   - password to be used
+      :realm      - realm name to authenticate in
+      :preemptive - assume authentication is required
     :timeout - request timeout in ms"
   {:tag Request}
   [method #^String url & {:keys [headers

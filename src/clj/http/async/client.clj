@@ -44,10 +44,11 @@
       :password - (optional) password to use for proxy authentication,
                   has to be provided with :user
   - :auth :: map with authentication to be used
-      :type     - either :basic or :digest
-      :user     - user name to be used
-      :password - password to be used
-      :realm    - realm name to authenticate in
+      :type       - either :basic or :digest
+      :user       - user name to be used
+      :password   - password to be used
+      :realm      - realm name to authenticate in
+      :preemptive - assume authentication is required
   - :request-timeout :: request timeout in ms
   - :user-agent :: User-Agent branding string
   - :async-connect :: Execute connect asynchronously

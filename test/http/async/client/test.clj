@@ -103,6 +103,12 @@
                                 (if (= auth "Basic YmVhc3RpZTpib3lz")
                                   200
                                   401)))
+	       "/preemptive-auth" (let [auth (.getHeader hReq "Authorization")]
+				    (.setStatus
+				     hResp
+				     (if (= auth "Basic YmVhc3RpZTpib3lz")
+				       200
+				       401)))
                "/timeout" (Thread/sleep 2000)
                "/empty" (.setHeader hResp "Nothing" "Yep")
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
@@ -473,6 +479,19 @@
        (:code (status (GET "http://localhost:8123/basic-auth"
                            :auth {:user "beastie"
                                   :password "boys"})))
+       200)))
+
+(deftest preemptive-authentication
+  (is (=
+       (:code (status (GET "http://localhost:8123/preemptive-auth"
+                           :auth {:user "beastie"
+                                  :password "boys"})))
+       401))
+  (is (=
+       (:code (status (GET "http://localhost:8123/preemptive-auth"
+                           :auth {:user "beastie"
+                                  :password "boys"
+				  :preemptive true})))
        200)))
 
 (deftest canceling-request
