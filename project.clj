@@ -7,7 +7,7 @@
   :min-lein-version "1.4.1"
   :dependencies     [[org.clojure/clojure "1.2.0"]
 		     [org.clojure/clojure-contrib "1.2.0"]
-		     [com.ning/async-http-client "1.6.0"]]
+		     [com.ning/async-http-client "1.6.3"]]
   :dev-dependencies [[swank-clojure "1.2.1"]
 		     ;;[autodoc "0.7.1"]
                      [marginalia "0.5.0"]
