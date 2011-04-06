@@ -35,7 +35,7 @@
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
-(def *user-agent* "http.async.client/0.2.1-dev")
+(def *user-agent* "http.async.client/0.2.2")
 
 (def *client*
      (AsyncHttpClient.
@@ -113,12 +113,21 @@
     :headers - map of headers
     :body    - body
     :cookies - cookies to send
-    :proxy   - map with proxy configuration to be used (:host and :port)
+    :proxy   - map with proxy configuration to be used
+      :host     - proxy host
+      :port     - proxy port
+      :protocol - (optional) protocol to communicate with proxy,
+                  :http (default, if you provide no value) and :https are allowed
+      :user     - (optional) user name to use for proxy authentication,
+                  has to be provided with :password
+      :password - (optional) password to use for proxy authentication,
+                  has to be provided with :user
     :auth    - map with authentication to be used
-      :type     - either :basic or :digest
-      :user     - user name to be used
-      :password - password to be used
-      :realm    - realm name to authenticate in
+      :type       - either :basic or :digest
+      :user       - user name to be used
+      :password   - password to be used
+      :realm      - realm name to authenticate in
+      :preemptive - assume authentication is required
     :timeout - request timeout in ms"
   {:tag Request}
   [method #^String url & {:keys [headers
@@ -166,7 +175,8 @@
      (instance? File body) (.setBody rbw body))
     (when auth
       (set-realm auth rbw))
-    (set-proxy proxy rbw)
+    (when proxy
+      (set-proxy proxy rbw))
     ;; request timeout
     (when timeout
       (let [prc (PerRequestConfig.)]
@@ -247,7 +257,8 @@
            (onThrowable [#^Throwable t]
                         (do
                           (deliver (:error resp) (error resp t))
-                          (deliver (:done resp) true)))))]
+                          (when-not (delivered? (:done resp))
+                            (deliver (:done resp) true))))))]
     (with-meta resp {:started (System/currentTimeMillis)
                      :cancelled? (fn [] (.isCancelled resp-future))
                      :cancel (fn [] (.cancel resp-future true))})))

@@ -4,21 +4,25 @@
 #+INFOJS_OPT: view:info toc:1
 #+OPTIONS: H:4
 
-* Release 0.2.0
-** Stream as seq
-   Response body can be seq, this allows for easy HTTP Stream
-   handling. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.4][Documentation]].
-** Cookies
-   Added cookies support. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.4][Sending]] and [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.5.4][receiving]].
-** Authentication support
-   Basic and Digest from rfc2617 are supported. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.6][Documentation]].
-** Proxy per request
-   Proxy can be specified per request. [[http://neotyk.github.com/http.async.client/http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
-** Branding User-Agent
-   Specifying User-Agent per client.
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]].
-** Keyworded maps in API
-   Like *:options* in [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].
+* Release 0.2.2
+** get-encoding helper works w/o Content-Type header
+** Upgrade async-http-client to v.1.5.0
+** Exposed more configuration options
+*** Timeouts
+*** Proxy
+*** Authentication
+** Zero byte copy mode
+   If sending File as body, zero byte copy is used.
+** Allow providing your own poll
+   Vadim Geshel contribution.
+** Allow Asynchronous Connect
+   Vadim Geshel contribution.
+** Fix seq streaming API
+   Previous versions of seq streaming API have been holding to head,
+   not anymore.
+** Lots of performance improvements
+   Underlying async-http-client has undergone serious optimization
+   changes.
 * Release 0.2.1
 ** Terminate body seq if errored                                        :bug:
 ** Canceling request
@@ -36,12 +40,18 @@
    (c/close hac)
    #+END_SRC
 ** Upgrade to v1.3.2 of async-http-client
-* Release 0.2.2
-** get-encoding helper works w/o Content-Type header                    :bug:
-** Upgrade async-http-client to v.1.5.0
-** Exposed more global configuration options
-*** Timeouts
-*** Proxy
-*** Authentication
-** Zero byte copy mode
-   If sending File as body, zero byte copy is used.
+* Release 0.2.0
+** Stream as seq
+   Response body can be seq, this allows for easy HTTP Stream
+   handling. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.4][Documentation]].
+** Cookies
+   Added cookies support. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.4][Sending]] and [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.5.4][receiving]].
+** Authentication support
+   Basic and Digest from rfc2617 are supported. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.6][Documentation]].
+** Proxy per request
+   Proxy can be specified per request. [[http://neotyk.github.com/http.async.client/http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
+** Branding User-Agent
+   Specifying User-Agent per client.
+   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]].
+** Keyworded maps in API
+   Like *:options* in [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].

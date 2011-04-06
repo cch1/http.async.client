@@ -103,6 +103,12 @@
                                 (if (= auth "Basic YmVhc3RpZTpib3lz")
                                   200
                                   401)))
+	       "/preemptive-auth" (let [auth (.getHeader hReq "Authorization")]
+				    (.setStatus
+				     hResp
+				     (if (= auth "Basic YmVhc3RpZTpib3lz")
+				       200
+				       401)))
                "/timeout" (Thread/sleep 2000)
                "/empty" (.setHeader hResp "Nothing" "Yep")
                (doseq [n (enumeration-seq (.getParameterNames hReq))]
@@ -120,7 +126,7 @@
   ([handler {port :port :as opts :or {:port 8123}}]
      (let [srv (Server. port)]
        (doto (Logger/getRootLogger)
-         (.setLevel Level/DEBUG)
+         (.setLevel Level/INFO)
          (.addAppender (ConsoleAppender. (PatternLayout. PatternLayout/TTCC_CONVERSION_PATTERN))))
 
        (let [loginSrv (HashLoginService. "MyRealm" "test-resources/realm.properties")
@@ -213,7 +219,7 @@
 (deftest test-get-params-not-allowed
   (is (thrown?
        IllegalArgumentException
-       (GET "http://localhost:8123/" :body {:a 5 :b 6}))))
+       (GET "http://localhost:8123/" :body "Boo!"))))
 
 (deftest test-post-params
   (let [resp (POST "http://localhost:8123/" :body {:a 5 :b 6})
@@ -318,16 +324,26 @@
     (is (= "part1part2" (string resp)))))
 
 (deftest test-stream-seq
-  (let [resp (stream-seq :get "http://localhost:8123/stream")
-        status (status resp)
-        headers (headers resp)
-        body (body resp)]
-    (are [e p] (= e p)
-         200 (:code status)
-         "test-value" (:test-header headers)
-         2 (count body))
-    (doseq [s (string headers body)]
-      (is (or (= "part1" s) (= "part2" s))))))
+  (testing "Simple stream."
+    (let [resp (stream-seq :get "http://localhost:8123/stream")
+          status (status resp)
+          headers (headers resp)
+          body (body resp)]
+      (are [e p] (= e p)
+           200 (:code status)
+           "test-value" (:test-header headers)
+           2 (count body))
+      (doseq [s (string headers body)]
+        (is (or (= "part1" s) (= "part2" s))))))
+  (testing "Backed by queue contract."
+    (let [resp (stream-seq :get "http://localhost:8123/stream")
+          status (status resp)
+          headers (headers resp)]
+      (are [e p] (= e p)
+           200 (:code status)
+           "test-value" (:test-header headers))
+      (is (= "part1" (first (string resp))))
+      (is (= "part2" (first (string resp)))))))
 
 (deftest issue-1
   (is (= "глава" (string (GET "http://localhost:8123/issue-1")))))
@@ -336,6 +352,62 @@
   (let [resp (GET "http://localhost:8123/proxy-req" :proxy {:host "localhost" :port 8123})
         headers (headers resp)]
     (is (= "http://localhost:8123/proxy-req" (:target headers)))))
+
+(deftest proxy-creation
+  (testing "host and port missing"
+    (is (thrown-with-msg? AssertionError #"Assert failed: host"
+          (prepare-request :get "http://not-important/" :proxy {:meaning :less}))))
+  (testing "host missing"
+    (is (thrown-with-msg? AssertionError #"Assert failed: host"
+          (prepare-request :get "http://not-important/" :proxy {:port 8080}))))
+  (testing "port missing"
+    (is (thrown-with-msg? AssertionError #"Assert failed: port"
+          (prepare-request :get "http://not-important/" :proxy {:host "localhost"}))))
+  (testing "only host and port"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:host "localhost"
+                                                                  :port 8080})]
+      (is (isa? (class r) com.ning.http.client.Request))))
+  (testing "wrong protocol"
+    (is (thrown-with-msg? AssertionError #"Assert failed:.*protocol.*"
+          (prepare-request :get "http://not-important/" :proxy {:protocol :wrong
+                                                                :host "localhost"
+                                                                :port 8080}))))
+  (testing "http protocol"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :http
+                                                                  :host "localhost"
+                                                                  :port 8080})]
+      (is (isa? (class r) com.ning.http.client.Request))))
+  (testing "https protocol"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :https
+                                                                  :host "localhost"
+                                                                  :port 8383})]
+      (is (isa? (class r) com.ning.http.client.Request))))
+  (testing "protocol but no host nor port"
+    (is (thrown-with-msg? AssertionError #"Assert failed: host"
+          (prepare-request :get "http://not-important/" :proxy {:protocol :http}))))
+  (testing "host, port, user but no password"
+    (is (thrown-with-msg? AssertionError #"Assert failed:.*password.*"
+          (prepare-request :get "http://not-important/" :proxy {:host "localhost"
+                                                                :port 8080
+                                                                :user "name"}))))
+  (testing "host, port, password but no user"
+    (is (thrown-with-msg? AssertionError #"Assert failed:.*user.*"
+          (prepare-request :get "http://not-important/" :proxy {:host "localhost"
+                                                                :port 8080
+                                                                :password "..."}))))
+  (testing "host, port, user and password"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:host "localhost"
+                                                                  :port 8080
+                                                                  :user "name"
+                                                                  :password "..."})]
+      (is (isa? (class r) com.ning.http.client.Request))))
+  (testing "protocol, host, port, user and password"
+    (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :http
+                                                                  :host "localhost"
+                                                                  :port 8080
+                                                                  :user "name"
+                                                                  :password "..."})]
+      (is (isa? (class r) com.ning.http.client.Request)))))
 
 (deftest get-with-cookie
   (let [cv "sample-value"
@@ -409,10 +481,24 @@
                                   :password "boys"})))
        200)))
 
+(deftest preemptive-authentication
+  (is (=
+       (:code (status (GET "http://localhost:8123/preemptive-auth"
+                           :auth {:user "beastie"
+                                  :password "boys"})))
+       401))
+  (is (=
+       (:code (status (GET "http://localhost:8123/preemptive-auth"
+                           :auth {:user "beastie"
+                                  :password "boys"
+				  :preemptive true})))
+       200)))
+
 (deftest canceling-request
   (let [resp (GET "http://localhost:8123/")]
     (is (false? (cancelled? resp)))
     (is (true? (cancel resp)))
+    (await resp)
     (is (true? (cancelled? resp)))))
 
 (deftest reqeust-timeout

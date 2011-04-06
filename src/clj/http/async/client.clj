@@ -34,6 +34,21 @@
   - :max-conns-per-host :: max number of polled connections per host
   - :max-conns-total :: max number of total connections held open by client
   - :max-redirects :: max nuber of redirects to follow
+  - :proxy :: map with proxy configuration to be used
+      :host     - proxy host
+      :port     - proxy port
+      :protocol - (optional) protocol to communicate with proxy,
+                  :http (default, if you provide no value) and :https are allowed
+      :user     - (optional) user name to use for proxy authentication,
+                  has to be provided with :password
+      :password - (optional) password to use for proxy authentication,
+                  has to be provided with :user
+  - :auth :: map with authentication to be used
+      :type       - either :basic or :digest
+      :user       - user name to be used
+      :password   - password to be used
+      :realm      - realm name to authenticate in
+      :preemptive - assume authentication is required
   - :request-timeout :: request timeout in ms
   - :user-agent :: User-Agent branding string
   - :async-connect :: Execute connect asynchronously
@@ -48,7 +63,7 @@
              max-conns-total
              max-redirects
              proxy
-             realm
+             auth
              request-timeout
              user-agent
              async-connect
@@ -70,9 +85,10 @@
                                 (.addProperty NettyAsyncHttpProviderConfig/EXECUTE_ASYNC_CONNECT true))]
           (.setAsyncHttpClientProviderConfig b provider-config)))
       (when executor-service (.setExecutorService b executor-service))
-      (set-proxy proxy b)
-      (when realm
-        (set-realm realm b))
+      (when proxy
+        (set-proxy proxy b))
+      (when auth
+        (set-realm auth b))
       (when request-timeout (.setRequestTimeoutInMs b request-timeout))
       (.setUserAgent b (if user-agent user-agent *user-agent*))
       b))))

@@ -18,6 +18,7 @@
   (:refer-clojure :exclude [promise])
   (:require [http.async.client.request :as r])
   (:import (com.ning.http.client ProxyServer
+                                 ProxyServer$Protocol
                                  Realm$AuthScheme
                                  Realm$RealmBuilder)))
 
@@ -81,7 +82,15 @@
     :headers - map of headers
     :body    - body
     :cookies - cookies to send
-    :proxy   - map with proxy configuration to be used (:host and :port)
+    :proxy   - map with proxy configuration to be used
+      :host     - proxy host
+      :port     - proxy port
+      :protocol - (optional) protocol to communicate with proxy,
+                  :http (default, if you provide no value) and :https are allowed
+      :user     - (optional) user name to use for proxy authentication,
+                  has to be provided with :password
+      :password - (optional) password to use for proxy authentication,
+                  has to be provided with :user
     :auth    - map with authentication to be used
       :type     - either :basic or :digest
       :user     - user name to be used
@@ -94,20 +103,28 @@
                         (apply concat r/*default-callbacks*)))))
           methods)))
 
+(defn- proto-map [proto]
+  (if proto
+    ({:http  ProxyServer$Protocol/HTTP
+      :https ProxyServer$Protocol/HTTPS} proto)
+    ProxyServer$Protocol/HTTP))
+
 (defn set-proxy
   "Sets proxy on builder."
-  [{host :host port :port} b]
-  (when (and host port)
-    (.setProxyServer b (ProxyServer. host port))))
+  [{:keys [protocol host port user password]} b]
+  {:pre [(or (nil? protocol)
+             (contains? #{:http :https} protocol))
+         host port
+         (or (and (nil? user) (nil? password))
+             (and user password))]}
+  (.setProxyServer b (if user
+                       (ProxyServer. (proto-map protocol) host port user password)
+                       (ProxyServer. (proto-map protocol) host port))))
 
 (defn set-realm
   "Sets realm on builder."
-  [{type :type
-    user :user
-    password :password
-    realm :realm
-    :or {:type :basic}}
-   b]
+  [{:keys [type user password realm preemptive]
+    :or {:type :basic}} b]
   (let [rbld (Realm$RealmBuilder.)]
     (when (nil? user)
       (if (nil? password)
@@ -120,6 +137,8 @@
                                  "For DIGEST authentication realm is required")))
       (.setRealmName rbld realm)
       (.setScheme rbld Realm$AuthScheme/DIGEST))
+    (when (not (nil? preemptive))
+      (.setUsePreemptiveAuth rbld preemptive))
     (doto rbld
       (.setPrincipal user)
       (.setPassword password))
