@@ -1,4 +1,4 @@
-(defproject http.async.client "0.2.2"
+(defproject org.clojars.vgeshel/http.async.client "0.2.2"
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "http://github.com/neotyk/http.async.client/"
   :source-path      "src/clj"
