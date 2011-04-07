@@ -483,18 +483,18 @@
        200)))
 
 ;; breaks with AsyncHttpClient 1.6.3
-;; (deftest preemptive-authentication
-;;   (is (=
-;;        (:code (status (GET "http://localhost:8123/preemptive-auth"
-;;                            :auth {:user "beastie"
-;;                                   :password "boys"})))
-;;        401))
-;;   (is (=
-;;        (:code (status (GET "http://localhost:8123/preemptive-auth"
-;;                            :auth {:user "beastie"
-;;                                   :password "boys"
-;; 				  :preemptive true})))
-;;        200)))
+(deftest preemptive-authentication
+  (is (=
+       (:code (status (GET "http://localhost:8123/preemptive-auth"
+                           :auth {:user "beastie"
+                                  :password "boys"})))
+       401))
+  (is (=
+       (:code (status (GET "http://localhost:8123/preemptive-auth"
+                           :auth {:user "beastie"
+                                  :password "boys"
+				  :preemptive true})))
+       200)))
 
 (deftest canceling-request
   (let [resp (GET "http://localhost:8123/")]

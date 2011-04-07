@@ -121,11 +121,17 @@
                        (ProxyServer. (proto-map protocol) host port user password)
                        (ProxyServer. (proto-map protocol) host port))))
 
+(defn- type->auth-scheme [type]
+  (or ({:basic Realm$AuthScheme/BASIC
+        :digest Realm$AuthScheme/DIGEST} type)
+      Realm$AuthScheme/BASIC))
+
 (defn set-realm
   "Sets realm on builder."
   [{:keys [type user password realm preemptive]
     :or {:type :basic}} b]
   (let [rbld (Realm$RealmBuilder.)]
+    (.setScheme rbld (type->auth-scheme type))
     (when (nil? user)
       (if (nil? password)
         (throw (IllegalArgumentException. "For authentication user and password is required"))
@@ -135,8 +141,7 @@
     (when (= :digest type)
       (when (nil? realm) (throw (IllegalArgumentException.
                                  "For DIGEST authentication realm is required")))
-      (.setRealmName rbld realm)
-      (.setScheme rbld Realm$AuthScheme/DIGEST))
+      (.setRealmName rbld realm))
     (when (not (nil? preemptive))
       (.setUsePreemptiveAuth rbld preemptive))
     (doto rbld
