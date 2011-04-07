@@ -482,7 +482,6 @@
                                   :password "boys"})))
        200)))
 
-;; breaks with AsyncHttpClient 1.6.3
 (deftest preemptive-authentication
   (is (=
        (:code (status (GET "http://localhost:8123/preemptive-auth"
