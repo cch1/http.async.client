@@ -37,7 +37,7 @@
 
 (def *user-agent* "http.async.client/0.2.2")
 
-(def *client* nil)
+(def *CLIENT* nil)
 
 (defn- convert-method [method]
   "Converts clj method (:get, :put, ...) to Async Client specific.
@@ -215,11 +215,11 @@
   - :done    - promise that is delivered once receiving response has finished
   - :error   - promise that is delivered if requesting resource failed, once delivered
                will contain Throwable."
-  [#^Request req & {status    :status
-                    headers   :headers
-                    part      :part
-                    completed :completed
-                    error     :error}]
+  [client #^Request req & {status    :status
+                           headers   :headers
+                           part      :part
+                           completed :completed
+                           error     :error}]
   (let [resp {:id      (gensym "req-id__")
               :status  (promise)
               :headers (promise)
@@ -228,7 +228,7 @@
               :error   (promise)}
         resp-future
         (.executeRequest
-         *client* req
+         client req
          (proxy [AsyncHandler] []
            (onStatusReceived [#^HttpResponseStatus e]
                              (let [[result action] (status resp (convert-status-to-map e))]

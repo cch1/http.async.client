@@ -42,6 +42,8 @@
            (java.util.concurrent TimeoutException)))
 (set! *warn-on-reflection* true)
 
+(def *client* nil)
+
 ;; test suite setup
 (def default-handler
      (proxy [AbstractHandler] []
@@ -167,7 +169,7 @@
 ;; testing
 (deftest test-status
   (let [status# (promise)
-	_ (apply execute-request
+	_ (apply execute-request *client*
                  (prepare-request :get "http://localhost:8123/")
                  (apply concat (merge *default-callbacks*
                                       {:status (fn [_ st] (do (deliver status# st) [st :abort]))})))
@@ -181,7 +183,7 @@
 
 (deftest test-receive-headers
   (let [headers# (promise)
-        _ (apply execute-request
+        _ (apply execute-request *client*
                  (prepare-request :get "http://localhost:8123/")
                  (apply concat (merge *default-callbacks*
                                       {:headers (fn [_ hds] (do (deliver headers# hds) [hds :abort]))})))
@@ -189,7 +191,7 @@
     (is (= (:test-header headers) "test-value"))))
 
 (deftest test-send-headers
-  (let [resp (GET "http://localhost:8123/" :headers {:a 1 :b 2})
+  (let [resp (GET *client* "http://localhost:8123/" :headers {:a 1 :b 2})
         headers (headers resp)]
     (if (delivered? (:error resp))
       (print-stack-trace @(:error resp)))
@@ -200,7 +202,7 @@
          :b 2)))
 
 (deftest test-body
-  (let [resp (GET "http://localhost:8123/body")
+  (let [resp (GET *client* "http://localhost:8123/body")
         headers (headers resp)
         body (body resp)]
     (is (not (nil? body)))
@@ -209,7 +211,7 @@
       (is (= (count (string resp)) (Integer/parseInt (:content-length headers)))))))
 
 (deftest test-query-params
-  (let [resp (GET "http://localhost:8123/" :query {:a 3 :b 4})
+  (let [resp (GET *client* "http://localhost:8123/" :query {:a 3 :b 4})
         headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
@@ -221,10 +223,10 @@
 ;; (deftest test-get-params-not-allowed
 ;;   (is (thrown?
 ;;        IllegalArgumentException
-;;        (GET "http://localhost:8123/" :body "Boo!"))))
+;;        (GET *client* "http://localhost:8123/" :body "Boo!"))))
 
 (deftest test-post-params
-  (let [resp (POST "http://localhost:8123/" :body {:a 5 :b 6})
+  (let [resp (POST *client* "http://localhost:8123/" :body {:a 5 :b 6})
         headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
@@ -232,13 +234,13 @@
          :b 6)))
 
 (deftest test-post-string-body
-  (let [resp (POST "http://localhost:8123/body-str" :body "TestBody  Encoded?")
+  (let [resp (POST *client* "http://localhost:8123/body-str" :body "TestBody  Encoded?")
         headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "TestBody  Encoded?" (string resp)))))
 
 (deftest test-post-string-body-content-type-encoded
-  (let [resp (POST "http://localhost:8123/body-str"
+  (let [resp (POST *client* "http://localhost:8123/body-str"
                    :headers {:content-type "application/x-www-form-urlencoded"}
                    :body "Encode this & string?")
         headers (headers resp)]
@@ -246,7 +248,7 @@
     (is (= "Encode+this+%26+string%3F" (string resp)))))
 
 (deftest test-post-map-body
-  (let [resp (POST "http://localhost:8123/" :body {:u "user" :p "s3cr3t"})
+  (let [resp (POST *client* "http://localhost:8123/" :body {:u "user" :p "s3cr3t"})
         headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= x (y headers))
@@ -254,18 +256,18 @@
          "s3cr3t" :p)))
 
 (deftest test-post-input-stream-body
-  (let [resp (POST "http://localhost:8123/body-str" :body (input-stream (.getBytes "TestContent" "UTF-8")))
+  (let [resp (POST *client* "http://localhost:8123/body-str" :body (input-stream (.getBytes "TestContent" "UTF-8")))
         headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-post-file-body
-  (let [resp (POST "http://localhost:8123/body-str" :body (File. "test-resources/test.txt"))]
+  (let [resp (POST *client* "http://localhost:8123/body-str" :body (File. "test-resources/test.txt"))]
     (is (false? (empty? (headers resp))))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-put
-  (let [resp (PUT "http://localhost:8123/put" :body "TestContent")
+  (let [resp (PUT *client* "http://localhost:8123/put" :body "TestContent")
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -275,7 +277,7 @@
     (is (= "PUT" (:method headers)))))
 
 (deftest test-delete
-  (let [resp (DELETE "http://localhost:8123/delete")
+  (let [resp (DELETE *client* "http://localhost:8123/delete")
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -285,7 +287,7 @@
     (is (= "DELETE" (:method headers)))))
 
 (deftest test-head
-  (let [resp (HEAD "http://localhost:8123/head")
+  (let [resp (HEAD *client* "http://localhost:8123/head")
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -295,7 +297,7 @@
     (is (= "HEAD" (:method headers)))))
 
 (deftest test-options
-  (let [resp (OPTIONS "http://localhost:8123/options")
+  (let [resp (OPTIONS *client* "http://localhost:8123/options")
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -306,7 +308,7 @@
 
 (deftest test-stream
   (let [stream (ref #{})
-        resp (request-stream :get "http://localhost:8123/stream"
+        resp (request-stream *client* :get "http://localhost:8123/stream"
                      (fn [_ baos]
                        (dosync (alter stream conj (.toString baos duck/*default-encoding*)))
                        [baos :continue]))
@@ -321,13 +323,13 @@
         (is (contains? #{"part1" "part2"} part))))))
 
 (deftest test-get-stream
-  (let [resp (GET "http://localhost:8123/stream")]
+  (let [resp (GET *client* "http://localhost:8123/stream")]
     (await resp)
     (is (= "part1part2" (string resp)))))
 
 (deftest test-stream-seq
   (testing "Simple stream."
-    (let [resp (stream-seq :get "http://localhost:8123/stream")
+    (let [resp (stream-seq *client* :get "http://localhost:8123/stream")
           status (status resp)
           headers (headers resp)
           body (body resp)]
@@ -338,7 +340,7 @@
       (doseq [s (string headers body)]
         (is (or (= "part1" s) (= "part2" s))))))
   (testing "Backed by queue contract."
-    (let [resp (stream-seq :get "http://localhost:8123/stream")
+    (let [resp (stream-seq *client* :get "http://localhost:8123/stream")
           status (status resp)
           headers (headers resp)]
       (are [e p] (= e p)
@@ -348,10 +350,10 @@
       (is (= "part2" (first (string resp)))))))
 
 (deftest issue-1
-  (is (= "глава" (string (GET "http://localhost:8123/issue-1")))))
+  (is (= "глава" (string (GET *client* "http://localhost:8123/issue-1")))))
 
 (deftest get-via-proxy
-  (let [resp (GET "http://localhost:8123/proxy-req" :proxy {:host "localhost" :port 8123})
+  (let [resp (GET *client* "http://localhost:8123/proxy-req" :proxy {:host "localhost" :port 8123})
         headers (headers resp)]
     (is (= "http://localhost:8123/proxy-req" (:target headers)))))
 
@@ -413,7 +415,7 @@
 
 (deftest get-with-cookie
   (let [cv "sample-value"
-        resp (GET "http://localhost:8123/cookie"
+        resp (GET *client* "http://localhost:8123/cookie"
                   :cookies #{{:domain "http://localhost:8123/"
                               :name "sample-name"
                               :value cv
@@ -435,7 +437,7 @@
 (deftest get-with-user-agent-branding
   (let [ua-brand "Branded User Agent/1.0"]
     (with-client {:user-agent ua-brand}
-      (let [headers (headers (GET "http://localhost:8123/branding"))]
+      (let [headers (headers (GET *CLIENT* "http://localhost:8123/branding"))]
         (is (contains? headers :x-user-agent))
         (is (= (:x-user-agent headers) ua-brand))))))
 
@@ -443,61 +445,61 @@
   (with-client {:max-conns-per-host 1
                 :max-conns-total 1}
     (let [url "http://localhost:8123/timeout"
-          r1 (GET url)]
-      (is (thrown-with-msg? java.io.IOException #"Too many connections 1" (GET url)))
+          r1 (GET *CLIENT* url)]
+      (is (thrown-with-msg? java.io.IOException #"Too many connections 1" (GET *CLIENT* url)))
       (is (not (failed? (await r1)))))))
 
 (deftest await-string
-  (let [resp (GET "http://localhost:8123/stream")
+  (let [resp (GET *client* "http://localhost:8123/stream")
         body (string (await resp))]
     (is (= body "part1part2"))))
 
 (deftest no-host
-  (let [resp (GET "http://notexisting/")]
+  (let [resp (GET *client* "http://notexisting/")]
     (await resp)
     (is (= (class (.getCause (error resp))) UnresolvedAddressException))
     (is (true? (failed? resp)))))
 
 (deftest no-realm-for-digest
   (is (thrown-with-msg? IllegalArgumentException #"For DIGEST authentication realm is required"
-        (GET "http://not-important/"
+        (GET *client* "http://not-important/"
              :auth {:type :digest
                     :user "user"
                     :password "secret"}))))
 
 (deftest authentication-without-user-or-password
   (is (thrown-with-msg? IllegalArgumentException #"For authentication user is required"
-        (GET "http://not-important/"
+        (GET *client* "http://not-important/"
              :auth {:password "secret"})))
   (is (thrown-with-msg? IllegalArgumentException #"For authentication password is required"
-        (GET "http://not-important/"
+        (GET *client* "http://not-important/"
              :auth {:user "user"})))
   (is (thrown-with-msg? IllegalArgumentException #"For authentication user and password is required"
-        (GET "http://not-important/"
+        (GET *client* "http://not-important/"
              :auth {:type :basic}))))
 
 (deftest basic-authentication
   (is (=
-       (:code (status (GET "http://localhost:8123/basic-auth"
+       (:code (status (GET *client* "http://localhost:8123/basic-auth"
                            :auth {:user "beastie"
                                   :password "boys"})))
        200)))
 
 (deftest preemptive-authentication
   (is (=
-       (:code (status (GET "http://localhost:8123/preemptive-auth"
+       (:code (status (GET *client* "http://localhost:8123/preemptive-auth"
                            :auth {:user "beastie"
                                   :password "boys"})))
        401))
   (is (=
-       (:code (status (GET "http://localhost:8123/preemptive-auth"
+       (:code (status (GET *client* "http://localhost:8123/preemptive-auth"
                            :auth {:user "beastie"
                                   :password "boys"
 				  :preemptive true})))
        200)))
 
 (deftest canceling-request
-  (let [resp (GET "http://localhost:8123/")]
+  (let [resp (GET *client* "http://localhost:8123/")]
     (is (false? (cancelled? resp)))
     (is (true? (cancel resp)))
     (await resp)
@@ -505,14 +507,14 @@
 
 (deftest reqeust-timeout
   (testing "timing out"
-    (let [resp (GET "http://localhost:8123/timeout" :timeout 100)]
+    (let [resp (GET *client* "http://localhost:8123/timeout" :timeout 100)]
       (await resp)
       (is (true? (failed? resp)))
       (if (failed? resp)
         (is (instance? TimeoutException (error resp)))
         (println "headers of response that was supposed to timeout." (headers resp)))))
   (testing "infinite timeout"
-    (let [resp (GET "http://localhost:8123/timeout" :timeout -1)]
+    (let [resp (GET *client* "http://localhost:8123/timeout" :timeout -1)]
       (await resp)
       (is (not (failed? resp)))
       (if (failed? resp)
@@ -522,7 +524,7 @@
       (is (true? (done? resp)))))
   (testing "global timeout"
     (with-client {:request-timeout 100}
-      (let [resp (GET "http://localhost:8123/timeout")]
+      (let [resp (GET *CLIENT* "http://localhost:8123/timeout")]
         (await resp)
         (is (true? (failed? resp)))
         (if (failed? resp)
@@ -530,31 +532,31 @@
           (println "headers of response that was supposed to timeout" (headers resp))))))
   (testing "global timeout overwritten by local infinite"
     (with-client {:request-timeout 100}
-      (let [resp (GET "http://localhost:8123/timeout" :timeout -1)]
+      (let [resp (GET *CLIENT* "http://localhost:8123/timeout" :timeout -1)]
         (await resp)
         (is (false? (failed? resp)))
         (is (done? resp)))))
   (testing "global idle connection in pool timeout"
     (with-client {:idle-in-pool-timeout 100}
-      (let [resp (GET "http://localhost:8123/timeout")]
+      (let [resp (GET *CLIENT* "http://localhost:8123/timeout")]
         (await resp)
         (is (false? (failed? resp)))
         (when (failed? resp)
           (println "No response received, while excepting it." (.getMessage (error resp))))))))
 
 (deftest closing-client
-  (binding [*client* (create-client)]
-    (let [_ (await (GET "http://localhost:8123/"))]
-      (close *client*)
-      (is (thrown-with-msg? IOException #"Closed" (GET "http://localhost:8123/"))))))
+  (binding [*CLIENT* (create-client)]
+    (let [_ (await (GET *CLIENT* "http://localhost:8123/"))]
+      (close *CLIENT*)
+      (is (thrown-with-msg? IOException #"Closed" (GET *CLIENT* "http://localhost:8123/"))))))
 
 (deftest extract-empty-body
-  (let [resp (await (GET "http://localhost:8123/empty"))]
+  (let [resp (await (GET *client* "http://localhost:8123/empty"))]
     (is (nil? (string resp)))))
 
 ;;(deftest profile-get-stream
-;;  (let [gets (repeat (GET "http://localhost:8123/stream"))
-;;        seqs (repeat (stream-seq :get "http://localhost:8123/stream"))
+;;  (let [gets (repeat (GET *client* "http://localhost:8123/stream"))
+;;        seqs (repeat (stream-seq *client* :get "http://localhost:8123/stream"))
 ;;        f (fn [resps] (doseq [resp resps] (is (= "part1part2" (prof :get-stream (string resp))))))
 ;;        g (fn [resps] (doseq [resp resps] (doseq [s (prof :seq-stream (doall (string resp)))]
 ;;                                                (is (or (= "part1" s) (= "part2 s"))))))]

@@ -99,7 +99,7 @@
   Config accepts same configuration options as create-client."
   [config & body]
   `(with-open [c# (create-client ~@(apply concat config))]
-     (binding [*client* c#]
+     (binding [http.async.client.request/*CLIENT* c#]
        ~@body)))
 
 (defmacro gen-methods [& methods]
@@ -123,8 +123,9 @@
   - :error   - promise that is delivered if requesting resource failed, once delivered
                will contain Throwable.
   Arguments:
-  - url     - URL to request
-  - options - keyworded arguments:
+  - client   - client created via create-client
+  - url      - URL to request
+  - options  - keyworded arguments:
     :query   - map of query parameters
     :headers - map of headers
     :body    - body
@@ -144,8 +145,8 @@
       :password - password to be used
       :realm    - realm name to authenticate in
     :timeout - request timeout in ms")]
-              `(defn ~fn-name ~fn-doc [#^String ~'url & {:as ~'options}]
-                 (apply execute-request
+              `(defn ~fn-name ~fn-doc [~'client #^String ~'url & {:as ~'options}]
+                 (apply execute-request ~'client
                         (apply prepare-request ~method# ~'url (apply concat ~'options))
                         (apply concat *default-callbacks*)))))
           methods)))
@@ -159,16 +160,16 @@
   body-part-callback - callback that takes status (ref {}) of request
                        and received body part as vector of bytes
   options - are optional and can contain :headers, :param, and :query (see prepare-request)."
-  [method #^String url body-part-callback & {:as options}]
-  (apply execute-request
+  [client method #^String url body-part-callback & {:as options}]
+  (apply execute-request client
          (apply prepare-request method url (apply concat options))
          (apply concat (merge *default-callbacks* {:part body-part-callback}))))
 
 (defn stream-seq
   "Creates potentially infinite lazy sequence of Http Stream."
-  [method #^String url & {:as options}]
+  [client method #^String url & {:as options}]
   (let [que (LinkedBlockingQueue.)]
-    (apply execute-request
+    (apply execute-request client
            (apply prepare-request method url (apply concat options))
            (apply concat (merge
                           *default-callbacks*
@@ -274,5 +275,4 @@
 
 (defn close
   "Closes client."
-  ([] (close *client*))
   ([client] (.close client)))
