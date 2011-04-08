@@ -216,7 +216,8 @@
          :a 3
          :b 4)))
 
-;; apparently the latest version of AsyncHttpClient allows body in GET
+;; TODO: uncomment this test once AHC throws exception again on body
+;; with GET
 ;; (deftest test-get-params-not-allowed
 ;;   (is (thrown?
 ;;        IllegalArgumentException
