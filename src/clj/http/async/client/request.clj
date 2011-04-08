@@ -37,10 +37,7 @@
 
 (def *user-agent* "http.async.client/0.2.2")
 
-(def *client*
-     (AsyncHttpClient.
-      (.build
-       (.setUserAgent (AsyncHttpClientConfig$Builder.) *user-agent*))))
+(def *client* nil)
 
 (defn- convert-method [method]
   "Converts clj method (:get, :put, ...) to Async Client specific.
