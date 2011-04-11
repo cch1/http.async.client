@@ -93,7 +93,7 @@
       (.setUserAgent b (if user-agent user-agent *user-agent*))
       b))))
 
-(defmacro gen-methods [& methods]
+(defmacro ^{:private true} gen-methods [& methods]
   (list* 'do
      (map (fn [method#]
             (let [fn-name (symbol (.toUpperCase (name method#)))
