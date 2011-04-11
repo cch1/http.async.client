@@ -93,15 +93,6 @@
       (.setUserAgent b (if user-agent user-agent *user-agent*))
       b))))
 
-(defmacro with-client
-  "Creates new Async Http Client with given configuration
-  than executes body and closes the client.
-  Config accepts same configuration options as create-client."
-  [config & body]
-  `(with-open [c# (create-client ~@(apply concat config))]
-     (binding [http.async.client.request/*CLIENT* c#]
-       ~@body)))
-
 (defmacro gen-methods [& methods]
   (list* 'do
      (map (fn [method#]

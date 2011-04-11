@@ -436,17 +436,17 @@
 
 (deftest get-with-user-agent-branding
   (let [ua-brand "Branded User Agent/1.0"]
-    (with-client {:user-agent ua-brand}
-      (let [headers (headers (GET *CLIENT* "http://localhost:8123/branding"))]
+    (with-open [client (create-client :user-agent ua-brand)]
+      (let [headers (headers (GET client "http://localhost:8123/branding"))]
         (is (contains? headers :x-user-agent))
         (is (= (:x-user-agent headers) ua-brand))))))
 
 (deftest connection-limiting
-  (with-client {:max-conns-per-host 1
-                :max-conns-total 1}
+  (with-open [client (create-client :max-conns-per-host 1
+                                      :max-conns-total 1)]
     (let [url "http://localhost:8123/timeout"
-          r1 (GET *CLIENT* url)]
-      (is (thrown-with-msg? java.io.IOException #"Too many connections 1" (GET *CLIENT* url)))
+          r1 (GET client url)]
+      (is (thrown-with-msg? java.io.IOException #"Too many connections 1" (GET client url)))
       (is (not (failed? (await r1)))))))
 
 (deftest await-string
@@ -523,32 +523,32 @@
           (print-stack-trace (error resp))))
       (is (true? (done? resp)))))
   (testing "global timeout"
-    (with-client {:request-timeout 100}
-      (let [resp (GET *CLIENT* "http://localhost:8123/timeout")]
+    (with-open [client (create-client :request-timeout 100)]
+      (let [resp (GET client "http://localhost:8123/timeout")]
         (await resp)
         (is (true? (failed? resp)))
         (if (failed? resp)
           (is (instance? TimeoutException (error resp)))
           (println "headers of response that was supposed to timeout" (headers resp))))))
   (testing "global timeout overwritten by local infinite"
-    (with-client {:request-timeout 100}
-      (let [resp (GET *CLIENT* "http://localhost:8123/timeout" :timeout -1)]
+    (with-open [client (create-client :request-timeout 100)]
+      (let [resp (GET client "http://localhost:8123/timeout" :timeout -1)]
         (await resp)
         (is (false? (failed? resp)))
         (is (done? resp)))))
   (testing "global idle connection in pool timeout"
-    (with-client {:idle-in-pool-timeout 100}
-      (let [resp (GET *CLIENT* "http://localhost:8123/timeout")]
+    (with-open [client (create-client :idle-in-pool-timeout 100)]
+      (let [resp (GET client "http://localhost:8123/timeout")]
         (await resp)
         (is (false? (failed? resp)))
         (when (failed? resp)
           (println "No response received, while excepting it." (.getMessage (error resp))))))))
 
 (deftest closing-client
-  (binding [*CLIENT* (create-client)]
-    (let [_ (await (GET *CLIENT* "http://localhost:8123/"))]
-      (close *CLIENT*)
-      (is (thrown-with-msg? IOException #"Closed" (GET *CLIENT* "http://localhost:8123/"))))))
+  (let [client (create-client)
+        _ (await (GET client "http://localhost:8123/"))]
+    (close client)
+    (is (thrown-with-msg? IOException #"Closed" (GET client "http://localhost:8123/")))))
 
 (deftest extract-empty-body
   (let [resp (await (GET *client* "http://localhost:8123/empty"))]
