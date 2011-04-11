@@ -4,6 +4,37 @@
 #+INFOJS_OPT: view:info toc:1
 #+OPTIONS: H:4
 
+* Release 0.2.3
+** Upgrade async-http-client to v1.6.3
+** Control over preemptive authentication
+   Patch provided by xeqi.
+** Explicit client usage
+   Now following functions require client as first argument:
+   - GET
+   - PUT
+   - POST
+   - DELETE
+   - HEAD
+   - OPTIONS
+   - request-stream
+   - stream-seq
+   - execute-request
+   You still create client with create-client function.
+** Removed with-client macro
+   This didn't really bring much value.
+   Migration procedure.
+   From:
+   #+begin_src clojure
+     (with-client {:key val}
+       ;; client usage
+       (let [resp (GET url)]))
+   #+end_src
+   To:
+   #+begin_src clojure
+     (with-open [client (create-client :key val)]
+       ;; client usage
+       (let [resp (GET client url)]))
+   #+end_src
 * Release 0.2.2
 ** get-encoding helper works w/o Content-Type header
 ** Upgrade async-http-client to v.1.5.0
