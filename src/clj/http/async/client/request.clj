@@ -35,7 +35,7 @@
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
-(def *user-agent* "http.async.client/0.2.2")
+(def *user-agent* "http.async.client/0.2.3-dev")
 
 (def *CLIENT* nil)
 
