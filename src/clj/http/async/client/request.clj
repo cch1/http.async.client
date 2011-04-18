@@ -229,33 +229,38 @@
         resp-future
         (.executeRequest
          client req
-         (proxy [AsyncHandler] []
-           (onStatusReceived [#^HttpResponseStatus e]
-                             (let [[result action] (status resp (convert-status-to-map e))]
-                               (deliver (:status resp) result)
-                               (convert-action action)))
-           (onHeadersReceived [#^HttpResponseHeaders e]
-                              (let [[result action] (headers resp (convert-headers-to-map e))]
-                                (deliver (:headers resp) result)
-                                (convert-action action)))
-           (onBodyPartReceived [#^HttpResponseBodyPart e]
-                               (when-let [bytes (.getBodyPartBytes e)]
-                                 (let [baos (ByteArrayOutputStream. (alength bytes))]
-                                   (.write baos bytes 0 (alength bytes))
-                                   (let [[result action] (part resp baos)
-                                         body (:body resp)]
-                                     (when-not (delivered? body)
-                                       (deliver body result))
-                                     (convert-action action)))))
-           (onCompleted []
-                        (do
-                          (completed resp)
-                          (deliver (:done resp) true)))
-           (onThrowable [#^Throwable t]
-                        (do
-                          (deliver (:error resp) (error resp t))
-                          (when-not (delivered? (:done resp))
-                            (deliver (:done resp) true))))))]
+         (reify AsyncHandler
+           (^{:tag com.ning.http.client.AsyncHandler$STATE}
+            onStatusReceived [this #^HttpResponseStatus e]
+            (let [[result action] (status resp (convert-status-to-map e))]
+              (deliver (:status resp) result)
+              (convert-action action)))
+           (^{:tag com.ning.http.client.AsyncHandler$STATE}
+            onHeadersReceived [this #^HttpResponseHeaders e]
+            (let [[result action] (headers resp (convert-headers-to-map e))]
+              (deliver (:headers resp) result)
+              (convert-action action)))
+           (^{:tag com.ning.http.client.AsyncHandler$STATE}
+            onBodyPartReceived [this #^HttpResponseBodyPart e]
+            (when-let [bytes (.getBodyPartBytes e)]
+              (let [baos (ByteArrayOutputStream. (alength bytes))]
+                (.write baos bytes 0 (alength bytes))
+                (let [[result action] (part resp baos)
+                      body (:body resp)]
+                  (when-not (delivered? body)
+                    (deliver body result))
+                  (convert-action action)))))
+           (^{:tag Object}
+            onCompleted [this]
+            (do
+              (completed resp)
+              (deliver (:done resp) true)))
+           (^{:tag void}
+            onThrowable [this #^Throwable t]
+            (do
+              (deliver (:error resp) (error resp t))
+              (when-not (delivered? (:done resp))
+                (deliver (:done resp) true))))))]
     (with-meta resp {:started (System/currentTimeMillis)
                      :cancelled? (fn [] (.isCancelled resp-future))
                      :cancel (fn [] (.cancel resp-future true))})))
