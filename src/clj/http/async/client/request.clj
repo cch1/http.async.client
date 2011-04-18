@@ -39,17 +39,14 @@
 
 (def *CLIENT* nil)
 
-(defn- convert-method [method]
-  "Converts clj method (:get, :put, ...) to Async Client specific.
-   Defaults to :get"
-  (cond
-   (= method :get) "GET"
-   (= method :post) "POST"
-   (= method :put) "PUT"
-   (= method :delete) "DELETE"
-   (= method :head) "HEAD"
-   (= method :options) "OPTIONS"
-   :default "GET"))
+(def convert-method
+  ^{:doc   "Converts clj method (:get, :put, . ..) to Async Client specific."}
+  {:get     "GET"
+   :post    "POST"
+   :put     "PUT"
+   :delete  "DELETE"
+   :head    "HEAD"
+   :options "OPTIONS"})
 
 (defn get-encoding
   "Gets content encoding from headers, if Content-Type header not present
