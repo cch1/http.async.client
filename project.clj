@@ -1,14 +1,15 @@
-(defproject http.async.client "0.2.2"
+(defproject http.async.client "0.3.0-SNAPSHOT"
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "http://github.com/neotyk/http.async.client/"
   :source-path      "src/clj"
   :java-source-path "src/jvm"
   :javac-options {:deprecation "true"}
   :min-lein-version "1.4.1"
-  :dependencies     [[org.clojure/clojure "1.2.0"]
+  :dependencies     [[org.clojure/clojure "1.2.1"]
 		     [org.clojure/clojure-contrib "1.2.0"]
 		     [com.ning/async-http-client "1.6.3"]]
-  :dev-dependencies [[swank-clojure "1.2.1"]
+  :dev-dependencies [;;[swank-clojure "1.2.1"]
+                     [swank-clj "0.1.5"]
 		     ;;[autodoc "0.7.1"]
                      [marginalia "0.5.0"]
                      [org.danlarkin/clojure-json "1.1"]
