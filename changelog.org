@@ -4,7 +4,7 @@
 #+INFOJS_OPT: view:info toc:1
 #+OPTIONS: H:4
 
-* Release 0.2.3
+* Release 0.3.0
 ** Upgrade async-http-client to v1.6.3
 ** Control over preemptive authentication
    Patch provided by xeqi.
@@ -22,7 +22,7 @@
    You still create client with create-client function.
 ** Removed with-client macro
    This didn't really bring much value.
-   Migration procedure.
+   Migration path.
    From:
    #+begin_src clojure
      (with-client {:key val}
