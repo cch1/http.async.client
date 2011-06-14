@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Asynchronous HTTP Client - Clojure - To Do</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-11-10 09:41:34 CET"/>
+<meta name="generated" content="2011-06-14 11:20:06 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -21,6 +21,9 @@ lang="en" xml:lang="en">
   .target { }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -31,7 +34,13 @@ lang="en" xml:lang="en">
         overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
@@ -89,7 +98,6 @@ org_html_manager.setup();  // activate after the parameters are set
 
 <h1 class="title">Asynchronous HTTP Client - Clojure - To Do</h1>
 
-
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
@@ -140,9 +148,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-3">3 Configuration [0/2] </a>
+<li><a href="#sec-3">3 Configuration [2/2] </a>
 <ul>
-<li><a href="#sec-3_1">3.1 Global configuration of AHC [2/4]</a>
+<li><a href="#sec-3_1">3.1 Global configuration of AHC [4/4]</a>
 <ul>
 <li><a href="#sec-3_1_1">3.1.1 Branding User-agent</a></li>
 <li><a href="#sec-3_1_2">3.1.2 Connection limiting per host.</a></li>
@@ -150,7 +158,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-3_1_4">3.1.4 Timeout settings</a></li>
 </ul>
 </li>
-<li><a href="#sec-3_2">3.2 Per request configuration [1/2]</a>
+<li><a href="#sec-3_2">3.2 Per request configuration [2/2]</a>
 <ul>
 <li><a href="#sec-3_2_1">3.2.1 Proxy configuration</a></li>
 <li><a href="#sec-3_2_2">3.2.2 Timeout</a></li>
@@ -217,8 +225,8 @@ org_html_manager.setup();  // activate after the parameters are set
 <h3 id="sec-1_3"><span class="section-number-3">1.3</span> <span class="done DONE"> DONE</span> Body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-1_3">
 
-<p>Instead of <b>id</b>, pass <b>(ref {})</b> to callbacks so they have their own
-STM ref'ed map.
+<p>   Instead of <b>id</b>, pass <b>(ref {})</b> to callbacks so they have their own
+   STM ref'ed map.
 </p></div>
 
 </div>
@@ -395,10 +403,10 @@ STM ref'ed map.
 <h3 id="sec-2_7"><span class="section-number-3">2.7</span> <span class="todo TODO"> TODO</span> PUT/POST streaming body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-2_7">
 
-<p>That can be done with <b>clojure.core/add-watch</b>.
-Watcher in that scenario will grab new content and write it via
-AHC, or alternatively will <b>clojure.core/send-off</b> to execute
-IO operation in separate thread.
+<p>   That can be done with <b>clojure.core/add-watch</b>.
+   Watcher in that scenario will grab new content and write it via
+   AHC, or alternatively will <b>clojure.core/send-off</b> to execute
+   IO operation in separate thread.
 </p></div>
 
 </div>
@@ -429,14 +437,14 @@ IO operation in separate thread.
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Configuration [0/2] </h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> Configuration [2/2] </h2>
 <div class="outline-text-2" id="text-3">
 
 
 </div>
 
 <div id="outline-container-3_1" class="outline-3">
-<h3 id="sec-3_1"><span class="section-number-3">3.1</span> <span class="todo TODO"> TODO</span> Global configuration of AHC [2/4] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<h3 id="sec-3_1"><span class="section-number-3">3.1</span> <span class="done DONE"> DONE</span> Global configuration of AHC [4/4] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-3_1">
 
 
@@ -451,7 +459,7 @@ IO operation in separate thread.
 </div>
 
 <div id="outline-container-3_1_2" class="outline-4">
-<h4 id="sec-3_1_2"><span class="section-number-4">3.1.2</span> <span class="todo TODO"> TODO</span> Connection limiting per host. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<h4 id="sec-3_1_2"><span class="section-number-4">3.1.2</span> <span class="done DONE"> DONE</span> Connection limiting per host. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-3_1_2">
 
 </div>
@@ -459,7 +467,7 @@ IO operation in separate thread.
 </div>
 
 <div id="outline-container-3_1_3" class="outline-4">
-<h4 id="sec-3_1_3"><span class="section-number-4">3.1.3</span> <span class="todo TODO"> TODO</span> Global proxy. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<h4 id="sec-3_1_3"><span class="section-number-4">3.1.3</span> <span class="done DONE"> DONE</span> Global proxy. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-3_1_3">
 
 </div>
@@ -488,7 +496,7 @@ IO operation in separate thread.
 </div>
 
 <div id="outline-container-3_2" class="outline-3">
-<h3 id="sec-3_2"><span class="section-number-3">3.2</span> <span class="todo TODO"> TODO</span> Per request configuration [1/2] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<h3 id="sec-3_2"><span class="section-number-3">3.2</span> <span class="done DONE"> DONE</span> Per request configuration [2/2] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-3_2">
 
 
@@ -503,7 +511,7 @@ IO operation in separate thread.
 </div>
 
 <div id="outline-container-3_2_2" class="outline-4">
-<h4 id="sec-3_2_2"><span class="section-number-4">3.2.2</span> <span class="todo TODO"> TODO</span> Timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<h4 id="sec-3_2_2"><span class="section-number-4">3.2.2</span> <span class="done DONE"> DONE</span> Timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-3_2_2">
 
 <ul>
@@ -550,8 +558,8 @@ IO operation in separate thread.
 <h4 id="sec-4_2_1"><span class="section-number-4">4.2.1</span> async.http.client </h4>
 <div class="outline-text-4" id="text-4_2_1">
 
-<p>Should contain helper functions to call all HTTP verbs.
-Default set of call-backs.
+<p>    Should contain helper functions to call all HTTP verbs.
+    Default set of call-backs.
 </p></div>
 
 </div>
@@ -560,13 +568,11 @@ Default set of call-backs.
 <h4 id="sec-4_2_2"><span class="section-number-4">4.2.2</span> async.http.client.request </h4>
 <div class="outline-text-4" id="text-4_2_2">
 
-<p>Lower level of requesting:
+<p>    Lower level of requesting:
 </p><ul>
-<li>
-execute-request
+<li>execute-request
 </li>
-<li>
-prepare-request
+<li>prepare-request
 </li>
 </ul>
 
@@ -595,16 +601,13 @@ prepare-request
 <h3 id="sec-4_5"><span class="section-number-3">4.5</span> <span class="done DONE"> DONE</span> Release 0.2.0 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-4_5">
 
-<p>Changes:
+<p>   Changes:
 </p><ul>
-<li>
-Stream as seq
+<li>Stream as seq
 </li>
-<li>
-Streams used instead of byte vectors (issue-1)
+<li>Streams used instead of byte vectors (issue-1)
 </li>
-<li>
-keyworded maps are used in api
+<li>keyworded maps are used in api
 </li>
 </ul>
 
@@ -624,7 +627,7 @@ keyworded maps are used in api
 <h3 id="sec-4_6"><span class="section-number-3">4.6</span> <span class="done DONE"> DONE</span> Release 0.2.1 </h3>
 <div class="outline-text-3" id="text-4_6">
 
-<p>Release bumps version of async-http-client to v1.3.2.
+<p>   Release bumps version of async-http-client to v1.3.2.
 </p></div>
 
 </div>
@@ -633,7 +636,7 @@ keyworded maps are used in api
 <h3 id="sec-4_7"><span class="section-number-3">4.7</span> <span class="done DONE"> DONE</span> Make tests stand-alone &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-4_7">
 
-<p>Test suite should not fail when there is now hello-www on port 8080.
+<p>   Test suite should not fail when there is now hello-www on port 8080.
 </p></div>
 
 </div>
@@ -642,9 +645,9 @@ keyworded maps are used in api
 <h3 id="sec-4_8"><span class="section-number-3">4.8</span> <span class="done DONE"> DONE</span> Simplify request preparation &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-4_8">
 
-<p>For now fns like GET will call prepare-get that will call
-prepare-reqeust. I don't think prepare-get is necessary,
-should be quite fine to only use <b>prepare-request</b>.
+<p>   For now fns like GET will call prepare-get that will call
+   prepare-reqeust. I don't think prepare-get is necessary,
+   should be quite fine to only use <b>prepare-request</b>.
 </p></div>
 
 </div>
@@ -653,7 +656,7 @@ should be quite fine to only use <b>prepare-request</b>.
 <h3 id="sec-4_9"><span class="section-number-3">4.9</span> <span class="done DONE"> DONE</span> Use last argument as key worded map &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-4_9">
 
-<p>As suggested by <a href="http://blog.licenser.net/">Licenser</a> on #clojure <a href="http://clojure-log.n01se.net/date/2010-07-08.html#i25">here</a>.
+<p>   As suggested by <a href="http://blog.licenser.net/">Licenser</a> on #clojure <a href="http://clojure-log.n01se.net/date/2010-07-08.html#i25">here</a>.
 </p></div>
 
 </div>
@@ -679,20 +682,17 @@ should be quite fine to only use <b>prepare-request</b>.
 
 <ul>
 <li id="sec-4_11_1_1"><span class="done DONE"> DONE</span> Build checkable promise <br/>
-To check if promise was delivered use <b>delivered?</b>
+     To check if promise was delivered use <b>delivered?</b>
 </li>
 </ul>
 <ul>
 <li id="sec-4_11_1_2"><span class="done DONE"> DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces <br/>
 <ul>
-<li>
-Use new checkable <b>promise</b> for different parts of response
+<li>Use new checkable <b>promise</b> for different parts of response
 </li>
-<li>
-Use normal map for response instead of (ref {})
+<li>Use normal map for response instead of (ref {})
 </li>
-<li>
-Provide helper functions to deal with metadata on response
+<li>Provide helper functions to deal with metadata on response
 </li>
 </ul>
 
@@ -711,10 +711,10 @@ Provide helper functions to deal with metadata on response
 </div>
 </div>
 <div id="postamble">
-<p class="author"> Author: Hubert Iwaniuk
-</p>
-<p class="date"> Date: 2010-11-10 09:41:34 CET</p>
-<p class="creator">HTML generated by org-mode 7.01trans in emacs 23</p>
+<p class="date">Date: 2011-06-14 11:20:06 CEST</p>
+<p class="author">Author: Hubert Iwaniuk</p>
+<p class="creator">Org version 7.5 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 </div>
 </div>
 </body>
