@@ -11,7 +11,7 @@
   :dev-dependencies [;;[swank-clojure "1.2.1"]
                      [swank-clj "0.1.5"]
 		     ;;[autodoc "0.7.1"]
-                     [marginalia "0.5.0"]
+                     [marginalia "0.5.1"]
                      [org.danlarkin/clojure-json "1.1"]
                      [org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
                      [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
