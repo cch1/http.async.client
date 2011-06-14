@@ -13,7 +13,7 @@
     :description "Your project description"
     :dependencies [[org.clojure/clojure "1.2.0"]
                    [org.clojure/clojure-contrib "1.2.0"]
-                   [http.async.client "0.2.2"]])
+                   [http.async.client "0.3.0-SNAPSHOT"]])
 #+END_SRC
 
   Require:
@@ -23,9 +23,10 @@
 
   GET resource:
 #+BEGIN_SRC clojure
-  (let [response (c/GET "http://github.com/neotyk/http.async.client/")]
-    (c/await response)
-    (c/string response))
+  (with-open [client (c/create-client)]
+    (let [response (c/GET client "http://github.com/neotyk/http.async.client/")]
+      (c/await response)
+      (c/string response)))
 #+END_SRC
 
 * Information over *http.async.client*

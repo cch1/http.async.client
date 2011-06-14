@@ -38,8 +38,8 @@
 ** TODO Multipart                                                      :rel4:
 ** DONE Authentication                                                 :rel3:
 *** DONE Test Authentication
-* Configuration [0/2]
-** TODO Global configuration of AHC [4/4]                              :rel4:
+* Configuration [2/2]
+** DONE Global configuration of AHC [4/4]                              :rel4:
 *** DONE Branding User-agent                                           :rel3:
 *** DONE Connection limiting per host.                                 :rel4:
 *** DONE Global proxy.                                                 :rel4:
@@ -47,9 +47,9 @@
 **** DONE Request timeout                                              :rel4:
 **** DONE Connection timeout                                           :rel4:
 **** DONE Idle connection timeout                                      :rel4:
-** TODO Per request configuration [1/2]                                :rel4:
+** DONE Per request configuration [2/2]                                :rel4:
 *** DONE Proxy configuration                                           :rel3:
-*** TODO Timeout                                                       :rel4:
+*** DONE Timeout                                                       :rel4:
 **** DONE Request timeout                                              :rel4:
 **** TODO Connection timeout                                           :rel4:
 **** TODO Idle connection timeout                                      :rel4:
