@@ -1,11 +1,11 @@
 #+TITLE: http.async.client - Asynchronous HTTP Client - Clojure
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
-#+INFOJS_OPT: view:info toc:1
+#+SETUPFILE: setup.org
 
 *http.async.client* is Asynchronous HTTP Client for Clojure.
 
-* *tl;dr*
+* tl;dr
 
   Declare dependency:
 #+BEGIN_SRC clojure
@@ -29,7 +29,7 @@
       (c/string response)))
 #+END_SRC
 
-* Information over *http.async.client*
+* More info
 
   [[http://github.com/neotyk/http.async.client][*http.async.client*]] is based on [[http://github.com/AsyncHttpClient/async-http-client][Asynchronous Http Client for Java]]
   which runs on top of [[http://jboss.org/netty][Netty Project]].

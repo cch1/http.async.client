@@ -1,7 +1,7 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - To Do
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
-#+INFOJS_OPT: view:info toc:1
+#+SETUPFILE: setup.org
 
 * Receive [6/6]                                                   :code:rel1:
 ** DONE Status Line                                                    :rel1:

@@ -1,8 +1,7 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
-#+INFOJS_OPT: view:info toc:1
-#+OPTIONS: H:4
+#+SETUPFILE: setup.org
 
 * Release 0.3.0
 ** Upgrade async-http-client to v1.6.3
@@ -35,6 +34,9 @@
        ;; client usage
        (let [resp (GET client url)]))
    #+end_src
+** Clojure 1.2.1
+   Fixed cyclic dependency that was preventing http.async.client from
+   been used in Clojure 1.2.1.
 * Release 0.2.2
 ** get-encoding helper works w/o Content-Type header
 ** Upgrade async-http-client to v.1.5.0
