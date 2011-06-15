@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Asynchronous HTTP Client - Clojure - To Do</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-06-14 11:20:06 CEST"/>
+<meta name="generated" content="2011-06-15 23:10:57 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -54,17 +54,18 @@ lang="en" xml:lang="en">
                                  font-weight:bold; }
   /*]]>*/-->
 </style>
-<script type="text/javascript" src="http://orgmode.org/org-info.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<script type="text/javascript" src="org-info.js"></script>
 <script type="text/javascript" >
 <!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "3");
-org_html_manager.set("LINK_HOME", "");
-org_html_manager.set("LINK_UP", "");
-org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("TOC_DEPTH", "2");
+org_html_manager.set("LINK_HOME", "http://neotyk.github.com");
+org_html_manager.set("LINK_UP", "http://neotyk.github.com/http.async.client/");
+org_html_manager.set("LOCAL_TOC", "above");
 org_html_manager.set("VIEW_BUTTONS", "0");
 org_html_manager.set("MOUSE_HINT", "underline");
-org_html_manager.set("FIXED_TOC", "0");
-org_html_manager.set("TOC", "1");
+org_html_manager.set("FIXED_TOC", "1");
+org_html_manager.set("TOC", "0");
 org_html_manager.set("VIEW", "info");
 org_html_manager.setup();  // activate after the parameters are set
 /*]]>*///-->
@@ -155,13 +156,23 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-3_1_1">3.1.1 Branding User-agent</a></li>
 <li><a href="#sec-3_1_2">3.1.2 Connection limiting per host.</a></li>
 <li><a href="#sec-3_1_3">3.1.3 Global proxy.</a></li>
-<li><a href="#sec-3_1_4">3.1.4 Timeout settings</a></li>
+<li><a href="#sec-3_1_4">3.1.4 Timeout settings</a>
+<ul>
+<li><a href="#sec-3_1_4_1">3.1.4.1 Request timeout</a></li>
+<li><a href="#sec-3_1_4_2">3.1.4.2 Connection timeout</a></li>
+<li><a href="#sec-3_1_4_3">3.1.4.3 Idle connection timeout</a></li>
+</ul></li>
 </ul>
 </li>
 <li><a href="#sec-3_2">3.2 Per request configuration [2/2]</a>
 <ul>
 <li><a href="#sec-3_2_1">3.2.1 Proxy configuration</a></li>
-<li><a href="#sec-3_2_2">3.2.2 Timeout</a></li>
+<li><a href="#sec-3_2_2">3.2.2 Timeout</a>
+<ul>
+<li><a href="#sec-3_2_2_1">3.2.2.1 Request timeout</a></li>
+<li><a href="#sec-3_2_2_2">3.2.2.2 Connection timeout</a></li>
+<li><a href="#sec-3_2_2_3">3.2.2.3 Idle connection timeout</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </li>
@@ -188,7 +199,11 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-4_10">4.10 Review documentation</a></li>
 <li><a href="#sec-4_11">4.11 Refactoring [1/1]</a>
 <ul>
-<li><a href="#sec-4_11_1">4.11.1 Refactor <b>execute-request</b> [2/2] </a></li>
+<li><a href="#sec-4_11_1">4.11.1 Refactor <b>execute-request</b> [2/2] </a>
+<ul>
+<li><a href="#sec-4_11_1_1">4.11.1.1 Build checkable promise </a></li>
+<li><a href="#sec-4_11_1_2">4.11.1.2 Unify <b>execute-request</b> and <b>consume-stream</b> interfaces </a></li>
+</ul></li>
 </ul>
 </li>
 <li><a href="#sec-4_12">4.12 Rename to <b>http.async.client</b></a></li>
@@ -478,18 +493,30 @@ org_html_manager.setup();  // activate after the parameters are set
 <h4 id="sec-3_1_4"><span class="section-number-4">3.1.4</span> <span class="done DONE"> DONE</span> Timeout settings &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-3_1_4">
 
-<ul>
-<li id="sec-3_1_4_1"><span class="done DONE"> DONE</span> Request timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span><br/>
-</li>
-</ul>
-<ul>
-<li id="sec-3_1_4_2"><span class="done DONE"> DONE</span> Connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span><br/>
-</li>
-</ul>
-<ul>
-<li id="sec-3_1_4_3"><span class="done DONE"> DONE</span> Idle connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span><br/>
-</li>
-</ul>
+
+</div>
+
+<div id="outline-container-3_1_4_1" class="outline-5">
+<h5 id="sec-3_1_4_1"><span class="section-number-5">3.1.4.1</span> <span class="done DONE"> DONE</span> Request timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3_1_4_1">
+
+</div>
+
+</div>
+
+<div id="outline-container-3_1_4_2" class="outline-5">
+<h5 id="sec-3_1_4_2"><span class="section-number-5">3.1.4.2</span> <span class="done DONE"> DONE</span> Connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3_1_4_2">
+
+</div>
+
+</div>
+
+<div id="outline-container-3_1_4_3" class="outline-5">
+<h5 id="sec-3_1_4_3"><span class="section-number-5">3.1.4.3</span> <span class="done DONE"> DONE</span> Idle connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3_1_4_3">
+
+</div>
 </div>
 </div>
 
@@ -514,18 +541,30 @@ org_html_manager.setup();  // activate after the parameters are set
 <h4 id="sec-3_2_2"><span class="section-number-4">3.2.2</span> <span class="done DONE"> DONE</span> Timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-3_2_2">
 
-<ul>
-<li id="sec-3_2_2_1"><span class="done DONE"> DONE</span> Request timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span><br/>
-</li>
-</ul>
-<ul>
-<li id="sec-3_2_2_2"><span class="todo TODO"> TODO</span> Connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span><br/>
-</li>
-</ul>
-<ul>
-<li id="sec-3_2_2_3"><span class="todo TODO"> TODO</span> Idle connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span><br/>
-</li>
-</ul>
+
+</div>
+
+<div id="outline-container-3_2_2_1" class="outline-5">
+<h5 id="sec-3_2_2_1"><span class="section-number-5">3.2.2.1</span> <span class="done DONE"> DONE</span> Request timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3_2_2_1">
+
+</div>
+
+</div>
+
+<div id="outline-container-3_2_2_2" class="outline-5">
+<h5 id="sec-3_2_2_2"><span class="section-number-5">3.2.2.2</span> <span class="todo TODO"> TODO</span> Connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3_2_2_2">
+
+</div>
+
+</div>
+
+<div id="outline-container-3_2_2_3" class="outline-5">
+<h5 id="sec-3_2_2_3"><span class="section-number-5">3.2.2.3</span> <span class="todo TODO"> TODO</span> Idle connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3_2_2_3">
+
+</div>
 </div>
 </div>
 </div>
@@ -680,13 +719,22 @@ org_html_manager.setup();  // activate after the parameters are set
 <h4 id="sec-4_11_1"><span class="section-number-4">4.11.1</span> <span class="done DONE"> DONE</span> Refactor <b>execute-request</b> [2/2] </h4>
 <div class="outline-text-4" id="text-4_11_1">
 
-<ul>
-<li id="sec-4_11_1_1"><span class="done DONE"> DONE</span> Build checkable promise <br/>
-     To check if promise was delivered use <b>delivered?</b>
-</li>
-</ul>
-<ul>
-<li id="sec-4_11_1_2"><span class="done DONE"> DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces <br/>
+
+</div>
+
+<div id="outline-container-4_11_1_1" class="outline-5">
+<h5 id="sec-4_11_1_1"><span class="section-number-5">4.11.1.1</span> <span class="done DONE"> DONE</span> Build checkable promise </h5>
+<div class="outline-text-5" id="text-4_11_1_1">
+
+<p>     To check if promise was delivered use <b>delivered?</b>
+</p></div>
+
+</div>
+
+<div id="outline-container-4_11_1_2" class="outline-5">
+<h5 id="sec-4_11_1_2"><span class="section-number-5">4.11.1.2</span> <span class="done DONE"> DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces </h5>
+<div class="outline-text-5" id="text-4_11_1_2">
+
 <ul>
 <li>Use new checkable <b>promise</b> for different parts of response
 </li>
@@ -696,8 +744,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </li>
 </ul>
 
-</li>
-</ul>
+</div>
 </div>
 </div>
 
@@ -711,10 +758,6 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 <div id="postamble">
-<p class="date">Date: 2011-06-14 11:20:06 CEST</p>
-<p class="author">Author: Hubert Iwaniuk</p>
-<p class="creator">Org version 7.5 with Emacs version 23</p>
-<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 </div>
 </div>
 </body>

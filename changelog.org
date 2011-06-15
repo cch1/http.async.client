@@ -1,9 +1,78 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+AUTHOR: Hubert Iwaniuk
 #+EMAIL: neotyk@kungfoo.pl
-#+INFOJS_OPT: view:info toc:1
-#+OPTIONS: H:4
+#+SETUPFILE: setup.org
 
+* Release 0.3.0
+** Upgrade async-http-client to v1.6.3
+** Control over preemptive authentication
+   Patch provided by xeqi.
+** Explicit client usage
+   Now following functions require client as first argument:
+   - GET
+   - PUT
+   - POST
+   - DELETE
+   - HEAD
+   - OPTIONS
+   - request-stream
+   - stream-seq
+   - execute-request
+   You still create client with create-client function.
+** Removed with-client macro
+   This didn't really bring much value.
+   Migration path.
+   From:
+   #+begin_src clojure
+     (with-client {:key val}
+       ;; client usage
+       (let [resp (GET url)]))
+   #+end_src
+   To:
+   #+begin_src clojure
+     (with-open [client (create-client :key val)]
+       ;; client usage
+       (let [resp (GET client url)]))
+   #+end_src
+** Clojure 1.2.1
+   Fixed cyclic dependency that was preventing http.async.client from
+   been used in Clojure 1.2.1.
+* Release 0.2.2
+** get-encoding helper works w/o Content-Type header
+** Upgrade async-http-client to v.1.5.0
+** Exposed more configuration options
+*** Timeouts
+*** Proxy
+*** Authentication
+** Zero byte copy mode
+   If sending File as body, zero byte copy is used.
+** Allow providing your own poll
+   Vadim Geshel contribution.
+** Allow Asynchronous Connect
+   Vadim Geshel contribution.
+** Fix seq streaming API
+   Previous versions of seq streaming API have been holding to head,
+   not anymore.
+** Lots of performance improvements
+   Underlying async-http-client has undergone serious optimization
+   changes.
+* Release 0.2.1
+** Terminate body seq if errored                                        :bug:
+** Canceling request
+   *http.async.client/cancel* and *http.async.client/canceled?*
+** Request timeout
+   Per request configuration of request timeout in ms.
+   #+BEGIN_SRC clojure
+   (GET url :timeout 100)
+   #+END_SRC
+** Close client
+   *http.async.client/close*.
+   #+BEGIN_SRC clojure
+   (c/close)
+   ;; or
+   (c/close hac)
+   #+END_SRC
+** Upgrade to v1.3.2 of async-http-client
 * Release 0.2.0
 ** Stream as seq
    Response body can be seq, this allows for easy HTTP Stream
@@ -16,6 +85,6 @@
    Proxy can be specified per request. [[http://neotyk.github.com/http.async.client/http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
 ** Branding User-Agent
    Specifying User-Agent per client.
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-ahc][*http.async.client/with-ahc*]].
+   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]].
 ** Keyworded maps in API
    Like *:options* in [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].

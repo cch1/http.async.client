@@ -1,6 +1,6 @@
 body
 {
-    margin: 10px 6% 10px 250px;
+    margin: 10px 6% 10px 30%;
     font-family: Verdana, Helvetica, sans-serif;
     font-size: 11pt;
     text-align: left;
@@ -68,10 +68,10 @@ img, a img
     position: fixed;
     display:  block;
     left:     1ex;
-    top:      180px;
-    width:    230px;
+    top:      20px;
+    width:    25%;
     min-height: 60px;
-    max-height: 55%;
+    max-height: 90%;
     overflow: auto;
     font-size: 85%;
     line-height: 1.4em;

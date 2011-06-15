@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>http.async.client - Asynchronous HTTP Client - Clojure</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-06-14 11:20:28 CEST"/>
+<meta name="generated" content="2011-06-15 23:10:06 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -54,17 +54,18 @@ lang="en" xml:lang="en">
                                  font-weight:bold; }
   /*]]>*/-->
 </style>
-<script type="text/javascript" src="http://orgmode.org/org-info.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<script type="text/javascript" src="org-info.js"></script>
 <script type="text/javascript" >
 <!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "3");
-org_html_manager.set("LINK_HOME", "");
-org_html_manager.set("LINK_UP", "");
-org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("TOC_DEPTH", "2");
+org_html_manager.set("LINK_HOME", "http://neotyk.github.com");
+org_html_manager.set("LINK_UP", "http://neotyk.github.com/http.async.client/");
+org_html_manager.set("LOCAL_TOC", "above");
 org_html_manager.set("VIEW_BUTTONS", "0");
 org_html_manager.set("MOUSE_HINT", "underline");
-org_html_manager.set("FIXED_TOC", "0");
-org_html_manager.set("TOC", "1");
+org_html_manager.set("FIXED_TOC", "1");
+org_html_manager.set("TOC", "0");
 org_html_manager.set("VIEW", "info");
 org_html_manager.setup();  // activate after the parameters are set
 /*]]>*///-->
@@ -104,14 +105,14 @@ org_html_manager.setup();  // activate after the parameters are set
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 <b>tl;dr</b> </a></li>
-<li><a href="#sec-2">2 Information over <b>http.async.client</b> </a></li>
+<li><a href="#sec-1">1 tl;dr </a></li>
+<li><a href="#sec-2">2 More info </a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> <b>tl;dr</b> </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> tl;dr </h2>
 <div class="outline-text-2" id="text-1">
 
 
@@ -125,7 +126,9 @@ org_html_manager.setup();  // activate after the parameters are set
   <span style="color: #7a378b;">:dependencies</span> [[org.clojure/clojure <span style="color: #8b2252;">"1.2.0"</span>]
                  [org.clojure/clojure-contrib <span style="color: #8b2252;">"1.2.0"</span>]
                  [http.async.client <span style="color: #8b2252;">"0.3.0-SNAPSHOT"</span>]]<span style="color: #8c8c8c;">)</span>
+
 </pre>
+
 
 
 
@@ -135,7 +138,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">ns</span> sample <span style="color: #8c8c8c;">(</span><span style="color: #7a378b;">:require</span> [http.async.client <span style="color: #7a378b;">:as</span> c]<span style="color: #8c8c8c;">))</span>
+
 </pre>
+
 
 
 
@@ -148,7 +153,9 @@ org_html_manager.setup();  // activate after the parameters are set
   <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [response <span style="color: #8c8c8c;">(</span>c/GET client <span style="color: #8b2252;">"http://github.com/neotyk/http.async.client/"</span><span style="color: #8c8c8c;">)</span>]
     <span style="color: #8c8c8c;">(</span>c/await response<span style="color: #8c8c8c;">)</span>
     <span style="color: #8c8c8c;">(</span>c/string response<span style="color: #8c8c8c;">)))</span>
+
 </pre>
+
 
 
 
@@ -157,12 +164,12 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Information over <b>http.async.client</b> </h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> More info </h2>
 <div class="outline-text-2" id="text-2">
 
 
 <p>
-  <a href="http://github.com/neotyk/http.async.client">&lt;b&gt;http.async.client&lt;/b&gt;</a> is based on <a href="http://github.com/AsyncHttpClient/async-http-client">Asynchronous Http Client for Java</a>
+  <a href="http://github.com/neotyk/http.async.client"><b>http.async.client</b></a> is based on <a href="http://github.com/AsyncHttpClient/async-http-client">Asynchronous Http Client for Java</a>
   which runs on top of <a href="http://jboss.org/netty">Netty Project</a>.
 </p>
 <p>
@@ -183,10 +190,6 @@ org_html_manager.setup();  // activate after the parameters are set
 </p></div>
 </div>
 <div id="postamble">
-<p class="date">Date: 2011-06-14 11:20:28 CEST</p>
-<p class="author">Author: Hubert Iwaniuk</p>
-<p class="creator">Org version 7.5 with Emacs version 23</p>
-<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 </div>
 </div>
 </body>
