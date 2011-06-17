@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Asynchronous HTTP Client - Clojure - Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-06-16 02:00:23 CEST"/>
+<meta name="generated" content="2011-06-17 11:39:24 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -978,6 +978,20 @@ org_html_manager.setup();  // activate after the parameters are set
 
 
 
+<p>
+    Controlling preemptive authentication behavior is also possible:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">with-open</span> [client <span style="color: #8c8c8c;">(</span>client/create-client<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>client/GET client url <span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p <span style="color: #7a378b;">:preemptive</span> true}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response</span>
+    <span style="color: #8c8c8c;">))</span>
+
+</pre>
+
+
+
 </div>
 
 </div>
@@ -1724,7 +1738,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>client/with-client {<span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:basic</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p}}
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">with-open</span> [client <span style="color: #8c8c8c;">(</span>client/create-client <span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:basic</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p}<span style="color: #8c8c8c;">)</span>]
   <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>client/GET client url<span style="color: #8c8c8c;">)</span>]
     <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response</span>
     <span style="color: #8c8c8c;">))</span>
@@ -1738,9 +1752,23 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>client/with-client {<span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:digest</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p <span style="color: #7a378b;">:realm</span> r}}
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">with-open</span> [client <span style="color: #8c8c8c;">(</span>client/create-client <span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:digest</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:password</span> p <span style="color: #7a378b;">:realm</span> r}<span style="color: #8c8c8c;">)</span>]
   <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>client/GET client url<span style="color: #8c8c8c;">)</span>]
     <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response</span>
+    <span style="color: #8c8c8c;">))</span>
+
+</pre>
+
+
+
+<p>
+    Preemptive authentication can be enabled or disabled globally per client:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">with-open</span> [client <span style="color: #8c8c8c;">(</span>client/create-client <span style="color: #7a378b;">:auth</span> {<span style="color: #7a378b;">:type</span> <span style="color: #7a378b;">:basic</span> <span style="color: #7a378b;">:user</span> u <span style="color: #7a378b;">:passowrd</span> p <span style="color: #7a378b;">:preemptive</span> true}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #7f007f;">let</span> [resp <span style="color: #8c8c8c;">(</span>client/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response</span>
     <span style="color: #8c8c8c;">))</span>
 
 </pre>
