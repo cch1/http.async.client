@@ -486,17 +486,29 @@
        200)))
 
 (deftest preemptive-authentication
-  (is (=
-       (:code (status (GET *client* "http://localhost:8123/preemptive-auth"
-                           :auth {:user "beastie"
-                                  :password "boys"})))
-       401))
-  (is (=
-       (:code (status (GET *client* "http://localhost:8123/preemptive-auth"
-                           :auth {:user "beastie"
-                                  :password "boys"
-				  :preemptive true})))
-       200)))
+  (let [url "http://localhost:8123/preemptive-auth"
+        cred {:user "beastie"
+              :password "boys"}]
+    (testing "Per request configuration"
+      (is (=
+           (:code (status (GET *client* url
+                               :auth cred)))
+           401))
+      (is (=
+           (:code (status (GET *client* url
+                               :auth (assoc cred :preemptive true))))
+           200)))
+    (testing "Global configuration"
+      (with-open [c (create-client :auth (assoc cred :preemptive true))]
+        (testing "Global preemptive, no per request"
+          (is (= 200
+                 (:code (status (GET c url))))))
+        (testing "Global preeptive, per request preemptive"
+          (is (= 200
+                 (:code (status (GET c url :auth (assoc cred :preemptive true)))))))
+        (testing "Global preemptive, per request no preemptive"
+          (is (= 401
+                 (:code (status (GET c url :auth (assoc cred :preemptive false)))))))))))
 
 (deftest canceling-request
   (let [resp (GET *client* "http://localhost:8123/")]
