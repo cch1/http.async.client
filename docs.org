@@ -327,25 +327,32 @@
 
     Basic method is default, so you don't have to specify it:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
-   (let [resp (client/GET client url :auth {:user u :password p})]
-     ;; Check if response is not 401 or so and process response
-     ))
+      (with-open [client (client/create-client)] ;; Create client
+        (let [resp (client/GET client url :auth {:user u :password p})]
+          ;; Check if response is not 401 or so and process response
+          ))
     #+END_SRC
     Though you can:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
-   (let [resp (client/GET client url :auth {:type :basic :user u :password p})]
-     ;; Check if response is not 401 or so and process response
-     ))
+      (with-open [client (client/create-client)] ;; Create client
+        (let [resp (client/GET client url :auth {:type :basic :user u :password p})]
+          ;; Check if response is not 401 or so and process response
+          ))
     #+END_SRC
     And for digest method you will need realm as well:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
-   (let [resp (client/GET client url
-                          :auth {:type :digest :user u :password p :realm r})]
-     ;; Check if response is not 401 or so and process response
-     ))
+      (with-open [client (client/create-client)] ;; Create client
+        (let [resp (client/GET client url
+                               :auth {:type :digest :user u :password p :realm r})]
+          ;; Check if response is not 401 or so and process response
+          ))
+    #+END_SRC
+    Controlling preemptive authentication behavior is also possible:
+    #+BEGIN_SRC clojure
+      (with-open [client (client/create-client)]
+        (let [resp (client/GET client url :auth {:user u :password p :preemptive true})]
+          ;; process response
+          ))
     #+END_SRC
 *** :timeout
     Response timeout can be configured per request as well.
@@ -695,17 +702,24 @@
     #+END_SRC
     Though you can:
     #+BEGIN_SRC clojure
- (client/with-client {:auth {:type :basic :user u :password p}}
-   (let [resp (client/GET client url)]
-     ;; Check if response is not 401 or so and process response
-     ))
+      (with-open [client (client/create-client :auth {:type :basic :user u :password p})]
+        (let [resp (client/GET client url)]
+          ;; Check if response is not 401 or so and process response
+          ))
     #+END_SRC
     And for digest method you will need realm as well:
     #+BEGIN_SRC clojure
- (client/with-client {:auth {:type :digest :user u :password p :realm r}}
-   (let [resp (client/GET client url)]
-     ;; Check if response is not 401 or so and process response
-     ))
+      (with-open [client (client/create-client :auth {:type :digest :user u :password p :realm r})]
+        (let [resp (client/GET client url)]
+          ;; Check if response is not 401 or so and process response
+          ))
+    #+END_SRC
+    Preemptive authentication can be enabled or disabled globally per client:
+    #+BEGIN_SRC clojure
+      (with-open [client (client/create-client :auth {:type :basic :user u :passowrd p :preemptive true})]
+        (let [resp (client/GET client url)]
+          ;; process response
+          ))
     #+END_SRC
 *** Closing *http.async.client*
     Whenever you've created *http.async.client* via
