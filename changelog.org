@@ -3,6 +3,8 @@
 #+EMAIL: neotyk@kungfoo.pl
 #+SETUPFILE: setup.org
 
+* Release 0.3.1
+** Upgrade async-http-client to v1.6.4
 * Release 0.3.0
 ** Upgrade async-http-client to v1.6.3
 ** Control over preemptive authentication
