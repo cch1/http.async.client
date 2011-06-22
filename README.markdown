@@ -8,7 +8,7 @@ Declare dependency:
       :description "Your project description"
       :dependencies [[org.clojure/clojure "1.2.1"]
                      [org.clojure/clojure-contrib "1.2.0"]
-                     [http.async.client "0.3.0"]])
+                     [http.async.client "0.3.1"]])
 
 Require:
 
@@ -16,9 +16,10 @@ Require:
 
 GET resource:
 
-    (let [response (c/GET "http://github.com/neotyk/http.async.client/")]
-      (c/await response)
-      (c/string response))
+    (with-open [client (c/create-client)]
+      (let [response (c/GET client "http://neotyk.github.com/http.async.client/")]
+        (c/await response)
+        (c/string response)))
 
 ## Information over *http.async.client*
 
