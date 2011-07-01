@@ -4,22 +4,28 @@ http.async.client - Asynchronous HTTP Client for Clojure
 ## *tl;dr*
 Declare dependency:
 
-    (defproject your-project "1.0.0-SNAPSHOT"
-      :description "Your project description"
-      :dependencies [[org.clojure/clojure "1.2.1"]
-                     [org.clojure/clojure-contrib "1.2.0"]
-                     [http.async.client "0.3.1"]])
+``` clojure
+(defproject your-project "1.0.0-SNAPSHOT"
+  :description "Your project description"
+  :dependencies [[org.clojure/clojure "1.2.1"]
+                 [org.clojure/clojure-contrib "1.2.0"]
+                 [http.async.client "0.3.1"]])
+```
 
 Require:
 
-    (ns sample (:require [http.async.client :as c]))
+``` clojure
+(ns sample (:require [http.async.client :as c]))
+```
 
 GET resource:
 
-    (with-open [client (c/create-client)]
-      (let [response (c/GET client "http://neotyk.github.com/http.async.client/")]
-        (c/await response)
-        (c/string response)))
+``` clojure
+(with-open [client (c/create-client)]
+  (let [response (c/GET client "http://neotyk.github.com/http.async.client/")]
+    (c/await response)
+    (c/string response)))
+```
 
 ## Information over *http.async.client*
 
