@@ -117,7 +117,8 @@
   - client   - client created via create-client
   - url      - URL to request
   - options  - keyworded arguments:
-    :query   - map of query parameters
+    :query   - map of query parameters, if value is vector than multiple values
+               will be send as n=v1&n=v2
     :headers - map of headers
     :body    - body
     :cookies - cookies to send

@@ -103,7 +103,8 @@
 (defn prepare-request
   "Prepares method (GET, POST, ..) request to url.
   Options:
-    :query   - map of query parameters
+    :query   - map of query parameters, if value is vector than multiple values
+               will be send as n=v1&n=v2
     :headers - map of headers
     :body    - body
     :cookies - cookies to send
@@ -152,9 +153,14 @@
                   secure false}} cookies]
       (.addCookie rbw (Cookie. domain name value path max-age secure)))
     ;; query parameters
-    (doseq [[k v] query] (.addQueryParameter rbw
-                                             (if (keyword? k) (name k) k)
-                                             (str v)))
+    (doseq [[k v] query] (if (vector? v)
+                           (doseq [vv v]
+                             (.addQueryParameter rbw
+                                                 (if (keyword? k) (name k) k)
+                                                 (str vv)))
+                           (.addQueryParameter rbw
+                                               (if (keyword? k) (name k) k)
+                                               (str v))))
     ;; message body
     (cond
      (map? body) (doseq [[k v] body]

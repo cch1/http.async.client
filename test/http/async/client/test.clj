@@ -117,6 +117,7 @@
                                      401)))
              "/timeout" (Thread/sleep 2000)
              "/empty" (.setHeader hResp "Nothing" "Yep")
+             "/multi-query" (.setHeader hResp "query" (.getQueryString hReq))
              (doseq [n (enumeration-seq (.getParameterNames hReq))]
                (doseq [v (.getParameterValues hReq n)]
                  (.addHeader hResp n v))))
@@ -221,6 +222,12 @@
     (are [x y] (= (x headers) (str y))
          :a 3
          :b 4)))
+
+(deftest test-query-params-multiple-values
+  (let [resp (GET *client* "http://localhost:8123/multi-query" :query {:multi [3 4]})
+        headers (headers resp)]
+    (is (not (empty? headers)))
+    (is (= "multi=3&multi=4" (:query headers)))))
 
 ;; TODO: uncomment this test once AHC throws exception again on body
 ;; with GET
