@@ -9,3 +9,4 @@ pom.xml
 *.backup
 .cake
 target/
+/.lein-failures
