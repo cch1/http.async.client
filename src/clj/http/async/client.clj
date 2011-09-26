@@ -16,7 +16,6 @@
   "Asynchronous HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [await promise])
-  (:require [clojure.contrib.io :as duck])
   (:use [http.async.client request headers util])
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
@@ -227,14 +226,16 @@
     (map #(convert % enc) body)
     (convert body enc)))
 
+(def ^:private ^:dynamic *default-encoding* "UTF-8")
+
 (defn string
   "Converts response to string.
   Or converts body taking encoding from response."
   ([resp]
      (when-let [body (body resp)]
-       (convert-body body (or (get-encoding (headers resp)) duck/*default-encoding*))))
+       (convert-body body (or (get-encoding (headers resp)) *default-encoding*))))
   ([headers body]
-     (convert-body body (or (get-encoding headers) duck/*default-encoding*))))
+     (convert-body body (or (get-encoding headers) *default-encoding*))))
 
 (defn cookies
   "Gets cookies from response."
