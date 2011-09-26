@@ -16,7 +16,6 @@
   "Asynchronous HTTP Client - Clojure - Requesting API"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [promise])
-  (:require [clojure.contrib.io :as duck])
   (:use [http.async.client status headers util]
         [clojure.stacktrace]
         [clojure.contrib.java-utils :only [as-str]]
@@ -35,9 +34,9 @@
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
-(def *user-agent* "http.async.client/0.2.3-dev")
+(def ^:dynamic *user-agent* "http.async.client/0.2.3-dev")
 
-(def *CLIENT* nil)
+(def ^:dynamic *CLIENT* nil)
 
 (def convert-method
   ^{:doc   "Converts clj method (:get, :put, . ..) to Async Client specific."}
@@ -85,7 +84,8 @@
 
 ;; default set of callbacks
 (def
- ^{:doc "Default set of callbacks."}
+  ^{:doc "Default set of callbacks."
+    :dynamic true}
  *default-callbacks*
  {:status status-collect
   :headers headers-collect

@@ -20,10 +20,8 @@
         http.async.client
         [http.async.client request util]
         [clojure.stacktrace :only [print-stack-trace]]
-        [clojure.contrib.str-utils2 :only [split]]
         [clojure.java.io :only [input-stream]]
-        [clojure.contrib.profile :only [prof profile]])
-  (:require [clojure.contrib.io :as duck])
+        [clojure.string :only [split]])
   (:import (com.ning.http.client AsyncHttpClient)
            (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
@@ -42,7 +40,9 @@
            (java.util.concurrent TimeoutException)))
 (set! *warn-on-reflection* true)
 
-(def *client* nil)
+(def ^:dynamic *client* nil)
+(def ^:private ^:dynamic *default-encoding* "UTF-8")
+
 
 ;; test suite setup
 (def default-handler
@@ -161,8 +161,8 @@
     (try (f)
          (finally
           (do
-            (.close *client*)
-            (.stop srv))))))
+            (.close ^AsyncHttpClient *client*)
+            (.stop ^Server srv))))))
 
 (use-fixtures :once once-fixture)
 
@@ -309,9 +309,9 @@
 (deftest test-stream
   (let [stream (ref #{})
         resp (request-stream *client* :get "http://localhost:8123/stream"
-                     (fn [_ baos]
-                       (dosync (alter stream conj (.toString baos duck/*default-encoding*)))
-                       [baos :continue]))
+                             (fn [_ ^ByteArrayOutputStream baos]
+                               (dosync (alter stream conj (.toString baos *default-encoding*)))
+                               [baos :continue]))
         status (status resp)]
     (await resp)
     (are [x] (not (empty? x))
@@ -446,7 +446,7 @@
                                       :max-conns-total 1)]
     (let [url "http://localhost:8123/timeout"
           r1 (GET client url)]
-      (is (thrown-with-msg? java.io.IOException #"Too many connections 1" (GET client url)))
+      (is (thrown-with-msg? RuntimeException #"Too many connections 1" (GET client url)))
       (is (not (failed? (await r1)))))))
 
 (deftest await-string
@@ -457,7 +457,7 @@
 (deftest no-host
   (let [resp (GET *client* "http://notexisting/")]
     (await resp)
-    (is (= (class (.getCause (error resp))) UnresolvedAddressException))
+    (is (= (class (.getCause ^Throwable (error resp))) UnresolvedAddressException))
     (is (true? (failed? resp)))))
 
 (deftest no-realm-for-digest
@@ -554,13 +554,13 @@
         (await resp)
         (is (false? (failed? resp)))
         (when (failed? resp)
-          (println "No response received, while excepting it." (.getMessage (error resp))))))))
+          (println "No response received, while excepting it." (.getMessage ^Throwable (error resp))))))))
 
 (deftest closing-client
   (let [client (create-client)
         _ (await (GET client "http://localhost:8123/"))]
     (close client)
-    (is (thrown-with-msg? IOException #"Closed" (GET client "http://localhost:8123/")))))
+    (is (thrown-with-msg? RuntimeException #"Closed" (GET client "http://localhost:8123/")))))
 
 (deftest extract-empty-body
   (let [resp (await (GET *client* "http://localhost:8123/empty"))]
