@@ -18,8 +18,7 @@
   (:refer-clojure :exclude [promise])
   (:use [http.async.client status headers util]
         [clojure.stacktrace]
-        [clojure.contrib.java-utils :only [as-str]]
-        [clojure.contrib.str-utils :only [str-join]])
+        [clojure.string :only [join]])
   (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
                                  AsyncHandler Cookie
                                  FluentCaseInsensitiveStringsMap
@@ -97,8 +96,8 @@
   "Taken from Clojure Http Client"
   [arg]
   (if (map? arg)
-    (URLEncoder/encode (str-join \& (map #(str-join \= (map url-encode %)) arg)) "UTF-8")
-    (URLEncoder/encode (as-str arg) "UTF-8")))
+    (URLEncoder/encode (join \& (map #(join \= (map url-encode %)) arg)) "UTF-8")
+    (URLEncoder/encode (name arg) "UTF-8")))
 
 (defn prepare-request
   "Prepares method (GET, POST, ..) request to url.
