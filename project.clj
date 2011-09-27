@@ -6,7 +6,7 @@
   :javac-options {:deprecation "true"}
   :min-lein-version "1.4.1"
   :dependencies     [[org.clojure/clojure "1.3.0"]
-		     [com.ning/async-http-client "1.6.4"]]
+		     [com.ning/async-http-client "1.6.5"]]
   :dev-dependencies [;; [swank-clj "0.1.5"]
 		     ;; [autodoc "0.8.0-SNAPSHOT"]
                      [marginalia "0.5.1"]
