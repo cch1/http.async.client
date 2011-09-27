@@ -63,59 +63,64 @@
            (.setStatus hResp 200)
                                         ; process params
            (condp = target
-               "/body" (.write (.getWriter hResp) "Remember to checkout #clojure@freenode")
-               "/body-str" (when-let [line (.readLine (.getReader hReq))]
-                             (.write (.getWriter hResp) line))
-               "/put" (.setHeader hResp "Method" (.getMethod hReq))
-               "/delete" (.setHeader hResp "Method" (.getMethod hReq))
-               "/head" (.setHeader hResp "Method" (.getMethod hReq))
-               "/options" (.setHeader hResp "Method" (.getMethod hReq))
-               "/stream" (do
-                           (let [cont (ContinuationSupport/getContinuation hReq)
-                                 writer (.getWriter hResp)
-                                 prom (promise)]
-                             (.suspend cont)
-                             (future
-                              (Thread/sleep 100)
-                              (doto writer
-                                (.write "part1")
-                                (.flush)))
-                             (future
-                              (Thread/sleep 200)
-                              (doto writer
-                                (.write "part2")
-                                (.flush))
-                              (deliver prom true))
-                             (future
-                              (if @prom
-                                (.complete cont)))))
-               "/issue-1" (let [writer (.getWriter hResp)]
-                            (doto writer
-                              (.write "глава")
-                              (.flush)))
-               "/proxy-req" (.setHeader hResp "Target" (.. req (getUri) (toString)))
-               "/cookie" (do
-                           (.addCookie hResp (Cookie. "foo" "bar"))
-                           (doseq [c (.getCookies hReq)]
-                             (.addCookie hResp c)))
-               "/branding" (.setHeader hResp "X-User-Agent" (.getHeader hReq "User-Agent"))
-               "/basic-auth" (let [auth (.getHeader hReq "Authorization")]
-                               (.setStatus
-                                hResp
-                                (if (= auth "Basic YmVhc3RpZTpib3lz")
-                                  200
-                                  401)))
-	       "/preemptive-auth" (let [auth (.getHeader hReq "Authorization")]
-				    (.setStatus
-				     hResp
-				     (if (= auth "Basic YmVhc3RpZTpib3lz")
-				       200
-				       401)))
-               "/timeout" (Thread/sleep 2000)
-               "/empty" (.setHeader hResp "Nothing" "Yep")
-               (doseq [n (enumeration-seq (.getParameterNames hReq))]
-                 (doseq [v (.getParameterValues hReq n)]
-                   (.addHeader hResp n v))))
+             "/body" (.write (.getWriter hResp) "Remember to checkout #clojure@freenode")
+             "/body-str" (when-let [line (.readLine (.getReader hReq))]
+                           (.write (.getWriter hResp) line))
+             "/put" (.setHeader hResp "Method" (.getMethod hReq))
+             "/post" (do
+                       (.setHeader hResp "Method" (.getMethod hReq))
+                       (when-let [line (.readLine (.getReader hReq))]
+                         (.write (.getWriter hResp) line)))
+             "/delete" (.setHeader hResp "Method" (.getMethod hReq))
+             "/head" (.setHeader hResp "Method" (.getMethod hReq))
+             "/options" (.setHeader hResp "Method" (.getMethod hReq))
+             "/stream" (do
+                         (let [cont (ContinuationSupport/getContinuation hReq)
+                               writer (.getWriter hResp)
+                               prom (promise)]
+                           (.suspend cont)
+                           (future
+                             (Thread/sleep 100)
+                             (doto writer
+                               (.write "part1")
+                               (.flush)))
+                           (future
+                             (Thread/sleep 200)
+                             (doto writer
+                               (.write "part2")
+                               (.flush))
+                             (deliver prom true))
+                           (future
+                             (if @prom
+                               (.complete cont)))))
+             "/issue-1" (let [writer (.getWriter hResp)]
+                          (doto writer
+                            (.write "глава")
+                            (.flush)))
+             "/proxy-req" (.setHeader hResp "Target" (.. req (getUri) (toString)))
+             "/cookie" (do
+                         (.addCookie hResp (Cookie. "foo" "bar"))
+                         (doseq [c (.getCookies hReq)]
+                           (.addCookie hResp c)))
+             "/branding" (.setHeader hResp "X-User-Agent" (.getHeader hReq "User-Agent"))
+             "/basic-auth" (let [auth (.getHeader hReq "Authorization")]
+                             (.setStatus
+                              hResp
+                              (if (= auth "Basic YmVhc3RpZTpib3lz")
+                                200
+                                401)))
+             "/preemptive-auth" (let [auth (.getHeader hReq "Authorization")]
+                                  (.setStatus
+                                   hResp
+                                   (if (= auth "Basic YmVhc3RpZTpib3lz")
+                                     200
+                                     401)))
+             "/timeout" (Thread/sleep 2000)
+             "/empty" (.setHeader hResp "Nothing" "Yep")
+             "/multi-query" (.setHeader hResp "query" (.getQueryString hReq))
+             (doseq [n (enumeration-seq (.getParameterNames hReq))]
+               (doseq [v (.getParameterValues hReq n)]
+                 (.addHeader hResp n v))))
            (when-let [q (.getQueryString hReq)]
              (doseq [p (split q #"\&")]
                (let [[k v] (split p #"=")]
@@ -218,12 +223,30 @@
          :a 3
          :b 4)))
 
+(deftest test-query-params-multiple-values
+  (let [resp (GET *client* "http://localhost:8123/multi-query" :query {:multi [3 4]})
+        headers (headers resp)]
+    (is (not (empty? headers)))
+    (is (= "multi=3&multi=4" (:query headers)))))
+
 ;; TODO: uncomment this test once AHC throws exception again on body
 ;; with GET
 ;; (deftest test-get-params-not-allowed
 ;;   (is (thrown?
 ;;        IllegalArgumentException
 ;;        (GET *client* "http://localhost:8123/" :body "Boo!"))))
+
+(deftest test-post-no-body
+  (let [resp (POST *client* "http://localhost:8123/post")
+        status (status resp)
+        headers (headers resp)]
+    (are [x] (not (empty? x))
+         status
+         headers)
+    (is (= 200 (:code status)))
+    (is (= "POST" (:method headers)))
+    (is (done? (await resp)))
+    (is (nil? (string resp)))))
 
 (deftest test-post-params
   (let [resp (POST *client* "http://localhost:8123/" :body {:a 5 :b 6})
@@ -268,6 +291,18 @@
 
 (deftest test-put
   (let [resp (PUT *client* "http://localhost:8123/put" :body "TestContent")
+        status (status resp)
+        headers (headers resp)]
+    (are [x] (not (empty? x))
+         status
+         headers)
+    (is (= 200 (:code status)))
+    (is (= "PUT" (:method headers)))
+    (is (done? (await resp)))
+    (is (nil? (string resp)))))
+
+(deftest test-put-no-body
+  (let [resp (PUT *client* "http://localhost:8123/put")
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))

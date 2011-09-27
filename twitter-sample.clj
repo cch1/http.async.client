@@ -2,6 +2,8 @@
   (:require [http.async.client :as c]
             [org.danlarkin.json :as j]))
 
+;; Please consider using https://github.com/adamwynne/twitter-api
+
 (def u "username")
 (def p "password")
 
@@ -13,15 +15,17 @@
 
 ;; statuses/sample
 (defn statuses-sample []
-  (doseq [twit-str (c/string
-                    (c/stream-seq :get "http://stream.twitter.com/1/statuses/sample.json"
-                                  :auth {:user u :password p}))]
-    (print-user-and-text "sample" twit-str)))
+  (with-open [client (c/create-client)]
+    (doseq [twit-str (c/string
+                      (c/stream-seq client :get "http://stream.twitter.com/1/statuses/sample.json"
+                                    :auth {:user u :password p}))]
+      (print-user-and-text "sample" twit-str))))
 
 ;; statuses/filter
 (defn statuses-filter []
-  (doseq [twit-str (c/string
-                    (c/stream-seq :post "http://stream.twitter.com/1/statuses/filter.json"
-                                  :body {"track" "basketball,football,baseball,footy,soccer"}
-                                  :auth {:user u :password p}))]
-    (print-user-and-text "sports" twit-str)))
+  (with-open [client (c/create-client)]
+    (doseq [twit-str (c/string
+                      (c/stream-seq client :post "http://stream.twitter.com/1/statuses/filter.json"
+                                    :body {"track" "basketball,football,baseball,footy,soccer"}
+                                    :auth {:user u :password p}))]
+      (print-user-and-text "sports" twit-str))))
