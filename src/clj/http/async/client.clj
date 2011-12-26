@@ -1,4 +1,6 @@
-; Copyright 2010 Hubert Iwaniuk
+;; ## client.clj -- Asynchronous HTTP Client for Clojure
+
+; Copyright 2011 Hubert Iwaniuk
 ;
 ; Licensed under the Apache License, Version 2.0 (the "License");
 ; you may not use this file except in compliance with the License.
@@ -21,6 +23,8 @@
            (java.util.concurrent LinkedBlockingQueue)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
            (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
+
+;; # Client Lifecycle
 
 (defn create-client
   "Creates new Async Http Client.

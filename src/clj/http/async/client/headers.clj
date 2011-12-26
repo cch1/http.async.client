@@ -1,3 +1,5 @@
+;; Lazy headers.
+
 ; Copyright 2010 Hubert Iwaniuk
 ;
 ; Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +14,7 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns http.async.client.headers
-  "Asynchrounous HTTP Client - Clojure - Lazy headers"
+(ns http.async.client.headers "Asynchrounous HTTP Client - Clojure - Lazy headers"
   {:author "Hubert Iwaniuk"}
   (:import (com.ning.http.client HttpResponseHeaders FluentCaseInsensitiveStringsMap)))
 
@@ -26,6 +27,7 @@
       (first vals)
       (into [] vals))))
 
+;; Convertion of AHC Headers to lazy map.
 (defn convert-headers-to-map
   "Converts Http Response Headers to lazy map."
   [#^HttpResponseHeaders headers]
@@ -57,6 +59,7 @@
                              (thisfn (rest pseq)))))))
                names)))))
 
+;; Creates cookies from headers.
 (defn create-cookies
   "Creates cookies from headers."
   [headers]
