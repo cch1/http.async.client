@@ -17,7 +17,7 @@
 (ns http.async.client
   "Asynchronous HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [await promise])
+  (:refer-clojure :exclude [await])
   (:use [http.async.client request headers util])
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
@@ -179,18 +179,18 @@
 (defn failed?
   "Checks if request failed."
   [resp]
-  (delivered? (:error resp)))
+  (realized? (:error resp)))
 
 (defn done?
   "Checks if request is finished already (response receiving finished)."
   [resp]
-  (delivered? (:done resp)))
+  (realized? (:done resp)))
 
 (defn- safe-get
   [k r]
   (let [p (k r)]
     (if (or
-         (delivered? p)
+         (realized? p)
          (not
           (or
            (failed? r)

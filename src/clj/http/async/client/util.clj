@@ -21,39 +21,6 @@
                                  Realm$AuthScheme
                                  Realm$RealmBuilder)))
 
-(defn promise
-  "Alpha - subject to change.
-  Returns a promise object that can be read with deref/@, and set,
-  once only, with deliver. Calls to deref/@ prior to delivery will
-  block. All subsequent derefs will return the same delivered value
-  without blocking."
-  {:added "1.1"}
-  []
-  (let [d (java.util.concurrent.CountDownLatch. 1)
-        v (atom nil)]
-    ^{:delivered?
-      (fn []
-        (locking d
-          (zero? (.getCount d))))}
-    (reify 
-     clojure.lang.IDeref
-      (deref [_] (.await d) @v)
-     clojure.lang.IFn
-      (invoke [this x]
-        (locking d
-          (if (pos? (.getCount d))
-            (do (reset! v x)
-                (.countDown d)
-                this)
-            (throw (IllegalStateException. "Multiple deliver calls to a promise"))))))))
-
-(defn delivered?
-  "Alpha - subject to change.
-  Returns true if promise has been delivered, else false"
-  [p]
-  (if-let [f (:delivered? (meta p))]
-   (f)))
-
 (defn- proto-map [proto]
   (if proto
     ({:http  ProxyServer$Protocol/HTTP

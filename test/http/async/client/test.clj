@@ -15,7 +15,7 @@
 (ns http.async.client.test
   "Testing of http.async"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [promise await])
+  (:refer-clojure :exclude [await])
   (:use clojure.test
         http.async.client
         [http.async.client request util]
@@ -198,9 +198,9 @@
 (deftest test-send-headers
   (let [resp (GET *client* "http://localhost:8123/" :headers {:a 1 :b 2})
         headers (headers resp)]
-    (if (delivered? (:error resp))
+    (if (realized? (:error resp))
       (print-stack-trace @(:error resp)))
-    (is (not (delivered? (:error resp))))
+    (is (not (realized? (:error resp))))
     (is (not (empty? headers)))
     (are [k v] (= (k headers) (str v))
          :a 1
@@ -566,7 +566,7 @@
       (is (not (failed? resp)))
       (if (failed? resp)
         (do
-          (println "Delivered error:" (delivered? (:error resp)))
+          (println "Delivered error:" (realized? (:error resp)))
           (print-stack-trace (error resp))))
       (is (true? (done? resp)))))
   (testing "global timeout"

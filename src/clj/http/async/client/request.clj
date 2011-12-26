@@ -15,7 +15,6 @@
 (ns http.async.client.request
   "Asynchronous HTTP Client - Clojure - Requesting API"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [promise])
   (:use [http.async.client status headers util]
         [clojure.stacktrace]
         [clojure.string :only [join]])
@@ -69,7 +68,7 @@
 ;; body callbacks
 (defn body-collect [state baos]
   (let [body (:body state)]
-    (if (delivered? body)
+    (if (realized? body)
       (do
         (.writeTo baos @body)
         [@body :continue])
@@ -249,7 +248,7 @@
                 (.write baos bytes 0 (alength bytes))
                 (let [[result action] (part resp baos)
                       body (:body resp)]
-                  (when-not (delivered? body)
+                  (when-not (realized? body)
                     (deliver body result))
                   (convert-action action)))))
            (^{:tag Object}
@@ -261,7 +260,7 @@
             onThrowable [this #^Throwable t]
             (do
               (deliver (:error resp) (error resp t))
-              (when-not (delivered? (:done resp))
+              (when-not (realized? (:done resp))
                 (deliver (:done resp) true))))))]
     (with-meta resp {:started (System/currentTimeMillis)
                      :cancelled? (fn [] (.isCancelled resp-future))
