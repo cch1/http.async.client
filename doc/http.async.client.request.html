@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html><head><link href="css/default.css" rel="stylesheet" type="text/css"><script src="js/jquery.min.js" type="text/javascript"></script><script src="js/page_effects.js" type="text/javascript"></script><title>http.async.client.request documentation</title></head><body><div id="header"><h1><a href="index.html">Http.async.client 0.4.0 API documentation</a></h1></div><div class="sidebar" id="namespaces"><h3>Namespaces</h3><ul><li><a href="http.async.client.html">http.async.client</a></li><li><a href="http.async.client.headers.html">http.async.client.headers</a></li><li class="current"><a href="http.async.client.request.html">http.async.client.request</a></li><li><a href="http.async.client.status.html">http.async.client.status</a></li><li><a href="http.async.client.util.html">http.async.client.util</a></li></ul></div><div class="sidebar" id="vars"><h3>Public Vars</h3><ul><li><a href="http.async.client.request.html#var-*default-callbacks*">*default-callbacks*</a></li><li><a href="http.async.client.request.html#var-convert-action">convert-action</a></li><li><a href="http.async.client.request.html#var-execute-request">execute-request</a></li><li><a href="http.async.client.request.html#var-get-encoding">get-encoding</a></li><li><a href="http.async.client.request.html#var-prepare-request">prepare-request</a></li><li><a href="http.async.client.request.html#var-url-encode">url-encode</a></li></ul></div><div class="namespace-docs" id="content"><h2>http.async.client.request documentation</h2><pre class="doc">Asynchronous HTTP Client - Clojure - Requesting API
+</pre><div class="public" id="var-*default-callbacks*"><h3>*default-callbacks*</h3><div class="usage"></div><pre class="doc">Default set of callbacks.
+</pre></div><div class="public" id="var-convert-action"><h3>convert-action</h3><div class="usage"><code>(convert-action action)</code></div><pre class="doc">Converts action (:abort, nil) to Async client STATE.
+</pre></div><div class="public" id="var-execute-request"><h3>execute-request</h3><div class="usage"><code>(execute-request client req &amp; {status :status, headers :headers, part :part, completed :completed, error :error})</code></div><pre class="doc">Executes provided request.
+Arguments:
+- req        - request to be executed
+- :status    - status callback
+- :headers   - headers callback
+- :part      - body part callback
+- :completed - response completed
+- :error     - error callback
+
+Returns a map:
+- :id      - unique ID of request
+- :status  - promise that once status is received is delivered, contains lazy map of:
+  - :code     - response code
+  - :msg      - response message
+  - :protocol - protocol with version
+  - :major    - major version of protocol
+  - :minor    - minor version of protocol
+- :headers - promise that once headers are received is delivered, contains lazy map of:
+  - :server - header names are keyworded, values stay not changed
+- :body    - body of response, depends on request type, might be ByteArrayOutputStream
+             or lazy sequence, use conveniece methods to extract it, like string
+- :done    - promise that is delivered once receiving response has finished
+- :error   - promise that is delivered if requesting resource failed, once delivered
+             will contain Throwable.</pre></div><div class="public" id="var-get-encoding"><h3>get-encoding</h3><div class="usage"><code>(get-encoding {ct :content-type, :or {ct &quot;&quot;}})</code></div><pre class="doc">Gets content encoding from headers, if Content-Type header not present
+or media-type in it is missing =&gt; nil</pre></div><div class="public" id="var-prepare-request"><h3>prepare-request</h3><div class="usage"><code>(prepare-request method url &amp; {:keys [headers query body cookies proxy auth timeout]})</code></div><pre class="doc">Prepares method (GET, POST, ..) request to url.
+Options:
+  :query   - map of query parameters, if value is vector than multiple values
+             will be send as n=v1&amp;n=v2
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used
+    :host     - proxy host
+    :port     - proxy port
+    :protocol - (optional) protocol to communicate with proxy,
+                :http (default, if you provide no value) and :https are allowed
+    :user     - (optional) user name to use for proxy authentication,
+                has to be provided with :password
+    :password - (optional) password to use for proxy authentication,
+                has to be provided with :user
+  :auth    - map with authentication to be used
+    :type       - either :basic or :digest
+    :user       - user name to be used
+    :password   - password to be used
+    :realm      - realm name to authenticate in
+    :preemptive - assume authentication is required
+  :timeout - request timeout in ms</pre></div><div class="public" id="var-url-encode"><h3>url-encode</h3><div class="usage"><code>(url-encode arg)</code></div><pre class="doc">Taken from Clojure Http Client
+</pre></div></div></body></html>
