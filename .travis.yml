@@ -1,1 +1,9 @@
 language: clojure
+before_script: "lein deps, javac"
+script:        "lein test"
+branches:
+  only:
+    - master
+    - development
+notifications:
+  irc: "irc.freenode.org#asynchttpclient"
