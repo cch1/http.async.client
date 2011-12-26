@@ -1,6 +1,8 @@
 http.async.client - Asynchronous HTTP Client for Clojure
 ========================================================
 
+[![Build Status](https://secure.travis-ci.org/neotyk/http.async.client.png)](http://travis-ci.org/neotyk/http.async.client)
+
 ## *tl;dr*
 Declare dependency:
 
