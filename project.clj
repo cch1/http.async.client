@@ -7,7 +7,7 @@
   :javac-options {:deprecation "true"}
   :dependencies     [[org.clojure/clojure "1.3.0"]
 		     [com.ning/async-http-client "1.6.5"]]
-  :dev-dependencies [[codox "0.3.0"]
+  :dev-dependencies [[codox "0.3.1"]
                      [org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
                      [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
                      [lein-difftest "1.3.3"  :exclusions [org.clojure/clojure
