@@ -221,7 +221,7 @@
 *** HEAD
     To call [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-HEAD][*http.async.client/HEAD*]] on a resource:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/HEAD "<your url>")]
                                          ; do something with resp
      ))
@@ -229,54 +229,54 @@
 *** OPTIONS
     To call [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-OPTIONS][*http.async.client/OPTIONS*]] on a resource:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/OPTIONS "<your url>")]
                                          ; do something with resp
      ))
     #+END_SRC
 ** Request options
    Following options can be provided to requests and are defined by
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request][*http.async.client.request/prepare-request*]]:
-   - [[*%20query][:query]] :: query parameters
-   - [[*%20headers][:headers]] :: custom headers to be sent out
-   - [[*%20body][:body]] :: body to be sent, allowed only with PUT/POST
-   - [[*%20cookies][:cookies]] :: cookies to be sent
-   - [[*%20proxy][:proxy]] :: proxy to be used
-   - [[*%20auth][:auth]] :: authentication map
+   [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]]:
+   - [[*:query][:query]] :: query parameters
+   - [[*:headers][:headers]] :: custom headers to be sent out
+   - [[*:body][:body]] :: body to be sent, allowed only with PUT/POST
+   - [[*:cookies][:cookies]] :: cookies to be sent
+   - [[*:proxy][:proxy]] :: proxy to be used
+   - [[*:auth][:auth]] :: authentication map
    - [[*:timeout][:timeout]] :: timeout configuration
 *** :query
     Query parameters is a map of keywords and their values. You use
     it like so:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url :query {:key1 "value1" :key2 "value2"})]
      (client/await resp)
      (client/string resp)))
     #+END_SRC
 *** :headers
-    Custom headers can be submitted same way as [[*%20query][:query]]:
+    Custom headers can be submitted same way as [[*:query][:query]]:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url :headers {:header-name1 "value1"
                                         :header-name2 "value2"})]
      (client/await resp)
      (client/string resp)))
     #+END_SRC
 *** :body
-    Body can be provided with a message only with [[*PUT%20POST][PUT/POST]], it
-    doesn't make sense to have body with other [[*HTTP%20methods][HTTP methods]].
+    Body can be provided with a message only with [[*PUT/POST][PUT/POST]], it
+    doesn't make sense to have body with other [[*HTTP methods][HTTP methods]].
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/PUT client url :body "sample body")]
      (client/await resp)
      (client/string resp)))
     #+END_SRC
     *:body* can be String, form parameters (that is map), input stream or
-    java.io.File, please see [[*PUT%20POST][PUT/POST]] for more documentation.
+    java.io.File, please see [[*PUT/POST][PUT/POST]] for more documentation.
 *** :cookies
     Cookies can be provided to request as follows:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client "http://localhost:8123/cookie"
                           :cookies #{{:domain "http://localhost:8123/"
                                       :name "sample-name"
@@ -299,11 +299,11 @@
     - *:max-age* :: Max age that cookie was configured to live
     - *:secure* :: If cookie is secure cookie
 
-    Cookie reading is described in [[*Reading%20cookies][Reading cookies]].
+    Cookie reading is described in [[*Reading cookies][Reading cookies]].
 *** :proxy
     Proxy can be configured per request basis as follows:
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url :proxy {:host h :port p})]
      (client/await resp)
      (client/string resp)))
@@ -324,21 +324,21 @@
 
     Basic method is default, so you don't have to specify it:
     #+BEGIN_SRC clojure
-      (with-open [client (client/create-client)] ;; Create client
+      (with-open [client (client/create-client)] ; Create client
         (let [resp (client/GET client url :auth {:user u :password p})]
           ;; Check if response is not 401 or so and process response
           ))
     #+END_SRC
     Though you can:
     #+BEGIN_SRC clojure
-      (with-open [client (client/create-client)] ;; Create client
+      (with-open [client (client/create-client)] ; Create client
         (let [resp (client/GET client url :auth {:type :basic :user u :password p})]
           ;; Check if response is not 401 or so and process response
           ))
     #+END_SRC
     And for digest method you will need realm as well:
     #+BEGIN_SRC clojure
-      (with-open [client (client/create-client)] ;; Create client
+      (with-open [client (client/create-client)] ; Create client
         (let [resp (client/GET client url
                                :auth {:type :digest :user u :password p :realm r})]
           ;; Check if response is not 401 or so and process response
@@ -357,7 +357,7 @@
     received.
     There is special value *-1* that indicates infinite timeout.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url :timeout -1)]
      (client/await resp)
      ;; process response
@@ -366,7 +366,7 @@
     Sample above will wait until response is fully received, as long
     as it takes (-1 timeout).
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url :timeout 100)]
      (client/await resp)
      (if (client/failed? resp)
@@ -387,15 +387,15 @@
    been received.
 
    Two ways of consuming a HTTP Stream are supported:
-   - [[*Lazy%20sequence][Lazy sequence]]
-   - [[*Call%20back][Call-back]]
+   - [[*Lazy sequence][Lazy sequence]]
+   - [[*Call-back][Call-back]]
 *** Lazy sequence
     You can get HTTP Stream as lazy sequence of it's body.
     This is very convenient method as *seq* is native type of Clojure
     so you can apply all mapping, filtering and any other standard
     function that you like to it.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/stream-seq client :get url)]
      (doseq [s (s/string resp)]
        (println s))))
@@ -433,7 +433,7 @@
     what URL and provide a call back function to handle body parts been
     received.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [parts (ref #{})
          resp (client/request-stream client :get url
                                      (fn [state body]
@@ -449,7 +449,7 @@
    place already, though it is advised to use convenience methods to
    read them, see [[*Reading%20status%20line][Reading status line]] and [[*Reading%20headers][Reading headers]],
  - call-back has to follow guidelines described in [[*Body%20part][Body part]],
- - some streams are not meant to be finish, in that case don't
+ - some streams are not meant to be finished, in that case don't
    collect body parts, as for sure you will run out of available
    resources,
  - try not to do any heavy lifting in this callback, better send it
@@ -466,7 +466,7 @@
     It takes only one argument, that is response and returns once
     receiving has finished.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url)]
      (client/await resp)))
     #+END_SRC
@@ -482,7 +482,7 @@
     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-status][*http.async.client/status*]] returns status lazy map of response.
     It will wait until HTTP Status has been received.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp   (client/GET client url)
          status (client/status resp)]
      (:code status)))
@@ -494,7 +494,7 @@
     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-headers][*http.async.client/headers*]] returns headers lazy map of response.
     It will wait until HTTP Headers are received.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp    (client/GET client url)
          headers (client/headers resp)]
      (:server headers)))
@@ -506,7 +506,7 @@
     cookies.
     It will wait until HTTP Headers are received.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp    (client/GET client url)
          cookies (client/cookies resp)]
      (map :name cookies)))
@@ -526,7 +526,7 @@
     It will *not* wait for response to be finished, it will return as
     soon as first chunk of HTTP response body is received.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url)]
      (client/string (client/await resp))))
     #+END_SRC
@@ -534,7 +534,7 @@
     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-string][*http.async.client/string*]] is lazy so you can use it in case of
     streams as well.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp    (client/stream-seq client :get url)
          strings (client/string resp)]
      (doseq [part strings]
@@ -546,7 +546,7 @@
     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-error][*http.async.client/error*]] will return Throwable that was cause of
     request failure iff request failed, else *nil*.
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url)]
      (client/await resp)
      (when-let [err (client/error resp)]
@@ -556,7 +556,7 @@
     At any given time of processing HTTP Response you can *cancel* it
     by calling [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cancel][*http.async.client/cancel*]].
     #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url)]
      (client/cancel resp)))
     #+END_SRC
@@ -567,7 +567,7 @@
      [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-done?][*http.async.client/done?*]] will tell you if response processing
      has finished:
      #+BEGIN_SRC clojure
- (with-open [client (client/create-client)] ;; Create client
+ (with-open [client (client/create-client)] ; Create client
    (let [resp (client/GET client url)]
      (when-not (client/done? resp)
        (client/await resp)
@@ -721,8 +721,7 @@
 *** Closing *http.async.client*
     Whenever you've created *http.async.client* via
     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-create-client][*http.async.client/create-client*]] you will need to close it.
-    To do so you call [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-close][*http.async.client/close*]], *http.async.client*
-    relies on client been bound to **client**.
+    To do so you call [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-close][*http.async.client/close*]].
     #+BEGIN_SRC clojure
       (let [client (client/create-client)]
         (try
@@ -730,7 +729,7 @@
             ;; process response
             )
           (finally
-           (client/close *client*))))
+           (client/close client))))
     #+END_SRC
 * Low level
   This is lowest level access to *http.async.client*.
@@ -738,7 +737,7 @@
   It provides default set of callbacks and functions to create and
   execute requests.
 ** Preparing request
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/prepare-request][*http.async.client.request/prepare-request*]] is responsible for
+   [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]] is responsible for
    request preparation, like name suggests.
    It takes following arguments:
   - HTTP Method like *:get* *:head*
@@ -754,16 +753,16 @@
           ))
     #+END_SRC
 ** Executing request
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/execute-request][*http.async.client/execute-request*]] returns same map of promises
+   [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-execute-request][*http.async.client.request/execute-request*]] returns same map of promises
    as [[*Asynchronous%20operations][Asynchronous operations]].
    Its arguments are: request to be executed (result of [[*Preparing%20request][Preparing
    request]]) and *options* as keyworded map consisting of call-backs.
    Following *options* are recognized:
-   - *:status* [[*Status%20line][Status line]]
-   - *:headers* [[*Headers][Headers]]
-   - *:part* [[*Body%20part][Body part]]
-   - *:completed* [[*Body%20completed][Body completed]]
-   - *:error* [[*Error][Error]]
+   - *:status* :: [[*Status%20line][Status line]]
+   - *:headers* :: [[*Headers][Headers]]
+   - *:part* :: [[*Body%20part][Body part]]
+   - *:completed* :: [[*Body%20completed][Body completed]]
+   - *:error* :: [[*Error][Error]]
    All callbacks take response map as first argument and callback
    specific argument if any.
    Callbacks are expected to return tuple of *result* and *action*:
@@ -803,7 +802,7 @@
     - response map
     - *Throwable* that was a cause of failure
 ** Default callbacks
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client.request/*default-callbacks*][*http.async.client.request/*default-callbacks**]] is a map of
+   [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-*default-callbacks*][*http.async.client.request/*default-callbacks**]] is a map of
    default callbacks. This fill allow you to easy change only few
    callbacks and reuse default for the rest.
 
