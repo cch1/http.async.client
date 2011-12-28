@@ -10,9 +10,8 @@ Declare dependency:
 ``` clojure
 (defproject your-project "1.0.0-SNAPSHOT"
   :description "Your project description"
-  :dependencies [[org.clojure/clojure "1.2.1"]
-                 [org.clojure/clojure-contrib "1.2.0"]
-                 [http.async.client "0.3.1"]])
+  :dependencies [[org.clojure/clojure "1.3.0"]
+                 [http.async.client "0.4.0-SNAPSHOT"]])
 ```
 
 Require:
@@ -33,14 +32,13 @@ GET resource:
 ## Information over *http.async.client*
 
 [*http.async.client*](http://github.com/neotyk/http.async.client) is
-based on [Asynchronous Http Client for Java](http://github.com/AsyncHttpClient/async-http-client)
-which runs on top of [Netty Project](http://jboss.org/netty).
+based on [Asynchronous Http Client for Java](http://github.com/AsyncHttpClient/async-http-client).
 
-It requires Clojure 1.2.
+It requires Clojure 1.3.
 
 For more documentation refer to
  [docs](http://neotyk.github.com/http.async.client/docs.html) and for
- API to [autodoc](http://neotyk.github.com/http.async.client/autodoc/).
+ API to [doc](http://neotyk.github.com/http.async.client/doc/).
 
 
 *http.async.client* is distributed under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
