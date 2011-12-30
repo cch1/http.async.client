@@ -11,7 +11,7 @@
  (defproject your-project "1.0.0-SNAPSHOT"
    :description "Your project description"
    :dependencies [[org.clojure/clojure "1.3.0"]
-                  [http.async.client "0.4.0-SNAPSHOT"]])
+                  [http.async.client "0.4.0"]])
    #+END_SRC
    Make sure that your project depends on at least 1.3.0 Clojure as
    *http.async.client* will not run in earlier versions.
@@ -808,3 +808,5 @@
 
    Please look at source of [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-stream-seq][*http.async.client/stream-seq*]] to see
    how to do it.
+
+#+INCLUDE: ga.org

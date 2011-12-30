@@ -91,3 +91,5 @@
      - Use normal map for response instead of (ref {})
      - Provide helper functions to deal with metadata on response
 ** DONE Rename to *http.async.client*                                  :rel3:
+
+#+INCLUDE: ga.org

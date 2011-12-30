@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Asynchronous HTTP Client - Clojure - To Do</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-06-15 23:10:57 CEST"/>
+<meta name="generated" content="2011-12-31 00:13:26 CET"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -95,9 +95,14 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </head>
 <body>
-<div id="content">
 
+<div id="preamble">
+
+</div>
+
+<div id="content">
 <h1 class="title">Asynchronous HTTP Client - Clojure - To Do</h1>
+
 
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
@@ -105,108 +110,108 @@ org_html_manager.setup();  // activate after the parameters are set
 <ul>
 <li><a href="#sec-1">1 Receive [6/6]</a>
 <ul>
-<li><a href="#sec-1_1">1.1 Status Line</a></li>
-<li><a href="#sec-1_2">1.2 Headers</a></li>
-<li><a href="#sec-1_3">1.3 Body</a></li>
-<li><a href="#sec-1_4">1.4 Implement response <b>promise</b></a></li>
-<li><a href="#sec-1_5">1.5 Consume stream</a></li>
-<li><a href="#sec-1_6">1.6 Error function</a></li>
+<li><a href="#sec-1-1">1.1 Status Line</a></li>
+<li><a href="#sec-1-2">1.2 Headers</a></li>
+<li><a href="#sec-1-3">1.3 Body</a></li>
+<li><a href="#sec-1-4">1.4 Implement response <b>promise</b></a></li>
+<li><a href="#sec-1-5">1.5 Consume stream</a></li>
+<li><a href="#sec-1-6">1.6 Error function</a></li>
 </ul>
 </li>
 <li><a href="#sec-2">2 Send [6/9]</a>
 <ul>
-<li><a href="#sec-2_1">2.1 Query parameters</a></li>
-<li><a href="#sec-2_2">2.2 Parameters</a></li>
-<li><a href="#sec-2_3">2.3 Parameters allowed only on PUT/POST</a></li>
-<li><a href="#sec-2_4">2.4 Cookies</a>
+<li><a href="#sec-2-1">2.1 Query parameters</a></li>
+<li><a href="#sec-2-2">2.2 Parameters</a></li>
+<li><a href="#sec-2-3">2.3 Parameters allowed only on PUT/POST</a></li>
+<li><a href="#sec-2-4">2.4 Cookies</a>
 <ul>
-<li><a href="#sec-2_4_1">2.4.1 Describe</a></li>
+<li><a href="#sec-2-4-1">2.4.1 Describe</a></li>
 </ul>
 </li>
-<li><a href="#sec-2_5">2.5 PUT/POST body [3/3]</a>
+<li><a href="#sec-2-5">2.5 PUT/POST body [3/3]</a>
 <ul>
-<li><a href="#sec-2_5_1">2.5.1 Support sending strings</a></li>
-<li><a href="#sec-2_5_2">2.5.2 Support sending map as form encoded data</a></li>
-<li><a href="#sec-2_5_3">2.5.3 Support InputStream body</a></li>
+<li><a href="#sec-2-5-1">2.5.1 Support sending strings</a></li>
+<li><a href="#sec-2-5-2">2.5.2 Support sending map as form encoded data</a></li>
+<li><a href="#sec-2-5-3">2.5.3 Support InputStream body</a></li>
 </ul>
 </li>
-<li><a href="#sec-2_6">2.6 All HTTP verbs [6/7] </a>
+<li><a href="#sec-2-6">2.6 All HTTP verbs [6/7] </a>
 <ul>
-<li><a href="#sec-2_6_1">2.6.1 GET</a></li>
-<li><a href="#sec-2_6_2">2.6.2 POST</a></li>
-<li><a href="#sec-2_6_3">2.6.3 PUT</a></li>
-<li><a href="#sec-2_6_4">2.6.4 DELETE</a></li>
-<li><a href="#sec-2_6_5">2.6.5 HEAD</a></li>
-<li><a href="#sec-2_6_6">2.6.6 OPTIONS</a></li>
-<li><a href="#sec-2_6_7">2.6.7 Others, once supported by AHC-Java</a></li>
+<li><a href="#sec-2-6-1">2.6.1 GET</a></li>
+<li><a href="#sec-2-6-2">2.6.2 POST</a></li>
+<li><a href="#sec-2-6-3">2.6.3 PUT</a></li>
+<li><a href="#sec-2-6-4">2.6.4 DELETE</a></li>
+<li><a href="#sec-2-6-5">2.6.5 HEAD</a></li>
+<li><a href="#sec-2-6-6">2.6.6 OPTIONS</a></li>
+<li><a href="#sec-2-6-7">2.6.7 Others, once supported by AHC-Java</a></li>
 </ul>
 </li>
-<li><a href="#sec-2_7">2.7 PUT/POST streaming body</a></li>
-<li><a href="#sec-2_8">2.8 Multipart</a></li>
-<li><a href="#sec-2_9">2.9 Authentication</a>
+<li><a href="#sec-2-7">2.7 PUT/POST streaming body</a></li>
+<li><a href="#sec-2-8">2.8 Multipart</a></li>
+<li><a href="#sec-2-9">2.9 Authentication</a>
 <ul>
-<li><a href="#sec-2_9_1">2.9.1 Test Authentication </a></li>
+<li><a href="#sec-2-9-1">2.9.1 Test Authentication </a></li>
 </ul></li>
 </ul>
 </li>
 <li><a href="#sec-3">3 Configuration [2/2] </a>
 <ul>
-<li><a href="#sec-3_1">3.1 Global configuration of AHC [4/4]</a>
+<li><a href="#sec-3-1">3.1 Global configuration of AHC [4/4]</a>
 <ul>
-<li><a href="#sec-3_1_1">3.1.1 Branding User-agent</a></li>
-<li><a href="#sec-3_1_2">3.1.2 Connection limiting per host.</a></li>
-<li><a href="#sec-3_1_3">3.1.3 Global proxy.</a></li>
-<li><a href="#sec-3_1_4">3.1.4 Timeout settings</a>
+<li><a href="#sec-3-1-1">3.1.1 Branding User-agent</a></li>
+<li><a href="#sec-3-1-2">3.1.2 Connection limiting per host.</a></li>
+<li><a href="#sec-3-1-3">3.1.3 Global proxy.</a></li>
+<li><a href="#sec-3-1-4">3.1.4 Timeout settings</a>
 <ul>
-<li><a href="#sec-3_1_4_1">3.1.4.1 Request timeout</a></li>
-<li><a href="#sec-3_1_4_2">3.1.4.2 Connection timeout</a></li>
-<li><a href="#sec-3_1_4_3">3.1.4.3 Idle connection timeout</a></li>
+<li><a href="#sec-3-1-4-1">3.1.4.1 Request timeout</a></li>
+<li><a href="#sec-3-1-4-2">3.1.4.2 Connection timeout</a></li>
+<li><a href="#sec-3-1-4-3">3.1.4.3 Idle connection timeout</a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-3_2">3.2 Per request configuration [2/2]</a>
+<li><a href="#sec-3-2">3.2 Per request configuration [2/2]</a>
 <ul>
-<li><a href="#sec-3_2_1">3.2.1 Proxy configuration</a></li>
-<li><a href="#sec-3_2_2">3.2.2 Timeout</a>
+<li><a href="#sec-3-2-1">3.2.1 Proxy configuration</a></li>
+<li><a href="#sec-3-2-2">3.2.2 Timeout</a>
 <ul>
-<li><a href="#sec-3_2_2_1">3.2.2.1 Request timeout</a></li>
-<li><a href="#sec-3_2_2_2">3.2.2.2 Connection timeout</a></li>
-<li><a href="#sec-3_2_2_3">3.2.2.3 Idle connection timeout</a></li>
+<li><a href="#sec-3-2-2-1">3.2.2.1 Request timeout</a></li>
+<li><a href="#sec-3-2-2-2">3.2.2.2 Connection timeout</a></li>
+<li><a href="#sec-3-2-2-3">3.2.2.3 Idle connection timeout</a></li>
 </ul></li>
 </ul></li>
 </ul>
 </li>
 <li><a href="#sec-4">4 Tasks [12/12] </a>
 <ul>
-<li><a href="#sec-4_1">4.1 License</a></li>
-<li><a href="#sec-4_2">4.2 Cleanup namespaces</a>
+<li><a href="#sec-4-1">4.1 License</a></li>
+<li><a href="#sec-4-2">4.2 Cleanup namespaces</a>
 <ul>
-<li><a href="#sec-4_2_1">4.2.1 async.http.client </a></li>
-<li><a href="#sec-4_2_2">4.2.2 async.http.client.request </a></li>
+<li><a href="#sec-4-2-1">4.2.1 async.http.client </a></li>
+<li><a href="#sec-4-2-2">4.2.2 async.http.client.request </a></li>
 </ul>
 </li>
-<li><a href="#sec-4_3">4.3 Release 0.1.0</a></li>
-<li><a href="#sec-4_4">4.4 Release 0.1.1</a></li>
-<li><a href="#sec-4_5">4.5 Release 0.2.0</a>
+<li><a href="#sec-4-3">4.3 Release 0.1.0</a></li>
+<li><a href="#sec-4-4">4.4 Release 0.1.1</a></li>
+<li><a href="#sec-4-5">4.5 Release 0.2.0</a>
 <ul>
-<li><a href="#sec-4_5_1">4.5.1 Create a changelog</a></li>
+<li><a href="#sec-4-5-1">4.5.1 Create a changelog</a></li>
 </ul>
 </li>
-<li><a href="#sec-4_6">4.6 Release 0.2.1 </a></li>
-<li><a href="#sec-4_7">4.7 Make tests stand-alone</a></li>
-<li><a href="#sec-4_8">4.8 Simplify request preparation</a></li>
-<li><a href="#sec-4_9">4.9 Use last argument as key worded map</a></li>
-<li><a href="#sec-4_10">4.10 Review documentation</a></li>
-<li><a href="#sec-4_11">4.11 Refactoring [1/1]</a>
+<li><a href="#sec-4-6">4.6 Release 0.2.1 </a></li>
+<li><a href="#sec-4-7">4.7 Make tests stand-alone</a></li>
+<li><a href="#sec-4-8">4.8 Simplify request preparation</a></li>
+<li><a href="#sec-4-9">4.9 Use last argument as key worded map</a></li>
+<li><a href="#sec-4-10">4.10 Review documentation</a></li>
+<li><a href="#sec-4-11">4.11 Refactoring [1/1]</a>
 <ul>
-<li><a href="#sec-4_11_1">4.11.1 Refactor <b>execute-request</b> [2/2] </a>
+<li><a href="#sec-4-11-1">4.11.1 Refactor <b>execute-request</b> [2/2] </a>
 <ul>
-<li><a href="#sec-4_11_1_1">4.11.1.1 Build checkable promise </a></li>
-<li><a href="#sec-4_11_1_2">4.11.1.2 Unify <b>execute-request</b> and <b>consume-stream</b> interfaces </a></li>
+<li><a href="#sec-4-11-1-1">4.11.1.1 Build checkable promise </a></li>
+<li><a href="#sec-4-11-1-2">4.11.1.2 Unify <b>execute-request</b> and <b>consume-stream</b> interfaces </a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-4_12">4.12 Rename to <b>http.async.client</b></a></li>
+<li><a href="#sec-4-12">4.12 Rename to <b>http.async.client</b></a></li>
 </ul>
 </li>
 </ul>
@@ -220,25 +225,25 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-1_1" class="outline-3">
-<h3 id="sec-1_1"><span class="section-number-3">1.1</span> <span class="done DONE"> DONE</span> Status Line &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-1_1">
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> <span class="done DONE"> DONE</span> Status Line &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-1_2" class="outline-3">
-<h3 id="sec-1_2"><span class="section-number-3">1.2</span> <span class="done DONE"> DONE</span> Headers &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-1_2">
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> <span class="done DONE"> DONE</span> Headers &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1-2">
 
 </div>
 
 </div>
 
-<div id="outline-container-1_3" class="outline-3">
-<h3 id="sec-1_3"><span class="section-number-3">1.3</span> <span class="done DONE"> DONE</span> Body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-1_3">
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> <span class="done DONE"> DONE</span> Body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1-3">
 
 <p>   Instead of <b>id</b>, pass <b>(ref {})</b> to callbacks so they have their own
    STM ref'ed map.
@@ -246,25 +251,25 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-1_4" class="outline-3">
-<h3 id="sec-1_4"><span class="section-number-3">1.4</span> <span class="done DONE"> DONE</span> Implement response <b>promise</b> &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-1_4">
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> <span class="done DONE"> DONE</span> Implement response <b>promise</b> &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1-4">
 
 </div>
 
 </div>
 
-<div id="outline-container-1_5" class="outline-3">
-<h3 id="sec-1_5"><span class="section-number-3">1.5</span> <span class="done DONE"> DONE</span> Consume stream &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-1_5">
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> <span class="done DONE"> DONE</span> Consume stream &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1-5">
 
 </div>
 
 </div>
 
-<div id="outline-container-1_6" class="outline-3">
-<h3 id="sec-1_6"><span class="section-number-3">1.6</span> <span class="done DONE"> DONE</span> Error function &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-1_6">
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> <span class="done DONE"> DONE</span> Error function &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-1-6">
 
 </div>
 </div>
@@ -278,145 +283,145 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2_1" class="outline-3">
-<h3 id="sec-2_1"><span class="section-number-3">2.1</span> <span class="done DONE"> DONE</span> Query parameters &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-2_1">
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> <span class="done DONE"> DONE</span> Query parameters &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-2_2" class="outline-3">
-<h3 id="sec-2_2"><span class="section-number-3">2.2</span> <span class="done DONE"> DONE</span> Parameters &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-2_2">
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> <span class="done DONE"> DONE</span> Parameters &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2-2">
 
 </div>
 
 </div>
 
-<div id="outline-container-2_3" class="outline-3">
-<h3 id="sec-2_3"><span class="section-number-3">2.3</span> <span class="done DONE"> DONE</span> Parameters allowed only on PUT/POST &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-2_3">
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> <span class="done DONE"> DONE</span> Parameters allowed only on PUT/POST &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2-3">
 
 </div>
 
 </div>
 
-<div id="outline-container-2_4" class="outline-3">
-<h3 id="sec-2_4"><span class="section-number-3">2.4</span> <span class="done DONE"> DONE</span> Cookies &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
-<div class="outline-text-3" id="text-2_4">
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> <span class="done DONE"> DONE</span> Cookies &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-2-4">
 
 
 </div>
 
-<div id="outline-container-2_4_1" class="outline-4">
-<h4 id="sec-2_4_1"><span class="section-number-4">2.4.1</span> <span class="done DONE"> DONE</span> Describe &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
-<div class="outline-text-4" id="text-2_4_1">
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-2_5" class="outline-3">
-<h3 id="sec-2_5"><span class="section-number-3">2.5</span> <span class="done DONE"> DONE</span> PUT/POST body [3/3] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-2_5">
-
-
-</div>
-
-<div id="outline-container-2_5_1" class="outline-4">
-<h4 id="sec-2_5_1"><span class="section-number-4">2.5.1</span> <span class="done DONE"> DONE</span> Support sending strings &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_5_1">
-
-</div>
-
-</div>
-
-<div id="outline-container-2_5_2" class="outline-4">
-<h4 id="sec-2_5_2"><span class="section-number-4">2.5.2</span> <span class="done DONE"> DONE</span> Support sending map as form encoded data &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_5_2">
-
-</div>
-
-</div>
-
-<div id="outline-container-2_5_3" class="outline-4">
-<h4 id="sec-2_5_3"><span class="section-number-4">2.5.3</span> <span class="done DONE"> DONE</span> Support InputStream body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_5_3">
+<div id="outline-container-2-4-1" class="outline-4">
+<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> <span class="done DONE"> DONE</span> Describe &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
+<div class="outline-text-4" id="text-2-4-1">
 
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-2_6" class="outline-3">
-<h3 id="sec-2_6"><span class="section-number-3">2.6</span> <span class="todo TODO"> TODO</span> All HTTP verbs [6/7] </h3>
-<div class="outline-text-3" id="text-2_6">
+<div id="outline-container-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> <span class="done DONE"> DONE</span> PUT/POST body [3/3] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-2-5">
 
 
 </div>
 
-<div id="outline-container-2_6_1" class="outline-4">
-<h4 id="sec-2_6_1"><span class="section-number-4">2.6.1</span> <span class="done DONE"> DONE</span> GET &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_6_1">
-
-</div>
-
-</div>
-
-<div id="outline-container-2_6_2" class="outline-4">
-<h4 id="sec-2_6_2"><span class="section-number-4">2.6.2</span> <span class="done DONE"> DONE</span> POST &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_6_2">
+<div id="outline-container-2-5-1" class="outline-4">
+<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> <span class="done DONE"> DONE</span> Support sending strings &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-5-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-2_6_3" class="outline-4">
-<h4 id="sec-2_6_3"><span class="section-number-4">2.6.3</span> <span class="done DONE"> DONE</span> PUT &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_6_3">
+<div id="outline-container-2-5-2" class="outline-4">
+<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> <span class="done DONE"> DONE</span> Support sending map as form encoded data &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-5-2">
 
 </div>
 
 </div>
 
-<div id="outline-container-2_6_4" class="outline-4">
-<h4 id="sec-2_6_4"><span class="section-number-4">2.6.4</span> <span class="done DONE"> DONE</span> DELETE &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_6_4">
-
-</div>
-
-</div>
-
-<div id="outline-container-2_6_5" class="outline-4">
-<h4 id="sec-2_6_5"><span class="section-number-4">2.6.5</span> <span class="done DONE"> DONE</span> HEAD &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_6_5">
-
-</div>
-
-</div>
-
-<div id="outline-container-2_6_6" class="outline-4">
-<h4 id="sec-2_6_6"><span class="section-number-4">2.6.6</span> <span class="done DONE"> DONE</span> OPTIONS &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
-<div class="outline-text-4" id="text-2_6_6">
-
-</div>
-
-</div>
-
-<div id="outline-container-2_6_7" class="outline-4">
-<h4 id="sec-2_6_7"><span class="section-number-4">2.6.7</span> <span class="todo TODO"> TODO</span> Others, once supported by AHC-Java &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
-<div class="outline-text-4" id="text-2_6_7">
+<div id="outline-container-2-5-3" class="outline-4">
+<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> <span class="done DONE"> DONE</span> Support InputStream body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-5-3">
 
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-2_7" class="outline-3">
-<h3 id="sec-2_7"><span class="section-number-3">2.7</span> <span class="todo TODO"> TODO</span> PUT/POST streaming body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
-<div class="outline-text-3" id="text-2_7">
+<div id="outline-container-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> <span class="todo TODO"> TODO</span> All HTTP verbs [6/7] </h3>
+<div class="outline-text-3" id="text-2-6">
+
+
+</div>
+
+<div id="outline-container-2-6-1" class="outline-4">
+<h4 id="sec-2-6-1"><span class="section-number-4">2.6.1</span> <span class="done DONE"> DONE</span> GET &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-6-1">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-6-2" class="outline-4">
+<h4 id="sec-2-6-2"><span class="section-number-4">2.6.2</span> <span class="done DONE"> DONE</span> POST &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-6-2">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-6-3" class="outline-4">
+<h4 id="sec-2-6-3"><span class="section-number-4">2.6.3</span> <span class="done DONE"> DONE</span> PUT &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-6-3">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-6-4" class="outline-4">
+<h4 id="sec-2-6-4"><span class="section-number-4">2.6.4</span> <span class="done DONE"> DONE</span> DELETE &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-6-4">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-6-5" class="outline-4">
+<h4 id="sec-2-6-5"><span class="section-number-4">2.6.5</span> <span class="done DONE"> DONE</span> HEAD &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-6-5">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-6-6" class="outline-4">
+<h4 id="sec-2-6-6"><span class="section-number-4">2.6.6</span> <span class="done DONE"> DONE</span> OPTIONS &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div class="outline-text-4" id="text-2-6-6">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-6-7" class="outline-4">
+<h4 id="sec-2-6-7"><span class="section-number-4">2.6.7</span> <span class="todo TODO"> TODO</span> Others, once supported by AHC-Java &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div class="outline-text-4" id="text-2-6-7">
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-7" class="outline-3">
+<h3 id="sec-2-7"><span class="section-number-3">2.7</span> <span class="todo TODO"> TODO</span> PUT/POST streaming body &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div class="outline-text-3" id="text-2-7">
 
 <p>   That can be done with <b>clojure.core/add-watch</b>.
    Watcher in that scenario will grab new content and write it via
@@ -426,24 +431,24 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2_8" class="outline-3">
-<h3 id="sec-2_8"><span class="section-number-3">2.8</span> <span class="todo TODO"> TODO</span> Multipart &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
-<div class="outline-text-3" id="text-2_8">
+<div id="outline-container-2-8" class="outline-3">
+<h3 id="sec-2-8"><span class="section-number-3">2.8</span> <span class="todo TODO"> TODO</span> Multipart &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div class="outline-text-3" id="text-2-8">
 
 </div>
 
 </div>
 
-<div id="outline-container-2_9" class="outline-3">
-<h3 id="sec-2_9"><span class="section-number-3">2.9</span> <span class="done DONE"> DONE</span> Authentication &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
-<div class="outline-text-3" id="text-2_9">
+<div id="outline-container-2-9" class="outline-3">
+<h3 id="sec-2-9"><span class="section-number-3">2.9</span> <span class="done DONE"> DONE</span> Authentication &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-2-9">
 
 
 </div>
 
-<div id="outline-container-2_9_1" class="outline-4">
-<h4 id="sec-2_9_1"><span class="section-number-4">2.9.1</span> <span class="done DONE"> DONE</span> Test Authentication </h4>
-<div class="outline-text-4" id="text-2_9_1">
+<div id="outline-container-2-9-1" class="outline-4">
+<h4 id="sec-2-9-1"><span class="section-number-4">2.9.1</span> <span class="done DONE"> DONE</span> Test Authentication </h4>
+<div class="outline-text-4" id="text-2-9-1">
 
 </div>
 </div>
@@ -458,63 +463,63 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-3_1" class="outline-3">
-<h3 id="sec-3_1"><span class="section-number-3">3.1</span> <span class="done DONE"> DONE</span> Global configuration of AHC [4/4] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
-<div class="outline-text-3" id="text-3_1">
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> <span class="done DONE"> DONE</span> Global configuration of AHC [4/4] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div class="outline-text-3" id="text-3-1">
 
 
 </div>
 
-<div id="outline-container-3_1_1" class="outline-4">
-<h4 id="sec-3_1_1"><span class="section-number-4">3.1.1</span> <span class="done DONE"> DONE</span> Branding User-agent &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
-<div class="outline-text-4" id="text-3_1_1">
-
-</div>
-
-</div>
-
-<div id="outline-container-3_1_2" class="outline-4">
-<h4 id="sec-3_1_2"><span class="section-number-4">3.1.2</span> <span class="done DONE"> DONE</span> Connection limiting per host. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
-<div class="outline-text-4" id="text-3_1_2">
+<div id="outline-container-3-1-1" class="outline-4">
+<h4 id="sec-3-1-1"><span class="section-number-4">3.1.1</span> <span class="done DONE"> DONE</span> Branding User-agent &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
+<div class="outline-text-4" id="text-3-1-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-3_1_3" class="outline-4">
-<h4 id="sec-3_1_3"><span class="section-number-4">3.1.3</span> <span class="done DONE"> DONE</span> Global proxy. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
-<div class="outline-text-4" id="text-3_1_3">
+<div id="outline-container-3-1-2" class="outline-4">
+<h4 id="sec-3-1-2"><span class="section-number-4">3.1.2</span> <span class="done DONE"> DONE</span> Connection limiting per host. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div class="outline-text-4" id="text-3-1-2">
 
 </div>
 
 </div>
 
-<div id="outline-container-3_1_4" class="outline-4">
-<h4 id="sec-3_1_4"><span class="section-number-4">3.1.4</span> <span class="done DONE"> DONE</span> Timeout settings &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
-<div class="outline-text-4" id="text-3_1_4">
-
-
-</div>
-
-<div id="outline-container-3_1_4_1" class="outline-5">
-<h5 id="sec-3_1_4_1"><span class="section-number-5">3.1.4.1</span> <span class="done DONE"> DONE</span> Request timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
-<div class="outline-text-5" id="text-3_1_4_1">
+<div id="outline-container-3-1-3" class="outline-4">
+<h4 id="sec-3-1-3"><span class="section-number-4">3.1.3</span> <span class="done DONE"> DONE</span> Global proxy. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div class="outline-text-4" id="text-3-1-3">
 
 </div>
 
 </div>
 
-<div id="outline-container-3_1_4_2" class="outline-5">
-<h5 id="sec-3_1_4_2"><span class="section-number-5">3.1.4.2</span> <span class="done DONE"> DONE</span> Connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
-<div class="outline-text-5" id="text-3_1_4_2">
+<div id="outline-container-3-1-4" class="outline-4">
+<h4 id="sec-3-1-4"><span class="section-number-4">3.1.4</span> <span class="done DONE"> DONE</span> Timeout settings &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div class="outline-text-4" id="text-3-1-4">
+
+
+</div>
+
+<div id="outline-container-3-1-4-1" class="outline-5">
+<h5 id="sec-3-1-4-1"><span class="section-number-5">3.1.4.1</span> <span class="done DONE"> DONE</span> Request timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3-1-4-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-3_1_4_3" class="outline-5">
-<h5 id="sec-3_1_4_3"><span class="section-number-5">3.1.4.3</span> <span class="done DONE"> DONE</span> Idle connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
-<div class="outline-text-5" id="text-3_1_4_3">
+<div id="outline-container-3-1-4-2" class="outline-5">
+<h5 id="sec-3-1-4-2"><span class="section-number-5">3.1.4.2</span> <span class="done DONE"> DONE</span> Connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3-1-4-2">
+
+</div>
+
+</div>
+
+<div id="outline-container-3-1-4-3" class="outline-5">
+<h5 id="sec-3-1-4-3"><span class="section-number-5">3.1.4.3</span> <span class="done DONE"> DONE</span> Idle connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3-1-4-3">
 
 </div>
 </div>
@@ -522,47 +527,47 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-3_2" class="outline-3">
-<h3 id="sec-3_2"><span class="section-number-3">3.2</span> <span class="done DONE"> DONE</span> Per request configuration [2/2] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
-<div class="outline-text-3" id="text-3_2">
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> <span class="done DONE"> DONE</span> Per request configuration [2/2] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div class="outline-text-3" id="text-3-2">
 
 
 </div>
 
-<div id="outline-container-3_2_1" class="outline-4">
-<h4 id="sec-3_2_1"><span class="section-number-4">3.2.1</span> <span class="done DONE"> DONE</span> Proxy configuration &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
-<div class="outline-text-4" id="text-3_2_1">
-
-</div>
-
-</div>
-
-<div id="outline-container-3_2_2" class="outline-4">
-<h4 id="sec-3_2_2"><span class="section-number-4">3.2.2</span> <span class="done DONE"> DONE</span> Timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
-<div class="outline-text-4" id="text-3_2_2">
-
-
-</div>
-
-<div id="outline-container-3_2_2_1" class="outline-5">
-<h5 id="sec-3_2_2_1"><span class="section-number-5">3.2.2.1</span> <span class="done DONE"> DONE</span> Request timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
-<div class="outline-text-5" id="text-3_2_2_1">
+<div id="outline-container-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> <span class="done DONE"> DONE</span> Proxy configuration &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
+<div class="outline-text-4" id="text-3-2-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-3_2_2_2" class="outline-5">
-<h5 id="sec-3_2_2_2"><span class="section-number-5">3.2.2.2</span> <span class="todo TODO"> TODO</span> Connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
-<div class="outline-text-5" id="text-3_2_2_2">
+<div id="outline-container-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> <span class="done DONE"> DONE</span> Timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div class="outline-text-4" id="text-3-2-2">
+
+
+</div>
+
+<div id="outline-container-3-2-2-1" class="outline-5">
+<h5 id="sec-3-2-2-1"><span class="section-number-5">3.2.2.1</span> <span class="done DONE"> DONE</span> Request timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3-2-2-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-3_2_2_3" class="outline-5">
-<h5 id="sec-3_2_2_3"><span class="section-number-5">3.2.2.3</span> <span class="todo TODO"> TODO</span> Idle connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
-<div class="outline-text-5" id="text-3_2_2_3">
+<div id="outline-container-3-2-2-2" class="outline-5">
+<h5 id="sec-3-2-2-2"><span class="section-number-5">3.2.2.2</span> <span class="todo TODO"> TODO</span> Connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3-2-2-2">
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2-2-3" class="outline-5">
+<h5 id="sec-3-2-2-3"><span class="section-number-5">3.2.2.3</span> <span class="todo TODO"> TODO</span> Idle connection timeout &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h5>
+<div class="outline-text-5" id="text-3-2-2-3">
 
 </div>
 </div>
@@ -578,24 +583,24 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-4_1" class="outline-3">
-<h3 id="sec-4_1"><span class="section-number-3">4.1</span> <span class="done DONE"> DONE</span> License &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-4_1">
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> <span class="done DONE"> DONE</span> License &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-4_2" class="outline-3">
-<h3 id="sec-4_2"><span class="section-number-3">4.2</span> <span class="done DONE"> DONE</span> Cleanup namespaces &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-4_2">
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> <span class="done DONE"> DONE</span> Cleanup namespaces &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4-2">
 
 
 </div>
 
-<div id="outline-container-4_2_1" class="outline-4">
-<h4 id="sec-4_2_1"><span class="section-number-4">4.2.1</span> async.http.client </h4>
-<div class="outline-text-4" id="text-4_2_1">
+<div id="outline-container-4-2-1" class="outline-4">
+<h4 id="sec-4-2-1"><span class="section-number-4">4.2.1</span> async.http.client </h4>
+<div class="outline-text-4" id="text-4-2-1">
 
 <p>    Should contain helper functions to call all HTTP verbs.
     Default set of call-backs.
@@ -603,9 +608,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-4_2_2" class="outline-4">
-<h4 id="sec-4_2_2"><span class="section-number-4">4.2.2</span> async.http.client.request </h4>
-<div class="outline-text-4" id="text-4_2_2">
+<div id="outline-container-4-2-2" class="outline-4">
+<h4 id="sec-4-2-2"><span class="section-number-4">4.2.2</span> async.http.client.request </h4>
+<div class="outline-text-4" id="text-4-2-2">
 
 <p>    Lower level of requesting:
 </p><ul>
@@ -620,25 +625,25 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-4_3" class="outline-3">
-<h3 id="sec-4_3"><span class="section-number-3">4.3</span> <span class="done DONE"> DONE</span> Release 0.1.0 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-4_3">
+<div id="outline-container-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> <span class="done DONE"> DONE</span> Release 0.1.0 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4-3">
 
 </div>
 
 </div>
 
-<div id="outline-container-4_4" class="outline-3">
-<h3 id="sec-4_4"><span class="section-number-3">4.4</span> <span class="done DONE"> DONE</span> Release 0.1.1 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
-<div class="outline-text-3" id="text-4_4">
+<div id="outline-container-4-4" class="outline-3">
+<h3 id="sec-4-4"><span class="section-number-3">4.4</span> <span class="done DONE"> DONE</span> Release 0.1.1 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<div class="outline-text-3" id="text-4-4">
 
 </div>
 
 </div>
 
-<div id="outline-container-4_5" class="outline-3">
-<h3 id="sec-4_5"><span class="section-number-3">4.5</span> <span class="done DONE"> DONE</span> Release 0.2.0 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
-<div class="outline-text-3" id="text-4_5">
+<div id="outline-container-4-5" class="outline-3">
+<h3 id="sec-4-5"><span class="section-number-3">4.5</span> <span class="done DONE"> DONE</span> Release 0.2.0 &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4-5">
 
 <p>   Changes:
 </p><ul>
@@ -653,36 +658,36 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-4_5_1" class="outline-4">
-<h4 id="sec-4_5_1"><span class="section-number-4">4.5.1</span> <span class="done DONE"> DONE</span> Create a changelog &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
-<div class="outline-text-4" id="text-4_5_1">
+<div id="outline-container-4-5-1" class="outline-4">
+<h4 id="sec-4-5-1"><span class="section-number-4">4.5.1</span> <span class="done DONE"> DONE</span> Create a changelog &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h4>
+<div class="outline-text-4" id="text-4-5-1">
 
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-4_6" class="outline-3">
-<h3 id="sec-4_6"><span class="section-number-3">4.6</span> <span class="done DONE"> DONE</span> Release 0.2.1 </h3>
-<div class="outline-text-3" id="text-4_6">
+<div id="outline-container-4-6" class="outline-3">
+<h3 id="sec-4-6"><span class="section-number-3">4.6</span> <span class="done DONE"> DONE</span> Release 0.2.1 </h3>
+<div class="outline-text-3" id="text-4-6">
 
 <p>   Release bumps version of async-http-client to v1.3.2.
 </p></div>
 
 </div>
 
-<div id="outline-container-4_7" class="outline-3">
-<h3 id="sec-4_7"><span class="section-number-3">4.7</span> <span class="done DONE"> DONE</span> Make tests stand-alone &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-4_7">
+<div id="outline-container-4-7" class="outline-3">
+<h3 id="sec-4-7"><span class="section-number-3">4.7</span> <span class="done DONE"> DONE</span> Make tests stand-alone &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4-7">
 
 <p>   Test suite should not fail when there is now hello-www on port 8080.
 </p></div>
 
 </div>
 
-<div id="outline-container-4_8" class="outline-3">
-<h3 id="sec-4_8"><span class="section-number-3">4.8</span> <span class="done DONE"> DONE</span> Simplify request preparation &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
-<div class="outline-text-3" id="text-4_8">
+<div id="outline-container-4-8" class="outline-3">
+<h3 id="sec-4-8"><span class="section-number-3">4.8</span> <span class="done DONE"> DONE</span> Simplify request preparation &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div class="outline-text-3" id="text-4-8">
 
 <p>   For now fns like GET will call prepare-get that will call
    prepare-reqeust. I don't think prepare-get is necessary,
@@ -691,49 +696,49 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-4_9" class="outline-3">
-<h3 id="sec-4_9"><span class="section-number-3">4.9</span> <span class="done DONE"> DONE</span> Use last argument as key worded map &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
-<div class="outline-text-3" id="text-4_9">
+<div id="outline-container-4-9" class="outline-3">
+<h3 id="sec-4-9"><span class="section-number-3">4.9</span> <span class="done DONE"> DONE</span> Use last argument as key worded map &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4-9">
 
 <p>   As suggested by <a href="http://blog.licenser.net/">Licenser</a> on #clojure <a href="http://clojure-log.n01se.net/date/2010-07-08.html#i25">here</a>.
 </p></div>
 
 </div>
 
-<div id="outline-container-4_10" class="outline-3">
-<h3 id="sec-4_10"><span class="section-number-3">4.10</span> <span class="done DONE"> DONE</span> Review documentation &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
-<div class="outline-text-3" id="text-4_10">
+<div id="outline-container-4-10" class="outline-3">
+<h3 id="sec-4-10"><span class="section-number-3">4.10</span> <span class="done DONE"> DONE</span> Review documentation &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4-10">
 
 </div>
 
 </div>
 
-<div id="outline-container-4_11" class="outline-3">
-<h3 id="sec-4_11"><span class="section-number-3">4.11</span> <span class="done DONE"> DONE</span> Refactoring [1/1] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
-<div class="outline-text-3" id="text-4_11">
+<div id="outline-container-4-11" class="outline-3">
+<h3 id="sec-4-11"><span class="section-number-3">4.11</span> <span class="done DONE"> DONE</span> Refactoring [1/1] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4-11">
 
 
 </div>
 
-<div id="outline-container-4_11_1" class="outline-4">
-<h4 id="sec-4_11_1"><span class="section-number-4">4.11.1</span> <span class="done DONE"> DONE</span> Refactor <b>execute-request</b> [2/2] </h4>
-<div class="outline-text-4" id="text-4_11_1">
+<div id="outline-container-4-11-1" class="outline-4">
+<h4 id="sec-4-11-1"><span class="section-number-4">4.11.1</span> <span class="done DONE"> DONE</span> Refactor <b>execute-request</b> [2/2] </h4>
+<div class="outline-text-4" id="text-4-11-1">
 
 
 </div>
 
-<div id="outline-container-4_11_1_1" class="outline-5">
-<h5 id="sec-4_11_1_1"><span class="section-number-5">4.11.1.1</span> <span class="done DONE"> DONE</span> Build checkable promise </h5>
-<div class="outline-text-5" id="text-4_11_1_1">
+<div id="outline-container-4-11-1-1" class="outline-5">
+<h5 id="sec-4-11-1-1"><span class="section-number-5">4.11.1.1</span> <span class="done DONE"> DONE</span> Build checkable promise </h5>
+<div class="outline-text-5" id="text-4-11-1-1">
 
 <p>     To check if promise was delivered use <b>delivered?</b>
 </p></div>
 
 </div>
 
-<div id="outline-container-4_11_1_2" class="outline-5">
-<h5 id="sec-4_11_1_2"><span class="section-number-5">4.11.1.2</span> <span class="done DONE"> DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces </h5>
-<div class="outline-text-5" id="text-4_11_1_2">
+<div id="outline-container-4-11-1-2" class="outline-5">
+<h5 id="sec-4-11-1-2"><span class="section-number-5">4.11.1.2</span> <span class="done DONE"> DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces </h5>
+<div class="outline-text-5" id="text-4-11-1-2">
 
 <ul>
 <li>Use new checkable <b>promise</b> for different parts of response
@@ -750,15 +755,34 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-4_12" class="outline-3">
-<h3 id="sec-4_12"><span class="section-number-3">4.12</span> <span class="done DONE"> DONE</span> Rename to <b>http.async.client</b> &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
-<div class="outline-text-3" id="text-4_12">
+<div id="outline-container-4-12" class="outline-3">
+<h3 id="sec-4-12"><span class="section-number-3">4.12</span> <span class="done DONE"> DONE</span> Rename to <b>http.async.client</b> &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-4-12">
+
+
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-28022940-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 
 </div>
 </div>
 </div>
-<div id="postamble">
 </div>
+
+<div id="postamble">
+
 </div>
 </body>
 </html>
