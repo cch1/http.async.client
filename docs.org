@@ -808,3 +808,5 @@
 
    Please look at source of [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-stream-seq][*http.async.client/stream-seq*]] to see
    how to do it.
+
+#+INCLUDE: ga.org
