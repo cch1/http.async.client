@@ -77,7 +77,7 @@
       (when-not (nil? compression-enabled) (.setCompressionEnabled b compression-enabled))
       (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
       (when-not (nil? follow-redirects) (.setFollowRedirects b follow-redirects))
-      (when idle-in-pool-timeout (.setConnectionTimeoutInMs b idle-in-pool-timeout))
+      (when idle-in-pool-timeout (.setIdleConnectionInPoolTimeoutInMs b idle-in-pool-timeout))
       (when-not (nil? keep-alive) (.setAllowPoolingConnection b keep-alive))
       (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
