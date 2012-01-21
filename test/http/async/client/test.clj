@@ -134,7 +134,7 @@
      (let [srv (Server. port)
            loginSrv (HashLoginService. "MyRealm" "test-resources/realm.properties")
            constraint (Constraint.)
-           mapping (ConstraintMapping)
+           mapping (ConstraintMapping.)
            security (ConstraintSecurityHandler.)]
        
        (.addBean srv loginSrv)
