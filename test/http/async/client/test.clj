@@ -342,7 +342,7 @@
   (let [stream (ref #{})
         resp (request-stream *client* :get "http://localhost:8123/stream"
                              (fn [_ ^ByteArrayOutputStream baos]
-                               (dosync (alter stream conj (.toString baos *default-encoding*)))
+                               (dosync (alter stream conj (.toString baos ^String *default-encoding*)))
                                [baos :continue]))
         status (status resp)]
     (await resp)
