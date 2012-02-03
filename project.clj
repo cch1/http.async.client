@@ -1,4 +1,4 @@
-(defproject http.async.client "0.4.0"
+(defproject http.async.client "0.4.0-SNAPSHOT"
   :name             "http.async.client"
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "http://neotyk.github.com/http.async.client/"
@@ -6,7 +6,7 @@
   :java-source-path "src/jvm"
   :javac-options {:deprecation "true"}
   :dependencies     [[org.clojure/clojure "1.3.0"]
-		     [com.ning/async-http-client "1.6.5"]]
+		     [com.ning/async-http-client "1.7.0"]]
   :dev-dependencies [[codox "0.3.1"]
                      [org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
                      [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
