@@ -131,32 +131,29 @@
   ([handler]
      (start-jetty handler {:port 8123}))
   ([handler {port :port :as opts :or {:port 8123}}]
-     (let [srv (Server. port)]
-       (doto (Logger/getRootLogger)
-         (.setLevel Level/INFO)
-         (.addAppender (ConsoleAppender. (PatternLayout. PatternLayout/TTCC_CONVERSION_PATTERN))))
-
-       (let [loginSrv (HashLoginService. "MyRealm" "test-resources/realm.properties")
-             constraint (Constraint.)
-             mapping (ConstraintMapping.)
-             security (ConstraintSecurityHandler.)]
-         (.addBean srv loginSrv)
-         (doto constraint
-           (.setName Constraint/__BASIC_AUTH)
-           (.setRoles (into-array #{"user"}))
-           (.setAuthenticate true))
-         (doto mapping
-           (.setConstraint constraint)
-           (.setPathSpec "/basic-auth"))
-         (doto security
-           (.setConstraintMappings (into-array #{mapping}) #{"user"})
-           (.setAuthenticator (BasicAuthenticator.))
-           (.setLoginService loginSrv)
-           (.setStrict false)
-           (.setHandler handler))
-         (doto srv
-           (.setHandler security)
-           (.start)))
+     (let [srv (Server. port)
+           loginSrv (HashLoginService. "MyRealm" "test-resources/realm.properties")
+           constraint (Constraint.)
+           mapping (ConstraintMapping.)
+           security (ConstraintSecurityHandler.)]
+       
+       (.addBean srv loginSrv)
+       (doto constraint
+         (.setName Constraint/__BASIC_AUTH)
+         (.setRoles (into-array #{"user"}))
+         (.setAuthenticate true))
+       (doto mapping
+         (.setConstraint constraint)
+         (.setPathSpec "/basic-auth"))
+       (doto security
+         (.setConstraintMappings (into-array #{mapping}) #{"user"})
+         (.setAuthenticator (BasicAuthenticator.))
+         (.setLoginService loginSrv)
+         (.setStrict false)
+         (.setHandler handler))
+       (doto srv
+         (.setHandler security)
+         (.start))
        srv)))
 
 (defn- once-fixture [f]
@@ -345,7 +342,7 @@
   (let [stream (ref #{})
         resp (request-stream *client* :get "http://localhost:8123/stream"
                              (fn [_ ^ByteArrayOutputStream baos]
-                               (dosync (alter stream conj (.toString baos *default-encoding*)))
+                               (dosync (alter stream conj (.toString baos ^String *default-encoding*)))
                                [baos :continue]))
         status (status resp)]
     (await resp)

@@ -1,4 +1,4 @@
-(defproject http.async.client "0.4.0-SNAPSHOT"
+(defproject http.async.client "0.4.1-SNAPSHOT"
   :name             "http.async.client"
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "http://neotyk.github.com/http.async.client/"
@@ -12,7 +12,8 @@
                      [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
                      [lein-difftest "1.3.3"  :exclusions [org.clojure/clojure
                                                           org.clojure/clojure-contrib]]
-                     [log4j "1.2.13"]]
+                     [log4j "1.2.13"]
+                     [org.slf4j/slf4j-log4j12 "1.6.4"]]
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
   :autodoc {:web-src-dir "http://github.com/neotyk/http.async.client/blob/"
             :web-home "http://neotyk.github.com/http.async.client/autodoc/"
