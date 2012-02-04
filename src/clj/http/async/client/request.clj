@@ -255,6 +255,8 @@
             onCompleted [this]
             (do
               (completed resp)
+              (when-not (realized? (:body resp))
+                (deliver (:body resp) nil))
               (deliver (:done resp) true)))
            (^{:tag void}
             onThrowable [this #^Throwable t]

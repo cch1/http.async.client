@@ -598,7 +598,7 @@
     (is (thrown-with-msg? RuntimeException #"Closed" (GET client "http://localhost:8123/")))))
 
 (deftest extract-empty-body
-  (let [resp (await (GET *client* "http://localhost:8123/empty"))]
+  (let [resp (GET *client* "http://localhost:8123/empty")]
     (is (nil? (string resp)))))
 
 ;;(deftest profile-get-stream
