@@ -11,7 +11,7 @@ Declare dependency:
 (defproject your-project "1.0.0-SNAPSHOT"
   :description "Your project description"
   :dependencies [[org.clojure/clojure "1.3.0"]
-                 [http.async.client "0.4.0"]])
+                 [http.async.client "0.4.1"]])
 ```
 
 Require:
@@ -34,7 +34,7 @@ GET resource:
 [*http.async.client*](http://github.com/neotyk/http.async.client) is
 based on [Asynchronous Http Client for Java](http://github.com/AsyncHttpClient/async-http-client).
 
-It requires Clojure 1.3.
+It requires Clojure 1.3, works with 1.4-beta1.
 
 For more documentation refer to
  [docs](http://neotyk.github.com/http.async.client/docs.html) and for

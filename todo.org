@@ -1,6 +1,6 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - To Do
 #+AUTHOR: Hubert Iwaniuk
-#+EMAIL: neotyk@kungfoo.pl
+#+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
 * Receive [6/6]                                                   :code:rel1:
@@ -12,7 +12,7 @@
 ** DONE Implement response *promise*                                   :rel1:
 ** DONE Consume stream                                                 :rel1:
 ** DONE Error function                                                 :rel1:
-* Send [6/9]                                                           :code:
+* Send [7/9]                                                           :code:
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
@@ -22,14 +22,14 @@
 *** DONE Support sending strings                                       :rel1:
 *** DONE Support sending map as form encoded data                      :rel1:
 *** DONE Support InputStream body                                      :rel1:
-** TODO All HTTP verbs [6/7]
+** DONE All HTTP verbs [7/7]
 *** DONE GET                                                           :rel1:
 *** DONE POST                                                          :rel1:
 *** DONE PUT                                                           :rel1:
 *** DONE DELETE                                                        :rel1:
 *** DONE HEAD                                                          :rel1:
 *** DONE OPTIONS                                                       :rel1:
-*** TODO Others, once supported by AHC-Java                            :rel4:
+*** DONE Others, once supported by AHC-Java                            :rel4:
 ** TODO PUT/POST streaming body                                        :rel4:
    That can be done with *clojure.core/add-watch*.
    Watcher in that scenario will grab new content and write it via
@@ -51,8 +51,8 @@
 *** DONE Proxy configuration                                           :rel3:
 *** DONE Timeout                                                       :rel4:
 **** DONE Request timeout                                              :rel4:
-**** TODO Connection timeout                                           :rel4:
-**** TODO Idle connection timeout                                      :rel4:
+**** DONE Connection timeout                                           :rel4:
+**** DONE Idle connection timeout                                      :rel4:
 * Tasks [12/12]
 ** DONE License                                                        :rel1:
 ** DONE Cleanup namespaces                                             :rel1:
