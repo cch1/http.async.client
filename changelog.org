@@ -1,8 +1,21 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+AUTHOR: Hubert Iwaniuk
-#+EMAIL: neotyk@kungfoo.pl
+#+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.4.1
+** Upgrade AC to 1.7.0
+** Issues [[https://github.com/neotyk/http.async.client/issues/26][#26]], [[https://github.com/neotyk/http.async.client/issues/27][#27]], [[https://github.com/neotyk/http.async.client/issues/28][#28]]
+   - [[https://github.com/neotyk/http.async.client/issues/26][#26]] :: [[https://github.com/jkk][Justin Kramer]], [[https://github.com/btatnall][Brian Tatnall]]
+            Empty response body hangs c/body, c/string
+   - [[https://github.com/neotyk/http.async.client/issues/27][#27]] :: [[https://github.com/jkk][Justin Kramer]]
+            create-client's :idle-in-pool-timeout option not being set
+            correctly
+   - [[https://github.com/neotyk/http.async.client/pull/28][#28]] :: [[https://github.com/klang][Karsten Lang]]
+            Documentation update
+** Improved logging
+   Improved logging configuration for running tests.
+** Tested against Clojure 1.4.0-beta1
 * Release 0.4.0
 ** Clojure 1.3 compatible
 ** Support for multiple values for same key (QString)
