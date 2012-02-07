@@ -4,7 +4,7 @@
 #+SETUPFILE: setup.org
 
 * Release 0.4.1
-** Upgrade AC to 1.7.0
+** Upgrade AHC to 1.7.0
 ** Issues [[https://github.com/neotyk/http.async.client/issues/26][#26]], [[https://github.com/neotyk/http.async.client/issues/27][#27]], [[https://github.com/neotyk/http.async.client/issues/28][#28]]
    - [[https://github.com/neotyk/http.async.client/issues/26][#26]] :: [[https://github.com/jkk][Justin Kramer]], [[https://github.com/btatnall][Brian Tatnall]]
             Empty response body hangs c/body, c/string
