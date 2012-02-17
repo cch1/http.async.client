@@ -59,7 +59,7 @@
   {:tag AsyncHttpClient}
   [& {:keys [compression-enabled
              connection-timeout
-             follow-redirects             
+             follow-redirects
              idle-in-pool-timeout
              keep-alive
              max-conns-per-host
@@ -70,7 +70,8 @@
              request-timeout
              user-agent
              async-connect
-             executor-service]}]
+             executor-service
+             ssl-context]}]
   (AsyncHttpClient.
    (.build
     (let [b (AsyncHttpClientConfig$Builder.)]
@@ -94,6 +95,7 @@
         (set-realm auth b))
       (when request-timeout (.setRequestTimeoutInMs b request-timeout))
       (.setUserAgent b (if user-agent user-agent *user-agent*))
+      (when-not (nil? ssl-context) (.setSSLContext b ssl-context))
       b))))
 
 (defmacro ^{:private true} gen-methods [& methods]
