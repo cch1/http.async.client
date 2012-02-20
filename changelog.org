@@ -3,6 +3,9 @@
 #+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.4.2
+** Issue [[https://github.com/neotyk/http.async.client/pull/29][#29]] by [[https://github.com/diamondap][A. Diamond]]
+   Added support for client certificates.
 * Release 0.4.1
 ** Upgrade AHC to 1.7.0
 ** Issues [[https://github.com/neotyk/http.async.client/issues/26][#26]], [[https://github.com/neotyk/http.async.client/issues/27][#27]], [[https://github.com/neotyk/http.async.client/issues/28][#28]]

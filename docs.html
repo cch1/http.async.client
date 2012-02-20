@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Asynchronous HTTP Client - Clojure - Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Asynchronous HTTP Client - Clojure - Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-02-05 16:38:43 CET"/>
+<meta name="generated" content="2012-02-20 23:08:02 CET"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -44,6 +44,12 @@ lang="en" xml:lang="en">
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
   textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
@@ -108,102 +114,102 @@ org_html_manager.setup();  // activate after the parameters are set
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Quick start </a>
+<li><a href="#sec-1">1 Quick start</a>
 <ul>
-<li><a href="#sec-1-1">1.1 Dependency </a></li>
-<li><a href="#sec-1-2">1.2 Require </a></li>
-<li><a href="#sec-1-3">1.3 GETting </a></li>
+<li><a href="#sec-1-1">1.1 Dependency</a></li>
+<li><a href="#sec-1-2">1.2 Require</a></li>
+<li><a href="#sec-1-3">1.3 GETting</a></li>
 </ul>
 </li>
-<li><a href="#sec-2">2 Detailed start </a>
+<li><a href="#sec-2">2 Detailed start</a>
 <ul>
-<li><a href="#sec-2-1">2.1 Work modes </a>
+<li><a href="#sec-2-1">2.1 Work modes</a>
 <ul>
-<li><a href="#sec-2-1-1">2.1.1 Asynchronous operations </a></li>
-<li><a href="#sec-2-1-2">2.1.2 Streaming </a></li>
-<li><a href="#sec-2-1-3">2.1.3 Raw mode </a></li>
+<li><a href="#sec-2-1-1">2.1.1 Asynchronous operations</a></li>
+<li><a href="#sec-2-1-2">2.1.2 Streaming</a></li>
+<li><a href="#sec-2-1-3">2.1.3 Raw mode</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-2">2.2 HTTP methods </a>
+<li><a href="#sec-2-2">2.2 HTTP methods</a>
 <ul>
-<li><a href="#sec-2-2-1">2.2.1 GET </a></li>
-<li><a href="#sec-2-2-2">2.2.2 PUT/POST </a>
+<li><a href="#sec-2-2-1">2.2.1 GET</a></li>
+<li><a href="#sec-2-2-2">2.2.2 PUT/POST</a>
 <ul>
-<li><a href="#sec-2-2-2-1">2.2.2.1 Submitting body as String </a></li>
-<li><a href="#sec-2-2-2-2">2.2.2.2 Submitting form parameters </a></li>
-<li><a href="#sec-2-2-2-3">2.2.2.3 Submitting body as InputStream </a></li>
-<li><a href="#sec-2-2-2-4">2.2.2.4 Submitting body as File, a.k.a. zero byte copy </a></li>
+<li><a href="#sec-2-2-2-1">2.2.2.1 Submitting body as String</a></li>
+<li><a href="#sec-2-2-2-2">2.2.2.2 Submitting form parameters</a></li>
+<li><a href="#sec-2-2-2-3">2.2.2.3 Submitting body as InputStream</a></li>
+<li><a href="#sec-2-2-2-4">2.2.2.4 Submitting body as File, a.k.a. zero byte copy</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-2-3">2.2.3 DELETE </a></li>
-<li><a href="#sec-2-2-4">2.2.4 HEAD </a></li>
-<li><a href="#sec-2-2-5">2.2.5 OPTIONS </a></li>
+<li><a href="#sec-2-2-3">2.2.3 DELETE</a></li>
+<li><a href="#sec-2-2-4">2.2.4 HEAD</a></li>
+<li><a href="#sec-2-2-5">2.2.5 OPTIONS</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-3">2.3 Request options </a>
+<li><a href="#sec-2-3">2.3 Request options</a>
 <ul>
-<li><a href="#sec-2-3-1">2.3.1 :query </a></li>
-<li><a href="#sec-2-3-2">2.3.2 :headers </a></li>
-<li><a href="#sec-2-3-3">2.3.3 :body </a></li>
-<li><a href="#sec-2-3-4">2.3.4 :cookies </a></li>
-<li><a href="#sec-2-3-5">2.3.5 :proxy </a></li>
-<li><a href="#sec-2-3-6">2.3.6 :auth </a></li>
-<li><a href="#sec-2-3-7">2.3.7 :timeout </a></li>
+<li><a href="#sec-2-3-1">2.3.1 :query</a></li>
+<li><a href="#sec-2-3-2">2.3.2 :headers</a></li>
+<li><a href="#sec-2-3-3">2.3.3 :body</a></li>
+<li><a href="#sec-2-3-4">2.3.4 :cookies</a></li>
+<li><a href="#sec-2-3-5">2.3.5 :proxy</a></li>
+<li><a href="#sec-2-3-6">2.3.6 :auth</a></li>
+<li><a href="#sec-2-3-7">2.3.7 :timeout</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-4">2.4 Streaming </a>
+<li><a href="#sec-2-4">2.4 Streaming</a>
 <ul>
-<li><a href="#sec-2-4-1">2.4.1 Lazy sequence </a></li>
-<li><a href="#sec-2-4-2">2.4.2 Call-back </a></li>
+<li><a href="#sec-2-4-1">2.4.1 Lazy sequence</a></li>
+<li><a href="#sec-2-4-2">2.4.2 Call-back</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-5">2.5 Response handling </a>
+<li><a href="#sec-2-5">2.5 Response handling</a>
 <ul>
-<li><a href="#sec-2-5-1">2.5.1 Awaiting response </a></li>
-<li><a href="#sec-2-5-2">2.5.2 Reading status line </a></li>
-<li><a href="#sec-2-5-3">2.5.3 Reading headers </a></li>
-<li><a href="#sec-2-5-4">2.5.4 Reading cookies </a></li>
-<li><a href="#sec-2-5-5">2.5.5 Reading body </a></li>
-<li><a href="#sec-2-5-6">2.5.6 Reading body as string </a></li>
-<li><a href="#sec-2-5-7">2.5.7 Reading error </a></li>
-<li><a href="#sec-2-5-8">2.5.8 Canceling request </a></li>
-<li><a href="#sec-2-5-9">2.5.9 Response predicates </a>
+<li><a href="#sec-2-5-1">2.5.1 Awaiting response</a></li>
+<li><a href="#sec-2-5-2">2.5.2 Reading status line</a></li>
+<li><a href="#sec-2-5-3">2.5.3 Reading headers</a></li>
+<li><a href="#sec-2-5-4">2.5.4 Reading cookies</a></li>
+<li><a href="#sec-2-5-5">2.5.5 Reading body</a></li>
+<li><a href="#sec-2-5-6">2.5.6 Reading body as string</a></li>
+<li><a href="#sec-2-5-7">2.5.7 Reading error</a></li>
+<li><a href="#sec-2-5-8">2.5.8 Canceling request</a></li>
+<li><a href="#sec-2-5-9">2.5.9 Response predicates</a>
 <ul>
-<li><a href="#sec-2-5-9-1">2.5.9.1 done? </a></li>
-<li><a href="#sec-2-5-9-2">2.5.9.2 failed? </a></li>
-<li><a href="#sec-2-5-9-3">2.5.9.3 canceled? </a></li>
+<li><a href="#sec-2-5-9-1">2.5.9.1 done?</a></li>
+<li><a href="#sec-2-5-9-2">2.5.9.2 failed?</a></li>
+<li><a href="#sec-2-5-9-3">2.5.9.3 canceled?</a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-2-6">2.6 Managing client </a>
+<li><a href="#sec-2-6">2.6 Managing client</a>
 <ul>
-<li><a href="#sec-2-6-1">2.6.1 Branding </a></li>
-<li><a href="#sec-2-6-2">2.6.2 Enabling HTTP compression </a></li>
-<li><a href="#sec-2-6-3">2.6.3 Follow redirects </a></li>
-<li><a href="#sec-2-6-4">2.6.4 Keep alive </a></li>
-<li><a href="#sec-2-6-5">2.6.5 Max connections per host </a></li>
-<li><a href="#sec-2-6-6">2.6.6 Max connections total count </a></li>
-<li><a href="#sec-2-6-7">2.6.7 Max redirects to follow </a></li>
-<li><a href="#sec-2-6-8">2.6.8 Timeouts </a></li>
-<li><a href="#sec-2-6-9">2.6.9 Proxy </a></li>
-<li><a href="#sec-2-6-10">2.6.10 Authentication </a></li>
-<li><a href="#sec-2-6-11">2.6.11 Closing <b>http.async.client</b> </a></li>
+<li><a href="#sec-2-6-1">2.6.1 Branding</a></li>
+<li><a href="#sec-2-6-2">2.6.2 Enabling HTTP compression</a></li>
+<li><a href="#sec-2-6-3">2.6.3 Follow redirects</a></li>
+<li><a href="#sec-2-6-4">2.6.4 Keep alive</a></li>
+<li><a href="#sec-2-6-5">2.6.5 Max connections per host</a></li>
+<li><a href="#sec-2-6-6">2.6.6 Max connections total count</a></li>
+<li><a href="#sec-2-6-7">2.6.7 Max redirects to follow</a></li>
+<li><a href="#sec-2-6-8">2.6.8 Timeouts</a></li>
+<li><a href="#sec-2-6-9">2.6.9 Proxy</a></li>
+<li><a href="#sec-2-6-10">2.6.10 Authentication</a></li>
+<li><a href="#sec-2-6-11">2.6.11 Closing <b>http.async.client</b></a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-3">3 Low level </a>
+<li><a href="#sec-3">3 Low level</a>
 <ul>
-<li><a href="#sec-3-1">3.1 Preparing request </a></li>
-<li><a href="#sec-3-2">3.2 Executing request </a>
+<li><a href="#sec-3-1">3.1 Preparing request</a></li>
+<li><a href="#sec-3-2">3.2 Executing request</a>
 <ul>
-<li><a href="#sec-3-2-1">3.2.1 Status line </a></li>
-<li><a href="#sec-3-2-2">3.2.2 Headers </a></li>
-<li><a href="#sec-3-2-3">3.2.3 Body part </a></li>
-<li><a href="#sec-3-2-4">3.2.4 Body completed </a></li>
-<li><a href="#sec-3-2-5">3.2.5 Error </a></li>
+<li><a href="#sec-3-2-1">3.2.1 Status line</a></li>
+<li><a href="#sec-3-2-2">3.2.2 Headers</a></li>
+<li><a href="#sec-3-2-3">3.2.3 Body part</a></li>
+<li><a href="#sec-3-2-4">3.2.4 Body completed</a></li>
+<li><a href="#sec-3-2-5">3.2.5 Error</a></li>
 </ul>
 </li>
-<li><a href="#sec-3-3">3.3 Default callbacks </a></li>
+<li><a href="#sec-3-3">3.3 Default callbacks</a></li>
 </ul>
 </li>
 </ul>
@@ -211,7 +217,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Quick start </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Quick start</h2>
 <div class="outline-text-2" id="text-1">
 
 <p>  If you just want to use it already.
@@ -219,7 +225,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-1-1" class="outline-3">
-<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Dependency </h3>
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Dependency</h3>
 <div class="outline-text-3" id="text-1-1">
 
 <p>   Declare dependency in your project.clj:
@@ -229,10 +235,8 @@ org_html_manager.setup();  // activate after the parameters are set
 <pre class="example">(defproject your-project "1.0.0-SNAPSHOT"
   :description "Your project description"
   :dependencies [[org.clojure/clojure "1.3.0"]
-                 [http.async.client "0.4.1"]])
+                 [http.async.client "0.4.2"]])
 </pre>
-
-
 
 <p>
    Make sure that your project depends on at least 1.3.0 Clojure as
@@ -242,7 +246,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-1-2" class="outline-3">
-<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Require </h3>
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Require</h3>
 <div class="outline-text-3" id="text-1-2">
 
 <p>   Require it from your code:
@@ -252,14 +256,12 @@ org_html_manager.setup();  // activate after the parameters are set
 <pre class="example">(ns your.ns (:require [http.async.client :as client]))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-1-3" class="outline-3">
-<h3 id="sec-1-3"><span class="section-number-3">1.3</span> GETting </h3>
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> GETting</h3>
 <div class="outline-text-3" id="text-1-3">
 
 <p>   To get HTTP resource:
@@ -275,29 +277,27 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/string response)))
 </pre>
 
-
-
 </div>
 </div>
 
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Detailed start </h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Detailed start</h2>
 <div class="outline-text-2" id="text-2">
 
 
 </div>
 
 <div id="outline-container-2-1" class="outline-3">
-<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Work modes </h3>
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Work modes</h3>
 <div class="outline-text-3" id="text-2-1">
 
 
 </div>
 
 <div id="outline-container-2-1-1" class="outline-4">
-<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> Asynchronous operations </h4>
+<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> Asynchronous operations</h4>
 <div class="outline-text-4" id="text-2-1-1">
 
 <p>    When you do:
@@ -306,8 +306,6 @@ org_html_manager.setup();  // activate after the parameters are set
 
 <pre class="example">(client/GET &lt;client&gt; url)
 </pre>
-
-
 
 <p>
     Result will be a map of <a href="http://clojuredocs.org/clojure_core/clojure.core/promise"><b>clojure.core/promise</b></a>s, and represents
@@ -340,8 +338,6 @@ org_html_manager.setup();  // activate after the parameters are set
 
 <pre class="example">(client/GET &lt;client&gt; url :query {:key "value"})
 </pre>
-
-
 
 <p>
     Following options are supported:
@@ -389,8 +385,6 @@ org_html_manager.setup();  // activate after the parameters are set
 <pre class="example">(client/string (client/GET &lt;client&gt; &lt;url&gt;))
 </pre>
 
-
-
 </dd>
 <dt><b>:done</b></dt><dd>promise that is delivered once response receiving
                  is done
@@ -404,7 +398,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-1-2" class="outline-4">
-<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> Streaming </h4>
+<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> Streaming</h4>
 <div class="outline-text-4" id="text-2-1-2">
 
 <p>    For consuming HTTP streams use:
@@ -413,8 +407,6 @@ org_html_manager.setup();  // activate after the parameters are set
 
 <pre class="example">(client/stream-seq &lt;client&gt; :get url)
 </pre>
-
-
 
 <p>
     Response here is same as in <a href="#sec-2-1-1">Asynchronous operations</a> but <b>:body</b>
@@ -431,7 +423,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-1-3" class="outline-4">
-<h4 id="sec-2-1-3"><span class="section-number-4">2.1.3</span> Raw mode </h4>
+<h4 id="sec-2-1-3"><span class="section-number-4">2.1.3</span> Raw mode</h4>
 <div class="outline-text-4" id="text-2-1-3">
 
 <p>    This allows you to provide callbacks that will get triggered on HTTP
@@ -462,7 +454,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-2" class="outline-3">
-<h3 id="sec-2-2"><span class="section-number-3">2.2</span> HTTP methods </h3>
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> HTTP methods</h3>
 <div class="outline-text-3" id="text-2-2">
 
 <p>   HTTP methods and convenience functions to request them.
@@ -470,7 +462,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-2-1" class="outline-4">
-<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> GET </h4>
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> GET</h4>
 <div class="outline-text-4" id="text-2-2-1">
 
 <p>    Most basic invocation of <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-GET"><b>http.async.client/GET</b></a> is only with
@@ -494,8 +486,6 @@ org_html_manager.setup();  // activate after the parameters are set
 </pre>
 
 
-
-
 <p>
     Invocation with query parameters:
 </p>
@@ -509,8 +499,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/await resp)
     (println (client/string resp))))
 </pre>
-
-
 
 
 <p>
@@ -527,8 +515,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/await resp)
     (println (client/string resp))))
 </pre>
-
-
 
 
 <p>
@@ -549,8 +535,6 @@ org_html_manager.setup();  // activate after the parameters are set
       (println "name:" (:name cookie) ", value:" (:value cookie)))))
 </pre>
 
-
-
 <p>
     Notice <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cookies"><b>http.async.client/cookies</b></a> function extracts cookies from
     response headers, so to start processing it you don't need to wait
@@ -560,7 +544,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-2-2" class="outline-4">
-<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> PUT/POST </h4>
+<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> PUT/POST</h4>
 <div class="outline-text-4" id="text-2-2-2">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-PUT"><b>http.async.client/PUT</b></a>/<a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-POST"><b>http.async.client/POST</b></a> work the same
@@ -583,7 +567,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-2-2-1" class="outline-5">
-<h5 id="sec-2-2-2-1"><span class="section-number-5">2.2.2.1</span> Submitting body as String </h5>
+<h5 id="sec-2-2-2-1"><span class="section-number-5">2.2.2.1</span> Submitting body as String</h5>
 <div class="outline-text-5" id="text-2-2-2-1">
 
 <p>     You can send String as body with PUT/POST:
@@ -596,14 +580,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-2-2-2" class="outline-5">
-<h5 id="sec-2-2-2-2"><span class="section-number-5">2.2.2.2</span> Submitting form parameters </h5>
+<h5 id="sec-2-2-2-2"><span class="section-number-5">2.2.2.2</span> Submitting form parameters</h5>
 <div class="outline-text-5" id="text-2-2-2-2">
 
 <p>     Submitting parameters via body map:
@@ -616,14 +598,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-2-2-3" class="outline-5">
-<h5 id="sec-2-2-2-3"><span class="section-number-5">2.2.2.3</span> Submitting body as InputStream </h5>
+<h5 id="sec-2-2-2-3"><span class="section-number-5">2.2.2.3</span> Submitting body as InputStream</h5>
 <div class="outline-text-5" id="text-2-2-2-3">
 
 <p>     Another method to provide body is via InputStream:
@@ -637,14 +617,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-2-2-4" class="outline-5">
-<h5 id="sec-2-2-2-4"><span class="section-number-5">2.2.2.4</span> Submitting body as File, a.k.a. zero byte copy </h5>
+<h5 id="sec-2-2-2-4"><span class="section-number-5">2.2.2.4</span> Submitting body as File, a.k.a. zero byte copy</h5>
 <div class="outline-text-5" id="text-2-2-2-4">
 
 <p>     To use zero byte copy future, provide a File as :body
@@ -658,15 +636,13 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 </div>
 
 </div>
 
 <div id="outline-container-2-2-3" class="outline-4">
-<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> DELETE </h4>
+<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> DELETE</h4>
 <div class="outline-text-4" id="text-2-2-3">
 
 <p>    To call <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-DELETE"><b>http.async.client/DELETE</b></a> on a resource:
@@ -679,14 +655,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-2-4" class="outline-4">
-<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> HEAD </h4>
+<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> HEAD</h4>
 <div class="outline-text-4" id="text-2-2-4">
 
 <p>    To call <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-HEAD"><b>http.async.client/HEAD</b></a> on a resource:
@@ -699,14 +673,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-2-5" class="outline-4">
-<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> OPTIONS </h4>
+<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> OPTIONS</h4>
 <div class="outline-text-4" id="text-2-2-5">
 
 <p>    To call <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-OPTIONS"><b>http.async.client/OPTIONS</b></a> on a resource:
@@ -719,15 +691,13 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 </div>
 
 </div>
 
 <div id="outline-container-2-3" class="outline-3">
-<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Request options </h3>
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Request options</h3>
 <div class="outline-text-3" id="text-2-3">
 
 <p>   Following options can be provided to requests and are defined by
@@ -753,7 +723,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-3-1" class="outline-4">
-<h4 id="sec-2-3-1"><span class="section-number-4">2.3.1</span> :query </h4>
+<h4 id="sec-2-3-1"><span class="section-number-4">2.3.1</span> :query</h4>
 <div class="outline-text-4" id="text-2-3-1">
 
 <p>    Query parameters is a map of keywords and their values. You use
@@ -767,14 +737,12 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/string resp)))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-3-2" class="outline-4">
-<h4 id="sec-2-3-2"><span class="section-number-4">2.3.2</span> :headers </h4>
+<h4 id="sec-2-3-2"><span class="section-number-4">2.3.2</span> :headers</h4>
 <div class="outline-text-4" id="text-2-3-2">
 
 <p>    Custom headers can be submitted same way as <a href="#sec-2-3-1">:query</a>:
@@ -788,14 +756,12 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/string resp)))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-3-3" class="outline-4">
-<h4 id="sec-2-3-3"><span class="section-number-4">2.3.3</span> :body </h4>
+<h4 id="sec-2-3-3"><span class="section-number-4">2.3.3</span> :body</h4>
 <div class="outline-text-4" id="text-2-3-3">
 
 <p>    Body can be provided with a message only with <a href="#sec-2-2-2">PUT/POST</a>, it
@@ -809,8 +775,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/string resp)))
 </pre>
 
-
-
 <p>
     <b>:body</b> can be String, form parameters (that is map), input stream or
     java.io.File, please see <a href="#sec-2-2-2">PUT/POST</a> for more documentation.
@@ -819,7 +783,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-3-4" class="outline-4">
-<h4 id="sec-2-3-4"><span class="section-number-4">2.3.4</span> :cookies </h4>
+<h4 id="sec-2-3-4"><span class="section-number-4">2.3.4</span> :cookies</h4>
 <div class="outline-text-4" id="text-2-3-4">
 
 <p>    Cookies can be provided to request as follows:
@@ -837,8 +801,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/await resp)
     (client/string resp)))
 </pre>
-
-
 
 <p>
     <b>:cookies</b> option takes sequence of cookie maps, in this example
@@ -869,7 +831,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-3-5" class="outline-4">
-<h4 id="sec-2-3-5"><span class="section-number-4">2.3.5</span> :proxy </h4>
+<h4 id="sec-2-3-5"><span class="section-number-4">2.3.5</span> :proxy</h4>
 <div class="outline-text-4" id="text-2-3-5">
 
 <p>    Proxy can be configured per request basis as follows:
@@ -881,8 +843,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/await resp)
     (client/string resp)))
 </pre>
-
-
 
 <p>
     Proxy expects a map with following keys:
@@ -908,7 +868,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-3-6" class="outline-4">
-<h4 id="sec-2-3-6"><span class="section-number-4">2.3.6</span> :auth </h4>
+<h4 id="sec-2-3-6"><span class="section-number-4">2.3.6</span> :auth</h4>
 <div class="outline-text-4" id="text-2-3-6">
 
 <p>    Authentication can be configured per request basis.
@@ -925,8 +885,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 <p>
     Though you can:
 </p>
@@ -937,8 +895,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ;; Check if response is not 401 or so and process response
     ))
 </pre>
-
-
 
 <p>
     And for digest method you will need realm as well:
@@ -952,8 +908,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 <p>
     Controlling preemptive authentication behavior is also possible:
 </p>
@@ -965,14 +919,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-3-7" class="outline-4">
-<h4 id="sec-2-3-7"><span class="section-number-4">2.3.7</span> :timeout </h4>
+<h4 id="sec-2-3-7"><span class="section-number-4">2.3.7</span> :timeout</h4>
 <div class="outline-text-4" id="text-2-3-7">
 
 <p>    Response timeout can be configured per request as well.
@@ -989,8 +941,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 <p>
     Sample above will wait until response is fully received, as long
     as it takes (-1 timeout).
@@ -1006,8 +956,6 @@ org_html_manager.setup();  // activate after the parameters are set
       )))
 </pre>
 
-
-
 <p>
     Example above configures timeout to 100ms, so <b>await</b> will only
     wait for 100ms, after that response is done.
@@ -1020,7 +968,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-4" class="outline-3">
-<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Streaming </h3>
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Streaming</h3>
 <div class="outline-text-3" id="text-2-4">
 
 <p>   HTTP Stream is response with chunked content encoding.
@@ -1042,7 +990,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-4-1" class="outline-4">
-<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> Lazy sequence </h4>
+<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> Lazy sequence</h4>
 <div class="outline-text-4" id="text-2-4-1">
 
 <p>    You can get HTTP Stream as lazy sequence of it's body.
@@ -1057,8 +1005,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (doseq [s (s/string resp)]
       (println s))))
 </pre>
-
-
 
 <p>
     <b>stream-seq</b> arguments:
@@ -1088,8 +1034,6 @@ org_html_manager.setup();  // activate after the parameters are set
   (println "2: " (first (client/string resp))))
 </pre>
 
-
-
 <p>
     This code will print following:
 </p><pre class="example">
@@ -1111,7 +1055,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-4-2" class="outline-4">
-<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> Call-back </h4>
+<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> Call-back</h4>
 <div class="outline-text-4" id="text-2-4-2">
 
 <p>    Consuming HTTP Stream with call-back is quite straight forward with
@@ -1130,8 +1074,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ;; do something to @parts
     ))
 </pre>
-
-
 
 
 <p>
@@ -1159,7 +1101,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5" class="outline-3">
-<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Response handling </h3>
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Response handling</h3>
 <div class="outline-text-3" id="text-2-5">
 
 <p>   <b>http.async.client</b> exposes some convenience functions for
@@ -1168,7 +1110,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-1" class="outline-4">
-<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> Awaiting response </h4>
+<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> Awaiting response</h4>
 <div class="outline-text-4" id="text-2-5-1">
 
 <p>    If you call any of <a href="#sec-2-1-1">Asynchronous operations</a>, <a href="#sec-2-1-2">Streaming</a> or <a href="#sec-2-1-3">Raw mode</a>
@@ -1186,8 +1128,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/await resp)))
 </pre>
 
-
-
 <p>
     Sample above will behave like synchronous HTTP operation.
     For convenience it returns same response so you can use it
@@ -1200,14 +1140,12 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/string (client/await resp))))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-5-2" class="outline-4">
-<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> Reading status line </h4>
+<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> Reading status line</h4>
 <div class="outline-text-4" id="text-2-5-2">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-status"><b>http.async.client/status</b></a> returns status lazy map of response.
@@ -1221,8 +1159,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (:code status)))
 </pre>
 
-
-
 <p>
     Sample above will return HTTP response status code, notice that
     after this returns headers and body, might not been delivered
@@ -1232,7 +1168,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-3" class="outline-4">
-<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> Reading headers </h4>
+<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> Reading headers</h4>
 <div class="outline-text-4" id="text-2-5-3">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-headers"><b>http.async.client/headers</b></a> returns headers lazy map of response.
@@ -1246,8 +1182,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (:server headers)))
 </pre>
 
-
-
 <p>
     Again, like in case of status, body might not have been delivered
     yet after this returns.
@@ -1256,7 +1190,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-4" class="outline-4">
-<h4 id="sec-2-5-4"><span class="section-number-4">2.5.4</span> Reading cookies </h4>
+<h4 id="sec-2-5-4"><span class="section-number-4">2.5.4</span> Reading cookies</h4>
 <div class="outline-text-4" id="text-2-5-4">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cookies"><b>http.async.client/cookies</b></a> returns seq of maps representing
@@ -1271,8 +1205,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (map :name cookies)))
 </pre>
 
-
-
 <p>
     Sample above will return sequence of cookie names that server has
     set.
@@ -1281,7 +1213,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-5" class="outline-4">
-<h4 id="sec-2-5-5"><span class="section-number-4">2.5.5</span> Reading body </h4>
+<h4 id="sec-2-5-5"><span class="section-number-4">2.5.5</span> Reading body</h4>
 <div class="outline-text-4" id="text-2-5-5">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-body"><b>http.async.client/body</b></a> returns either ByteArrayOutputStream or
@@ -1294,7 +1226,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-6" class="outline-4">
-<h4 id="sec-2-5-6"><span class="section-number-4">2.5.6</span> Reading body as string </h4>
+<h4 id="sec-2-5-6"><span class="section-number-4">2.5.6</span> Reading body as string</h4>
 <div class="outline-text-4" id="text-2-5-6">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-string"><b>http.async.client/string</b></a> returns either string or seq of
@@ -1310,8 +1242,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/string (client/await resp))))
 </pre>
 
-
-
 <p>
     Sample above will return string of response body.
     <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-string"><b>http.async.client/string</b></a> is lazy so you can use it in case of
@@ -1326,8 +1256,6 @@ org_html_manager.setup();  // activate after the parameters are set
       (println part))))
 </pre>
 
-
-
 <p>
     Sample above will print parts as they are received, and will
     return once response receiving is finished.
@@ -1336,7 +1264,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-7" class="outline-4">
-<h4 id="sec-2-5-7"><span class="section-number-4">2.5.7</span> Reading error </h4>
+<h4 id="sec-2-5-7"><span class="section-number-4">2.5.7</span> Reading error</h4>
 <div class="outline-text-4" id="text-2-5-7">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-error"><b>http.async.client/error</b></a> will return Throwable that was cause of
@@ -1351,14 +1279,12 @@ org_html_manager.setup();  // activate after the parameters are set
       (println "failed processing request: " err))))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-5-8" class="outline-4">
-<h4 id="sec-2-5-8"><span class="section-number-4">2.5.8</span> Canceling request </h4>
+<h4 id="sec-2-5-8"><span class="section-number-4">2.5.8</span> Canceling request</h4>
 <div class="outline-text-4" id="text-2-5-8">
 
 <p>    At any given time of processing HTTP Response you can <b>cancel</b> it
@@ -1371,8 +1297,6 @@ org_html_manager.setup();  // activate after the parameters are set
     (client/cancel resp)))
 </pre>
 
-
-
 <p>
     Please see <b>canceling-request</b> test.
 </p></div>
@@ -1380,7 +1304,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-9" class="outline-4">
-<h4 id="sec-2-5-9"><span class="section-number-4">2.5.9</span> Response predicates </h4>
+<h4 id="sec-2-5-9"><span class="section-number-4">2.5.9</span> Response predicates</h4>
 <div class="outline-text-4" id="text-2-5-9">
 
 <p>    You can also check status of request.
@@ -1388,7 +1312,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-9-1" class="outline-5">
-<h5 id="sec-2-5-9-1"><span class="section-number-5">2.5.9.1</span> done? </h5>
+<h5 id="sec-2-5-9-1"><span class="section-number-5">2.5.9.1</span> done?</h5>
 <div class="outline-text-5" id="text-2-5-9-1">
 
 <p>     <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-done?"><b>http.async.client/done?</b></a> will tell you if response processing
@@ -1403,8 +1327,6 @@ org_html_manager.setup();  // activate after the parameters are set
       (client/done? resp))))
 </pre>
 
-
-
 <p>
      Sample above will check if response was finished, if not - will
      wait for it and return true as a result of call to done?.
@@ -1413,7 +1335,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-9-2" class="outline-5">
-<h5 id="sec-2-5-9-2"><span class="section-number-5">2.5.9.2</span> failed? </h5>
+<h5 id="sec-2-5-9-2"><span class="section-number-5">2.5.9.2</span> failed?</h5>
 <div class="outline-text-5" id="text-2-5-9-2">
 
 <p>     <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-failed?"><b>http.async.client/failed?</b></a> will return true iff request has
@@ -1423,7 +1345,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-9-3" class="outline-5">
-<h5 id="sec-2-5-9-3"><span class="section-number-5">2.5.9.3</span> canceled? </h5>
+<h5 id="sec-2-5-9-3"><span class="section-number-5">2.5.9.3</span> canceled?</h5>
 <div class="outline-text-5" id="text-2-5-9-3">
 
 <p>     <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-canceled?"><b>http.async.client/canceled?</b></a> will return true iff request has
@@ -1435,14 +1357,14 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-6" class="outline-3">
-<h3 id="sec-2-6"><span class="section-number-3">2.6</span> Managing client </h3>
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> Managing client</h3>
 <div class="outline-text-3" id="text-2-6">
 
 
 </div>
 
 <div id="outline-container-2-6-1" class="outline-4">
-<h4 id="sec-2-6-1"><span class="section-number-4">2.6.1</span> Branding </h4>
+<h4 id="sec-2-6-1"><span class="section-number-4">2.6.1</span> Branding</h4>
 <div class="outline-text-4" id="text-2-6-1">
 
 <p>    <b>http.async.client</b> can be configured with User-Agent. To do so
@@ -1459,14 +1381,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-6-2" class="outline-4">
-<h4 id="sec-2-6-2"><span class="section-number-4">2.6.2</span> Enabling HTTP compression </h4>
+<h4 id="sec-2-6-2"><span class="section-number-4">2.6.2</span> Enabling HTTP compression</h4>
 <div class="outline-text-4" id="text-2-6-2">
 
 <p>    <b>http.async.client</b> can be configured to allow, or not, HTTP
@@ -1480,14 +1400,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-6-3" class="outline-4">
-<h4 id="sec-2-6-3"><span class="section-number-4">2.6.3</span> Follow redirects </h4>
+<h4 id="sec-2-6-3"><span class="section-number-4">2.6.3</span> Follow redirects</h4>
 <div class="outline-text-4" id="text-2-6-3">
 
 <p>    Enabling HTTP redirects following.
@@ -1500,14 +1418,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-6-4" class="outline-4">
-<h4 id="sec-2-6-4"><span class="section-number-4">2.6.4</span> Keep alive </h4>
+<h4 id="sec-2-6-4"><span class="section-number-4">2.6.4</span> Keep alive</h4>
 <div class="outline-text-4" id="text-2-6-4">
 
 <p>    Keep Alive is enabled by default. This implies using pool for
@@ -1521,14 +1437,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-6-5" class="outline-4">
-<h4 id="sec-2-6-5"><span class="section-number-4">2.6.5</span> Max connections per host </h4>
+<h4 id="sec-2-6-5"><span class="section-number-4">2.6.5</span> Max connections per host</h4>
 <div class="outline-text-4" id="text-2-6-5">
 
 <p>    Maximum number of connections to be cached per host.
@@ -1543,14 +1457,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-6-6" class="outline-4">
-<h4 id="sec-2-6-6"><span class="section-number-4">2.6.6</span> Max connections total count </h4>
+<h4 id="sec-2-6-6"><span class="section-number-4">2.6.6</span> Max connections total count</h4>
 <div class="outline-text-4" id="text-2-6-6">
 
 <p>    Maximum number of total connections opened, submitting new
@@ -1565,14 +1477,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-6-7" class="outline-4">
-<h4 id="sec-2-6-7"><span class="section-number-4">2.6.7</span> Max redirects to follow </h4>
+<h4 id="sec-2-6-7"><span class="section-number-4">2.6.7</span> Max redirects to follow</h4>
 <div class="outline-text-4" id="text-2-6-7">
 
 <p>    Maximum number of redirects to follow.
@@ -1585,14 +1495,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-6-8" class="outline-4">
-<h4 id="sec-2-6-8"><span class="section-number-4">2.6.8</span> Timeouts </h4>
+<h4 id="sec-2-6-8"><span class="section-number-4">2.6.8</span> Timeouts</h4>
 <div class="outline-text-4" id="text-2-6-8">
 
 <p>    With <b>http.async.client</b> apart from per connection <a href="#sec-2-3-7">:timeout</a> you
@@ -1613,8 +1521,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 <p>
     Example above will timeout connection if it was not established
     in 10ms, request if it was not received in 1sec, or connection
@@ -1624,7 +1530,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-6-9" class="outline-4">
-<h4 id="sec-2-6-9"><span class="section-number-4">2.6.9</span> Proxy </h4>
+<h4 id="sec-2-6-9"><span class="section-number-4">2.6.9</span> Proxy</h4>
 <div class="outline-text-4" id="text-2-6-9">
 
 <p>    Client can be also configured with global HTTP Proxy settings.
@@ -1636,8 +1542,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ;; do stuff with resp
     ))
 </pre>
-
-
 
 <p>
     Proxy expects a map with following keys:
@@ -1663,7 +1567,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-6-10" class="outline-4">
-<h4 id="sec-2-6-10"><span class="section-number-4">2.6.10</span> Authentication </h4>
+<h4 id="sec-2-6-10"><span class="section-number-4">2.6.10</span> Authentication</h4>
 <div class="outline-text-4" id="text-2-6-10">
 
 <p>    Default authentication realm to be used globally can be
@@ -1681,8 +1585,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 <p>
     Though you can:
 </p>
@@ -1693,8 +1595,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ;; Check if response is not 401 or so and process response
     ))
 </pre>
-
-
 
 <p>
     And for digest method you will need realm as well:
@@ -1707,8 +1607,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 <p>
     Preemptive authentication can be enabled or disabled globally per client:
 </p>
@@ -1720,14 +1618,12 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </div>
 
 </div>
 
 <div id="outline-container-2-6-11" class="outline-4">
-<h4 id="sec-2-6-11"><span class="section-number-4">2.6.11</span> Closing <b>http.async.client</b> </h4>
+<h4 id="sec-2-6-11"><span class="section-number-4">2.6.11</span> Closing <b>http.async.client</b></h4>
 <div class="outline-text-4" id="text-2-6-11">
 
 <p>    Whenever you've created <b>http.async.client</b> via
@@ -1745,8 +1641,6 @@ org_html_manager.setup();  // activate after the parameters are set
      (client/close client))))
 </pre>
 
-
-
 </div>
 </div>
 </div>
@@ -1754,7 +1648,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Low level </h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> Low level</h2>
 <div class="outline-text-2" id="text-3">
 
 <p>  This is lowest level access to <b>http.async.client</b>.
@@ -1765,7 +1659,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3-1" class="outline-3">
-<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Preparing request </h3>
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Preparing request</h3>
 <div class="outline-text-3" id="text-3-1">
 
 <p>   <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-prepare-request"><b>http.async.client.request/prepare-request</b></a> is responsible for
@@ -1789,8 +1683,6 @@ org_html_manager.setup();  // activate after the parameters are set
     ))
 </pre>
 
-
-
 </li>
 </ul>
 
@@ -1799,7 +1691,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3-2" class="outline-3">
-<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Executing request </h3>
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Executing request</h3>
 <div class="outline-text-3" id="text-3-2">
 
 <p>   <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-execute-request"><b>http.async.client.request/execute-request</b></a> returns same map of promises
@@ -1836,7 +1728,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3-2-1" class="outline-4">
-<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> Status line </h4>
+<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> Status line</h4>
 <div class="outline-text-4" id="text-3-2-1">
 
 <p>    Status line callback gets called after status line has been
@@ -1866,7 +1758,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3-2-2" class="outline-4">
-<h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> Headers </h4>
+<h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> Headers</h4>
 <div class="outline-text-4" id="text-3-2-2">
 
 <p>    Headers callback gets called after headers have been received
@@ -1884,7 +1776,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3-2-3" class="outline-4">
-<h4 id="sec-3-2-3"><span class="section-number-4">3.2.3</span> Body part </h4>
+<h4 id="sec-3-2-3"><span class="section-number-4">3.2.3</span> Body part</h4>
 <div class="outline-text-4" id="text-3-2-3">
 
 <p>    Body part callback gets called after each part of body has been
@@ -1901,7 +1793,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3-2-4" class="outline-4">
-<h4 id="sec-3-2-4"><span class="section-number-4">3.2.4</span> Body completed </h4>
+<h4 id="sec-3-2-4"><span class="section-number-4">3.2.4</span> Body completed</h4>
 <div class="outline-text-4" id="text-3-2-4">
 
 <p>    This callback gets called when receiving of response body has
@@ -1911,7 +1803,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3-2-5" class="outline-4">
-<h4 id="sec-3-2-5"><span class="section-number-4">3.2.5</span> Error </h4>
+<h4 id="sec-3-2-5"><span class="section-number-4">3.2.5</span> Error</h4>
 <div class="outline-text-4" id="text-3-2-5">
 
 <p>    Error callback gets called when error while processing has been
@@ -1929,7 +1821,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3-3" class="outline-3">
-<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Default callbacks </h3>
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Default callbacks</h3>
 <div class="outline-text-3" id="text-3-3">
 
 <p>   <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-*default-callbacks*"><b>http.async.client.request/*default-callbacks*</b></a> is a map of
@@ -1962,9 +1854,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-02-05 16:38:43 CET</p>
+<p class="date">Date: 2012-02-20 23:08:02 CET</p>
 <p class="author">Author: Hubert Iwaniuk</p>
-<p class="creator">Org version 7.7 with Emacs version 24</p>
+<p class="creator">Org version 7.8.03 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 
 </div>
