@@ -55,7 +55,8 @@
   - :request-timeout :: request timeout in ms
   - :user-agent :: User-Agent branding string
   - :async-connect :: Execute connect asynchronously
-  - :executor-service :: provide your own executor service for callbacks to be executed on"
+  - :executor-service :: provide your own executor service for callbacks to be executed on
+  - :ssl-context :: provide your own SSL Context"
   {:tag AsyncHttpClient}
   [& {:keys [compression-enabled
              connection-timeout
