@@ -692,7 +692,7 @@
 
     Basic method is default, so you don't have to specify it:
     #+BEGIN_SRC clojure
-      (with-open [client (client/create-client {:auth {:user u :password p}})] 
+      (with-open [client (client/create-client :auth {:user u :password p})] 
         (let [resp (client/GET client url)]
           ;; Check if response is not 401 or so and process response
           ))
@@ -718,6 +718,25 @@
           ;; process response
           ))
     #+END_SRC
+*** SSL Certificates
+    Since v0.4.2 it is possible to use SSL certificates with client.
+
+    For client to use SSL you need to provide it with *ssl-context*.
+    #+BEGIN_SRC clojure
+      (require [http.async.client.cert :as cert])
+      (let [ctx (cert/ssl-context :keystore-file ks-file
+                                  :keystore-password password
+                                  :certificate-file cert-file
+                                  :certificate-alias other-cert-alias)]
+        (with-open [client (client/create-client :ssl-context ctx)]
+          (let [resp (client/GET client url)]
+            ;; process response
+            )))
+    #+END_SRC
+
+    For more documentation please consult docstring of
+    [[http://neotyk.github.com/http.async.client/doc/http.async.client.cert.html#var-ssl-context][*http.async.client.cert/ssl-context*]] and tests.
+
 *** Closing *http.async.client*
     Whenever you've created *http.async.client* via
     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-create-client][*http.async.client/create-client*]] you will need to close it.
