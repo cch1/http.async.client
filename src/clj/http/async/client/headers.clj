@@ -64,7 +64,8 @@
   "Creates cookies from headers."
   [headers]
   (if (contains? headers :set-cookie)
-    (for [cookie-string (:set-cookie headers)]
+    (for [cookie-string (let [set-cookie (:set-cookie headers)]
+                          (if (string? set-cookie) (vector set-cookie) set-cookie))]
       (let [name-token (atom true)]
         (into {}
               (for [#^String cookie (.split cookie-string ";")]

@@ -136,7 +136,7 @@
            constraint (Constraint.)
            mapping (ConstraintMapping.)
            security (ConstraintSecurityHandler.)]
-       
+
        (.addBean srv loginSrv)
        (doto constraint
          (.setName Constraint/__BASIC_AUTH)
@@ -480,6 +480,16 @@
           r1 (GET client url)]
       (is (thrown-with-msg? RuntimeException #"Too many connections 1" (GET client url)))
       (is (not (failed? (await r1)))))))
+
+
+(deftest single-set-cookie
+  (let [resp (GET *client* "http://localhost:8123/cookie")
+        cookie (first (cookies resp))
+        header (headers resp)]
+    (is (string? (:set-cookie header)))
+    (is (= (:name cookie) "foo"))
+    (is (= (:value cookie) "bar"))))
+
 
 (deftest await-string
   (let [resp (GET *client* "http://localhost:8123/stream")
