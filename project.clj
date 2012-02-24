@@ -6,7 +6,7 @@
   :java-source-path "src/jvm"
   :javac-options {:deprecation "true"}
   :dependencies     [[org.clojure/clojure "1.3.0"]
-		     [com.ning/async-http-client "1.7.0"]]
+		     [com.ning/async-http-client "1.7.1"]]
   :dev-dependencies [[codox "0.4.0"]
                      [org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
                      [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
@@ -17,4 +17,4 @@
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
   :autodoc {:web-src-dir "http://github.com/neotyk/http.async.client/blob/"
             :web-home "http://neotyk.github.com/http.async.client/autodoc/"
-            :copyright "Copyright 2011 Hubert Iwaniuk"})
+            :copyright "Copyright 2012 Hubert Iwaniuk"})
