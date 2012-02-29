@@ -3,6 +3,7 @@
 #+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.4.4
 * Release 0.4.3
 ** Issue [[https://github.com/neotyk/http.async.client/pull/30][#30]] by [[https://github.com/canassa][Cesar Canassa]]
    Fixes issue with single cookie in response.

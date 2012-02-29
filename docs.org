@@ -11,7 +11,7 @@
  (defproject your-project "1.0.0-SNAPSHOT"
    :description "Your project description"
    :dependencies [[org.clojure/clojure "1.3.0"]
-                  [http.async.client "0.4.3"]])
+                  [http.async.client "0.4.3-SNAPSHOT"]])
    #+END_SRC
    Make sure that your project depends on at least 1.3.0 Clojure as
    *http.async.client* will not run in earlier versions.
