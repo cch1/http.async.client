@@ -35,7 +35,8 @@
            (java.io ByteArrayOutputStream
                     File
                     IOException)
-           (java.net ServerSocket)
+           (java.net ServerSocket
+                     ConnectException)
            (java.nio.channels UnresolvedAddressException)
            (java.util.concurrent TimeoutException)))
 (set! *warn-on-reflection* true)
@@ -597,6 +598,14 @@
         (is (false? (failed? resp)))
         (when (failed? resp)
           (println "No response received, while excepting it." (.getMessage ^Throwable (error resp))))))))
+
+(deftest connection-timeout
+  ;; timeout connection after 1ms
+  (with-open [client (create-client :connection-timeout 1)]
+    (let [resp (GET client "http://localhost:8124/")]
+      (await resp)
+      (is (true? (failed? resp)))
+      (is (instance? ConnectException (error resp))))))
 
 (deftest closing-client
   (let [client (create-client)
