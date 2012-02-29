@@ -79,8 +79,8 @@
   (let [ctx (ssl-context :keystore-file ks-file
                          :keystore-password password
                          :certificate-file cert-file
-                         :certificate-alias other-cert-alias)
-        client (create-client :ssl-context ctx)]
-    (is (= AsyncHttpClient (class client)))
-    ;; Make sure client is using the SSLContext we supplied
-    (is (= ctx (.getSSLContext (.getConfig client))))))
+                         :certificate-alias other-cert-alias)]
+    (with-open [client (create-client :ssl-context ctx)]
+      (is (= AsyncHttpClient (class client)))
+      ;; Make sure client is using the SSLContext we supplied
+      (is (= ctx (.getSSLContext (.getConfig client)))))))
