@@ -195,11 +195,11 @@
   "Executes provided request.
   Arguments:
   - req        - request to be executed
-  - :status    - status callback
-  - :headers   - headers callback
-  - :part      - body part callback
-  - :completed - response completed
-  - :error     - error callback
+  - :status    - status callback (optional, defaults to status-collect)
+  - :headers   - headers callback (optional, defaults to headers-collect)
+  - :part      - body part callback (optional, defaults to body-collect)
+  - :completed - response completed (optional, defaults to body-completed)
+  - :error     - error callback (optional, defaults to error-collect)
 
   Returns a map:
   - :id      - unique ID of request
