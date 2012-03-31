@@ -144,9 +144,9 @@
       :realm    - realm name to authenticate in
     :timeout - request timeout in ms")]
               `(defn ~fn-name ~fn-doc [~'client #^String ~'url & {:as ~'options}]
-                 (apply execute-request ~'client
-                        (apply prepare-request ~method# ~'url (apply concat ~'options))
-                        (apply concat *default-callbacks*)))))
+                 (execute-request ~'client
+                                  (apply prepare-request ~method# ~'url
+                                         (apply concat ~'options))))))
           methods)))
 
 (gen-methods :get :post :put :delete :head :options)
@@ -159,25 +159,23 @@
                        and received body part as vector of bytes
   options - are optional and can contain :headers, :param, and :query (see prepare-request)."
   [client method #^String url body-part-callback & {:as options}]
-  (apply execute-request client
-         (apply prepare-request method url (apply concat options))
-         (apply concat (merge *default-callbacks* {:part body-part-callback}))))
+  (execute-request client
+                   (apply prepare-request method url (apply concat options))
+                   :part body-part-callback))
 
 (defn stream-seq
   "Creates potentially infinite lazy sequence of Http Stream."
   [client method #^String url & {:as options}]
   (let [que (LinkedBlockingQueue.)]
-    (apply execute-request client
-           (apply prepare-request method url (apply concat options))
-           (apply concat (merge
-                          *default-callbacks*
-                          {:part (fn [_ baos]
-                                   (.put que baos)
-                                   [que :continue])
-                           :completed (fn [_] (.put que ::done))
-                           :error (fn [_ t]
-                                    (.put que ::done)
-                                    t)})))))
+    (execute-request client
+                     (apply prepare-request method url (apply concat options))
+                     :part (fn [_ baos]
+                             (.put que baos)
+                             [que :continue])
+                     :completed (fn [_] (.put que ::done))
+                     :error (fn [_ t]
+                              (.put que ::done)
+                              t))))
 
 (defn failed?
   "Checks if request failed."
