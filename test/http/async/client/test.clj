@@ -172,10 +172,11 @@
 ;; testing
 (deftest test-status
   (let [status# (promise)
-	_ (apply execute-request *client*
-                 (prepare-request :get "http://localhost:8123/")
-                 (apply concat (merge *default-callbacks*
-                                      {:status (fn [_ st] (do (deliver status# st) [st :abort]))})))
+	_ (execute-request *client*
+                           (prepare-request :get "http://localhost:8123/")
+                           :status (fn [_ st]
+                                     (deliver status# st)
+                                     [st :abort]))
 	status @status#]
     (are [k v] (= (k status) v)
          :code 200
@@ -186,11 +187,33 @@
 
 (deftest test-receive-headers
   (let [headers# (promise)
-        _ (apply execute-request *client*
-                 (prepare-request :get "http://localhost:8123/")
-                 (apply concat (merge *default-callbacks*
-                                      {:headers (fn [_ hds] (do (deliver headers# hds) [hds :abort]))})))
+        _ (execute-request *client*
+                           (prepare-request :get "http://localhost:8123/")
+                           :headers (fn [_ hds]
+                                      (deliver headers# hds)
+                                      [hds :abort]))
         headers @headers#]
+    (is (= (:test-header headers) "test-value"))))
+
+(deftest test-status-and-header-callbacks
+  (let [status# (promise)
+        headers# (promise)
+        _ (execute-request *client*
+                           (prepare-request :get "http://localhost:8123/")
+                           :status (fn [_ st]
+                                     (deliver status# st)
+                                     [st :continue])
+                           :headers (fn [_ hds]
+                                      (deliver headers# hds)
+                                      [hds :abort]))
+        status @status#
+        headers @headers#]
+    (are [k v] (= (k status) v)
+         :code 200
+         :msg "OK"
+         :protocol "HTTP/1.1"
+         :major 1
+         :minor 1)
     (is (= (:test-header headers) "test-value"))))
 
 (deftest test-send-headers

@@ -233,12 +233,16 @@
          (reify AsyncHandler
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
             onStatusReceived [this #^HttpResponseStatus e]
-            (let [[result action] (status resp (convert-status-to-map e))]
+            (let [[result action] ((or status
+                                       (:status *default-callbacks*))
+                                   resp (convert-status-to-map e))]
               (deliver (:status resp) result)
               (convert-action action)))
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
             onHeadersReceived [this #^HttpResponseHeaders e]
-            (let [[result action] (headers resp (convert-headers-to-map e))]
+            (let [[result action] ((or headers
+                                       (:headers *default-callbacks*))
+                                   resp (convert-headers-to-map e))]
               (deliver (:headers resp) result)
               (convert-action action)))
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
@@ -246,7 +250,9 @@
             (when-let [bytes (.getBodyPartBytes e)]
               (let [baos (ByteArrayOutputStream. (alength bytes))]
                 (.write baos bytes 0 (alength bytes))
-                (let [[result action] (part resp baos)
+                (let [[result action] ((or part
+                                           (:part *default-callbacks*))
+                                       resp baos)
                       body (:body resp)]
                   (when-not (realized? body)
                     (deliver body result))
@@ -254,14 +260,18 @@
            (^{:tag Object}
             onCompleted [this]
             (do
-              (completed resp)
+              ((or completed
+                   (:completed *default-callbacks*))
+               resp)
               (when-not (realized? (:body resp))
                 (deliver (:body resp) nil))
               (deliver (:done resp) true)))
            (^{:tag void}
             onThrowable [this #^Throwable t]
             (do
-              (deliver (:error resp) (error resp t))
+              (deliver (:error resp) ((or error
+                                          (:error *default-callbacks*))
+                                      resp t))
               (when-not (realized? (:done resp))
                 (deliver (:done resp) true))))))]
     (with-meta resp {:started (System/currentTimeMillis)
