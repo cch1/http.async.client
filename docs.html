@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Asynchronous HTTP Client - Clojure - Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-02-29 08:09:32 CET"/>
+<meta name="generated" content="2012-04-27 18:21:19 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -133,14 +133,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-2-2">2.2 HTTP methods</a>
 <ul>
 <li><a href="#sec-2-2-1">2.2.1 GET</a></li>
-<li><a href="#sec-2-2-2">2.2.2 PUT/POST</a>
-<ul>
-<li><a href="#sec-2-2-2-1">2.2.2.1 Submitting body as String</a></li>
-<li><a href="#sec-2-2-2-2">2.2.2.2 Submitting form parameters</a></li>
-<li><a href="#sec-2-2-2-3">2.2.2.3 Submitting body as InputStream</a></li>
-<li><a href="#sec-2-2-2-4">2.2.2.4 Submitting body as File, a.k.a. zero byte copy</a></li>
-</ul>
-</li>
+<li><a href="#sec-2-2-2">2.2.2 PUT/POST</a></li>
 <li><a href="#sec-2-2-3">2.2.3 DELETE</a></li>
 <li><a href="#sec-2-2-4">2.2.4 HEAD</a></li>
 <li><a href="#sec-2-2-5">2.2.5 OPTIONS</a></li>
@@ -173,12 +166,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-2-5-6">2.5.6 Reading body as string</a></li>
 <li><a href="#sec-2-5-7">2.5.7 Reading error</a></li>
 <li><a href="#sec-2-5-8">2.5.8 Canceling request</a></li>
-<li><a href="#sec-2-5-9">2.5.9 Response predicates</a>
-<ul>
-<li><a href="#sec-2-5-9-1">2.5.9.1 done?</a></li>
-<li><a href="#sec-2-5-9-2">2.5.9.2 failed?</a></li>
-<li><a href="#sec-2-5-9-3">2.5.9.3 canceled?</a></li>
-</ul></li>
+<li><a href="#sec-2-5-9">2.5.9 Response predicates</a></li>
 </ul>
 </li>
 <li><a href="#sec-2-6">2.6 Managing client</a>
@@ -233,10 +221,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(defproject your-project "1.0.0-SNAPSHOT"
-  :description "Your project description"
-  :dependencies [[org.clojure/clojure "1.3.0"]
-                 [http.async.client "0.4.3"]])
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>defproject your-project <span style="color: #8b2252;">"1.0.0-SNAPSHOT"</span>
+  <span style="color: #008b8b;">:description</span> <span style="color: #8b2252;">"Your project description"</span>
+  <span style="color: #008b8b;">:dependencies</span> [[org.clojure/clojure <span style="color: #8b2252;">"1.4.0"</span>]
+                 [http.async.client <span style="color: #8b2252;">"0.4.4"</span>]]<span style="color: #8c8c8c;">)</span>
 </pre>
 
 <p>
@@ -254,7 +242,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(ns your.ns (:require [http.async.client :as client]))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">ns</span> your.ns <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:require</span> [http.async.client <span style="color: #008b8b;">:as</span> http]<span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -269,13 +257,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ;; Create client
-  ;; request http resource
-  (let [response (client/GET client "http://github.com/neotyk/http.async.client/")]
-    ;; wait for response to be received
-    (client/await response)
-    ;; read body of response as string
-    (client/string response)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [response <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"http://github.com/neotyk/http.async.client/"</span><span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">request http resource</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">-&gt;</span> response
+        http/await     <span style="color: #b22222;">; </span><span style="color: #b22222;">wait for response to be received</span>
+        http/string<span style="color: #8c8c8c;">)))</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">read body of response as string</span>
 </pre>
 
 </div>
@@ -305,7 +291,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(client/GET &lt;client&gt; url)
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>http/GET &lt;client&gt; url<span style="color: #8c8c8c;">)</span>
 </pre>
 
 <p>
@@ -337,7 +323,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(client/GET &lt;client&gt; url :query {:key "value"})
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>http/GET &lt;client&gt; url <span style="color: #008b8b;">:query</span> {<span style="color: #008b8b;">:key</span> <span style="color: #8b2252;">"value"</span>}<span style="color: #8c8c8c;">)</span>
 </pre>
 
 <p>
@@ -383,7 +369,7 @@ org_html_manager.setup();  // activate after the parameters are set
 
 
 
-<pre class="example">(client/string (client/GET &lt;client&gt; &lt;url&gt;))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>http/string <span style="color: #8c8c8c;">(</span>http/GET &lt;client&gt; &lt;url&gt;<span style="color: #8c8c8c;">))</span>
 </pre>
 
 </dd>
@@ -406,7 +392,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(client/stream-seq &lt;client&gt; :get url)
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>http/stream-seq &lt;client&gt; <span style="color: #008b8b;">:get</span> url<span style="color: #8c8c8c;">)</span>
 </pre>
 
 <p>
@@ -414,7 +400,7 @@ org_html_manager.setup();  // activate after the parameters are set
     will be lazy sequence of ByteArrayOutputStreams.
 </p>
 <p>
-    You can still use convenience functions like <b>client/string</b> for body,
+    You can still use convenience functions like <b>http/string</b> for body,
     but remember that you are dealing now with <b>seq</b>.
 </p>
 <p>
@@ -477,13 +463,13 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client "&lt;your url&gt;")
-        status (client/status resp)
-        headers (client/headers resp)]
-    (println (:code status))
-    (client/await resp)
-    (println (client/string resp))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"&lt;your url&gt;"</span><span style="color: #8c8c8c;">)</span>
+        status <span style="color: #8c8c8c;">(</span>http/status resp<span style="color: #8c8c8c;">)</span>
+        headers <span style="color: #8c8c8c;">(</span>http/headers resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:code</span> status<span style="color: #8c8c8c;">))</span>
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 
@@ -492,13 +478,13 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client "&lt;your url&gt;" :query {:param-name "some-value"})
-        status (client/status resp)
-        headers (client/headers resp)]
-    (println (:code status))
-    (client/await resp)
-    (println (client/string resp))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #008b8b;">:query</span> {<span style="color: #008b8b;">:param-name</span> <span style="color: #8b2252;">"some-value"</span>}<span style="color: #8c8c8c;">)</span>
+        status <span style="color: #8c8c8c;">(</span>http/status resp<span style="color: #8c8c8c;">)</span>
+        headers <span style="color: #8c8c8c;">(</span>http/headers resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:code</span> status<span style="color: #8c8c8c;">))</span>
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 
@@ -507,14 +493,14 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client "&lt;your url&gt;"
-                         :query {:param-name "some-value"}
-                         :proxy {:host host :port port})
-        status (client/status resp)]
-    (println (:code status))
-    (client/await resp)
-    (println (client/string resp))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"&lt;your url&gt;"</span>
+                       <span style="color: #008b8b;">:query</span> {<span style="color: #008b8b;">:param-name</span> <span style="color: #8b2252;">"some-value"</span>}
+                       <span style="color: #008b8b;">:proxy</span> {<span style="color: #008b8b;">:host</span> host <span style="color: #008b8b;">:port</span> port}<span style="color: #8c8c8c;">)</span>
+        status <span style="color: #8c8c8c;">(</span>http/status resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:code</span> status<span style="color: #8c8c8c;">))</span>
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 
@@ -523,17 +509,17 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client "http://localhost:8123/cookie"
-                         ;; Send cookie
-                         :cookies #{{:domain "http://localhost:8123/"
-                                     :name "sample-name"
-                                     :value "sample-value"
-                                     :path "/cookie"
-                                     :max-age 10
-                                     :secure false}})]
-    (doseq [cookie (client/cookies resp)] ; Read cookies from server response
-      (println "name:" (:name cookie) ", value:" (:value cookie)))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"http://localhost:8123/cookie"</span>
+                       <span style="color: #b22222;">;; </span><span style="color: #b22222;">Send cookie</span>
+                       <span style="color: #008b8b;">:cookies</span> #{{<span style="color: #008b8b;">:domain</span> <span style="color: #8b2252;">"http://localhost:8123/"</span>
+                                   <span style="color: #008b8b;">:name</span> <span style="color: #8b2252;">"sample-name"</span>
+                                   <span style="color: #008b8b;">:value</span> <span style="color: #8b2252;">"sample-value"</span>
+                                   <span style="color: #008b8b;">:path</span> <span style="color: #8b2252;">"/cookie"</span>
+                                   <span style="color: #008b8b;">:max-age</span> 10
+                                   <span style="color: #008b8b;">:secure</span> false}}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">doseq</span> [cookie <span style="color: #8c8c8c;">(</span>http/cookies resp<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Read cookies from server response</span>
+      <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8b2252;">"name:"</span> <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:name</span> cookie<span style="color: #8c8c8c;">)</span> <span style="color: #8b2252;">", value:"</span> <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:value</span> cookie<span style="color: #8c8c8c;">)))))</span>
 </pre>
 
 <p>
@@ -575,10 +561,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/POST client "&lt;your url&gt;" :body "SampleBody")]
-                                        ; do something with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/POST client <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #008b8b;">:body</span> <span style="color: #8b2252;">"SampleBody"</span><span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -593,10 +579,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/POST client "&lt;your url&gt;" :body {:u "user" :p "s3cr3t"})]
-                                        ; do something with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/POST client <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #008b8b;">:body</span> {<span style="color: #008b8b;">:u</span> <span style="color: #8b2252;">"user"</span> <span style="color: #008b8b;">:p</span> <span style="color: #8b2252;">"s3cr3t"</span>}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -611,11 +597,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(use '[clojure.java.io :only [input-stream]])
-(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/PUT client "&lt;your url&gt;" :body (input-stream (.getBytes "SampleContent" "UTF-8")))]
-                                        ; do something with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">use</span> '[clojure.java.io <span style="color: #008b8b;">:only</span> [input-stream]]<span style="color: #8c8c8c;">)</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/PUT client <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #008b8b;">:body</span> <span style="color: #8c8c8c;">(</span>input-stream <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">.getBytes</span> <span style="color: #8b2252;">"SampleContent"</span> <span style="color: #8b2252;">"UTF-8"</span><span style="color: #8c8c8c;">)))</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -630,11 +616,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(import '(java.io File))
-(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/PUT "&lt;your url&gt;" :body (File. "&lt;path to file&gt;"))]
-    ; do something with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">import</span> '<span style="color: #8c8c8c;">(</span>java.io <span style="color: #483d8b;">File</span><span style="color: #8c8c8c;">))</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/PUT <span style="color: #8b2252;">"&lt;your url&gt;"</span> <span style="color: #008b8b;">:body</span> <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">File.</span> <span style="color: #8b2252;">"&lt;path to file&gt;"</span><span style="color: #8c8c8c;">))</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -650,10 +636,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/DELETE "&lt;your url&gt;")]
-                                        ; do something with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/DELETE <span style="color: #8b2252;">"&lt;your url&gt;"</span><span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -668,10 +654,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/HEAD "&lt;your url&gt;")]
-                                        ; do something with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/HEAD <span style="color: #8b2252;">"&lt;your url&gt;"</span><span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -686,10 +672,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/OPTIONS "&lt;your url&gt;")]
-                                        ; do something with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/OPTIONS <span style="color: #8b2252;">"&lt;your url&gt;"</span><span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -732,10 +718,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url :query {:key1 "value1" :key2 "value2"})]
-    (client/await resp)
-    (client/string resp)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url <span style="color: #008b8b;">:query</span> {<span style="color: #008b8b;">:key1</span> <span style="color: #8b2252;">"value1"</span> <span style="color: #008b8b;">:key2</span> <span style="color: #8b2252;">"value2"</span>}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 </div>
@@ -750,11 +736,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url :headers {:header-name1 "value1"
-                                       :header-name2 "value2"})]
-    (client/await resp)
-    (client/string resp)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url <span style="color: #008b8b;">:headers</span> {<span style="color: #008b8b;">:header-name1</span> <span style="color: #8b2252;">"value1"</span>
+                                            <span style="color: #008b8b;">:header-name2</span> <span style="color: #8b2252;">"value2"</span>}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 </div>
@@ -770,10 +756,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/PUT client url :body "sample body")]
-    (client/await resp)
-    (client/string resp)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/PUT client url <span style="color: #008b8b;">:body</span> <span style="color: #8b2252;">"sample body"</span><span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -791,16 +777,16 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client "http://localhost:8123/cookie"
-                         :cookies #{{:domain "http://localhost:8123/"
-                                     :name "sample-name"
-                                     :value "sample-value"
-                                     :path "/cookie"
-                                     :max-age 10
-                                     :secure false}})]
-    (client/await resp)
-    (client/string resp)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"http://localhost:8123/cookie"</span>
+                       <span style="color: #008b8b;">:cookies</span> #{{<span style="color: #008b8b;">:domain</span> <span style="color: #8b2252;">"http://localhost:8123/"</span>
+                                   <span style="color: #008b8b;">:name</span> <span style="color: #8b2252;">"sample-name"</span>
+                                   <span style="color: #008b8b;">:value</span> <span style="color: #8b2252;">"sample-value"</span>
+                                   <span style="color: #008b8b;">:path</span> <span style="color: #8b2252;">"/cookie"</span>
+                                   <span style="color: #008b8b;">:max-age</span> 10
+                                   <span style="color: #008b8b;">:secure</span> false}}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -839,10 +825,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url :proxy {:host h :port p})]
-    (client/await resp)
-    (client/string resp)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url <span style="color: #008b8b;">:proxy</span> {<span style="color: #008b8b;">:host</span> h <span style="color: #008b8b;">:port</span> p}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -880,10 +866,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url :auth {:user u :password p})]
-    ;; Check if response is not 401 or so and process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url <span style="color: #008b8b;">:auth</span> {<span style="color: #008b8b;">:user</span> u <span style="color: #008b8b;">:password</span> p}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -891,10 +877,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url :auth {:type :basic :user u :password p})]
-    ;; Check if response is not 401 or so and process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url <span style="color: #008b8b;">:auth</span> {<span style="color: #008b8b;">:type</span> <span style="color: #008b8b;">:basic</span> <span style="color: #008b8b;">:user</span> u <span style="color: #008b8b;">:password</span> p}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -902,11 +888,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url
-                         :auth {:type :digest :user u :password p :realm r})]
-    ;; Check if response is not 401 or so and process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url
+                       <span style="color: #008b8b;">:auth</span> {<span style="color: #008b8b;">:type</span> <span style="color: #008b8b;">:digest</span> <span style="color: #008b8b;">:user</span> u <span style="color: #008b8b;">:password</span> p <span style="color: #008b8b;">:realm</span> r}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -914,10 +900,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)]
-  (let [resp (client/GET client url :auth {:user u :password p :preemptive true})]
-    ;; process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url <span style="color: #008b8b;">:auth</span> {<span style="color: #008b8b;">:user</span> u <span style="color: #008b8b;">:password</span> p <span style="color: #008b8b;">:preemptive</span> true}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -935,11 +921,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url :timeout -1)]
-    (client/await resp)
-    ;; process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url <span style="color: #008b8b;">:timeout</span> -1<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -948,13 +934,13 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url :timeout 100)]
-    (client/await resp)
-    (if (client/failed? resp)
-      ;; did not get response in configured timeout
-      ;; process response
-      )))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url <span style="color: #008b8b;">:timeout</span> 100<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">if</span> <span style="color: #8c8c8c;">(</span>http/failed? resp<span style="color: #8c8c8c;">)</span>
+      <span style="color: #b22222;">;; </span><span style="color: #b22222;">did not get response in configured timeout</span>
+      <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response</span>
+      <span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -1001,10 +987,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/stream-seq client :get url)]
-    (doseq [s (s/string resp)]
-      (println s))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/stream-seq client <span style="color: #008b8b;">:get</span> url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">doseq</span> [s <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">)</span>]
+      <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> s<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 <p>
@@ -1030,9 +1016,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(let [resp (client/stream-seq :get url)]
-  (println "1: " (first (client/string resp)))
-  (println "2: " (first (client/string resp))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/stream-seq <span style="color: #008b8b;">:get</span> url<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8b2252;">"1: "</span> <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">first</span> <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">)))</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8b2252;">"2: "</span> <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">first</span> <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 <p>
@@ -1066,14 +1052,14 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [parts (ref #{})
-        resp (client/request-stream client :get url
-                                    (fn [state body]
-                                      (dosync (alter parts conj (string body)))
-                                      [body :continue]))]
-    ;; do something to @parts
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [parts <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">ref</span> #{}<span style="color: #8c8c8c;">)</span>
+        resp <span style="color: #8c8c8c;">(</span>http/request-stream client <span style="color: #008b8b;">:get</span> url
+                                  <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">fn</span> [state body]
+                                    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">dosync</span> <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">alter</span> parts conj <span style="color: #8c8c8c;">(</span>string body<span style="color: #8c8c8c;">)))</span>
+                                    [body <span style="color: #008b8b;">:continue</span>]<span style="color: #8c8c8c;">))</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something to @parts</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 
@@ -1124,9 +1110,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url)]
-    (client/await resp)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -1136,9 +1122,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ;; Create client
-  (let [resp (client/GET client url)]
-    (client/string (client/await resp))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/string <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 </div>
@@ -1154,10 +1140,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp   (client/GET client url)
-        status (client/status resp)]
-    (:code status)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp   <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>
+        status <span style="color: #8c8c8c;">(</span>http/status resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:code</span> status<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -1177,10 +1163,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp    (client/GET client url)
-        headers (client/headers resp)]
-    (:server headers)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp    <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>
+        headers <span style="color: #8c8c8c;">(</span>http/headers resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:server</span> headers<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -1200,10 +1186,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp    (client/GET client url)
-        cookies (client/cookies resp)]
-    (map :name cookies)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp    <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>
+        cookies <span style="color: #8c8c8c;">(</span>http/cookies resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">map</span> <span style="color: #008b8b;">:name</span> cookies<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -1238,9 +1224,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url)]
-    (client/string (client/await resp))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/string <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 <p>
@@ -1250,11 +1236,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp    (client/stream-seq client :get url)
-        strings (client/string resp)]
-    (doseq [part strings]
-      (println part))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp    <span style="color: #8c8c8c;">(</span>http/stream-seq client <span style="color: #008b8b;">:get</span> url<span style="color: #8c8c8c;">)</span>
+        strings <span style="color: #8c8c8c;">(</span>http/string resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">doseq</span> [part strings]
+      <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> part<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 <p>
@@ -1273,11 +1259,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url)]
-    (client/await resp)
-    (when-let [err (client/error resp)]
-      (println "failed processing request: " err))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">when-let</span> [err <span style="color: #8c8c8c;">(</span>http/error resp<span style="color: #8c8c8c;">)</span>]
+      <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8b2252;">"failed processing request: "</span> err<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 </div>
@@ -1293,9 +1279,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url)]
-    (client/cancel resp)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span>http/cancel resp<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 <p>
@@ -1321,11 +1307,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client)] ; Create client
-  (let [resp (client/GET client url)]
-    (when-not (client/done? resp)
-      (client/await resp)
-      (client/done? resp))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">when-not</span> <span style="color: #8c8c8c;">(</span>http/done? resp<span style="color: #8c8c8c;">)</span>
+      <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>
+      <span style="color: #8c8c8c;">(</span>http/done? resp<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 <p>
@@ -1372,14 +1358,14 @@ org_html_manager.setup();  // activate after the parameters are set
     you can use <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-create-client"><b>http.async.client/create-client</b></a> and remember to
     close created client yourself, best is to use it within macro
     like with-open, though make sure that body of it will wait for
-    whore response to finish.
+    whole response to finish.
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client {:user-agent "Your User Agent/1.0"})]
-  (let [resp (client/GET client url)]
-    ;; do stuff with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:user-agent</span> <span style="color: #8b2252;">"Your User Agent/1.0"</span><span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -1395,10 +1381,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client {:compression-enabled true})]
-  (let [resp (client/GET client url)]
-    ;; do stuff with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:compression-enabled</span> true<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -1413,10 +1399,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client  (client/create-client {:follow-redirects true})]
-  (let [resp (client/GET client url)]
-    ;; do stuff with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client  <span style="color: #8c8c8c;">(</span>http/create-client {<span style="color: #008b8b;">:follow-redirects</span> true}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -1432,10 +1418,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client {:keep-alive true})]
-  (let [resp (client/GET client url)]
-    ;; do stuff with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:keep-alive</span> true<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -1452,10 +1438,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client {:max-conns-per-host 10})]
-  (let [resp (client/GET client url)]
-    ;; do stuff with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:max-conns-per-host</span> 10<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -1472,10 +1458,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client {:max-conns-total 100})]
-  (let [resp (client/GET client url)]
-    ;; do stuff with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:max-conns-total</span> 100<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -1490,10 +1476,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client {:max-redirects 3})]
-  (let [resp (client/GET client url)]
-    ;; do stuff with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:max-redirects</span> 3<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -1514,12 +1500,12 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client {:connection-timeout 10
-                                          :request-timeout 1000
-                                          :idle-in-pool-timeout 100})]
-  (let [resp (client/client client/GET url)]
-    ;; request processing
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:connection-timeout</span> 10
+                                       <span style="color: #008b8b;">:request-timeout</span> 1000
+                                       <span style="color: #008b8b;">:idle-in-pool-timeout</span> 100<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">request processing</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -1538,10 +1524,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client {:proxy {:host h :port p}})]
-  (let [resp (client/GET client url)]
-    ;; do stuff with resp
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:proxy</span> {<span style="color: #008b8b;">:host</span> h <span style="color: #008b8b;">:port</span> p}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -1580,10 +1566,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client :auth {:user u :password p})] 
-  (let [resp (client/GET client url)]
-    ;; Check if response is not 401 or so and process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:auth</span> {<span style="color: #008b8b;">:user</span> u <span style="color: #008b8b;">:password</span> p}<span style="color: #8c8c8c;">)</span>] 
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -1591,10 +1577,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client :auth {:type :basic :user u :password p})]
-  (let [resp (client/GET client url)]
-    ;; Check if response is not 401 or so and process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:auth</span> {<span style="color: #008b8b;">:type</span> <span style="color: #008b8b;">:basic</span> <span style="color: #008b8b;">:user</span> u <span style="color: #008b8b;">:password</span> p}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -1602,10 +1588,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client :auth {:type :digest :user u :password p :realm r})]
-  (let [resp (client/GET client url)]
-    ;; Check if response is not 401 or so and process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:auth</span> {<span style="color: #008b8b;">:type</span> <span style="color: #008b8b;">:digest</span> <span style="color: #008b8b;">:user</span> u <span style="color: #008b8b;">:password</span> p <span style="color: #008b8b;">:realm</span> r}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">Check if response is not 401 or so and process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 <p>
@@ -1613,10 +1599,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (client/create-client :auth {:type :basic :user u :passowrd p :preemptive true})]
-  (let [resp (client/GET client url)]
-    ;; process response
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:auth</span> {<span style="color: #008b8b;">:type</span> <span style="color: #008b8b;">:basic</span> <span style="color: #008b8b;">:user</span> u <span style="color: #008b8b;">:passowrd</span> p <span style="color: #008b8b;">:preemptive</span> true}<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </div>
@@ -1634,15 +1620,15 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(require [http.async.client.cert :as cert])
-(let [ctx (cert/ssl-context :keystore-file ks-file
-                            :keystore-password password
-                            :certificate-file cert-file
-                            :certificate-alias other-cert-alias)]
-  (with-open [client (client/create-client :ssl-context ctx)]
-    (let [resp (client/GET client url)]
-      ;; process response
-      )))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">require</span> [http.async.client.cert <span style="color: #008b8b;">:as</span> cert]<span style="color: #8c8c8c;">)</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [ctx <span style="color: #8c8c8c;">(</span>cert/ssl-context <span style="color: #008b8b;">:keystore-file</span> ks-file
+                            <span style="color: #008b8b;">:keystore-password</span> password
+                            <span style="color: #008b8b;">:certificate-file</span> cert-file
+                            <span style="color: #008b8b;">:certificate-alias</span> other-cert-alias<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:ssl-context</span> ctx<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+      <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response</span>
+      <span style="color: #8c8c8c;">)))</span>
 </pre>
 
 
@@ -1664,13 +1650,13 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(let [client (client/create-client)]
-  (try
-    (let [resp (client/GET client url)]
-      ;; process response
-      )
-    (finally
-     (client/close client))))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">try</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
+      <span style="color: #b22222;">;; </span><span style="color: #b22222;">process response</span>
+      <span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">finally</span>
+     <span style="color: #8c8c8c;">(</span>http/close client<span style="color: #8c8c8c;">))))</span>
 </pre>
 
 </div>
@@ -1695,7 +1681,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <div class="outline-text-3" id="text-3-1">
 
 <p>   <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-prepare-request"><b>http.async.client.request/prepare-request</b></a> is responsible for
-   request preparation, like name suggests.
+   request preparation, like the name suggests.
    It takes following arguments:
 </p><ul>
 <li>HTTP Method like <b>:get</b> <b>:head</b>
@@ -1707,12 +1693,12 @@ org_html_manager.setup();  // activate after the parameters are set
 
 
 
-<pre class="example">(with-open [client (client/create-client)]
-  (let [req (prepare-request client
-             :get "http://google.com"
-             :headers {:my-header "value"})]
-    ;; now you have request, next thing to do would be to execute it
-    ))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [req <span style="color: #8c8c8c;">(</span>request/prepare-request client
+                                     <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://google.com"</span>
+                                     <span style="color: #008b8b;">:headers</span> {<span style="color: #008b8b;">:my-header</span> <span style="color: #8b2252;">"value"</span>}<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">now you have request, next thing to do would be to execute it</span>
+    <span style="color: #8c8c8c;">))</span>
 </pre>
 
 </li>
@@ -1729,7 +1715,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <p>   <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-execute-request"><b>http.async.client.request/execute-request</b></a> returns same map of promises
    as <a href="#sec-2-1-1">Asynchronous operations</a>.
    Its arguments are: request to be executed (result of <a href="#sec-3-1">Preparing request</a>) and <b>options</b> as keyworded map consisting of call-backs.
-   Following <b>options</b> are recognized:
+   Following <b>options</b> keys are recognized:
 </p><dl>
 <dt><b>:status</b></dt><dd><a href="#sec-3-2-1">Status line</a>
 </dd>
@@ -1785,6 +1771,25 @@ org_html_manager.setup();  // activate after the parameters are set
 </li>
 </ul>
 
+
+<p>
+    Sample code to illustrate how to use status callback:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request client <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://example.com"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+        status <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">promise</span><span style="color: #8c8c8c;">)</span>                <span style="color: #b22222;">; </span><span style="color: #b22222;">status promise that will be delivered by callback</span>
+        response <span style="color: #8c8c8c;">(</span>request/execute-request
+                  client request        <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
+                  <span style="color: #008b8b;">:status</span>               <span style="color: #b22222;">; </span><span style="color: #b22222;">status callback</span>
+                  <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">fn</span> [res st]          <span style="color: #b22222;">; </span><span style="color: #b22222;">*res* is response map, same as one returned by *execute-request*</span>
+                                        <span style="color: #b22222;">; </span><span style="color: #b22222;">*st* is status map, as described above</span>
+                    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">deliver</span> status st<span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">deliver status promise</span>
+                    [st <span style="color: #008b8b;">:abort</span>]<span style="color: #8c8c8c;">))</span>]      <span style="color: #b22222;">; </span><span style="color: #b22222;">return status to be delivered to response map and abort further processing of response.</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> @status<span style="color: #8c8c8c;">)))</span>                 <span style="color: #b22222;">; </span><span style="color: #b22222;">await status to be delivered and print it.</span>
+</pre>
+
 </div>
 
 </div>
@@ -1803,6 +1808,25 @@ org_html_manager.setup();  // activate after the parameters are set
 </li>
 </ul>
 
+
+<p>
+    Sample code to illustrate how to use headers callback:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request client <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://example.com"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+        headers <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">promise</span><span style="color: #8c8c8c;">)</span>               <span style="color: #b22222;">; </span><span style="color: #b22222;">headers promise that will be delivered by callback</span>
+        response <span style="color: #8c8c8c;">(</span>request/execute-request
+                  client request        <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
+                  <span style="color: #008b8b;">:header</span>               <span style="color: #b22222;">; </span><span style="color: #b22222;">header callback</span>
+                  <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">fn</span> [res hds]         <span style="color: #b22222;">; </span><span style="color: #b22222;">*res* is response map, same as one returned by *execute-request*</span>
+                                        <span style="color: #b22222;">; </span><span style="color: #b22222;">*hds* is headers map, as described above</span>
+                    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">deliver</span> headers st<span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">deliver headers promise</span>
+                    [hds <span style="color: #008b8b;">:abort</span>]<span style="color: #8c8c8c;">))</span>]     <span style="color: #b22222;">; </span><span style="color: #b22222;">return headers to be delivered to response map and abort further processing of response.</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> @headers<span style="color: #8c8c8c;">)))</span>
+</pre>
+
 </div>
 
 </div>
@@ -1820,6 +1844,48 @@ org_html_manager.setup();  // activate after the parameters are set
 </li>
 </ul>
 
+
+<p>
+    Following code sample will show how to count number of body parts
+    received:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [cnt <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">atom</span> 0<span style="color: #8c8c8c;">)</span>                    <span style="color: #b22222;">; </span><span style="color: #b22222;">body parts counter</span>
+        request <span style="color: #8c8c8c;">(</span>request/prepare-request <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://localhost:8123/stream"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+        resp <span style="color: #8c8c8c;">(</span>execute-request
+              *client* request          <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
+              <span style="color: #008b8b;">:part</span>                     <span style="color: #b22222;">; </span><span style="color: #b22222;">body part callback</span>
+              <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">fn</span> [_ p]                 <span style="color: #b22222;">; </span><span style="color: #b22222;">ignore response map,</span>
+                                        <span style="color: #b22222;">; </span><span style="color: #b22222;">*p* is body part</span>
+                <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">swap!</span> cnt inc<span style="color: #8c8c8c;">)</span>         <span style="color: #b22222;">; </span><span style="color: #b22222;">increment body part counter</span>
+                [p <span style="color: #008b8b;">:continue</span>]<span style="color: #8c8c8c;">))</span>]        <span style="color: #b22222;">; </span><span style="color: #b22222;">return part to be delivered to response map and continue processing of response.</span>
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>                   <span style="color: #b22222;">; </span><span style="color: #b22222;">wait for response to finish</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> @cnt<span style="color: #8c8c8c;">)))</span>                    <span style="color: #b22222;">; </span><span style="color: #b22222;">print body parts counter</span>
+</pre>
+
+
+<p>
+    Next sample will collect body parts:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [parts <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">atom</span> #{}<span style="color: #8c8c8c;">)</span>                <span style="color: #b22222;">; </span><span style="color: #b22222;">body parts collector</span>
+        request <span style="color: #8c8c8c;">(</span>request/prepare-request <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://localhost:8123/stream"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+        resp <span style="color: #8c8c8c;">(</span>execute-request
+              *client* request          <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
+              <span style="color: #008b8b;">:part</span>                     <span style="color: #b22222;">; </span><span style="color: #b22222;">body part callback</span>
+              <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">fn</span> [_ <span style="color: #228b22;">^ByteArrayOutputStream</span> p] <span style="color: #b22222;">; </span><span style="color: #b22222;">ignore response map,</span>
+                                        <span style="color: #b22222;">; </span><span style="color: #b22222;">*p* is body part</span>
+                <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [p <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">.toString</span> part <span style="color: #8b2252;">"UTF-8"</span><span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">extract text</span>
+                  <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">swap!</span> parts conj p<span style="color: #8c8c8c;">)</span>  <span style="color: #b22222;">; </span><span style="color: #b22222;">collect body part</span>
+                  [p <span style="color: #008b8b;">:continue</span>]<span style="color: #8c8c8c;">)))</span>]     <span style="color: #b22222;">; </span><span style="color: #b22222;">return part to be delivered to response map and continue processing of response.</span>
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>                   <span style="color: #b22222;">; </span><span style="color: #b22222;">wait for response to finish</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> @parts<span style="color: #8c8c8c;">)))</span>                  <span style="color: #b22222;">; </span><span style="color: #b22222;">print collected body parts</span>
+</pre>
+
 </div>
 
 </div>
@@ -1830,7 +1896,46 @@ org_html_manager.setup();  // activate after the parameters are set
 
 <p>    This callback gets called when receiving of response body has
     finished with only one argument, i.e. response map.
-</p></div>
+</p>
+<p>
+    Following snippet shows how to measure execution time:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://localhost:8123/"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+        finished <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">promise</span><span style="color: #8c8c8c;">)</span>               <span style="color: #b22222;">; </span><span style="color: #b22222;">execution time will be stored here</span>
+        start <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">System/currentTimeMillis</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">start time</span>
+        resp <span style="color: #8c8c8c;">(</span>execute-request
+              *client* request           <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
+              <span style="color: #008b8b;">:completed</span>                 <span style="color: #b22222;">; </span><span style="color: #b22222;">completed callback</span>
+              <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">fn</span> [_]                    <span style="color: #b22222;">; </span><span style="color: #b22222;">ignore response map,</span>
+                <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">deliver</span> finished        <span style="color: #b22222;">; </span><span style="color: #b22222;">deliver execution time</span>
+                         <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">-</span> <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">System/currentTimeMillis</span><span style="color: #8c8c8c;">)</span> start<span style="color: #8c8c8c;">))))</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> @finished<span style="color: #8c8c8c;">)))</span>                <span style="color: #b22222;">; </span><span style="color: #b22222;">print execution time</span>
+</pre>
+
+
+<p>
+    You have to be aware of fact that <b>:completed</b> callback is called
+    only on successful response. Next snippet will show that
+    <b>:completed</b> callback is not called when request errors:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://not-existing-host/"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+        finished <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">promise</span><span style="color: #8c8c8c;">)</span>               <span style="color: #b22222;">; </span><span style="color: #b22222;">would get delivered if :completed callback would get executed</span>
+        resp <span style="color: #8c8c8c;">(</span>execute-request
+              *client* request           <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
+              <span style="color: #008b8b;">:completed</span>                 <span style="color: #b22222;">; </span><span style="color: #b22222;">completed callback, will not fire in this example</span>
+              <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">fn</span> [_]                    <span style="color: #b22222;">; </span><span style="color: #b22222;">ignore response map,</span>
+                <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">deliver</span> finished true<span style="color: #8c8c8c;">)))</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">deliver finished promise</span>
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>                    <span style="color: #b22222;">; </span><span style="color: #b22222;">wait for response</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">false?</span> <span style="color: #8c8c8c;">(</span>realized? finished<span style="color: #8c8c8c;">))))</span>      <span style="color: #b22222;">; </span><span style="color: #b22222;">finished promise never got delivered</span>
+</pre>
+
+</div>
 
 </div>
 
@@ -1847,6 +1952,24 @@ org_html_manager.setup();  // activate after the parameters are set
 </li>
 </ul>
 
+
+<p>
+    Next code snippet shows error callback in use:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://not-existing-host/"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+        errored <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">promise</span><span style="color: #8c8c8c;">)</span>                <span style="color: #b22222;">; </span><span style="color: #b22222;">will store exception</span>
+        resp <span style="color: #8c8c8c;">(</span>execute-request
+              *client* request           <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
+              <span style="color: #008b8b;">:error</span>                     <span style="color: #b22222;">; </span><span style="color: #b22222;">error callback</span>
+              <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">fn</span> [_ e]                  <span style="color: #b22222;">; </span><span style="color: #b22222;">ignore response map, *e* is exception</span>
+                <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">deliver</span> errored e<span style="color: #8c8c8c;">)))</span>]   <span style="color: #b22222;">; </span><span style="color: #b22222;">deliver errored promise</span>
+    <span style="color: #8c8c8c;">(</span>http/await resp<span style="color: #8c8c8c;">)</span>                    <span style="color: #b22222;">; </span><span style="color: #b22222;">wait for response</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> @errored<span style="color: #8c8c8c;">)))</span>                 <span style="color: #b22222;">; </span><span style="color: #b22222;">print exception from callback</span>
+</pre>
+
 </div>
 </div>
 
@@ -1857,7 +1980,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <div class="outline-text-3" id="text-3-3">
 
 <p>   <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-*default-callbacks*"><b>http.async.client.request/*default-callbacks*</b></a> is a map of
-   default callbacks. This fill allow you to easy change only few
+   default callbacks. This will allow you to easy change only few
    callbacks and reuse default for the rest.
 </p>
 <p>
@@ -1886,7 +2009,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-02-29 08:09:32 CET</p>
+<p class="date">Date: 2012-04-27 18:21:19 CEST</p>
 <p class="author">Author: Hubert Iwaniuk</p>
 <p class="creator">Org version 7.8.03 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

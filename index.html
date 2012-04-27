@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="http.async.client - Asynchronous HTTP Client - Clojure"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-02-29 08:09:14 CET"/>
+<meta name="generated" content="2012-04-27 18:06:02 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -132,10 +132,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(defproject your-project "1.0.0-SNAPSHOT"
-  :description "Your project description"
-  :dependencies [[org.clojure/clojure "1.3.0"]
-                 [http.async.client "0.4.3"]])
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>defproject your-project <span style="color: #8b2252;">"1.0.0-SNAPSHOT"</span>
+  <span style="color: #008b8b;">:description</span> <span style="color: #8b2252;">"Your project description"</span>
+  <span style="color: #008b8b;">:dependencies</span> [[org.clojure/clojure <span style="color: #8b2252;">"1.4.0"</span>]
+                 [http.async.client <span style="color: #8b2252;">"0.4.4"</span>]]<span style="color: #8c8c8c;">)</span>
 </pre>
 
 
@@ -144,7 +144,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(ns sample (:require [http.async.client :as c]))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">ns</span> sample <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:require</span> [http.async.client <span style="color: #008b8b;">:as</span> http]<span style="color: #8c8c8c;">))</span>
 </pre>
 
 
@@ -153,10 +153,11 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="example">(with-open [client (c/create-client)]
-  (let [response (c/GET client "http://github.com/neotyk/http.async.client/")]
-    (c/await response)
-    (c/string response)))
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [response <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"http://github.com/neotyk/http.async.client/"</span><span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">-&gt;</span> response
+        http/await
+        http/string<span style="color: #8c8c8c;">)))</span>
 </pre>
 
 
@@ -173,7 +174,7 @@ org_html_manager.setup();  // activate after the parameters are set
   <a href="http://github.com/neotyk/http.async.client"><b>http.async.client</b></a> is based on <a href="http://github.com/AsyncHttpClient/async-http-client">Asynchronous Http Client for Java</a>.
 </p>
 <p>
-  It requires Clojure 1.3, works with 1.4-beta1.
+  It runs with Clojure 1.3, development goes against Clojure 1.4.
 </p>
 <p>
   For more documentation refer to <a href="./docs.html">docs</a> and for API to <a href="http://neotyk.github.com/http.async.client/doc/">doc</a>.
@@ -210,7 +211,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-02-29 08:09:14 CET</p>
+<p class="date">Date: 2012-04-27 18:06:02 CEST</p>
 <p class="author">Author: Hubert Iwaniuk</p>
 <p class="creator">Org version 7.8.03 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

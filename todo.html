@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Asynchronous HTTP Client - Clojure - To Do</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Asynchronous HTTP Client - Clojure - To Do"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-02-05 16:38:00 CET"/>
+<meta name="generated" content="2012-04-27 18:23:44 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -44,6 +44,12 @@ lang="en" xml:lang="en">
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
   textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
@@ -135,7 +141,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-2-5-3">2.5.3 Support InputStream body</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-6">2.6 All HTTP verbs [7/7] </a>
+<li><a href="#sec-2-6">2.6 All HTTP verbs [7/7]</a>
 <ul>
 <li><a href="#sec-2-6-1">2.6.1 GET</a></li>
 <li><a href="#sec-2-6-2">2.6.2 POST</a></li>
@@ -148,46 +154,37 @@ org_html_manager.setup();  // activate after the parameters are set
 </li>
 <li><a href="#sec-2-7">2.7 PUT/POST streaming body</a></li>
 <li><a href="#sec-2-8">2.8 Multipart</a></li>
-<li><a href="#sec-2-9">2.9 Authentication</a>
+<li><a href="#sec-2-9">2.9 Request queuing</a></li>
+<li><a href="#sec-2-10">2.10 Authentication</a>
 <ul>
-<li><a href="#sec-2-9-1">2.9.1 Test Authentication </a></li>
+<li><a href="#sec-2-10-1">2.10.1 Test Authentication</a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-3">3 Configuration [2/2] </a>
+<li><a href="#sec-3">3 Configuration [2/2]</a>
 <ul>
 <li><a href="#sec-3-1">3.1 Global configuration of AHC [4/4]</a>
 <ul>
 <li><a href="#sec-3-1-1">3.1.1 Branding User-agent</a></li>
 <li><a href="#sec-3-1-2">3.1.2 Connection limiting per host.</a></li>
 <li><a href="#sec-3-1-3">3.1.3 Global proxy.</a></li>
-<li><a href="#sec-3-1-4">3.1.4 Timeout settings</a>
-<ul>
-<li><a href="#sec-3-1-4-1">3.1.4.1 Request timeout</a></li>
-<li><a href="#sec-3-1-4-2">3.1.4.2 Connection timeout</a></li>
-<li><a href="#sec-3-1-4-3">3.1.4.3 Idle connection timeout</a></li>
-</ul></li>
+<li><a href="#sec-3-1-4">3.1.4 Timeout settings</a></li>
 </ul>
 </li>
 <li><a href="#sec-3-2">3.2 Per request configuration [2/2]</a>
 <ul>
 <li><a href="#sec-3-2-1">3.2.1 Proxy configuration</a></li>
-<li><a href="#sec-3-2-2">3.2.2 Timeout</a>
-<ul>
-<li><a href="#sec-3-2-2-1">3.2.2.1 Request timeout</a></li>
-<li><a href="#sec-3-2-2-2">3.2.2.2 Connection timeout</a></li>
-<li><a href="#sec-3-2-2-3">3.2.2.3 Idle connection timeout</a></li>
-</ul></li>
+<li><a href="#sec-3-2-2">3.2.2 Timeout</a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-4">4 Tasks [12/12] </a>
+<li><a href="#sec-4">4 Tasks [12/12]</a>
 <ul>
 <li><a href="#sec-4-1">4.1 License</a></li>
 <li><a href="#sec-4-2">4.2 Cleanup namespaces</a>
 <ul>
-<li><a href="#sec-4-2-1">4.2.1 async.http.client </a></li>
-<li><a href="#sec-4-2-2">4.2.2 async.http.client.request </a></li>
+<li><a href="#sec-4-2-1">4.2.1 async.http.client</a></li>
+<li><a href="#sec-4-2-2">4.2.2 async.http.client.request</a></li>
 </ul>
 </li>
 <li><a href="#sec-4-3">4.3 Release 0.1.0</a></li>
@@ -197,18 +194,14 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-4-5-1">4.5.1 Create a changelog</a></li>
 </ul>
 </li>
-<li><a href="#sec-4-6">4.6 Release 0.2.1 </a></li>
+<li><a href="#sec-4-6">4.6 Release 0.2.1</a></li>
 <li><a href="#sec-4-7">4.7 Make tests stand-alone</a></li>
 <li><a href="#sec-4-8">4.8 Simplify request preparation</a></li>
 <li><a href="#sec-4-9">4.9 Use last argument as key worded map</a></li>
 <li><a href="#sec-4-10">4.10 Review documentation</a></li>
 <li><a href="#sec-4-11">4.11 Refactoring [1/1]</a>
 <ul>
-<li><a href="#sec-4-11-1">4.11.1 Refactor <b>execute-request</b> [2/2] </a>
-<ul>
-<li><a href="#sec-4-11-1-1">4.11.1.1 Build checkable promise </a></li>
-<li><a href="#sec-4-11-1-2">4.11.1.2 Unify <b>execute-request</b> and <b>consume-stream</b> interfaces </a></li>
-</ul></li>
+<li><a href="#sec-4-11-1">4.11.1 Refactor <b>execute-request</b> [2/2]</a></li>
 </ul>
 </li>
 <li><a href="#sec-4-12">4.12 Rename to <b>http.async.client</b></a></li>
@@ -356,7 +349,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-6" class="outline-3">
-<h3 id="sec-2-6"><span class="section-number-3">2.6</span> <span class="done DONE"> DONE</span> All HTTP verbs [7/7] </h3>
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> <span class="done DONE"> DONE</span> All HTTP verbs [7/7]</h3>
 <div class="outline-text-3" id="text-2-6">
 
 
@@ -440,15 +433,23 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-9" class="outline-3">
-<h3 id="sec-2-9"><span class="section-number-3">2.9</span> <span class="done DONE"> DONE</span> Authentication &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<h3 id="sec-2-9"><span class="section-number-3">2.9</span> <span class="todo TODO"> TODO</span> Request queuing</h3>
 <div class="outline-text-3" id="text-2-9">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-10" class="outline-3">
+<h3 id="sec-2-10"><span class="section-number-3">2.10</span> <span class="done DONE"> DONE</span> Authentication &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div class="outline-text-3" id="text-2-10">
 
 
 </div>
 
-<div id="outline-container-2-9-1" class="outline-4">
-<h4 id="sec-2-9-1"><span class="section-number-4">2.9.1</span> <span class="done DONE"> DONE</span> Test Authentication </h4>
-<div class="outline-text-4" id="text-2-9-1">
+<div id="outline-container-2-10-1" class="outline-4">
+<h4 id="sec-2-10-1"><span class="section-number-4">2.10.1</span> <span class="done DONE"> DONE</span> Test Authentication</h4>
+<div class="outline-text-4" id="text-2-10-1">
 
 </div>
 </div>
@@ -457,7 +458,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Configuration [2/2] </h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> Configuration [2/2]</h2>
 <div class="outline-text-2" id="text-3">
 
 
@@ -577,7 +578,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Tasks [12/12] </h2>
+<h2 id="sec-4"><span class="section-number-2">4</span> Tasks [12/12]</h2>
 <div class="outline-text-2" id="text-4">
 
 
@@ -599,7 +600,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-4-2-1" class="outline-4">
-<h4 id="sec-4-2-1"><span class="section-number-4">4.2.1</span> async.http.client </h4>
+<h4 id="sec-4-2-1"><span class="section-number-4">4.2.1</span> async.http.client</h4>
 <div class="outline-text-4" id="text-4-2-1">
 
 <p>    Should contain helper functions to call all HTTP verbs.
@@ -609,7 +610,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-4-2-2" class="outline-4">
-<h4 id="sec-4-2-2"><span class="section-number-4">4.2.2</span> async.http.client.request </h4>
+<h4 id="sec-4-2-2"><span class="section-number-4">4.2.2</span> async.http.client.request</h4>
 <div class="outline-text-4" id="text-4-2-2">
 
 <p>    Lower level of requesting:
@@ -668,7 +669,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-4-6" class="outline-3">
-<h3 id="sec-4-6"><span class="section-number-3">4.6</span> <span class="done DONE"> DONE</span> Release 0.2.1 </h3>
+<h3 id="sec-4-6"><span class="section-number-3">4.6</span> <span class="done DONE"> DONE</span> Release 0.2.1</h3>
 <div class="outline-text-3" id="text-4-6">
 
 <p>   Release bumps version of async-http-client to v1.3.2.
@@ -721,14 +722,14 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-4-11-1" class="outline-4">
-<h4 id="sec-4-11-1"><span class="section-number-4">4.11.1</span> <span class="done DONE"> DONE</span> Refactor <b>execute-request</b> [2/2] </h4>
+<h4 id="sec-4-11-1"><span class="section-number-4">4.11.1</span> <span class="done DONE"> DONE</span> Refactor <b>execute-request</b> [2/2]</h4>
 <div class="outline-text-4" id="text-4-11-1">
 
 
 </div>
 
 <div id="outline-container-4-11-1-1" class="outline-5">
-<h5 id="sec-4-11-1-1"><span class="section-number-5">4.11.1.1</span> <span class="done DONE"> DONE</span> Build checkable promise </h5>
+<h5 id="sec-4-11-1-1"><span class="section-number-5">4.11.1.1</span> <span class="done DONE"> DONE</span> Build checkable promise</h5>
 <div class="outline-text-5" id="text-4-11-1-1">
 
 <p>     To check if promise was delivered use <b>delivered?</b>
@@ -737,7 +738,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-4-11-1-2" class="outline-5">
-<h5 id="sec-4-11-1-2"><span class="section-number-5">4.11.1.2</span> <span class="done DONE"> DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces </h5>
+<h5 id="sec-4-11-1-2"><span class="section-number-5">4.11.1.2</span> <span class="done DONE"> DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces</h5>
 <div class="outline-text-5" id="text-4-11-1-2">
 
 <ul>
@@ -782,9 +783,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-02-05 16:38:00 CET</p>
+<p class="date">Date: 2012-04-27 18:23:44 CEST</p>
 <p class="author">Author: Hubert Iwaniuk</p>
-<p class="creator">Org version 7.7 with Emacs version 24</p>
+<p class="creator">Org version 7.8.03 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 
 </div>
