@@ -11,4 +11,4 @@ pom.xml
 target/
 /.lein-failures
 .lein-deps-sum
-
+.lein-plugins
