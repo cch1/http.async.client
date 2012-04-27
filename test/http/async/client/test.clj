@@ -216,6 +216,66 @@
          :minor 1)
     (is (= (:test-header headers) "test-value"))))
 
+(deftest test-body-part-callback
+  (testing "callecting body callback"
+    (let [parts (atom #{})
+          resp (execute-request *client*
+                                (prepare-request :get "http://localhost:8123/stream")
+                                :part (fn [response ^ByteArrayOutputStream part]
+                                        (let [p (.toString part ^String *default-encoding*)]
+                                          (swap! parts conj p)
+                                          [p :continue])))]
+      (await resp)
+      (is (contains? @parts "part1"))
+      (is (contains? @parts "part2"))
+      (is (= 2 (count @parts)))))
+  (testing "counting body parts callback"
+    (let [cnt (atom 0)
+          resp (execute-request *client*
+                                (prepare-request :get "http://localhost:8123/stream")
+                                :part (fn [_ ^ByteArrayOutputStream p]
+                                        (swap! cnt inc)
+                                        [p :continue]))]
+      (await resp)
+      (is (= 2 @cnt)))))
+
+(deftest test-body-completed-callback
+  (testing "successful response"
+    (let [finished (promise)
+          resp (execute-request *client*
+                                (prepare-request :get "http://localhost:8123/")
+                                :completed (fn [response]
+                                             (deliver finished true)))]
+      (await resp)
+      (is (true? (realized? finished)))
+      (is (true? @finished))))
+  (testing "execution time"
+    (let [finished (promise)
+          req (prepare-request :get "http://localhost:8123/")
+          start (System/currentTimeMillis)
+          resp (execute-request *client* req
+                                :completed (fn [_]
+                                             (deliver finished
+                                                      (- (System/currentTimeMillis) start))))]
+      (is (pos? @finished))))
+  (testing "failed response"
+    (let [finished (promise)
+          resp (execute-request *client*
+                                (prepare-request :get "http://not-existing-host/")
+                                :completed (fn [response]
+                                             (deliver finished true)))]
+      (await resp)
+      (is (false? (realized? finished))))))
+
+(deftest test-error-callback
+  (let [errored (promise)
+        resp (execute-request *client* (prepare-request :get "http://not-existing-host/")
+                              :error (fn [_ e]
+                                       (deliver errored e)))]
+    (await resp)
+    (is (true? (realized? errored)))
+    (is (true? (instance? java.net.ConnectException @errored)))))
+
 (deftest test-send-headers
   (let [resp (GET *client* "http://localhost:8123/" :headers {:a 1 :b 2})
         headers (headers resp)]
