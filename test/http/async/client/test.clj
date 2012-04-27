@@ -251,7 +251,7 @@
       (is (true? @finished))))
   (testing "execution time"
     (let [finished (promise)
-          req (prepare-request :get "http://localhost:8123/")
+          req (prepare-request :get "http://localhost:8123/body")
           start (System/currentTimeMillis)
           resp (execute-request *client* req
                                 :completed (fn [_]
