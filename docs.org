@@ -757,7 +757,7 @@
   execute requests.
 ** Preparing request
    [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]] is responsible for
-   request preparation, like name suggests.
+   request preparation, like the name suggests.
    It takes following arguments:
   - HTTP Method like *:get* *:head*
   - *url* that you want to call
@@ -776,7 +776,7 @@
    as [[*Asynchronous%20operations][Asynchronous operations]].
    Its arguments are: request to be executed (result of [[*Preparing%20request][Preparing
    request]]) and *options* as keyworded map consisting of call-backs.
-   Following *options* are recognized:
+   Following *options* keys are recognized:
    - *:status* :: [[*Status%20line][Status line]]
    - *:headers* :: [[*Headers][Headers]]
    - *:part* :: [[*Body%20part][Body part]]
@@ -800,6 +800,21 @@
       - *:protocol* protocol with version ("HTTP/1.1")
       - *:major* major protocol version (1)
       - *:minor* minor protocol version (0, 1)
+
+    Sample code to illustrate how to use status callback:
+    #+begin_src clojure
+      (with-open [client (http/create-client)] ; create client
+        (let [request (request/prepare-request client :get "http://example.com") ; create request
+              status (promise)                ; status promise that will be delivered by callback
+              response (request/execute-request
+                        client request        ; execute *request*
+                        :status               ; status callback
+                        (fn [res st]          ; *res* is response map, same as one returned by *execute-request*
+                                              ; *st* is status map, as described above
+                          (deliver status st) ; deliver status promise
+                          [st :abort]))]      ; return status to be delivered to response map and abort further processing of response.
+          (println @status)))                 ; await status to be delivered and print it.
+    #+end_src
 *** Headers
     Headers callback gets called after headers have been received
     with arguments:
@@ -807,19 +822,113 @@
     - lazy map of headers. Keys in that map are *(keyword
       (.toLowerCase <header name>))*, so "Server" headers is
       *:server* and so on.
+
+    Sample code to illustrate how to use headers callback:
+    #+begin_src clojure
+      (with-open [client (http/create-client)] ; create client
+        (let [request (request/prepare-request client :get "http://example.com") ; create request
+              headers (promise)               ; headers promise that will be delivered by callback
+              response (request/execute-request
+                        client request        ; execute *request*
+                        :header               ; header callback
+                        (fn [res hds]         ; *res* is response map, same as one returned by *execute-request*
+                                              ; *hds* is headers map, as described above
+                          (deliver headers st) ; deliver headers promise
+                          [hds :abort]))]     ; return headers to be delivered to response map and abort further processing of response.
+          (println @headers)))
+    #+end_src
 *** Body part
     Body part callback gets called after each part of body has been
     received with arguments:
     - response map
     - ByteArrayOutputStream that contains body part received.
+
+    Following code sample will show how to count number of body parts
+    received:
+    #+begin_src clojure
+      (with-open [client (http/create-client)] ; create client
+        (let [cnt (atom 0)                    ; body parts counter
+              request (request/prepare-request :get "http://localhost:8123/stream") ; create request
+              resp (execute-request
+                    *client* request          ; execute *request*
+                    :part                     ; body part callback
+                    (fn [_ p]                 ; ignore response map,
+                                              ; *p* is body part
+                      (swap! cnt inc)         ; increment body part counter
+                      [p :continue]))]        ; return part to be delivered to response map and continue processing of response.
+          (http/await resp)                   ; wait for response to finish
+          (println @cnt)))                    ; print body parts counter
+    #+end_src
+
+    Next sample will collect body parts:
+    #+begin_src clojure
+      (with-open [client (http/create-client)] ; create client
+        (let [parts (atom #{})                ; body parts collector
+              request (request/prepare-request :get "http://localhost:8123/stream") ; create request
+              resp (execute-request
+                    *client* request          ; execute *request*
+                    :part                     ; body part callback
+                    (fn [_ ^ByteArrayOutputStream p] ; ignore response map,
+                                              ; *p* is body part
+                      (let [p (.toString part "UTF-8")] ; extract text
+                        (swap! parts conj p)  ; collect body part
+                        [p :continue])))]     ; return part to be delivered to response map and continue processing of response.
+          (http/await resp)                   ; wait for response to finish
+          (println @parts)))                  ; print collected body parts
+    #+end_src
 *** Body completed
     This callback gets called when receiving of response body has
     finished with only one argument, i.e. response map.
+
+    Following snippet shows how to measure execution time:
+    #+begin_src clojure
+      (with-open [client (http/create-client)] ; create client
+        (let [request (request/prepare-request :get "http://localhost:8123/") ; create request
+              finished (promise)               ; execution time will be stored here
+              start (System/currentTimeMillis) ; start time
+              resp (execute-request
+                    *client* request           ; execute *request*
+                    :completed                 ; completed callback
+                    (fn [_]                    ; ignore response map,
+                      (deliver finished        ; deliver execution time
+                               (- (System/currentTimeMillis) start))))]
+          (println @finished)))                ; print execution time
+    #+end_src
+
+    You have to be aware of fact that *:completed* callback is called
+    only on successful response. Next snippet will show that
+    *:completed* callback is not called when request errors:
+    #+begin_src clojure
+      (with-open [client (http/create-client)] ; create client
+        (let [request (request/prepare-request :get "http://not-existing-host/") ; create request
+              finished (promise)               ; would get delivered if :completed callback would get executed
+              resp (execute-request
+                    *client* request           ; execute *request*
+                    :completed                 ; completed callback, will not fire in this example
+                    (fn [_]                    ; ignore response map,
+                      (deliver finished true)))] ; deliver finished promise
+          (http/await resp)                    ; wait for response
+          (false? (realized? finished))))      ; finished promise never got delivered
+    #+end_src
 *** Error
     Error callback gets called when error while processing has been
     encountered with arguments
     - response map
     - *Throwable* that was a cause of failure
+
+    Next code snippet shows error callback in use:
+    #+begin_src clojure
+      (with-open [client (http/create-client)] ; create client
+        (let [request (request/prepare-request :get "http://not-existing-host/") ; create request
+              errored (promise)                ; will store exception
+              resp (execute-request
+                    *client* request           ; execute *request*
+                    :error                     ; error callback
+                    (fn [_ e]                  ; ignore response map, *e* is exception
+                      (deliver errored e)))]   ; deliver errored promise
+          (http/await resp)                    ; wait for response
+          (println @errored)))                 ; print exception from callback
+    #+end_src
 ** Default callbacks
    [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-*default-callbacks*][*http.async.client.request/*default-callbacks**]] is a map of
    default callbacks. This will allow you to easy change only few
