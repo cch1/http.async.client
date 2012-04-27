@@ -5,7 +5,7 @@
   :source-path      "src/clj"
   :java-source-path "src/jvm"
   :javac-options {:deprecation "true"}
-  :dependencies     [[org.clojure/clojure "1.3.0"]
+  :dependencies     [[org.clojure/clojure "1.4.0"]
 		     [com.ning/async-http-client "1.7.4"]]
   :plugins [[codox "0.6.1"]]
   :dev-dependencies [[org.eclipse.jetty/jetty-server "7.1.4.v20100610"]

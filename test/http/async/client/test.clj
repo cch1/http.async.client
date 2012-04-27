@@ -562,7 +562,7 @@
                                       :max-conns-total 1)]
     (let [url "http://localhost:8123/timeout"
           r1 (GET client url)]
-      (is (thrown-with-msg? RuntimeException #"Too many connections 1" (GET client url)))
+      (is (thrown-with-msg? IOException #"Too many connections 1" (GET client url)))
       (is (not (failed? (await r1)))))))
 
 
@@ -694,7 +694,7 @@
   (let [client (create-client)
         _ (await (GET client "http://localhost:8123/"))]
     (close client)
-    (is (thrown-with-msg? RuntimeException #"Closed" (GET client "http://localhost:8123/")))))
+    (is (thrown-with-msg? IOException #"Closed" (GET client "http://localhost:8123/")))))
 
 (deftest extract-empty-body
   (let [resp (GET *client* "http://localhost:8123/empty")]
