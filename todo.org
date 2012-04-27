@@ -36,6 +36,7 @@
    AHC, or alternatively will *clojure.core/send-off* to execute
    IO operation in separate thread.
 ** TODO Multipart                                                      :rel4:
+** TODO Request queuing
 ** DONE Authentication                                                 :rel3:
 *** DONE Test Authentication
 * Configuration [2/2]
