@@ -60,7 +60,7 @@
       (when (nil? realm) (throw (IllegalArgumentException.
                                  "For DIGEST authentication realm is required")))
       (.setRealmName rbld realm))
-    (when (not (nil? preemptive))
+    (when-not (nil? preemptive)
       (.setUsePreemptiveAuth rbld preemptive))
     (doto rbld
       (.setPrincipal user)

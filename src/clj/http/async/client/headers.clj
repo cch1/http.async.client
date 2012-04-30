@@ -25,7 +25,7 @@
   (let [vals (.get h (kn k))]
     (if (= 1 (count vals))
       (first vals)
-      (into [] vals))))
+      (vec vals))))
 
 ;; Convertion of AHC Headers to lazy map.
 (defn convert-headers-to-map

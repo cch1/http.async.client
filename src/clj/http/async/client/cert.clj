@@ -49,7 +49,7 @@
   (let [thr (Thread/currentThread)
         loader (.getContextClassLoader thr)
         resource (.getResource loader resource)]
-    (FileInputStream. (File. (. resource toURI)))))
+    (FileInputStream. (File. (.toURI resource)))))
 
 (defn #^InputStream resource-stream
   "Loads the resource at the specified path, and returns it as an
@@ -58,7 +58,7 @@
    within the jar at the specified path."
   [#^String path]
   (try
-    (if (. (io/file path) exists)
+    (if (.exists (io/file path))
       (FileInputStream. path)
       (load-embedded-resource path))
     (catch Exception _ (throw (new FileNotFoundException
@@ -73,8 +73,8 @@
   [#^String path]
   (let [cert-file-instream (resource-stream path)
         cert-factory (CertificateFactory/getInstance "X.509")
-        cert (. cert-factory generateCertificate cert-file-instream)]
-    (. cert-file-instream close)
+        cert (.generateCertificate cert-factory cert-file-instream)]
+    (.close cert-file-instream)
     (cast X509Certificate cert)))
 
 (defn #^KeyStore load-keystore
@@ -86,16 +86,16 @@
   (let [ks (KeyStore/getInstance (KeyStore/getDefaultType))]
     (if keystore-stream
       (if password
-        (. ks load keystore-stream (.toCharArray password))
-        (. ks load keystore-stream nil))
-      (. ks load nil nil))
+        (.load ks keystore-stream (.toCharArray password))
+        (.load ks keystore-stream nil))
+      (.load ks nil nil))
     ks))
 
 (defn #^KeyStore add-x509-cert
   "Adds the x509 certificate to the specified keystore. Param cert-alias
    is a name for this cert. Returns KeyStore with the certificate loaded."
   [#^KeyStore keystore #^String cert-alias #^String certificate]
-  (. keystore setCertificateEntry cert-alias certificate)
+  (.setCertificateEntry keystore cert-alias certificate)
   keystore)
 
 (defn #^KeyManagerFactory key-manager-factory
@@ -103,8 +103,8 @@
   [#^KeyStore keystore #^String password]
   (let [kmf (KeyManagerFactory/getInstance "SunX509")]
     (if password
-      (. kmf init keystore (. password toCharArray))
-      (. kmf init keystore nil))
+      (.init kmf keystore (.toCharArray password))
+      (.init kmf keystore nil))
     kmf))
 
 (defn #^SSLContext ssl-context
@@ -146,11 +146,11 @@
                             (load-x509-cert certificate-file))
         key-mgr-factory (key-manager-factory keystore-with-cert keystore-password)
         ctx (SSLContext/getInstance "TLS")
-        key-managers (. key-mgr-factory getKeyManagers)
+        key-managers (.getKeyManagers key-mgr-factory)
         trust-managers (into-array javax.net.ssl.X509TrustManager
                                    (or trust-managers
                                        (list (new BlindTrustManager))))]
-    (. ctx init key-managers trust-managers (new SecureRandom))
+    (.init ctx key-managers trust-managers (new SecureRandom))
     ctx))
 
 
