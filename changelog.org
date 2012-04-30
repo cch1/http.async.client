@@ -3,6 +3,8 @@
 #+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.4.5
+** Listen to what kibit has to say
 * Release 0.4.4
 ** Simplified callbacks API
    Issue [[https://github.com/neotyk/http.async.client/issues/32][#32]].
