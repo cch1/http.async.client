@@ -256,7 +256,7 @@
 (defn error
   "Returns Throwable if request processing failed."
   [resp]
-  (if (failed? resp)
+  (when (failed? resp)
     @(:error resp)))
 
 (defn cancelled?
