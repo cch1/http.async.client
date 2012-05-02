@@ -15,7 +15,7 @@
 (ns http.async.client.request
   "Asynchronous HTTP Client - Clojure - Requesting API"
   {:author "Hubert Iwaniuk"}
-  (:use [http.async.client status headers util]
+  (:use [http.async.client status headers util part]
         [clojure.stacktrace]
         [clojure.string :only [join]])
   (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
@@ -170,7 +170,12 @@
                                                body)
                                              "UTF-8"))
      (instance? InputStream body) (.setBody rbw body)
-     (instance? File body) (.setBody rbw body))
+     (instance? File body) (.setBody rbw body)
+     (vector? body) (let [#^RequestBuilder rb (.getRequestBuilder rbw)]
+                      (doseq [part body]
+                        ;; each part should be map with all details
+                        ;; needed to create body part
+                        (.addBodyPart rb (create-part part)))))
     (when auth
       (set-realm auth rbw))
     (when proxy

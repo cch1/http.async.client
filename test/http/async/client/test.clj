@@ -13,7 +13,7 @@
 ; limitations under the License.
 
 (ns http.async.client.test
-  "Testing of http.async"
+  "Testing of http.async.client"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [await])
   (:use clojure.test
@@ -67,6 +67,8 @@
              "/body" (.write (.getWriter hResp) "Remember to checkout #clojure@freenode")
              "/body-str" (when-let [line (.readLine (.getReader hReq))]
                            (.write (.getWriter hResp) line))
+             "/body-multi" (let [#^String body (slurp (.getReader hReq))]
+                             (.write (.getWriter hResp) body))
              "/put" (.setHeader hResp "Method" (.getMethod hReq))
              "/post" (do
                        (.setHeader hResp "Method" (.getMethod hReq))
@@ -369,6 +371,16 @@
   (let [resp (POST *client* "http://localhost:8123/body-str" :body (File. "test-resources/test.txt"))]
     (is (false? (empty? (headers resp))))
     (is (= "TestContent" (string resp)))))
+
+(deftest test-post-multipart
+  (let [resp (POST *client* "http://localhost:8123/body-multi" :body [{:type  :string
+                                                                       :name  "test-name"
+                                                                       :value "test-value"}])]
+    (is (false? (empty? (headers resp))))
+    (let [#^String s (string resp)]
+      (is (true? (.startsWith s "--")))
+      (are [v] #(.contains s %)
+           "test-name" "test-value"))))
 
 (deftest test-put
   (let [resp (PUT *client* "http://localhost:8123/put" :body "TestContent")
