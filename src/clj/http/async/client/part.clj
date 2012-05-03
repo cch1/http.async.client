@@ -15,7 +15,7 @@
 (ns http.async.client.part
   "Asynchronous HTTP Client - Clojure - Multipart API"
   {:author "Hubert Iwaniuk"}
-  (:import (com.ning.http.client StringPart)))
+  (:import (com.ning.http.client StringPart FilePart)))
 
 (defn create-string-part
   "Create string multipart part"
@@ -24,8 +24,14 @@
     (StringPart. name value charset)
     (StringPart. name value)))
 
+(defn create-file-part
+  "Create file multipart part"
+  [{:keys [name file mime-type charset]}]
+  (FilePart. name file mime-type charset))
+
 (defn create-part
   "Create multipart part according to spec"
   [{type :type :as opts}]
   (case type
-    :string (create-string-part opts)))
+    :string (create-string-part opts)
+    :file   (create-file-part opts)))

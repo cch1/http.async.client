@@ -354,7 +354,8 @@
     (is (= "Encode+this+%26+string%3F" (string resp)))))
 
 (deftest test-post-map-body
-  (let [resp (POST *client* "http://localhost:8123/" :body {:u "user" :p "s3cr3t"})
+  (let [resp (POST *client* "http://localhost:8123/"
+                   :body {:u "user" :p "s3cr3t"})
         headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= x (y headers))
@@ -362,25 +363,41 @@
          "s3cr3t" :p)))
 
 (deftest test-post-input-stream-body
-  (let [resp (POST *client* "http://localhost:8123/body-str" :body (input-stream (.getBytes "TestContent" "UTF-8")))
+  (let [resp (POST *client* "http://localhost:8123/body-str"
+                   :body (input-stream (.getBytes "TestContent" "UTF-8")))
         headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-post-file-body
-  (let [resp (POST *client* "http://localhost:8123/body-str" :body (File. "test-resources/test.txt"))]
+  (let [resp (POST *client* "http://localhost:8123/body-str"
+                   :body (File. "test-resources/test.txt"))]
     (is (false? (empty? (headers resp))))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-post-multipart
-  (let [resp (POST *client* "http://localhost:8123/body-multi" :body [{:type  :string
-                                                                       :name  "test-name"
-                                                                       :value "test-value"}])]
-    (is (false? (empty? (headers resp))))
-    (let [#^String s (string resp)]
-      (is (true? (.startsWith s "--")))
-      (are [v] #(.contains s %)
-           "test-name" "test-value"))))
+  (testing "String multipart part"
+    (let [resp (POST *client* "http://localhost:8123/body-multi"
+                     :body [{:type  :string
+                             :name  "test-name"
+                             :value "test-value"}])]
+      (is (false? (empty? (headers resp))))
+      (let [#^String s (string resp)]
+        (is (true? (.startsWith s "--")))
+        (are [v] #(.contains s %)
+             "test-name" "test-value"))))
+  (testing "File multipart part"
+    (let [resp (POST *client* "http://localhost:8123/body-multi"
+                     :body [{:type      :file
+                             :name      "test-name"
+                             :file      (File. "test-resources/test.txt")
+                             :mime-type "text/plain"
+                             :charset   "UTF-8"}])]
+      (is (false? (empty? (headers resp))))
+      (let [#^String s (string resp)]
+        (is (true? (.startsWith s "--")))
+        (are [v] #(.contains s %)
+             "test-name" "TestContent")))))
 
 (deftest test-put
   (let [resp (PUT *client* "http://localhost:8123/put" :body "TestContent")

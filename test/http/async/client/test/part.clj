@@ -17,7 +17,9 @@
   {:author "Hubert Iwaniuk"}
   (:use clojure.test
         http.async.client.part)
-  (:import (com.ning.http.client StringPart)))
+  (:import (com.ning.http.client StringPart
+                                 FilePart)
+           (java.io File)))
 
 (set! *warn-on-reflection* true)
 
@@ -30,12 +32,25 @@
            "test-value" (.getValue #^StringPart p)
            "UTF-8" (.getCharset #^StringPart p))))
   (testing "With encoding"
-    (let [p (create-part {:type :string
-                          :name "test-name"
-                          :value "test-value"
+    (let [p (create-part {:type    :string
+                          :name    "test-name"
+                          :value   "test-value"
                           :charset "test-encoding"})]
       (is (instance? StringPart p))
       (are [expected tested] (= expected tested)
            "test-name" (.getName #^StringPart p)
            "test-value" (.getValue #^StringPart p)
            "test-encoding" (.getCharset #^StringPart p)))))
+
+(deftest file-part
+  (let [p (create-part {:type      :file
+                        :name      "test-name"
+                        :file      (File. "test-resources/test.txt")
+                        :mime-type "text/plain"
+                        :charset   "UTF-8"})]
+    (is (instance? FilePart p))
+    (are [expected tested] (= expected tested)
+         "test-name" (.getName #^FilePart p)
+         (File. "test-resources/test.txt") (.getFile #^FilePart p)
+         "text/plain" (.getMimeType #^FilePart p)
+         "UTF-8" (.getCharSet #^FilePart p))))
