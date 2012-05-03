@@ -397,7 +397,43 @@
       (let [#^String s (string resp)]
         (is (true? (.startsWith s "--")))
         (are [v] #(.contains s %)
-             "test-name" "TestContent")))))
+             "test-name" "TestContent"))))
+  (testing "Byte array multipart part"
+    (let [resp (POST *client* "http://localhost:8123/body-multi"
+                     :body [{:type      :bytearray
+                             :name      "test-name"
+                             :file-name "test-file-name"
+                             :data       (.getBytes "test-content" "UTF-8")
+                             :mime-type  "text/plain"
+                             :charset    "UTF-8"}])]
+      (is (false? (empty? (headers resp))))
+      (let [#^String s (string resp)]
+        (is (true? (.startsWith s "--")))
+        (are [v] #(.contains s %)
+             "test-name" "test-file-name" "test-content"))))
+  (testing "Multiple multipart parts"
+    (let [resp (POST *client* "http://localhost:8123/body-multi"
+                     :body [{:type  :string
+                             :name  "test-str-name"
+                             :value "test-str-value"}
+                            {:type      :file
+                             :name      "test-file-name"
+                             :file      (File. "test-resources/test.txt")
+                             :mime-type "text/plain"
+                             :charset   "UTF-8"}
+                            {:type      :bytearray
+                             :name      "test-ba-name"
+                             :file-name "test-ba-file-name"
+                             :data       (.getBytes "test-ba-content" "UTF-8")
+                             :mime-type  "text/plain"
+                             :charset    "UTF-8"}])]
+      (is (false? (empty? (headers resp))))
+      (let [#^String s (string resp)]
+        (is (true? (.startsWith s "--")))
+        (are [v] #(.contains s %)
+             "test-str-name" "test-str-value"
+             "test-file-name" "TestContent"
+             "test-ba-name" "test-ba-file-name" "test-ba-content")))))
 
 (deftest test-put
   (let [resp (PUT *client* "http://localhost:8123/put" :body "TestContent")

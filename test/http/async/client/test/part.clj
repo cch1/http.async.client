@@ -17,8 +17,9 @@
   {:author "Hubert Iwaniuk"}
   (:use clojure.test
         http.async.client.part)
-  (:import (com.ning.http.client StringPart
-                                 FilePart)
+  (:import (com.ning.http.client ByteArrayPart
+                                 FilePart
+                                 StringPart)
            (java.io File)))
 
 (set! *warn-on-reflection* true)
@@ -54,3 +55,18 @@
          (File. "test-resources/test.txt") (.getFile #^FilePart p)
          "text/plain" (.getMimeType #^FilePart p)
          "UTF-8" (.getCharSet #^FilePart p))))
+
+(deftest bytearray-part
+  (let [p (create-part {:type      :bytearray
+                        :name      "test-name"
+                        :file-name "test-file-name"
+                        :data       (.getBytes "test-content" "UTF-8")
+                        :mime-type  "text/plain"
+                        :charset    "UTF-8"})]
+    (is (instance? ByteArrayPart p))
+    (are [expected tested] (= expected tested)
+         "test-name" (.getName #^ByteArrayPart p)
+         "test-file-name" (.getFileName #^ByteArrayPart p)
+         "test-content" (String. (.getData #^ByteArrayPart p))
+         "text/plain" (.getMimeType #^ByteArrayPart p)
+         "UTF-8" (.getCharSet #^ByteArrayPart p))))
