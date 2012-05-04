@@ -183,13 +183,117 @@
            ))
      #+END_SRC
 **** Submitting form parameters
-     Submitting parameters via body map:
+     Submitting form parameters is done via body map:
      #+BEGIN_SRC clojure
        (with-open [client (http/create-client)] ; Create client
          (let [resp (http/POST client "<your url>" :body {:u "user" :p "s3cr3t"})]
            ;; do something with resp
            ))
      #+END_SRC
+**** Submitting multipart messages
+     To send multipart messages in body use vector of maps.
+     Each map describes one multipart part.
+
+     Every map has to have *:type* key.
+
+     Following values for *:type* are recognized:
+     - :string ::
+       Will send named string value in multipart part.
+       Map spec:
+       - :name :: *required*, name of field sent in multipart part,
+       - :value :: *required*, value of field sent in multipart part,
+       - :charset :: *optional*, default *UTF-8*, charset used to encode
+                     value of field set in multipart part.
+
+       Example of string part in use:
+       #+begin_src clojure
+         (with-open [client (http/create-client)] ; Create client
+           (let [resp (http/POST client "<your url>"
+                                 :body [{:type    :string
+                                         :name    "field-name"
+                                         :value   "field-value"
+                                         :charset "UTF-8" ; this is optional,
+                                                 ; and contains default value
+                                         }])]
+             ;; do something with resp
+             ))
+       #+end_src
+     - :file ::
+       Will send named file in multipart part.
+       Map spec:
+       - :name :: *required*, name of field sent in multipart part,
+       - :file :: *required*, java.io.File, whose contents will be
+                  sent as field value,
+       - :mime-type :: *required*, mime-type of /Content-Type/ of this
+                       multipart part.
+       - :charset :: *required*, charset of /Content-Type/ of this
+                     multipart part.
+
+       Example of file part in use:
+       #+begin_src clojure
+         (with-open [client (http/create-client)] ; Create client
+           (let [resp (http/POST client "<your url>"
+                                 :body [{:type      :file
+                                         :name      "field-name"
+                                         :file      (File. "file/to/send.txt")
+                                         :mime-type "text/plain"
+                                         :charset   "UTF-8"}])]
+             ;; do something with resp
+             ))
+       #+end_src
+     - :bytearray ::
+       Will send named byte array part.
+
+       Map spec:
+       - :name :: *required*, name of field sent in multipart part,
+       - file-name :: *required*, filename of /Content-Disposition/,
+       - data :: *required*, byte array containing data to sent as
+                 field value,
+       - :mime-type :: *required*, mime-type of /Content-Type/ of this
+                       multipart part.
+       - :charset :: *required*, charset of /Content-Type/ of this
+                     multipart part.
+
+       Example of *:bytearray* in use:
+       #+begin_src clojure
+         (with-open [client (http/create-client)] ; Create client
+           (let [resp (http/POST client "<your url>"
+                                 :body [{:type      :bytearray
+                                         :name      "field-name"
+                                         :file-name "file-name.txt"
+                                         :data       (.getBytes "contents" "UTF-8")
+                                         :mime-type  "text/plain"
+                                         :charset    "UTF-8"}])]
+             ;; do something with resp
+             ))
+       #+end_src
+
+     To send request with multiple multiparts *:body* vector needs to
+     contain multiple maps:
+     #+begin_src clojure
+       (with-open [client (http/create-client)] ; Create client
+         (let [resp (http/POST client "<your url>"
+                               :body [{:type    :string
+                                       :name    "field1-name"
+                                       :value   "field-value"
+                                       :charset "UTF-8" ; this is optional,
+                                               ; and contains default value
+                                       }
+                                      {:type      :file
+                                       :name      "field2-name"
+                                       :file      (File. "file/to/send.txt")
+                                       :mime-type "text/plain"
+                                       :charset   "UTF-8"
+                                       }
+                                      {:type      :bytearray
+                                       :name      "field3-name"
+                                       :file-name "file-name.txt"
+                                       :data       (.getBytes "contents" "UTF-8")
+                                       :mime-type  "text/plain"
+                                       :charset    "UTF-8"}])]
+           ;; do something with resp
+           ))
+     #+end_src
 **** Submitting body as InputStream
      Another method to provide body is via InputStream:
      #+BEGIN_SRC clojure
@@ -269,8 +373,14 @@
           (http/await resp)
           (http/string resp)))
     #+END_SRC
-    *:body* can be String, form parameters (that is map), input stream or
-    java.io.File, please see [[*PUT/POST][PUT/POST]] for more documentation.
+    *:body* can be:
+    - String,
+    - map, sent as form parameters,
+    - vector, sent as multipart message,
+    - input stream,
+    - java.io.File, this will be sent using zero byte copy.
+
+    Please see [[*PUT/POST][PUT/POST]] for more documentation.
 *** :cookies
     Cookies can be provided to request as follows:
     #+BEGIN_SRC clojure
