@@ -18,7 +18,7 @@
   (:refer-clojure :exclude [await])
   (:use clojure.test
         http.async.client
-        [http.async.client request util]
+        [http.async.client request util timing]
         [clojure.stacktrace :only [print-stack-trace]]
         [clojure.java.io :only [input-stream]]
         [clojure.string :only [split]])
@@ -764,6 +764,53 @@
 (deftest extract-empty-body
   (let [resp (GET *client* "http://localhost:8123/empty")]
     (is (nil? (string resp)))))
+
+(deftest timing
+  (testing "started-time present"
+    (let [resp (GET *client* "http://localhost:8123/")]
+      (cancel resp)
+      (is (realized? (:started-time resp)))
+      (when (realized? (:started-time resp))
+        (is (false? (nil? @(:started-time resp)))))))
+  (testing "status-time present"
+    (let [resp (GET *client* "http://localhost:8123/")
+          _ (status resp)]
+      (cancel resp)
+      (is (realized? (:status-time resp)))
+      (when (realized? (:status-time resp))
+        (is (< 0 (status-time resp))))))
+  (testing "headers-time present"
+    (let [resp (GET *client* "http://localhost:8123/")
+          _ (headers resp)]
+      (cancel resp)
+      (is (realized? (:headers-time resp)))
+      (when (realized? (:headers-time resp))
+        (is (< 0 (headers-time resp))))))
+  (testing "body-time present"
+    (let [resp (GET *client* "http://localhost:8123/body")
+          _ (body resp)]
+      (is (realized? (:body-time resp)))
+      (when (realized? (:body-time resp))
+        (is (< 0 (body-time resp))))))
+  (testing "done-time present"
+    (let [resp (GET *client* "http://localhost:8123/")
+          _ (await resp)]
+      (is (realized? (:done-time resp)))
+      (when (realized? (:done-time resp))
+        (is (< 0 (done-time resp))))))
+  (testing "error-time present"
+    (let [resp (GET *client* "http://incanters.do.not.exist.or.do.they/")
+          _ (await resp)]
+      (is (realized? (:error-time resp)))
+      (when (realized? (:error-time resp))
+        (is (< 0 (error-time resp))))))
+  (testing "events partial order"
+    (let [resp (GET *client* "http://localhost:8123/body")
+          _ (await resp)]
+      (is (< (status-time resp)
+             (headers-time resp)
+             (body-time resp)
+             (done-time resp))))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET *client* "http://localhost:8123/stream"))

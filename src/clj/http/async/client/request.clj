@@ -226,18 +226,26 @@
                            part      :part
                            completed :completed
                            error     :error}]
-  (let [resp {:id      (gensym "req-id__")
-              :status  (promise)
-              :headers (promise)
-              :body    (promise)
-              :done    (promise)
-              :error   (promise)}
+  (let [resp {:id           (gensym "req-id__")
+              :started-time (promise)
+              :status       (promise)
+              :status-time  (promise)
+              :headers      (promise)
+              :headers-time (promise)
+              :body         (promise)
+              :body-time    (promise)
+              :done         (promise)
+              :done-time    (promise)
+              :error        (promise)
+              :error-time   (promise)}
+        _ (deliver (:started-time resp) (System/nanoTime))
         resp-future
         (.executeRequest
          client req
          (reify AsyncHandler
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
             onStatusReceived [this #^HttpResponseStatus e]
+            (deliver (:status-time resp) (System/nanoTime))
             (let [[result action] ((or status
                                        (:status *default-callbacks*))
                                    resp (convert-status-to-map e))]
@@ -245,6 +253,7 @@
               (convert-action action)))
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
             onHeadersReceived [this #^HttpResponseHeaders e]
+            (deliver (:headers-time resp) (System/nanoTime))
             (let [[result action] ((or headers
                                        (:headers *default-callbacks*))
                                    resp (convert-headers-to-map e))]
@@ -252,6 +261,7 @@
               (convert-action action)))
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
             onBodyPartReceived [this #^HttpResponseBodyPart e]
+            (deliver (:body-time resp) (System/nanoTime))
             (when-let [bytes (.getBodyPartBytes e)]
               (let [baos (ByteArrayOutputStream. (alength bytes))]
                 (.write baos bytes 0 (alength bytes))
@@ -264,21 +274,20 @@
                   (convert-action action)))))
            (^{:tag Object}
             onCompleted [this]
-            (do
-              ((or completed
-                   (:completed *default-callbacks*))
-               resp)
-              (when-not (realized? (:body resp))
-                (deliver (:body resp) nil))
-              (deliver (:done resp) true)))
+            (deliver (:done-time resp) (System/nanoTime))
+            ((or completed
+                 (:completed *default-callbacks*))
+             resp)
+            (when-not (realized? (:body resp))
+              (deliver (:body resp) nil))
+            (deliver (:done resp) true))
            (^{:tag void}
             onThrowable [this #^Throwable t]
-            (do
-              (deliver (:error resp) ((or error
-                                          (:error *default-callbacks*))
-                                      resp t))
-              (when-not (realized? (:done resp))
-                (deliver (:done resp) true))))))]
-    (with-meta resp {:started (System/currentTimeMillis)
-                     :cancelled? (fn [] (.isCancelled resp-future))
+            (deliver (:error-time resp) (System/nanoTime))
+            (deliver (:error resp) ((or error
+                                        (:error *default-callbacks*))
+                                    resp t))
+            (when-not (realized? (:done resp))
+              (deliver (:done resp) true)))))]
+    (with-meta resp {:cancelled? (fn [] (.isCancelled resp-future))
                      :cancel (fn [] (.cancel resp-future true))})))
