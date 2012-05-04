@@ -1,5 +1,5 @@
 #+INFOJS_OPT: path:org-info.js
-#+INFOJS_OPT: view:showall toc:t ftoc:t ltoc:above tdepth:2 sdepth:3 mouse:underline buttons:t
+#+INFOJS_OPT: view:showall toc:t ftoc:t ltoc:above tdepth:3 sdepth:4 mouse:underline buttons:t
 #+INFOJS_OPT: up:http://neotyk.github.com/http.async.client/
 #+INFOJS_OPT: home:http://neotyk.github.com
 #+STYLE: <link rel="stylesheet" type="text/css" href="stylesheet.css" />

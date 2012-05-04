@@ -12,7 +12,7 @@
 ** DONE Implement response *promise*                                   :rel1:
 ** DONE Consume stream                                                 :rel1:
 ** DONE Error function                                                 :rel1:
-* Send [7/9]                                                           :code:
+* Send [8/10]                                                          :code:
 ** DONE Query parameters                                               :rel1:
 ** DONE Parameters                                                     :rel1:
 ** DONE Parameters allowed only on PUT/POST                            :rel1:
@@ -35,7 +35,7 @@
    Watcher in that scenario will grab new content and write it via
    AHC, or alternatively will *clojure.core/send-off* to execute
    IO operation in separate thread.
-** TODO Multipart                                                      :rel4:
+** DONE Multipart                                                      :rel4:
 ** TODO Request queuing
 ** DONE Authentication                                                 :rel3:
 *** DONE Test Authentication

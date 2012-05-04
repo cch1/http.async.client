@@ -170,10 +170,11 @@
     way as [[*GET][*GET*]] but they also accept *:body* argument.
 
     *:body* can be:
-    - String
-    - map, for easy form data submissions
-    - InputStream for any content
-    - File for zero byte copy
+    - String,
+    - map, sent as form parameters,
+    - vector, sent as multipart message,
+    - input stream,
+    - java.io.File, this will be sent using zero byte copy.
 **** Submitting body as String
      You can send String as body with PUT/POST:
      #+BEGIN_SRC clojure
