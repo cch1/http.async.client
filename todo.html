@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Asynchronous HTTP Client - Clojure - To Do"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-04-27 18:23:44 CEST"/>
+<meta name="generated" content="2012-05-04 23:06:11 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -64,7 +64,7 @@
 <script type="text/javascript" src="org-info.js"></script>
 <script type="text/javascript" >
 <!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "2");
+org_html_manager.set("TOC_DEPTH", "3");
 org_html_manager.set("LINK_HOME", "http://neotyk.github.com");
 org_html_manager.set("LINK_UP", "http://neotyk.github.com/http.async.client/");
 org_html_manager.set("LOCAL_TOC", "above");
@@ -124,7 +124,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-1-6">1.6 Error function</a></li>
 </ul>
 </li>
-<li><a href="#sec-2">2 Send [7/9]</a>
+<li><a href="#sec-2">2 Send [8/10]</a>
 <ul>
 <li><a href="#sec-2-1">2.1 Query parameters</a></li>
 <li><a href="#sec-2-2">2.2 Parameters</a></li>
@@ -168,13 +168,23 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-3-1-1">3.1.1 Branding User-agent</a></li>
 <li><a href="#sec-3-1-2">3.1.2 Connection limiting per host.</a></li>
 <li><a href="#sec-3-1-3">3.1.3 Global proxy.</a></li>
-<li><a href="#sec-3-1-4">3.1.4 Timeout settings</a></li>
+<li><a href="#sec-3-1-4">3.1.4 Timeout settings</a>
+<ul>
+<li><a href="#sec-3-1-4-1">3.1.4.1 Request timeout</a></li>
+<li><a href="#sec-3-1-4-2">3.1.4.2 Connection timeout</a></li>
+<li><a href="#sec-3-1-4-3">3.1.4.3 Idle connection timeout</a></li>
+</ul></li>
 </ul>
 </li>
 <li><a href="#sec-3-2">3.2 Per request configuration [2/2]</a>
 <ul>
 <li><a href="#sec-3-2-1">3.2.1 Proxy configuration</a></li>
-<li><a href="#sec-3-2-2">3.2.2 Timeout</a></li>
+<li><a href="#sec-3-2-2">3.2.2 Timeout</a>
+<ul>
+<li><a href="#sec-3-2-2-1">3.2.2.1 Request timeout</a></li>
+<li><a href="#sec-3-2-2-2">3.2.2.2 Connection timeout</a></li>
+<li><a href="#sec-3-2-2-3">3.2.2.3 Idle connection timeout</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </li>
@@ -201,7 +211,11 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-4-10">4.10 Review documentation</a></li>
 <li><a href="#sec-4-11">4.11 Refactoring [1/1]</a>
 <ul>
-<li><a href="#sec-4-11-1">4.11.1 Refactor <b>execute-request</b> [2/2]</a></li>
+<li><a href="#sec-4-11-1">4.11.1 Refactor <b>execute-request</b> [2/2]</a>
+<ul>
+<li><a href="#sec-4-11-1-1">4.11.1.1 Build checkable promise</a></li>
+<li><a href="#sec-4-11-1-2">4.11.1.2 Unify <b>execute-request</b> and <b>consume-stream</b> interfaces</a></li>
+</ul></li>
 </ul>
 </li>
 <li><a href="#sec-4-12">4.12 Rename to <b>http.async.client</b></a></li>
@@ -270,7 +284,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Send [7/9] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="code">code</span></span></h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Send [8/10] &nbsp;&nbsp;&nbsp;<span class="tag"><span class="code">code</span></span></h2>
 <div class="outline-text-2" id="text-2">
 
 
@@ -425,7 +439,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-8" class="outline-3">
-<h3 id="sec-2-8"><span class="section-number-3">2.8</span> <span class="todo TODO"> TODO</span> Multipart &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<h3 id="sec-2-8"><span class="section-number-3">2.8</span> <span class="done DONE"> DONE</span> Multipart &nbsp;&nbsp;&nbsp;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-2-8">
 
 </div>
@@ -783,7 +797,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-04-27 18:23:44 CEST</p>
+<p class="date">Date: 2012-05-04 23:06:11 CEST</p>
 <p class="author">Author: Hubert Iwaniuk</p>
 <p class="creator">Org version 7.8.03 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

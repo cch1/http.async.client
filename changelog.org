@@ -3,6 +3,20 @@
 #+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.4.5
+** Multipart support
+   Allow POST and PUT to send multipart messages.
+   When *vector* is provided as body it is treated as multipart.
+   Please consult documentation and tests for examples of usage.
+** There's a function for that!
+   Listen to what kibit has to say.
+* Release 0.4.4
+** Simplified callbacks API
+   Issue [[https://github.com/neotyk/http.async.client/issues/32][#32]].
+** Better documented callbacks
+   This was long outstanding issue [[https://github.com/neotyk/http.async.client/issues/12][#12]].
+** Upgrade [[https://github.com/sonatype/async-http-client][AHC]] to 1.7.4
+** Upgrade Clojure to 1.4
 * Release 0.4.3
 ** Issue [[https://github.com/neotyk/http.async.client/pull/30][#30]] by [[https://github.com/canassa][Cesar Canassa]]
    Fixes issue with single cookie in response.

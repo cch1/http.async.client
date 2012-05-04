@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Asynchronous HTTP Client - Clojure - Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-04-27 18:21:19 CEST"/>
+<meta name="generated" content="2012-05-04 23:07:00 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -64,7 +64,7 @@
 <script type="text/javascript" src="org-info.js"></script>
 <script type="text/javascript" >
 <!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "2");
+org_html_manager.set("TOC_DEPTH", "3");
 org_html_manager.set("LINK_HOME", "http://neotyk.github.com");
 org_html_manager.set("LINK_UP", "http://neotyk.github.com/http.async.client/");
 org_html_manager.set("LOCAL_TOC", "above");
@@ -133,7 +133,15 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-2-2">2.2 HTTP methods</a>
 <ul>
 <li><a href="#sec-2-2-1">2.2.1 GET</a></li>
-<li><a href="#sec-2-2-2">2.2.2 PUT/POST</a></li>
+<li><a href="#sec-2-2-2">2.2.2 PUT/POST</a>
+<ul>
+<li><a href="#sec-2-2-2-1">2.2.2.1 Submitting body as String</a></li>
+<li><a href="#sec-2-2-2-2">2.2.2.2 Submitting form parameters</a></li>
+<li><a href="#sec-2-2-2-3">2.2.2.3 Submitting multipart messages</a></li>
+<li><a href="#sec-2-2-2-4">2.2.2.4 Submitting body as InputStream</a></li>
+<li><a href="#sec-2-2-2-5">2.2.2.5 Submitting body as File, a.k.a. zero byte copy</a></li>
+</ul>
+</li>
 <li><a href="#sec-2-2-3">2.2.3 DELETE</a></li>
 <li><a href="#sec-2-2-4">2.2.4 HEAD</a></li>
 <li><a href="#sec-2-2-5">2.2.5 OPTIONS</a></li>
@@ -166,7 +174,12 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-2-5-6">2.5.6 Reading body as string</a></li>
 <li><a href="#sec-2-5-7">2.5.7 Reading error</a></li>
 <li><a href="#sec-2-5-8">2.5.8 Canceling request</a></li>
-<li><a href="#sec-2-5-9">2.5.9 Response predicates</a></li>
+<li><a href="#sec-2-5-9">2.5.9 Response predicates</a>
+<ul>
+<li><a href="#sec-2-5-9-1">2.5.9.1 done?</a></li>
+<li><a href="#sec-2-5-9-2">2.5.9.2 failed?</a></li>
+<li><a href="#sec-2-5-9-3">2.5.9.3 canceled?</a></li>
+</ul></li>
 </ul>
 </li>
 <li><a href="#sec-2-6">2.6 Managing client</a>
@@ -224,7 +237,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>defproject your-project <span style="color: #8b2252;">"1.0.0-SNAPSHOT"</span>
   <span style="color: #008b8b;">:description</span> <span style="color: #8b2252;">"Your project description"</span>
   <span style="color: #008b8b;">:dependencies</span> [[org.clojure/clojure <span style="color: #8b2252;">"1.4.0"</span>]
-                 [http.async.client <span style="color: #8b2252;">"0.4.4"</span>]]<span style="color: #8c8c8c;">)</span>
+                 [http.async.client <span style="color: #8b2252;">"0.4.5-SNAPSHOT"</span>]]<span style="color: #8c8c8c;">)</span>
 </pre>
 
 <p>
@@ -540,13 +553,15 @@ org_html_manager.setup();  // activate after the parameters are set
 <p>
     <b>:body</b> can be:
 </p><ul>
-<li>String
+<li>String,
 </li>
-<li>map, for easy form data submissions
+<li>map, sent as form parameters,
 </li>
-<li>InputStream for any content
+<li>vector, sent as multipart message,
 </li>
-<li>File for zero byte copy
+<li>input stream,
+</li>
+<li>java.io.File, this will be sent using zero byte copy.
 </li>
 </ul>
 
@@ -575,7 +590,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <h5 id="sec-2-2-2-2"><span class="section-number-5">2.2.2.2</span> Submitting form parameters</h5>
 <div class="outline-text-5" id="text-2-2-2-2">
 
-<p>     Submitting parameters via body map:
+<p>     Submitting form parameters is done via body map:
 </p>
 
 
@@ -590,8 +605,165 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-2-2-3" class="outline-5">
-<h5 id="sec-2-2-2-3"><span class="section-number-5">2.2.2.3</span> Submitting body as InputStream</h5>
+<h5 id="sec-2-2-2-3"><span class="section-number-5">2.2.2.3</span> Submitting multipart messages</h5>
 <div class="outline-text-5" id="text-2-2-2-3">
+
+<p>     To send multipart messages in body use vector of maps.
+     Each map describes one multipart part.
+</p>
+<p>
+     Every map has to have <b>:type</b> key.
+</p>
+<p>
+     Following values for <b>:type</b> are recognized:
+</p><dl>
+<dt>:string</dt><dd>
+<p>
+       Will send named string value in multipart part.
+       Map spec:
+</p><dl>
+<dt>:name</dt><dd><b>required</b>, name of field sent in multipart part,
+</dd>
+<dt>:value</dt><dd><b>required</b>, value of field sent in multipart part,
+</dd>
+<dt>:charset</dt><dd><b>optional</b>, default <b>UTF-8</b>, charset used to encode
+                     value of field set in multipart part.
+
+</dd>
+</dl>
+
+<p>       Example of string part in use:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/POST client <span style="color: #8b2252;">"&lt;your url&gt;"</span>
+                        <span style="color: #008b8b;">:body</span> [{<span style="color: #008b8b;">:type</span>    <span style="color: #008b8b;">:string</span>
+                                <span style="color: #008b8b;">:name</span>    <span style="color: #8b2252;">"field-name"</span>
+                                <span style="color: #008b8b;">:value</span>   <span style="color: #8b2252;">"field-value"</span>
+                                <span style="color: #008b8b;">:charset</span> <span style="color: #8b2252;">"UTF-8"</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">this is optional,</span>
+                                        <span style="color: #b22222;">; </span><span style="color: #b22222;">and contains default value</span>
+                                }]<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+</dd>
+<dt>:file</dt><dd>
+<p>
+       Will send named file in multipart part.
+       Map spec:
+</p><dl>
+<dt>:name</dt><dd><b>required</b>, name of field sent in multipart part,
+</dd>
+<dt>:file</dt><dd><b>required</b>, java.io.File, whose contents will be
+                  sent as field value,
+</dd>
+<dt>:mime-type</dt><dd><b>required</b>, mime-type of <i>Content-Type</i> of this
+                       multipart part.
+</dd>
+<dt>:charset</dt><dd><b>required</b>, charset of <i>Content-Type</i> of this
+                     multipart part.
+
+</dd>
+</dl>
+
+<p>       Example of file part in use:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/POST client <span style="color: #8b2252;">"&lt;your url&gt;"</span>
+                        <span style="color: #008b8b;">:body</span> [{<span style="color: #008b8b;">:type</span>      <span style="color: #008b8b;">:file</span>
+                                <span style="color: #008b8b;">:name</span>      <span style="color: #8b2252;">"field-name"</span>
+                                <span style="color: #008b8b;">:file</span>      <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">File.</span> <span style="color: #8b2252;">"file/to/send.txt"</span><span style="color: #8c8c8c;">)</span>
+                                <span style="color: #008b8b;">:mime-type</span> <span style="color: #8b2252;">"text/plain"</span>
+                                <span style="color: #008b8b;">:charset</span>   <span style="color: #8b2252;">"UTF-8"</span>}]<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+</dd>
+<dt>:bytearray</dt><dd>
+<p>
+       Will send named byte array part.
+</p>
+<p>
+       Map spec:
+</p><dl>
+<dt>:name</dt><dd><b>required</b>, name of field sent in multipart part,
+</dd>
+<dt>file-name</dt><dd><b>required</b>, filename of <i>Content-Disposition</i>,
+</dd>
+<dt>data</dt><dd><b>required</b>, byte array containing data to sent as
+                 field value,
+</dd>
+<dt>:mime-type</dt><dd><b>required</b>, mime-type of <i>Content-Type</i> of this
+                       multipart part.
+</dd>
+<dt>:charset</dt><dd><b>required</b>, charset of <i>Content-Type</i> of this
+                     multipart part.
+
+</dd>
+</dl>
+
+<p>       Example of <b>:bytearray</b> in use:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/POST client <span style="color: #8b2252;">"&lt;your url&gt;"</span>
+                        <span style="color: #008b8b;">:body</span> [{<span style="color: #008b8b;">:type</span>      <span style="color: #008b8b;">:bytearray</span>
+                                <span style="color: #008b8b;">:name</span>      <span style="color: #8b2252;">"field-name"</span>
+                                <span style="color: #008b8b;">:file-name</span> <span style="color: #8b2252;">"file-name.txt"</span>
+                                <span style="color: #008b8b;">:data</span>       <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">.getBytes</span> <span style="color: #8b2252;">"contents"</span> <span style="color: #8b2252;">"UTF-8"</span><span style="color: #8c8c8c;">)</span>
+                                <span style="color: #008b8b;">:mime-type</span>  <span style="color: #8b2252;">"text/plain"</span>
+                                <span style="color: #008b8b;">:charset</span>    <span style="color: #8b2252;">"UTF-8"</span>}]<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+</dd>
+</dl>
+
+
+<p>
+     To send request with multiple multiparts <b>:body</b> vector needs to
+     contain multiple maps:
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/POST client <span style="color: #8b2252;">"&lt;your url&gt;"</span>
+                        <span style="color: #008b8b;">:body</span> [{<span style="color: #008b8b;">:type</span>    <span style="color: #008b8b;">:string</span>
+                                <span style="color: #008b8b;">:name</span>    <span style="color: #8b2252;">"field1-name"</span>
+                                <span style="color: #008b8b;">:value</span>   <span style="color: #8b2252;">"field-value"</span>
+                                <span style="color: #008b8b;">:charset</span> <span style="color: #8b2252;">"UTF-8"</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">this is optional,</span>
+                                        <span style="color: #b22222;">; </span><span style="color: #b22222;">and contains default value</span>
+                                }
+                               {<span style="color: #008b8b;">:type</span>      <span style="color: #008b8b;">:file</span>
+                                <span style="color: #008b8b;">:name</span>      <span style="color: #8b2252;">"field2-name"</span>
+                                <span style="color: #008b8b;">:file</span>      <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">File.</span> <span style="color: #8b2252;">"file/to/send.txt"</span><span style="color: #8c8c8c;">)</span>
+                                <span style="color: #008b8b;">:mime-type</span> <span style="color: #8b2252;">"text/plain"</span>
+                                <span style="color: #008b8b;">:charset</span>   <span style="color: #8b2252;">"UTF-8"</span>
+                                }
+                               {<span style="color: #008b8b;">:type</span>      <span style="color: #008b8b;">:bytearray</span>
+                                <span style="color: #008b8b;">:name</span>      <span style="color: #8b2252;">"field3-name"</span>
+                                <span style="color: #008b8b;">:file-name</span> <span style="color: #8b2252;">"file-name.txt"</span>
+                                <span style="color: #008b8b;">:data</span>       <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">.getBytes</span> <span style="color: #8b2252;">"contents"</span> <span style="color: #8b2252;">"UTF-8"</span><span style="color: #8c8c8c;">)</span>
+                                <span style="color: #008b8b;">:mime-type</span>  <span style="color: #8b2252;">"text/plain"</span>
+                                <span style="color: #008b8b;">:charset</span>    <span style="color: #8b2252;">"UTF-8"</span>}]<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #b22222;">;; </span><span style="color: #b22222;">do something with resp</span>
+    <span style="color: #8c8c8c;">))</span>
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-2-2-4" class="outline-5">
+<h5 id="sec-2-2-2-4"><span class="section-number-5">2.2.2.4</span> Submitting body as InputStream</h5>
+<div class="outline-text-5" id="text-2-2-2-4">
 
 <p>     Another method to provide body is via InputStream:
 </p>
@@ -608,9 +780,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2-2-2-4" class="outline-5">
-<h5 id="sec-2-2-2-4"><span class="section-number-5">2.2.2.4</span> Submitting body as File, a.k.a. zero byte copy</h5>
-<div class="outline-text-5" id="text-2-2-2-4">
+<div id="outline-container-2-2-2-5" class="outline-5">
+<h5 id="sec-2-2-2-5"><span class="section-number-5">2.2.2.5</span> Submitting body as File, a.k.a. zero byte copy</h5>
+<div class="outline-text-5" id="text-2-2-2-5">
 
 <p>     To use zero byte copy future, provide a File as :body
 </p>
@@ -763,8 +935,23 @@ org_html_manager.setup();  // activate after the parameters are set
 </pre>
 
 <p>
-    <b>:body</b> can be String, form parameters (that is map), input stream or
-    java.io.File, please see <a href="#sec-2-2-2">PUT/POST</a> for more documentation.
+    <b>:body</b> can be:
+</p><ul>
+<li>String,
+</li>
+<li>map, sent as form parameters,
+</li>
+<li>vector, sent as multipart message,
+</li>
+<li>input stream,
+</li>
+<li>java.io.File, this will be sent using zero byte copy.
+</li>
+</ul>
+
+
+<p>
+    Please see <a href="#sec-2-2-2">PUT/POST</a> for more documentation.
 </p></div>
 
 </div>
@@ -2009,7 +2196,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-04-27 18:21:19 CEST</p>
+<p class="date">Date: 2012-05-04 23:07:00 CEST</p>
 <p class="author">Author: Hubert Iwaniuk</p>
 <p class="creator">Org version 7.8.03 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

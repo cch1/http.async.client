@@ -1,0 +1,5 @@
+.lein*
+classes/*
+lib/*
+pom.xml
+tmp/*

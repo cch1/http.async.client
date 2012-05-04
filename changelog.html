@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Asynchronous HTTP Client - Clojure - Changelog"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-04-27 18:13:43 CEST"/>
+<meta name="generated" content="2012-05-04 23:07:49 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -64,7 +64,7 @@
 <script type="text/javascript" src="org-info.js"></script>
 <script type="text/javascript" >
 <!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "2");
+org_html_manager.set("TOC_DEPTH", "3");
 org_html_manager.set("LINK_HOME", "http://neotyk.github.com");
 org_html_manager.set("LINK_UP", "http://neotyk.github.com/http.async.client/");
 org_html_manager.set("LOCAL_TOC", "above");
@@ -114,90 +114,96 @@ org_html_manager.setup();  // activate after the parameters are set
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Release 0.4.4</a>
+<li><a href="#sec-1">1 Release 0.4.5</a>
 <ul>
-<li><a href="#sec-1-1">1.1 Simplified callbacks API</a></li>
-<li><a href="#sec-1-2">1.2 Better documented callbacks</a></li>
-<li><a href="#sec-1-3">1.3 Upgrade AHC to 1.7.4</a></li>
-<li><a href="#sec-1-4">1.4 Upgrade Clojure to 1.4</a></li>
+<li><a href="#sec-1-1">1.1 Multipart support</a></li>
+<li><a href="#sec-1-2">1.2 There's a function for that!</a></li>
 </ul>
 </li>
-<li><a href="#sec-2">2 Release 0.4.3</a>
+<li><a href="#sec-2">2 Release 0.4.4</a>
 <ul>
-<li><a href="#sec-2-1">2.1 Issue #30 by Cesar Canassa</a></li>
-<li><a href="#sec-2-2">2.2 Upgrade AHC to 1.7.1</a></li>
+<li><a href="#sec-2-1">2.1 Simplified callbacks API</a></li>
+<li><a href="#sec-2-2">2.2 Better documented callbacks</a></li>
+<li><a href="#sec-2-3">2.3 Upgrade AHC to 1.7.4</a></li>
+<li><a href="#sec-2-4">2.4 Upgrade Clojure to 1.4</a></li>
 </ul>
 </li>
-<li><a href="#sec-3">3 Release 0.4.2</a>
+<li><a href="#sec-3">3 Release 0.4.3</a>
 <ul>
-<li><a href="#sec-3-1">3.1 Issue #29 by A. Diamond</a></li>
+<li><a href="#sec-3-1">3.1 Issue #30 by Cesar Canassa</a></li>
+<li><a href="#sec-3-2">3.2 Upgrade AHC to 1.7.1</a></li>
 </ul>
 </li>
-<li><a href="#sec-4">4 Release 0.4.1</a>
+<li><a href="#sec-4">4 Release 0.4.2</a>
 <ul>
-<li><a href="#sec-4-1">4.1 Upgrade AHC to 1.7.0</a></li>
-<li><a href="#sec-4-2">4.2 Issues #26, #27, #28</a></li>
-<li><a href="#sec-4-3">4.3 Improved logging</a></li>
-<li><a href="#sec-4-4">4.4 Tested against Clojure 1.4.0-beta1</a></li>
+<li><a href="#sec-4-1">4.1 Issue #29 by A. Diamond</a></li>
 </ul>
 </li>
-<li><a href="#sec-5">5 Release 0.4.0</a>
+<li><a href="#sec-5">5 Release 0.4.1</a>
 <ul>
-<li><a href="#sec-5-1">5.1 Clojure 1.3 compatible</a></li>
-<li><a href="#sec-5-2">5.2 Support for multiple values for same key (QString)</a></li>
-<li><a href="#sec-5-3">5.3 Clojure contrib independent</a></li>
-<li><a href="#sec-5-4">5.4 Upgrade async-http-client to v1.6.5</a></li>
+<li><a href="#sec-5-1">5.1 Upgrade AHC to 1.7.0</a></li>
+<li><a href="#sec-5-2">5.2 Issues #26, #27, #28</a></li>
+<li><a href="#sec-5-3">5.3 Improved logging</a></li>
+<li><a href="#sec-5-4">5.4 Tested against Clojure 1.4.0-beta1</a></li>
 </ul>
 </li>
-<li><a href="#sec-6">6 Release 0.3.1</a>
+<li><a href="#sec-6">6 Release 0.4.0</a>
 <ul>
-<li><a href="#sec-6-1">6.1 Upgrade async-http-client to v1.6.4</a></li>
+<li><a href="#sec-6-1">6.1 Clojure 1.3 compatible</a></li>
+<li><a href="#sec-6-2">6.2 Support for multiple values for same key (QString)</a></li>
+<li><a href="#sec-6-3">6.3 Clojure contrib independent</a></li>
+<li><a href="#sec-6-4">6.4 Upgrade async-http-client to v1.6.5</a></li>
 </ul>
 </li>
-<li><a href="#sec-7">7 Release 0.3.0</a>
+<li><a href="#sec-7">7 Release 0.3.1</a>
 <ul>
-<li><a href="#sec-7-1">7.1 Upgrade async-http-client to v1.6.3</a></li>
-<li><a href="#sec-7-2">7.2 Control over preemptive authentication</a></li>
-<li><a href="#sec-7-3">7.3 Explicit client usage</a></li>
-<li><a href="#sec-7-4">7.4 Removed with-client macro</a></li>
-<li><a href="#sec-7-5">7.5 Clojure 1.2.1</a></li>
+<li><a href="#sec-7-1">7.1 Upgrade async-http-client to v1.6.4</a></li>
 </ul>
 </li>
-<li><a href="#sec-8">8 Release 0.2.2</a>
+<li><a href="#sec-8">8 Release 0.3.0</a>
 <ul>
-<li><a href="#sec-8-1">8.1 get-encoding helper works w/o Content-Type header</a></li>
-<li><a href="#sec-8-2">8.2 Upgrade async-http-client to v.1.5.0</a></li>
-<li><a href="#sec-8-3">8.3 Exposed more configuration options</a>
-<ul>
-<li><a href="#sec-8-3-1">8.3.1 Timeouts</a></li>
-<li><a href="#sec-8-3-2">8.3.2 Proxy</a></li>
-<li><a href="#sec-8-3-3">8.3.3 Authentication</a></li>
+<li><a href="#sec-8-1">8.1 Upgrade async-http-client to v1.6.3</a></li>
+<li><a href="#sec-8-2">8.2 Control over preemptive authentication</a></li>
+<li><a href="#sec-8-3">8.3 Explicit client usage</a></li>
+<li><a href="#sec-8-4">8.4 Removed with-client macro</a></li>
+<li><a href="#sec-8-5">8.5 Clojure 1.2.1</a></li>
 </ul>
 </li>
-<li><a href="#sec-8-4">8.4 Zero byte copy mode</a></li>
-<li><a href="#sec-8-5">8.5 Allow providing your own poll</a></li>
-<li><a href="#sec-8-6">8.6 Allow Asynchronous Connect</a></li>
-<li><a href="#sec-8-7">8.7 Fix seq streaming API</a></li>
-<li><a href="#sec-8-8">8.8 Lots of performance improvements</a></li>
+<li><a href="#sec-9">9 Release 0.2.2</a>
+<ul>
+<li><a href="#sec-9-1">9.1 get-encoding helper works w/o Content-Type header</a></li>
+<li><a href="#sec-9-2">9.2 Upgrade async-http-client to v.1.5.0</a></li>
+<li><a href="#sec-9-3">9.3 Exposed more configuration options</a>
+<ul>
+<li><a href="#sec-9-3-1">9.3.1 Timeouts</a></li>
+<li><a href="#sec-9-3-2">9.3.2 Proxy</a></li>
+<li><a href="#sec-9-3-3">9.3.3 Authentication</a></li>
 </ul>
 </li>
-<li><a href="#sec-9">9 Release 0.2.1</a>
-<ul>
-<li><a href="#sec-9-1">9.1 Terminate body seq if errored</a></li>
-<li><a href="#sec-9-2">9.2 Canceling request</a></li>
-<li><a href="#sec-9-3">9.3 Request timeout</a></li>
-<li><a href="#sec-9-4">9.4 Close client</a></li>
-<li><a href="#sec-9-5">9.5 Upgrade to v1.3.2 of async-http-client</a></li>
+<li><a href="#sec-9-4">9.4 Zero byte copy mode</a></li>
+<li><a href="#sec-9-5">9.5 Allow providing your own poll</a></li>
+<li><a href="#sec-9-6">9.6 Allow Asynchronous Connect</a></li>
+<li><a href="#sec-9-7">9.7 Fix seq streaming API</a></li>
+<li><a href="#sec-9-8">9.8 Lots of performance improvements</a></li>
 </ul>
 </li>
-<li><a href="#sec-10">10 Release 0.2.0</a>
+<li><a href="#sec-10">10 Release 0.2.1</a>
 <ul>
-<li><a href="#sec-10-1">10.1 Stream as seq</a></li>
-<li><a href="#sec-10-2">10.2 Cookies</a></li>
-<li><a href="#sec-10-3">10.3 Authentication support</a></li>
-<li><a href="#sec-10-4">10.4 Proxy per request</a></li>
-<li><a href="#sec-10-5">10.5 Branding User-Agent</a></li>
-<li><a href="#sec-10-6">10.6 Keyworded maps in API</a></li>
+<li><a href="#sec-10-1">10.1 Terminate body seq if errored</a></li>
+<li><a href="#sec-10-2">10.2 Canceling request</a></li>
+<li><a href="#sec-10-3">10.3 Request timeout</a></li>
+<li><a href="#sec-10-4">10.4 Close client</a></li>
+<li><a href="#sec-10-5">10.5 Upgrade to v1.3.2 of async-http-client</a></li>
+</ul>
+</li>
+<li><a href="#sec-11">11 Release 0.2.0</a>
+<ul>
+<li><a href="#sec-11-1">11.1 Stream as seq</a></li>
+<li><a href="#sec-11-2">11.2 Cookies</a></li>
+<li><a href="#sec-11-3">11.3 Authentication support</a></li>
+<li><a href="#sec-11-4">11.4 Proxy per request</a></li>
+<li><a href="#sec-11-5">11.5 Branding User-Agent</a></li>
+<li><a href="#sec-11-6">11.6 Keyworded maps in API</a></li>
 </ul>
 </li>
 </ul>
@@ -205,66 +211,69 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Release 0.4.4</h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Release 0.4.5</h2>
 <div class="outline-text-2" id="text-1">
 
 
 </div>
 
 <div id="outline-container-1-1" class="outline-3">
-<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Simplified callbacks API</h3>
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Multipart support</h3>
 <div class="outline-text-3" id="text-1-1">
 
-<p>   Issue <a href="https://github.com/neotyk/http.async.client/issues/32">#32</a>.
+<p>   Allow POST and PUT to send multipart messages.
+   When <b>vector</b> is provided as body it is treated as multipart.
+   Please consult documentation and tests for examples of usage.
 </p></div>
 
 </div>
 
 <div id="outline-container-1-2" class="outline-3">
-<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Better documented callbacks</h3>
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> There's a function for that!</h3>
 <div class="outline-text-3" id="text-1-2">
 
-<p>   This was long outstanding issue <a href="https://github.com/neotyk/http.async.client/issues/12">#12</a>.
+<p>   Listen to what kibit has to say.
 </p></div>
-
-</div>
-
-<div id="outline-container-1-3" class="outline-3">
-<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Upgrade <a href="https://github.com/sonatype/async-http-client">AHC</a> to 1.7.4</h3>
-<div class="outline-text-3" id="text-1-3">
-
-</div>
-
-</div>
-
-<div id="outline-container-1-4" class="outline-3">
-<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Upgrade Clojure to 1.4</h3>
-<div class="outline-text-3" id="text-1-4">
-
-</div>
 </div>
 
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Release 0.4.3</h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Release 0.4.4</h2>
 <div class="outline-text-2" id="text-2">
 
 
 </div>
 
 <div id="outline-container-2-1" class="outline-3">
-<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Issue <a href="https://github.com/neotyk/http.async.client/pull/30">#30</a> by <a href="https://github.com/canassa">Cesar Canassa</a></h3>
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Simplified callbacks API</h3>
 <div class="outline-text-3" id="text-2-1">
 
-<p>   Fixes issue with single cookie in response.
+<p>   Issue <a href="https://github.com/neotyk/http.async.client/issues/32">#32</a>.
 </p></div>
 
 </div>
 
 <div id="outline-container-2-2" class="outline-3">
-<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Upgrade AHC to 1.7.1</h3>
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Better documented callbacks</h3>
 <div class="outline-text-3" id="text-2-2">
+
+<p>   This was long outstanding issue <a href="https://github.com/neotyk/http.async.client/issues/12">#12</a>.
+</p></div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Upgrade <a href="https://github.com/sonatype/async-http-client">AHC</a> to 1.7.4</h3>
+<div class="outline-text-3" id="text-2-3">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Upgrade Clojure to 1.4</h3>
+<div class="outline-text-3" id="text-2-4">
 
 </div>
 </div>
@@ -272,15 +281,40 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Release 0.4.2</h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> Release 0.4.3</h2>
 <div class="outline-text-2" id="text-3">
 
 
 </div>
 
 <div id="outline-container-3-1" class="outline-3">
-<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Issue <a href="https://github.com/neotyk/http.async.client/pull/29">#29</a> by <a href="https://github.com/diamondap">A. Diamond</a></h3>
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Issue <a href="https://github.com/neotyk/http.async.client/pull/30">#30</a> by <a href="https://github.com/canassa">Cesar Canassa</a></h3>
 <div class="outline-text-3" id="text-3-1">
+
+<p>   Fixes issue with single cookie in response.
+</p></div>
+
+</div>
+
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Upgrade AHC to 1.7.1</h3>
+<div class="outline-text-3" id="text-3-2">
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Release 0.4.2</h2>
+<div class="outline-text-2" id="text-4">
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Issue <a href="https://github.com/neotyk/http.async.client/pull/29">#29</a> by <a href="https://github.com/diamondap">A. Diamond</a></h3>
+<div class="outline-text-3" id="text-4-1">
 
 <p>   Added support for client certificates.
 </p></div>
@@ -288,24 +322,24 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Release 0.4.1</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Release 0.4.1</h2>
+<div class="outline-text-2" id="text-5">
 
 
 </div>
 
-<div id="outline-container-4-1" class="outline-3">
-<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Upgrade AHC to 1.7.0</h3>
-<div class="outline-text-3" id="text-4-1">
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Upgrade AHC to 1.7.0</h3>
+<div class="outline-text-3" id="text-5-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-4-2" class="outline-3">
-<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Issues <a href="https://github.com/neotyk/http.async.client/issues/26">#26</a>, <a href="https://github.com/neotyk/http.async.client/issues/27">#27</a>, <a href="https://github.com/neotyk/http.async.client/issues/28">#28</a></h3>
-<div class="outline-text-3" id="text-4-2">
+<div id="outline-container-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> Issues <a href="https://github.com/neotyk/http.async.client/issues/26">#26</a>, <a href="https://github.com/neotyk/http.async.client/issues/27">#27</a>, <a href="https://github.com/neotyk/http.async.client/issues/28">#28</a></h3>
+<div class="outline-text-3" id="text-5-2">
 
 <dl>
 <dt><a href="https://github.com/neotyk/http.async.client/issues/26">#26</a></dt><dd><a href="https://github.com/jkk">Justin Kramer</a>, <a href="https://github.com/btatnall">Brian Tatnall</a>
@@ -324,59 +358,17 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-4-3" class="outline-3">
-<h3 id="sec-4-3"><span class="section-number-3">4.3</span> Improved logging</h3>
-<div class="outline-text-3" id="text-4-3">
+<div id="outline-container-5-3" class="outline-3">
+<h3 id="sec-5-3"><span class="section-number-3">5.3</span> Improved logging</h3>
+<div class="outline-text-3" id="text-5-3">
 
 <p>   Improved logging configuration for running tests.
 </p></div>
 
 </div>
 
-<div id="outline-container-4-4" class="outline-3">
-<h3 id="sec-4-4"><span class="section-number-3">4.4</span> Tested against Clojure 1.4.0-beta1</h3>
-<div class="outline-text-3" id="text-4-4">
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> Release 0.4.0</h2>
-<div class="outline-text-2" id="text-5">
-
-
-</div>
-
-<div id="outline-container-5-1" class="outline-3">
-<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Clojure 1.3 compatible</h3>
-<div class="outline-text-3" id="text-5-1">
-
-</div>
-
-</div>
-
-<div id="outline-container-5-2" class="outline-3">
-<h3 id="sec-5-2"><span class="section-number-3">5.2</span> Support for multiple values for same key (QString)</h3>
-<div class="outline-text-3" id="text-5-2">
-
-<p>   <a href="https://github.com/neotyk/http.async.client/issues/22">#22</a>
-</p></div>
-
-</div>
-
-<div id="outline-container-5-3" class="outline-3">
-<h3 id="sec-5-3"><span class="section-number-3">5.3</span> Clojure contrib independent</h3>
-<div class="outline-text-3" id="text-5-3">
-
-<p>   <a href="https://github.com/neotyk/http.async.client/pull/24">#24</a>
-</p></div>
-
-</div>
-
 <div id="outline-container-5-4" class="outline-3">
-<h3 id="sec-5-4"><span class="section-number-3">5.4</span> Upgrade async-http-client to v1.6.5</h3>
+<h3 id="sec-5-4"><span class="section-number-3">5.4</span> Tested against Clojure 1.4.0-beta1</h3>
 <div class="outline-text-3" id="text-5-4">
 
 </div>
@@ -385,15 +377,41 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> Release 0.3.1</h2>
+<h2 id="sec-6"><span class="section-number-2">6</span> Release 0.4.0</h2>
 <div class="outline-text-2" id="text-6">
 
 
 </div>
 
 <div id="outline-container-6-1" class="outline-3">
-<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Upgrade async-http-client to v1.6.4</h3>
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Clojure 1.3 compatible</h3>
 <div class="outline-text-3" id="text-6-1">
+
+</div>
+
+</div>
+
+<div id="outline-container-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> Support for multiple values for same key (QString)</h3>
+<div class="outline-text-3" id="text-6-2">
+
+<p>   <a href="https://github.com/neotyk/http.async.client/issues/22">#22</a>
+</p></div>
+
+</div>
+
+<div id="outline-container-6-3" class="outline-3">
+<h3 id="sec-6-3"><span class="section-number-3">6.3</span> Clojure contrib independent</h3>
+<div class="outline-text-3" id="text-6-3">
+
+<p>   <a href="https://github.com/neotyk/http.async.client/pull/24">#24</a>
+</p></div>
+
+</div>
+
+<div id="outline-container-6-4" class="outline-3">
+<h3 id="sec-6-4"><span class="section-number-3">6.4</span> Upgrade async-http-client to v1.6.5</h3>
+<div class="outline-text-3" id="text-6-4">
 
 </div>
 </div>
@@ -401,32 +419,48 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> Release 0.3.0</h2>
+<h2 id="sec-7"><span class="section-number-2">7</span> Release 0.3.1</h2>
 <div class="outline-text-2" id="text-7">
 
 
 </div>
 
 <div id="outline-container-7-1" class="outline-3">
-<h3 id="sec-7-1"><span class="section-number-3">7.1</span> Upgrade async-http-client to v1.6.3</h3>
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> Upgrade async-http-client to v1.6.4</h3>
 <div class="outline-text-3" id="text-7-1">
 
 </div>
+</div>
 
 </div>
 
-<div id="outline-container-7-2" class="outline-3">
-<h3 id="sec-7-2"><span class="section-number-3">7.2</span> Control over preemptive authentication</h3>
-<div class="outline-text-3" id="text-7-2">
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Release 0.3.0</h2>
+<div class="outline-text-2" id="text-8">
+
+
+</div>
+
+<div id="outline-container-8-1" class="outline-3">
+<h3 id="sec-8-1"><span class="section-number-3">8.1</span> Upgrade async-http-client to v1.6.3</h3>
+<div class="outline-text-3" id="text-8-1">
+
+</div>
+
+</div>
+
+<div id="outline-container-8-2" class="outline-3">
+<h3 id="sec-8-2"><span class="section-number-3">8.2</span> Control over preemptive authentication</h3>
+<div class="outline-text-3" id="text-8-2">
 
 <p>   Patch provided by xeqi.
 </p></div>
 
 </div>
 
-<div id="outline-container-7-3" class="outline-3">
-<h3 id="sec-7-3"><span class="section-number-3">7.3</span> Explicit client usage</h3>
-<div class="outline-text-3" id="text-7-3">
+<div id="outline-container-8-3" class="outline-3">
+<h3 id="sec-8-3"><span class="section-number-3">8.3</span> Explicit client usage</h3>
+<div class="outline-text-3" id="text-8-3">
 
 <p>   Now following functions require client as first argument:
 </p><ul>
@@ -455,9 +489,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-7-4" class="outline-3">
-<h3 id="sec-7-4"><span class="section-number-3">7.4</span> Removed with-client macro</h3>
-<div class="outline-text-3" id="text-7-4">
+<div id="outline-container-8-4" class="outline-3">
+<h3 id="sec-8-4"><span class="section-number-3">8.4</span> Removed with-client macro</h3>
+<div class="outline-text-3" id="text-8-4">
 
 <p>   This didn't really bring much value.
    Migration path.
@@ -484,9 +518,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-7-5" class="outline-3">
-<h3 id="sec-7-5"><span class="section-number-3">7.5</span> Clojure 1.2.1</h3>
-<div class="outline-text-3" id="text-7-5">
+<div id="outline-container-8-5" class="outline-3">
+<h3 id="sec-8-5"><span class="section-number-3">8.5</span> Clojure 1.2.1</h3>
+<div class="outline-text-3" id="text-8-5">
 
 <p>   Fixed cyclic dependency that was preventing http.async.client from
    been used in Clojure 1.2.1.
@@ -495,91 +529,91 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> Release 0.2.2</h2>
-<div class="outline-text-2" id="text-8">
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> Release 0.2.2</h2>
+<div class="outline-text-2" id="text-9">
 
 
 </div>
 
-<div id="outline-container-8-1" class="outline-3">
-<h3 id="sec-8-1"><span class="section-number-3">8.1</span> get-encoding helper works w/o Content-Type header</h3>
-<div class="outline-text-3" id="text-8-1">
-
-</div>
-
-</div>
-
-<div id="outline-container-8-2" class="outline-3">
-<h3 id="sec-8-2"><span class="section-number-3">8.2</span> Upgrade async-http-client to v.1.5.0</h3>
-<div class="outline-text-3" id="text-8-2">
+<div id="outline-container-9-1" class="outline-3">
+<h3 id="sec-9-1"><span class="section-number-3">9.1</span> get-encoding helper works w/o Content-Type header</h3>
+<div class="outline-text-3" id="text-9-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-8-3" class="outline-3">
-<h3 id="sec-8-3"><span class="section-number-3">8.3</span> Exposed more configuration options</h3>
-<div class="outline-text-3" id="text-8-3">
-
-
-</div>
-
-<div id="outline-container-8-3-1" class="outline-4">
-<h4 id="sec-8-3-1"><span class="section-number-4">8.3.1</span> Timeouts</h4>
-<div class="outline-text-4" id="text-8-3-1">
+<div id="outline-container-9-2" class="outline-3">
+<h3 id="sec-9-2"><span class="section-number-3">9.2</span> Upgrade async-http-client to v.1.5.0</h3>
+<div class="outline-text-3" id="text-9-2">
 
 </div>
 
 </div>
 
-<div id="outline-container-8-3-2" class="outline-4">
-<h4 id="sec-8-3-2"><span class="section-number-4">8.3.2</span> Proxy</h4>
-<div class="outline-text-4" id="text-8-3-2">
+<div id="outline-container-9-3" class="outline-3">
+<h3 id="sec-9-3"><span class="section-number-3">9.3</span> Exposed more configuration options</h3>
+<div class="outline-text-3" id="text-9-3">
+
+
+</div>
+
+<div id="outline-container-9-3-1" class="outline-4">
+<h4 id="sec-9-3-1"><span class="section-number-4">9.3.1</span> Timeouts</h4>
+<div class="outline-text-4" id="text-9-3-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-8-3-3" class="outline-4">
-<h4 id="sec-8-3-3"><span class="section-number-4">8.3.3</span> Authentication</h4>
-<div class="outline-text-4" id="text-8-3-3">
+<div id="outline-container-9-3-2" class="outline-4">
+<h4 id="sec-9-3-2"><span class="section-number-4">9.3.2</span> Proxy</h4>
+<div class="outline-text-4" id="text-9-3-2">
+
+</div>
+
+</div>
+
+<div id="outline-container-9-3-3" class="outline-4">
+<h4 id="sec-9-3-3"><span class="section-number-4">9.3.3</span> Authentication</h4>
+<div class="outline-text-4" id="text-9-3-3">
 
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-8-4" class="outline-3">
-<h3 id="sec-8-4"><span class="section-number-3">8.4</span> Zero byte copy mode</h3>
-<div class="outline-text-3" id="text-8-4">
+<div id="outline-container-9-4" class="outline-3">
+<h3 id="sec-9-4"><span class="section-number-3">9.4</span> Zero byte copy mode</h3>
+<div class="outline-text-3" id="text-9-4">
 
 <p>   If sending File as body, zero byte copy is used.
 </p></div>
 
 </div>
 
-<div id="outline-container-8-5" class="outline-3">
-<h3 id="sec-8-5"><span class="section-number-3">8.5</span> Allow providing your own poll</h3>
-<div class="outline-text-3" id="text-8-5">
+<div id="outline-container-9-5" class="outline-3">
+<h3 id="sec-9-5"><span class="section-number-3">9.5</span> Allow providing your own poll</h3>
+<div class="outline-text-3" id="text-9-5">
 
 <p>   Vadim Geshel contribution.
 </p></div>
 
 </div>
 
-<div id="outline-container-8-6" class="outline-3">
-<h3 id="sec-8-6"><span class="section-number-3">8.6</span> Allow Asynchronous Connect</h3>
-<div class="outline-text-3" id="text-8-6">
+<div id="outline-container-9-6" class="outline-3">
+<h3 id="sec-9-6"><span class="section-number-3">9.6</span> Allow Asynchronous Connect</h3>
+<div class="outline-text-3" id="text-9-6">
 
 <p>   Vadim Geshel contribution.
 </p></div>
 
 </div>
 
-<div id="outline-container-8-7" class="outline-3">
-<h3 id="sec-8-7"><span class="section-number-3">8.7</span> Fix seq streaming API</h3>
-<div class="outline-text-3" id="text-8-7">
+<div id="outline-container-9-7" class="outline-3">
+<h3 id="sec-9-7"><span class="section-number-3">9.7</span> Fix seq streaming API</h3>
+<div class="outline-text-3" id="text-9-7">
 
 <p>   Previous versions of seq streaming API have been holding to head,
    not anymore.
@@ -587,9 +621,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-8-8" class="outline-3">
-<h3 id="sec-8-8"><span class="section-number-3">8.8</span> Lots of performance improvements</h3>
-<div class="outline-text-3" id="text-8-8">
+<div id="outline-container-9-8" class="outline-3">
+<h3 id="sec-9-8"><span class="section-number-3">9.8</span> Lots of performance improvements</h3>
+<div class="outline-text-3" id="text-9-8">
 
 <p>   Underlying async-http-client has undergone serious optimization
    changes.
@@ -598,33 +632,33 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> Release 0.2.1</h2>
-<div class="outline-text-2" id="text-9">
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Release 0.2.1</h2>
+<div class="outline-text-2" id="text-10">
 
 
 </div>
 
-<div id="outline-container-9-1" class="outline-3">
-<h3 id="sec-9-1"><span class="section-number-3">9.1</span> Terminate body seq if errored &nbsp;&nbsp;&nbsp;<span class="tag"><span class="bug">bug</span></span></h3>
-<div class="outline-text-3" id="text-9-1">
+<div id="outline-container-10-1" class="outline-3">
+<h3 id="sec-10-1"><span class="section-number-3">10.1</span> Terminate body seq if errored &nbsp;&nbsp;&nbsp;<span class="tag"><span class="bug">bug</span></span></h3>
+<div class="outline-text-3" id="text-10-1">
 
 </div>
 
 </div>
 
-<div id="outline-container-9-2" class="outline-3">
-<h3 id="sec-9-2"><span class="section-number-3">9.2</span> Canceling request</h3>
-<div class="outline-text-3" id="text-9-2">
+<div id="outline-container-10-2" class="outline-3">
+<h3 id="sec-10-2"><span class="section-number-3">10.2</span> Canceling request</h3>
+<div class="outline-text-3" id="text-10-2">
 
 <p>   <b>http.async.client/cancel</b> and <b>http.async.client/canceled?</b>
 </p></div>
 
 </div>
 
-<div id="outline-container-9-3" class="outline-3">
-<h3 id="sec-9-3"><span class="section-number-3">9.3</span> Request timeout</h3>
-<div class="outline-text-3" id="text-9-3">
+<div id="outline-container-10-3" class="outline-3">
+<h3 id="sec-10-3"><span class="section-number-3">10.3</span> Request timeout</h3>
+<div class="outline-text-3" id="text-10-3">
 
 <p>   Per request configuration of request timeout in ms.
 </p>
@@ -637,9 +671,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-9-4" class="outline-3">
-<h3 id="sec-9-4"><span class="section-number-3">9.4</span> Close client</h3>
-<div class="outline-text-3" id="text-9-4">
+<div id="outline-container-10-4" class="outline-3">
+<h3 id="sec-10-4"><span class="section-number-3">10.4</span> Close client</h3>
+<div class="outline-text-3" id="text-10-4">
 
 <p>   <b>http.async.client/close</b>.
 </p>
@@ -654,25 +688,25 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-9-5" class="outline-3">
-<h3 id="sec-9-5"><span class="section-number-3">9.5</span> Upgrade to v1.3.2 of async-http-client</h3>
-<div class="outline-text-3" id="text-9-5">
+<div id="outline-container-10-5" class="outline-3">
+<h3 id="sec-10-5"><span class="section-number-3">10.5</span> Upgrade to v1.3.2 of async-http-client</h3>
+<div class="outline-text-3" id="text-10-5">
 
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> Release 0.2.0</h2>
-<div class="outline-text-2" id="text-10">
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> Release 0.2.0</h2>
+<div class="outline-text-2" id="text-11">
 
 
 </div>
 
-<div id="outline-container-10-1" class="outline-3">
-<h3 id="sec-10-1"><span class="section-number-3">10.1</span> Stream as seq</h3>
-<div class="outline-text-3" id="text-10-1">
+<div id="outline-container-11-1" class="outline-3">
+<h3 id="sec-11-1"><span class="section-number-3">11.1</span> Stream as seq</h3>
+<div class="outline-text-3" id="text-11-1">
 
 <p>   Response body can be seq, this allows for easy HTTP Stream
    handling. <a href="http://neotyk.github.com/http.async.client/docs.html#sec-1.2.4">Documentation</a>.
@@ -680,36 +714,36 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-10-2" class="outline-3">
-<h3 id="sec-10-2"><span class="section-number-3">10.2</span> Cookies</h3>
-<div class="outline-text-3" id="text-10-2">
+<div id="outline-container-11-2" class="outline-3">
+<h3 id="sec-11-2"><span class="section-number-3">11.2</span> Cookies</h3>
+<div class="outline-text-3" id="text-11-2">
 
 <p>   Added cookies support. <a href="http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.4">Sending</a> and <a href="http://neotyk.github.com/http.async.client/docs.html#sec-1.2.5.4">receiving</a>.
 </p></div>
 
 </div>
 
-<div id="outline-container-10-3" class="outline-3">
-<h3 id="sec-10-3"><span class="section-number-3">10.3</span> Authentication support</h3>
-<div class="outline-text-3" id="text-10-3">
+<div id="outline-container-11-3" class="outline-3">
+<h3 id="sec-11-3"><span class="section-number-3">11.3</span> Authentication support</h3>
+<div class="outline-text-3" id="text-11-3">
 
 <p>   Basic and Digest from rfc2617 are supported. <a href="http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.6">Documentation</a>.
 </p></div>
 
 </div>
 
-<div id="outline-container-10-4" class="outline-3">
-<h3 id="sec-10-4"><span class="section-number-3">10.4</span> Proxy per request</h3>
-<div class="outline-text-3" id="text-10-4">
+<div id="outline-container-11-4" class="outline-3">
+<h3 id="sec-11-4"><span class="section-number-3">11.4</span> Proxy per request</h3>
+<div class="outline-text-3" id="text-11-4">
 
 <p>   Proxy can be specified per request. <a href="http://neotyk.github.com/http.async.client/http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5">Documentation</a>.
 </p></div>
 
 </div>
 
-<div id="outline-container-10-5" class="outline-3">
-<h3 id="sec-10-5"><span class="section-number-3">10.5</span> Branding User-Agent</h3>
-<div class="outline-text-3" id="text-10-5">
+<div id="outline-container-11-5" class="outline-3">
+<h3 id="sec-11-5"><span class="section-number-3">11.5</span> Branding User-Agent</h3>
+<div class="outline-text-3" id="text-11-5">
 
 <p>   Specifying User-Agent per client.
    <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client"><b>http.async.client/create-client</b></a> and <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client"><b>http.async.client/with-client</b></a>.
@@ -717,9 +751,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-10-6" class="outline-3">
-<h3 id="sec-10-6"><span class="section-number-3">10.6</span> Keyworded maps in API</h3>
-<div class="outline-text-3" id="text-10-6">
+<div id="outline-container-11-6" class="outline-3">
+<h3 id="sec-11-6"><span class="section-number-3">11.6</span> Keyworded maps in API</h3>
+<div class="outline-text-3" id="text-11-6">
 
 <p>   Like <b>:options</b> in <a href="http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET"><b>http.async.client/GET</b></a>.
 </p>
@@ -745,7 +779,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-04-27 18:13:43 CEST</p>
+<p class="date">Date: 2012-05-04 23:07:49 CEST</p>
 <p class="author">Author: Hubert Iwaniuk</p>
 <p class="creator">Org version 7.8.03 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
