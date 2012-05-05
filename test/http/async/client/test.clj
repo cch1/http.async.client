@@ -804,7 +804,21 @@
       (is (realized? (:error-time resp)))
       (when (realized? (:error-time resp))
         (is (< 0 (error-time resp))))))
-  (testing "events partial order"
+  (testing "all timing - success response"
+    (let [resp (GET *client* "http://localhost:8123/body")
+          _ (await resp)
+          t (all-times resp)]
+      (are [k] (not (nil? (k t)))
+           :status :headers :body :done)
+      (is (nil? (:error t)))))
+  (testing "all timing - failed response"
+    (let [resp (GET *client* "http://incanters.do.not.exist.or.do.they/")
+          _ (await resp)
+          t (all-times resp)]
+      (is (not (nil? (:error t))))
+      (are [k] (nil? (k t))
+           :status :headers :body :done)))
+  (testing "events order"
     (let [resp (GET *client* "http://localhost:8123/body")
           _ (await resp)]
       (is (< (status-time resp)

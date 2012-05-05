@@ -40,3 +40,20 @@
   "Time it took (in milliseconds) from request execution to failure."
   [response]
   (/ (double (- @(:error-time response) @(:started-time response))) 1000000.0))
+
+(defn all-times
+  "All times that are already available, in milliseconds."
+  [response]
+  (let [start   @(:started-time response)
+        get-nb  (fn [k] (let [p (k response)] (when (realized? p) @p)))
+        status  (get-nb :status-time)
+        headers (get-nb :headers-time)
+        body    (get-nb :body-time)
+        done    (get-nb :done-time)
+        error   (get-nb :error-time)
+        safe-time (fn [t] (when t (/ (double (- t start)) 1000000.0)))]
+    {:status  (safe-time status)
+     :headers (safe-time headers)
+     :body    (safe-time body)
+     :done    (safe-time done)
+     :error   (safe-time error)}))
