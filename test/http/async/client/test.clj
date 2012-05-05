@@ -765,7 +765,7 @@
   (let [resp (GET *client* "http://localhost:8123/empty")]
     (is (nil? (string resp)))))
 
-(deftest timing
+(deftest response-timing
   (testing "started-time present"
     (let [resp (GET *client* "http://localhost:8123/")]
       (cancel resp)

@@ -17,26 +17,26 @@
   {:author "Hubert Iwaniuk"})
 
 (defn status-time
-  "Time it took (in nanoseconds) from request execution to receiving status line."
+  "Time it took (in milliseconds) from request execution to receiving status line."
   [response]
-  (- @(:status-time response) @(:started-time response)))
+  (/ (double (- @(:status-time response) @(:started-time response))) 1000000.0))
 
 (defn headers-time
-  "Time it took (in nanoseconds) from request execution to receiving headers."
+  "Time it took (in milliseconds) from request execution to receiving headers."
   [response]
-  (- @(:headers-time response) @(:started-time response)))
+  (/ (double (- @(:headers-time response) @(:started-time response))) 1000000.0))
 
 (defn body-time
-  "Time it took (in nanoseconds) from request execution to receiving body."
+  "Time it took (in milliseconds) from request execution to receiving body."
   [response]
-  (- @(:body-time response) @(:started-time response)))
+  (/ (double (- @(:body-time response) @(:started-time response))) 1000000.0))
 
 (defn done-time
-  "Time it took (in nanoseconds) from request execution to completing response."
+  "Time it took (in milliseconds) from request execution to completing response."
   [response]
-  (- @(:done-time response) @(:started-time response)))
+  (/ (double (- @(:done-time response) @(:started-time response))) 1000000.0))
 
 (defn error-time
-  "Time it took (in nanoseconds) from request execution to failure."
+  "Time it took (in milliseconds) from request execution to failure."
   [response]
-  (- @(:error-time response) @(:started-time response)))
+  (/ (double (- @(:error-time response) @(:started-time response))) 1000000.0))
