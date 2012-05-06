@@ -271,6 +271,16 @@
   (when-let [f (:cancel (meta resp))]
     (f)))
 
+(defn url
+  "Gets URL from response"
+  [resp]
+  (:url resp))
+
+(defn raw-url
+  "Gets raw URL from response"
+  [resp]
+  (:raw-url resp))
+
 (defn close
   "Closes client."
   ([client] (.close client)))
