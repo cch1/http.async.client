@@ -8,6 +8,8 @@
    Allow POST and PUT to send multipart messages.
    When *vector* is provided as body it is treated as multipart.
    Please consult documentation and tests for examples of usage.
+** Add convenience url and raw-url
+   [[https://github.com/neotyk/http.async.client/issues/35][#35]]. Allow easy retrieval of URL used to request resource.
 ** There's a function for that!
    Listen to what kibit has to say.
 * Release 0.4.4
