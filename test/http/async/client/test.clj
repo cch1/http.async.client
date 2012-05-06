@@ -706,7 +706,8 @@
     (is (false? (cancelled? resp)))
     (is (true? (cancel resp)))
     (await resp)
-    (is (true? (cancelled? resp)))))
+    (is (true? (cancelled? resp)))
+    (is (true? (done? resp)))))
 
 (deftest reqeust-timeout
   (testing "timing out"

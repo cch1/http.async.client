@@ -189,14 +189,8 @@
 
 (defn- safe-get
   [k r]
-  (let [p (k r)]
-    (if (or
-         (realized? p)
-         (not
-          (or
-           (failed? r)
-           (done? r))))
-      @p)))
+  (when-not (failed? r)
+    @(k r)))
 
 (defn await
   "Waits for response processing to be finished.
