@@ -32,7 +32,7 @@
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
-(def ^:dynamic *user-agent* "http.async.client/0.4.5-dev")
+(def ^:dynamic *user-agent* "http.async.client/0.4.5")
 
 (def ^:dynamic *CLIENT* nil)
 
