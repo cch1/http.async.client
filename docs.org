@@ -690,6 +690,16 @@
 **** canceled?
      [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-canceled?][*http.async.client/canceled?*]] will return true iff request has
      been [[*Canceling%20request][canceled]], else false is return.
+*** Requested URL
+    If you need to get URL of response at hand, there are two
+    associations in it that you will find useful:
+    - :url :: encoded url,
+    - :raw-url :: not encoded url.
+
+    And two convenience functions:
+    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-url][*http.async.client/url*]],
+    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-raw-url][*http.async.client/raw-url*]].
+
 ** Managing client
 *** Branding
     *http.async.client* can be configured with User-Agent. To do so

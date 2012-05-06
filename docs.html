@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Asynchronous HTTP Client - Clojure - Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-05-04 23:07:00 CEST"/>
+<meta name="generated" content="2012-05-06 23:39:24 CEST"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -179,7 +179,9 @@ org_html_manager.setup();  // activate after the parameters are set
 <li><a href="#sec-2-5-9-1">2.5.9.1 done?</a></li>
 <li><a href="#sec-2-5-9-2">2.5.9.2 failed?</a></li>
 <li><a href="#sec-2-5-9-3">2.5.9.3 canceled?</a></li>
-</ul></li>
+</ul>
+</li>
+<li><a href="#sec-2-5-10">2.5.10 Requested URL</a></li>
 </ul>
 </li>
 <li><a href="#sec-2-6">2.6 Managing client</a>
@@ -1526,6 +1528,34 @@ org_html_manager.setup();  // activate after the parameters are set
      been <a href="#sec-2-5-8">canceled</a>, else false is return.
 </p></div>
 </div>
+
+</div>
+
+<div id="outline-container-2-5-10" class="outline-4">
+<h4 id="sec-2-5-10"><span class="section-number-4">2.5.10</span> Requested URL</h4>
+<div class="outline-text-4" id="text-2-5-10">
+
+<p>    If you need to get URL of response at hand, there are two
+    associations in it that you will find useful:
+</p><dl>
+<dt>:url</dt><dd>encoded url,
+</dd>
+<dt>:raw-url</dt><dd>not encoded url.
+</dd>
+</dl>
+
+
+<p>
+    And two convenience functions:
+</p><ul>
+<li><a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-url"><b>http.async.client/url</b></a>,
+</li>
+<li><a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-raw-url"><b>http.async.client/raw-url</b></a>.
+</li>
+</ul>
+
+
+</div>
 </div>
 
 </div>
@@ -2196,7 +2226,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-05-04 23:07:00 CEST</p>
+<p class="date">Date: 2012-05-06 23:39:24 CEST</p>
 <p class="author">Author: Hubert Iwaniuk</p>
 <p class="creator">Org version 7.8.03 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
