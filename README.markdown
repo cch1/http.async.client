@@ -11,7 +11,7 @@ Declare dependency:
 (defproject your-project "1.0.0-SNAPSHOT"
   :description "Your project description"
   :dependencies [[org.clojure/clojure "1.4.0"]
-                 [http.async.client "0.4.5"]])
+                 [http.async.client "0.5.0-SNAPSHOT"]])
 ```
 
 Require:

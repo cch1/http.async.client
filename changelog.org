@@ -3,6 +3,7 @@
 #+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.5.0
 * Release 0.4.5
 ** Multipart support
    Allow POST and PUT to send multipart messages.
