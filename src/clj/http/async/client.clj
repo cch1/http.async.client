@@ -242,10 +242,28 @@
   [resp]
   (create-cookies (headers resp)))
 
+(defn content-type
+  "Gets content type from response."
+  [resp]
+  (when-let [hs (headers resp)]
+    (:content-type hs)))
+
 (defn status
   "Gets status if status was delivered."
   [resp]
   (safe-get :status resp))
+
+(defn redirect?
+  "Checks if response is redirect."
+  [resp]
+  (when-let [st (status resp)]
+    (<= 300 (:code st) 399)))
+
+(defn location
+  "Retrieves location of redirect."
+  [resp]
+  (when-let [hs (headers resp)]
+    (:location hs)))
 
 (defn error
   "Returns Throwable if request processing failed."
