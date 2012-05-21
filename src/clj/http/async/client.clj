@@ -17,7 +17,7 @@
 (ns http.async.client
   "Asynchronous HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [await])
+  (:refer-clojure :exclude [await send])
   (:use [http.async.client request headers util])
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
@@ -302,63 +302,82 @@
       (-sendText ws text)
       (-sendByte ws byte))))
 
+(defn ws-lifecycle-listener
+  "Registers WebSocketListener to handle lifecycle of WebSocket.
+
+   Stores active socket in atom."
+  [ws openf closef errorf]
+  (reify
+    WebSocketCloseCodeReasonListener
+    (onClose [_ ws code reason]
+      (when closef (closef ws code reason))
+      (reset! ws nil))
+
+    WebSocketListener
+    (^{:tag void} onOpen [_ #^WebSocket soc]
+     (reset! ws soc)
+     (when openf (openf soc)))
+    (^{:tag void} onClose [_ #^WebSocket soc])
+    (^{:tag void} onError [_ #^Throwable t]
+     (reset! ws nil)
+     (when errorf (errorf @ws t)))))
+
+(defn create-ws-close-listener
+  "Creates WebSocket close listener."
+  [f]
+  (reify
+    WebSocketCloseCodeReasonListener
+    (onClose [_ ws code reason]
+      (println "closing")
+      (f ws code reason))
+
+    WebSocketListener
+    (^{:tag void} onOpen [_ #^WebSocket _])
+    (^{:tag void} onClose [_ #^WebSocket _]
+     (println "closing2"))
+    (^{:tag void} onError [_ #^Throwable _])))
+
 (defn create-ws-text-listener
   "Creates WebSocket text listener."
-  [cb]
+  [soc f]
   (reify
     WebSocketTextListener
     (^{:tag void} onMessage [_ #^String s]
-      (println "ws msg:" s)
-      (cb s))
-    (^{:tag void} onFragment [_ #^String s #^boolean last]
-      (println "ws frag:" s ", last:" last))
+     (f @soc s))
+    (^{:tag void} onFragment [_ #^String s #^boolean last])
 
     WebSocketListener
-    (^{:tag void} onOpen [_ #^WebSocket ws]
-      (println "ws open:" ws))
-    (^{:tag void} onClose [_ #^WebSocket ws]
-      (println "ws close:" ws))
-    (^{:tag void} onError [_ #^Throwable t]
-      (println "ws error:" t))
-
-
-    WebSocketCloseCodeReasonListener
-    (onClose [_ ws code reason]
-      (println "ws close:" ws ", code:" code ", reason:" reason))
-    ))
+    (^{:tag void} onOpen [_ #^WebSocket _])
+    (^{:tag void} onClose [_ #^WebSocket _])
+    (^{:tag void} onError [_ #^Throwable _])))
 
 (defn create-ws-byte-listener
   "Creates WebSocket binary listner."
-  [cb]
+  [soc f]
   (reify
     WebSocketByteListener
     (^{:tag void} onMessage [_ #^bytes b]
-      (println "ws msg:" (alength b))
-      (cb b))
-    (^{:tag void} onFragment [_ #^bytes b #^boolean last]
-      (println "ws frag:" (alength b) ", last:" last))
+     (f @soc b))
+    (^{:tag void} onFragment [_ #^bytes b #^boolean last])
 
     WebSocketListener
-    (^{:tag void} onOpen [_ #^WebSocket ws]
-      (println "ws open:" ws))
-    (^{:tag void} onClose [_ #^WebSocket ws]
-      (println "ws close:" ws))
-    (^{:tag void} onError [_ #^Throwable t]
-      (println "ws error:" t))
-
-
-    WebSocketCloseCodeReasonListener
-    (onClose [_ ws code reason]
-      (println "ws close:" ws ", code:" code ", reason:" reason))
-    ))
+    (^{:tag void} onOpen [_ #^WebSocket _])
+    (^{:tag void} onClose [_ #^WebSocket _])
+    (^{:tag void} onError [_ #^Throwable _])))
 
 (defn websocket
   "Opens WebSocket connection."
   {:tag WebSocket}
-  [client #^String url & {text-cb :text byte-cb :byte}]
-  (let [b (WebSocketUpgradeHandler$Builder.)]
-    (when text-cb (.addWebSocketListener b (create-ws-text-listener text-cb)))
-    (when byte-cb (.addWebSocketListener b (create-ws-byte-listener byte-cb)))
+  [client #^String url & {text-cb  :text
+                          byte-cb  :byte
+                          open-cb  :open
+                          close-cb :close
+                          error-cb :error}]
+  (let [b (WebSocketUpgradeHandler$Builder.)
+        ws (atom nil)]
+    (.addWebSocketListener b (ws-lifecycle-listener ws open-cb close-cb error-cb))
+    (when text-cb (.addWebSocketListener b (create-ws-text-listener ws text-cb)))
+    (when byte-cb (.addWebSocketListener b (create-ws-byte-listener ws byte-cb)))
     (.get (.executeRequest client (prepare-request :get url) (.build b)))))
 
 ;; closing
