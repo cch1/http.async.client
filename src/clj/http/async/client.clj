@@ -220,7 +220,10 @@
       ((fn gen-next []
          (lazy-seq
           (let [v (.take b)]
-            (when-not (= ::done v)
+            (if (= ::done v)
+              (do
+                (.put b ::done)
+                nil)
               (cons v (gen-next)))))))
       b)))
 
