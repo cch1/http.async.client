@@ -884,7 +884,7 @@
     Sample:
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)]
-        (let [req (request/prepare-request client
+        (let [req (request/prepare-request 
                                            :get "http://google.com"
                                            :headers {:my-header "value"})]
           ;; now you have request, next thing to do would be to execute it
@@ -923,7 +923,7 @@
     Sample code to illustrate how to use status callback:
     #+begin_src clojure
       (with-open [client (http/create-client)] ; create client
-        (let [request (request/prepare-request client :get "http://example.com") ; create request
+        (let [request (request/prepare-request :get "http://example.com") ; create request
               status (promise)                ; status promise that will be delivered by callback
               response (request/execute-request
                         client request        ; execute *request*
@@ -945,7 +945,7 @@
     Sample code to illustrate how to use headers callback:
     #+begin_src clojure
       (with-open [client (http/create-client)] ; create client
-        (let [request (request/prepare-request client :get "http://example.com") ; create request
+        (let [request (request/prepare-request :get "http://example.com") ; create request
               headers (promise)               ; headers promise that will be delivered by callback
               response (request/execute-request
                         client request        ; execute *request*
