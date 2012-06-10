@@ -618,6 +618,24 @@
     #+END_SRC
     Again, like in case of status, body might not have been delivered
     yet after this returns.
+*** Reading content-type
+    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-content-type][*http.async.client/content-type*]] returns value of *Content-Type*
+    header.
+    #+BEGIN_SRC clojure
+      (with-open [client (http/create-client)] ; Create client
+        (let [resp         (http/GET client url)
+              content-type (http/content-type resp)]
+          (println "Content-Type of response:" content-type)))
+    #+END_SRC
+*** Reading location
+    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-location][*http.async.client/location*]] will return redirect target if
+    response is redirect.
+    #+BEGIN_SRC clojure
+      (with-open [client (http/create-client)] ; Create client
+        (let [resp (http/GET client url)
+              loc  (http/location resp)]
+          (println "Location of redirect:" loc)))
+    #+END_SRC
 *** Reading cookies
     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cookies][*http.async.client/cookies*]] returns seq of maps representing
     cookies.
