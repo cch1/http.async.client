@@ -599,6 +599,14 @@
     Sample above will return HTTP response status code, notice that
     after this returns headers and body, might not been delivered
     yet.
+*** Is redirect?
+    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-redirect%3F][*http.async.client/redirect?*]] checks if response is redirect.
+    #+BEGIN_SRC clojure
+      (with-open [client (http/create-client)] ; Create client
+        (let [resp (http/await (http/GET client url))]
+          (when (http/redirect? resp)
+            (println "Response is redirect."))))
+    #+END_SRC
 *** Reading headers
     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-headers][*http.async.client/headers*]] returns headers lazy map of response.
     It will wait until HTTP Headers are received.
