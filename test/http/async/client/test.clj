@@ -121,6 +121,7 @@
              "/timeout" (Thread/sleep 2000)
              "/empty" (.setHeader hResp "Nothing" "Yep")
              "/multi-query" (.setHeader hResp "query" (.getQueryString hReq))
+             "/redirect" (.sendRedirect hResp "here")
              (doseq [n (enumeration-seq (.getParameterNames hReq))]
                (doseq [v (.getParameterValues hReq n)]
                  (.addHeader hResp n v))))
@@ -630,6 +631,14 @@
       (is (thrown-with-msg? IOException #"Too many connections 1" (GET client url)))
       (is (not (failed? (await r1)))))))
 
+(deftest redirect-convenience-fns
+  (let [resp (GET *client* "http://localhost:8123/redirect")]
+    (is (true? (redirect? resp)))
+    (is (= "http://localhost:8123/here" (location resp)))))
+
+(deftest content-type-fn
+  (let [resp (GET *client* "http://localhost:8123/body")]
+    (is (.startsWith (content-type resp) "text/plain"))))
 
 (deftest single-set-cookie
   (let [resp (GET *client* "http://localhost:8123/cookie")
@@ -638,7 +647,6 @@
     (is (string? (:set-cookie header)))
     (is (= (:name cookie) "foo"))
     (is (= (:value cookie) "bar"))))
-
 
 (deftest await-string
   (let [resp (GET *client* "http://localhost:8123/stream")
