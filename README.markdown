@@ -43,10 +43,14 @@ For more documentation refer to
 
 [Discussion forum](http://groups.google.com/group/httpasyncclient).
 
-*http.async.client* is distributed under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
+If you would like to help please
+[look at to do](http://neotyk.github.com/http.async.client/todo.html)
+or
+[submit a ticket](http://github.com/neotyk/http.async.client/issues).
 
-If you would like to help please look at
-[to do](http://neotyk.github.com/http.async.client/todo.html) or submit
-ticket [here](http://github.com/neotyk/http.async.client/issues).
+[*http.async.client*](http://github.com/neotyk/http.async.client) is
+using [*YourKit*](http://www.yourkit.com/).
+
+*http.async.client* is distributed under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 [Changelog](http://neotyk.github.com/http.async.client/changelog.html).
