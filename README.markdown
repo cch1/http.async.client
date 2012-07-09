@@ -33,7 +33,7 @@ GET resource:
 ## Information over *http.async.client*
 
 [*http.async.client*](http://github.com/neotyk/http.async.client) is
-based on [Asynchronous Http Client for Java](http://github.com/AsyncHttpClient/async-http-client).
+based on [Asynchronous Http Client for Java](http://github.com/sonatype/async-http-client).
 
 It runs with Clojure 1.3, development goes against Clojure 1.4.
 
@@ -41,6 +41,7 @@ For more documentation refer to
  [docs](http://neotyk.github.com/http.async.client/docs.html) and for
  API to [doc](http://neotyk.github.com/http.async.client/doc/).
 
+[Discussion forum](http://groups.google.com/group/httpasyncclient).
 
 *http.async.client* is distributed under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
