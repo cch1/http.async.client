@@ -45,10 +45,10 @@
        ([k default] (if (.containsKey hds k)
                       (v hds k)
                       default)))
-      (cons [m] (throw (UnsupportedOperationException. "Headers are read only.")))
+      (cons [m] (throw (UnsupportedOperationException. "Form 'cons' not supported: headers are read only.")))
       (count [] (.size hds))
-      (assoc [k v] (throw (UnsupportedOperationException. "Headers are read only.")))
-      (without [k] (throw (UnsupportedOperationException. "Headers are read only")))
+      (assoc [k v] (throw (UnsupportedOperationException. "Form 'assoc' not supported: headers are read only.")))
+      (without [k] (throw (UnsupportedOperationException. "Form 'without' not supported: headers are read only")))
       (seq [] ((fn thisfn [plseq]
                   (lazy-seq
                    (when-let [pseq (seq plseq)]
