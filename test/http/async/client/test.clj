@@ -196,7 +196,10 @@
                                       (deliver headers# hds)
                                       [hds :abort]))
         headers @headers#]
-    (is (= (:test-header headers) "test-value"))))
+    (is (= (:test-header headers) "test-value"))
+    (is (thrown? UnsupportedOperationException (.cons ^clojure.lang.APersistentMap headers '())))
+    (is (thrown? UnsupportedOperationException (assoc ^clojure.lang.APersistentMap headers :a 1)))
+    (is (thrown? UnsupportedOperationException (.without ^clojure.lang.APersistentMap headers :a)))))
 
 (deftest test-status-and-header-callbacks
   (let [status# (promise)
