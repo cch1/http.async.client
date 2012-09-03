@@ -2,18 +2,21 @@
   :name             "http.async.client"
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "http://neotyk.github.com/http.async.client/"
-  :source-path      "src/clj"
-  :java-source-path "src/jvm"
-  :javac-options {:deprecation "true"}
+  :source-paths ["src/clj"]
+  :java-source-paths ["src/jvm"]
   :dependencies     [[org.clojure/clojure "1.4.0"]
 		     [com.ning/async-http-client "1.7.4"]]
-  :plugins [[codox "0.6.1"]]
-  :dev-dependencies [[org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
-                     [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
-                     [lein-difftest "1.3.3"  :exclusions [org.clojure/clojure
-                                                          org.clojure/clojure-contrib]]
-                     [log4j "1.2.13"]
-                     [org.slf4j/slf4j-log4j12 "1.6.4"]]
+  :min-lein-version "2.0.0"
+  :plugins [[codox "0.6.1"]
+            [lein-difftest "1.3.3"
+             :exclusions [org.clojure/clojure org.clojure/clojure-contrib]]]
+  :profiles {:dev
+             {:resource-paths ["test-resources"],
+              :dependencies
+              [[org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
+               [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
+               [log4j "1.2.13"]
+               [org.slf4j/slf4j-log4j12 "1.6.4"]]}}
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
   :codox {:output-dir "doc"}
   :autodoc {:web-src-dir "http://github.com/neotyk/http.async.client/blob/"
