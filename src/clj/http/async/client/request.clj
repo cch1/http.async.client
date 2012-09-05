@@ -43,7 +43,8 @@
    :put     "PUT"
    :delete  "DELETE"
    :head    "HEAD"
-   :options "OPTIONS"})
+   :options "OPTIONS"
+   :patch   "PATCH"})
 
 (defn get-encoding
   "Gets content encoding from headers, if Content-Type header not present

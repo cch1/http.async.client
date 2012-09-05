@@ -149,7 +149,7 @@
                                          (apply concat ~'options))))))
           methods)))
 
-(gen-methods :get :post :put :delete :head :options)
+(gen-methods :get :post :put :delete :head :options :patch)
 
 (defn request-stream
   "Consumes stream from given url.
