@@ -15,7 +15,6 @@
 (ns http.async.client.util
   "Asynchronous HTTP Client - Clojure - Utils"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [promise])
   (:import (com.ning.http.client ProxyServer
                                  ProxyServer$Protocol
                                  Realm$AuthScheme
