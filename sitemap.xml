@@ -8,86 +8,67 @@
 
 <url>
   <loc>http://neotyk.github.com/http.async.client/</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>1.00</priority>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/docs.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.80</priority>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/doc/</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.80</priority>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/todo.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.80</priority>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/changelog.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.80</priority>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/doc/http.async.client.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/doc/http.async.client.request.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://neotyk.github.com/http.async.client/doc/http.async.client.cert.html</loc>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
+  <changefreq>daily</changefreq>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/doc/index.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/doc/http.async.client.headers.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://neotyk.github.com/http.async.client/doc/http.async.client.part.html</loc>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
+  <changefreq>daily</changefreq>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/doc/http.async.client.status.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://neotyk.github.com/http.async.client/doc/http.async.client.util.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
+  <lastmod>2012-05-06T23:00:51+00:00</lastmod>
   <changefreq>daily</changefreq>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
-  <changefreq>daily</changefreq>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>http://neotyk.github.com/http.async.client/autodoc/index.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
-  <changefreq>daily</changefreq>
-  <priority>0.51</priority>
-</url>
-<url>
-  <loc>http://neotyk.github.com/http.async.client/autodoc/api-index.html</loc>
-  <lastmod>2011-12-31T13:20:48+00:00</lastmod>
-  <changefreq>daily</changefreq>
-  <priority>0.51</priority>
 </url>
 </urlset>
