@@ -127,11 +127,12 @@
 ** Authentication support
    Basic and Digest from rfc2617 are supported. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.6][Documentation]].
 ** Proxy per request
-   Proxy can be specified per request. [[http://neotyk.github.com/http.async.client/http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
+   Proxy can be specified per request. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
 ** Branding User-Agent
    Specifying User-Agent per client.
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]].
+   [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-create-client][*http.async.client/create-client*]]
+   and *http.async.client/with-client* (which later got deprecated).
 ** Keyworded maps in API
-   Like *:options* in [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].
+   Like *:options* in [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-GET][*http.async.client/GET*]].
 
 #+INCLUDE: ga.org
