@@ -17,11 +17,17 @@
 (ns http.async.client
   "Asynchronous HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [await])
+  (:refer-clojure :exclude [await send])
   (:use [http.async.client request headers util])
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
+           (com.ning.http.client.websocket WebSocket
+                                           WebSocketUpgradeHandler$Builder
+                                           WebSocketListener
+                                           WebSocketByteListener
+                                           WebSocketTextListener
+                                           WebSocketCloseCodeReasonListener)
            (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
 
 ;; # Client Lifecycle
@@ -293,6 +299,127 @@
   [resp]
   (:raw-url resp))
 
+;; websocket
+(defprotocol IWebSocket
+  (-sendText [this text])
+  (-sendByte [this byte]))
+
+(extend-protocol IWebSocket
+  WebSocket
+  (-sendText [ws text]
+    (.sendTextMessage ws text))
+  (-sendByte [ws byte]
+    (.sendMessage ws byte)))
+
+(defn send
+  "Send message via WebSocket."
+  [ws & {text :text
+         byte :byte}]
+  (when (satisfies? IWebSocket ws)
+    (if text
+      (-sendText ws text)
+      (-sendByte ws byte))))
+
+(defn ws-lifecycle-listener
+  "Registers WebSocketListener to handle lifecycle of WebSocket.
+
+   Stores active socket in atom."
+  [ws openf closef errorf]
+  (reify
+    WebSocketCloseCodeReasonListener
+    (onClose [_ ws code reason]
+      (when closef (closef ws code reason))
+      (reset! ws nil))
+
+    WebSocketListener
+    (^{:tag void} onOpen [_ #^WebSocket soc]
+     (reset! ws soc)
+     (when openf (openf soc)))
+    (^{:tag void} onClose [_ #^WebSocket soc])
+    (^{:tag void} onError [_ #^Throwable t]
+     (reset! ws nil)
+     (when errorf (errorf @ws t)))))
+
+(defn create-ws-close-listener
+  "Creates WebSocket close listener."
+  [f]
+  (reify
+    WebSocketCloseCodeReasonListener
+    (onClose [_ ws code reason]
+      (println "closing")
+      (f ws code reason))
+
+    WebSocketListener
+    (^{:tag void} onOpen [_ #^WebSocket _])
+    (^{:tag void} onClose [_ #^WebSocket _]
+     (println "closing2"))
+    (^{:tag void} onError [_ #^Throwable _])))
+
+(defn create-ws-text-listener
+  "Creates WebSocket text listener."
+  [soc f]
+  (reify
+    WebSocketTextListener
+    (^{:tag void} onMessage [_ #^String s]
+     (f @soc s))
+    (^{:tag void} onFragment [_ #^String s #^boolean last])
+
+    WebSocketListener
+    (^{:tag void} onOpen [_ #^WebSocket _])
+    (^{:tag void} onClose [_ #^WebSocket _])
+    (^{:tag void} onError [_ #^Throwable _])))
+
+(defn create-ws-byte-listener
+  "Creates WebSocket binary listner."
+  [soc f]
+  (reify
+    WebSocketByteListener
+    (^{:tag void} onMessage [_ #^bytes b]
+     (f @soc b))
+    (^{:tag void} onFragment [_ #^bytes b #^boolean last])
+
+    WebSocketListener
+    (^{:tag void} onOpen [_ #^WebSocket _])
+    (^{:tag void} onClose [_ #^WebSocket _])
+    (^{:tag void} onError [_ #^Throwable _])))
+
+(defn websocket
+  "Opens WebSocket connection."
+  {:tag WebSocket}
+  [client #^String url & {text-cb  :text
+                          byte-cb  :byte
+                          open-cb  :open
+                          close-cb :close
+                          error-cb :error}]
+  (let [b (WebSocketUpgradeHandler$Builder.)
+        ws (atom nil)]
+    (.addWebSocketListener b (ws-lifecycle-listener ws open-cb close-cb error-cb))
+    (when text-cb (.addWebSocketListener b (create-ws-text-listener ws text-cb)))
+    (when byte-cb (.addWebSocketListener b (create-ws-byte-listener ws byte-cb)))
+    (.get (.executeRequest client (prepare-request :get url) (.build b)))))
+
+;; closing
+(defprotocol IClosable
+  (-close [this])
+  (-open? [this]))
+
+(extend-protocol IClosable
+  AsyncHttpClient
+  (-close [client] (.close client))
+  (-open? [client] (not (.isClosed client)))
+
+  WebSocket
+  (-close [soc] (.close soc))
+  (-open? [soc] (.isOpen soc)))
+
 (defn close
   "Closes client."
-  ([client] (.close client)))
+  [client]
+  (when (satisfies? IClosable client)
+    (-close client)))
+
+(defn open?
+  "Checks if client is open."
+  [client]
+  (when (satisfies? IClosable client)
+    (-open? client)))
