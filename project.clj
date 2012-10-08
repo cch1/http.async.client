@@ -5,7 +5,7 @@
   :source-paths ["src/clj"]
   :java-source-paths ["src/jvm"]
   :dependencies     [[org.clojure/clojure "1.4.0"]
-		     [com.ning/async-http-client "1.7.4"]]
+		     [com.ning/async-http-client "1.7.5"]]
   :min-lein-version "2.0.0"
   :plugins [[codox "0.6.1"]
             [lein-difftest "1.3.3"
@@ -21,4 +21,7 @@
   :codox {:output-dir "doc"}
   :autodoc {:web-src-dir "http://github.com/neotyk/http.async.client/blob/"
             :web-home "http://neotyk.github.com/http.async.client/autodoc/"
-            :copyright "Copyright 2012 Hubert Iwaniuk"})
+            :copyright "Copyright 2012 Hubert Iwaniuk"}
+  :licence {:name "Apache License, Version 2.0"
+            :url "http://www.apache.org/licenses/LICENSE-2.0"
+            :distribution :repo})
