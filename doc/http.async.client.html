@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><link href="css/default.css" rel="stylesheet" type="text/css"><script src="js/jquery.min.js" type="text/javascript"></script><script src="js/page_effects.js" type="text/javascript"></script><title>http.async.client documentation</title></head><body><div id="header"><h1><a href="index.html">Http.async.client 0.4.5-SNAPSHOT API documentation</a></h1></div><div class="sidebar" id="namespaces"><h3><span>Namespaces</span></h3><ul><li class="current"><a href="http.async.client.html"><span>http.async.client</span></a></li><li><a href="http.async.client.cert.html"><span>http.async.client.cert</span></a></li><li><a href="http.async.client.headers.html"><span>http.async.client.headers</span></a></li><li><a href="http.async.client.part.html"><span>http.async.client.part</span></a></li><li><a href="http.async.client.request.html"><span>http.async.client.request</span></a></li><li><a href="http.async.client.status.html"><span>http.async.client.status</span></a></li><li><a href="http.async.client.util.html"><span>http.async.client.util</span></a></li></ul></div><div class="sidebar" id="vars"><h3>Public Vars</h3><ul><li><a href="http.async.client.html#var-DELETE"><span>DELETE</span></a></li><li><a href="http.async.client.html#var-GET"><span>GET</span></a></li><li><a href="http.async.client.html#var-HEAD"><span>HEAD</span></a></li><li><a href="http.async.client.html#var-OPTIONS"><span>OPTIONS</span></a></li><li><a href="http.async.client.html#var-POST"><span>POST</span></a></li><li><a href="http.async.client.html#var-PUT"><span>PUT</span></a></li><li><a href="http.async.client.html#var-await"><span>await</span></a></li><li><a href="http.async.client.html#var-body"><span>body</span></a></li><li><a href="http.async.client.html#var-cancel"><span>cancel</span></a></li><li><a href="http.async.client.html#var-cancelled%3F"><span>cancelled?</span></a></li><li><a href="http.async.client.html#var-close"><span>close</span></a></li><li><a href="http.async.client.html#var-cookies"><span>cookies</span></a></li><li><a href="http.async.client.html#var-create-client"><span>create-client</span></a></li><li><a href="http.async.client.html#var-done%3F"><span>done?</span></a></li><li><a href="http.async.client.html#var-error"><span>error</span></a></li><li><a href="http.async.client.html#var-failed%3F"><span>failed?</span></a></li><li><a href="http.async.client.html#var-headers"><span>headers</span></a></li><li><a href="http.async.client.html#var-raw-url"><span>raw-url</span></a></li><li><a href="http.async.client.html#var-request-stream"><span>request-stream</span></a></li><li><a href="http.async.client.html#var-status"><span>status</span></a></li><li><a href="http.async.client.html#var-stream-seq"><span>stream-seq</span></a></li><li><a href="http.async.client.html#var-string"><span>string</span></a></li><li><a href="http.async.client.html#var-url"><span>url</span></a></li></ul></div><div class="namespace-docs" id="content"><h2>http.async.client documentation</h2><pre class="doc">Asynchronous HTTP Client - Clojure
+<html><head><link href="css/default.css" rel="stylesheet" type="text/css"><script src="js/jquery.min.js" type="text/javascript"></script><script src="js/page_effects.js" type="text/javascript"></script><title>http.async.client documentation</title></head><body><div id="header"><h1><a href="index.html">Http.async.client 0.5.0 API documentation</a></h1></div><div class="sidebar" id="namespaces"><h3><span>Namespaces</span></h3><ul><li class="current"><a href="http.async.client.html"><span>http.async.client</span></a></li><li><a href="http.async.client.cert.html"><span>http.async.client.cert</span></a></li><li><a href="http.async.client.headers.html"><span>http.async.client.headers</span></a></li><li><a href="http.async.client.part.html"><span>http.async.client.part</span></a></li><li><a href="http.async.client.request.html"><span>http.async.client.request</span></a></li><li><a href="http.async.client.status.html"><span>http.async.client.status</span></a></li><li><a href="http.async.client.util.html"><span>http.async.client.util</span></a></li></ul></div><div class="sidebar" id="vars"><h3>Public Vars</h3><ul><li><a href="http.async.client.html#var-DELETE"><span>DELETE</span></a></li><li><a href="http.async.client.html#var-GET"><span>GET</span></a></li><li><a href="http.async.client.html#var-HEAD"><span>HEAD</span></a></li><li><a href="http.async.client.html#var-OPTIONS"><span>OPTIONS</span></a></li><li><a href="http.async.client.html#var-PATCH"><span>PATCH</span></a></li><li><a href="http.async.client.html#var-POST"><span>POST</span></a></li><li><a href="http.async.client.html#var-PUT"><span>PUT</span></a></li><li><a href="http.async.client.html#var-await"><span>await</span></a></li><li><a href="http.async.client.html#var-body"><span>body</span></a></li><li><a href="http.async.client.html#var-cancel"><span>cancel</span></a></li><li><a href="http.async.client.html#var-cancelled%3F"><span>cancelled?</span></a></li><li><a href="http.async.client.html#var-close"><span>close</span></a></li><li><a href="http.async.client.html#var-content-type"><span>content-type</span></a></li><li><a href="http.async.client.html#var-cookies"><span>cookies</span></a></li><li><a href="http.async.client.html#var-create-client"><span>create-client</span></a></li><li><a href="http.async.client.html#var-create-ws-byte-listener"><span>create-ws-byte-listener</span></a></li><li><a href="http.async.client.html#var-create-ws-close-listener"><span>create-ws-close-listener</span></a></li><li><a href="http.async.client.html#var-create-ws-text-listener"><span>create-ws-text-listener</span></a></li><li><a href="http.async.client.html#var-done%3F"><span>done?</span></a></li><li><a href="http.async.client.html#var-error"><span>error</span></a></li><li><a href="http.async.client.html#var-failed%3F"><span>failed?</span></a></li><li><a href="http.async.client.html#var-headers"><span>headers</span></a></li><li><a href="http.async.client.html#var-location"><span>location</span></a></li><li><a href="http.async.client.html#var-open%3F"><span>open?</span></a></li><li><a href="http.async.client.html#var-raw-url"><span>raw-url</span></a></li><li><a href="http.async.client.html#var-redirect%3F"><span>redirect?</span></a></li><li><a href="http.async.client.html#var-request-stream"><span>request-stream</span></a></li><li><a href="http.async.client.html#var-send"><span>send</span></a></li><li><a href="http.async.client.html#var-status"><span>status</span></a></li><li><a href="http.async.client.html#var-stream-seq"><span>stream-seq</span></a></li><li><a href="http.async.client.html#var-string"><span>string</span></a></li><li><a href="http.async.client.html#var-url"><span>url</span></a></li><li><a href="http.async.client.html#var-websocket"><span>websocket</span></a></li><li><a href="http.async.client.html#var-ws-lifecycle-listener"><span>ws-lifecycle-listener</span></a></li></ul></div><div class="namespace-docs" id="content"><h2>http.async.client documentation</h2><pre class="doc">Asynchronous HTTP Client - Clojure
 </pre><div class="public" id="var-DELETE"><h3>DELETE</h3><div class="usage"><code>(DELETE client url &amp; {:as options})</code></div><pre class="doc">Sends asynchronously HTTP DELETE request to url.
 Returns a map:
 - :id      - unique ID of request
@@ -156,6 +156,45 @@ Arguments:
     :user     - user name to be used
     :password - password to be used
     :realm    - realm name to authenticate in
+  :timeout - request timeout in ms</pre></div><div class="public" id="var-PATCH"><h3>PATCH</h3><div class="usage"><code>(PATCH client url &amp; {:as options})</code></div><pre class="doc">Sends asynchronously HTTP PATCH request to url.
+Returns a map:
+- :id      - unique ID of request
+- :status  - promise that once status is received is delivered, contains lazy map of:
+  - :code     - response code
+  - :msg      - response message
+  - :protocol - protocol with version
+  - :major    - major version of protocol
+  - :minor    - minor version of protocol
+- :headers - promise that once headers are received is delivered, contains lazy map of:
+  - :server - header names are keyworded, values stay not changed
+- :body    - body of response, depends on request type, might be ByteArrayOutputStream
+             or lazy sequence, use conveniece methods to extract it, like string
+- :done    - promise that is delivered once receiving response has finished
+- :error   - promise that is delivered if requesting resource failed, once delivered
+             will contain Throwable.
+Arguments:
+- client   - client created via create-client
+- url      - URL to request
+- options  - keyworded arguments:
+  :query   - map of query parameters, if value is vector than multiple values
+             will be send as n=v1&amp;n=v2
+  :headers - map of headers
+  :body    - body
+  :cookies - cookies to send
+  :proxy   - map with proxy configuration to be used
+    :host     - proxy host
+    :port     - proxy port
+    :protocol - (optional) protocol to communicate with proxy,
+                :http (default, if you provide no value) and :https are allowed
+    :user     - (optional) user name to use for proxy authentication,
+                has to be provided with :password
+    :password - (optional) password to use for proxy authentication,
+                has to be provided with :user
+  :auth    - map with authentication to be used
+    :type     - either :basic or :digest
+    :user     - user name to be used
+    :password - password to be used
+    :realm    - realm name to authenticate in
   :timeout - request timeout in ms</pre></div><div class="public" id="var-POST"><h3>POST</h3><div class="usage"><code>(POST client url &amp; {:as options})</code></div><pre class="doc">Sends asynchronously HTTP POST request to url.
 Returns a map:
 - :id      - unique ID of request
@@ -239,6 +278,7 @@ Returns same response.</pre></div><div class="public" id="var-body"><h3>body</h3
 If body have not yet been delivered and request hasn't failed waits for body.</pre></div><div class="public" id="var-cancel"><h3>cancel</h3><div class="usage"><code>(cancel resp)</code></div><pre class="doc">Cancels response.
 </pre></div><div class="public" id="var-cancelled%3F"><h3>cancelled?</h3><div class="usage"><code>(cancelled? resp)</code></div><pre class="doc">Checks if response has been cancelled.
 </pre></div><div class="public" id="var-close"><h3>close</h3><div class="usage"><code>(close client)</code></div><pre class="doc">Closes client.
+</pre></div><div class="public" id="var-content-type"><h3>content-type</h3><div class="usage"><code>(content-type resp)</code></div><pre class="doc">Gets content type from response.
 </pre></div><div class="public" id="var-cookies"><h3>cookies</h3><div class="usage"><code>(cookies resp)</code></div><pre class="doc">Gets cookies from response.
 </pre></div><div class="public" id="var-create-client"><h3>create-client</h3><div class="usage"><code>(create-client &amp; {:keys [compression-enabled connection-timeout follow-redirects idle-in-pool-timeout keep-alive max-conns-per-host max-conns-total max-redirects proxy auth request-timeout user-agent async-connect executor-service ssl-context]})</code></div><pre class="doc">Creates new Async Http Client.
 Arguments:
@@ -269,18 +309,28 @@ Arguments:
 - :user-agent :: User-Agent branding string
 - :async-connect :: Execute connect asynchronously
 - :executor-service :: provide your own executor service for callbacks to be executed on
-- :ssl-context :: provide your own SSL Context</pre></div><div class="public" id="var-done%3F"><h3>done?</h3><div class="usage"><code>(done? resp)</code></div><pre class="doc">Checks if request is finished already (response receiving finished).
+- :ssl-context :: provide your own SSL Context</pre></div><div class="public" id="var-create-ws-byte-listener"><h3>create-ws-byte-listener</h3><div class="usage"><code>(create-ws-byte-listener soc f)</code></div><pre class="doc">Creates WebSocket binary listner.
+</pre></div><div class="public" id="var-create-ws-close-listener"><h3>create-ws-close-listener</h3><div class="usage"><code>(create-ws-close-listener f)</code></div><pre class="doc">Creates WebSocket close listener.
+</pre></div><div class="public" id="var-create-ws-text-listener"><h3>create-ws-text-listener</h3><div class="usage"><code>(create-ws-text-listener soc f)</code></div><pre class="doc">Creates WebSocket text listener.
+</pre></div><div class="public" id="var-done%3F"><h3>done?</h3><div class="usage"><code>(done? resp)</code></div><pre class="doc">Checks if request is finished already (response receiving finished).
 </pre></div><div class="public" id="var-error"><h3>error</h3><div class="usage"><code>(error resp)</code></div><pre class="doc">Returns Throwable if request processing failed.
 </pre></div><div class="public" id="var-failed%3F"><h3>failed?</h3><div class="usage"><code>(failed? resp)</code></div><pre class="doc">Checks if request failed.
 </pre></div><div class="public" id="var-headers"><h3>headers</h3><div class="usage"><code>(headers resp)</code></div><pre class="doc">Gets headers.
-If headers have not yet been delivered and request hasn't failed waits for headers.</pre></div><div class="public" id="var-raw-url"><h3>raw-url</h3><div class="usage"><code>(raw-url resp)</code></div><pre class="doc">Gets raw URL from response
+If headers have not yet been delivered and request hasn't failed waits for headers.</pre></div><div class="public" id="var-location"><h3>location</h3><div class="usage"><code>(location resp)</code></div><pre class="doc">Retrieves location of redirect.
+</pre></div><div class="public" id="var-open%3F"><h3>open?</h3><div class="usage"><code>(open? client)</code></div><pre class="doc">Checks if client is open.
+</pre></div><div class="public" id="var-raw-url"><h3>raw-url</h3><div class="usage"><code>(raw-url resp)</code></div><pre class="doc">Gets raw URL from response
+</pre></div><div class="public" id="var-redirect%3F"><h3>redirect?</h3><div class="usage"><code>(redirect? resp)</code></div><pre class="doc">Checks if response is redirect.
 </pre></div><div class="public" id="var-request-stream"><h3>request-stream</h3><div class="usage"><code>(request-stream client method url body-part-callback &amp; {:as options})</code></div><pre class="doc">Consumes stream from given url.
 method - HTTP method to be used (:get, :post, ...)
 url - URL to set request to
 body-part-callback - callback that takes status (ref {}) of request
                      and received body part as vector of bytes
-options - are optional and can contain :headers, :param, and :query (see prepare-request).</pre></div><div class="public" id="var-status"><h3>status</h3><div class="usage"><code>(status resp)</code></div><pre class="doc">Gets status if status was delivered.
+options - are optional and can contain :headers, :param, and :query (see prepare-request).</pre></div><div class="public" id="var-send"><h3>send</h3><div class="usage"><code>(send ws &amp; {text :text, byte :byte})</code></div><pre class="doc">Send message via WebSocket.
+</pre></div><div class="public" id="var-status"><h3>status</h3><div class="usage"><code>(status resp)</code></div><pre class="doc">Gets status if status was delivered.
 </pre></div><div class="public" id="var-stream-seq"><h3>stream-seq</h3><div class="usage"><code>(stream-seq client method url &amp; {:as options})</code></div><pre class="doc">Creates potentially infinite lazy sequence of Http Stream.
 </pre></div><div class="public" id="var-string"><h3>string</h3><div class="usage"><code>(string resp)</code><code>(string headers body)</code></div><pre class="doc">Converts response to string.
 Or converts body taking encoding from response.</pre></div><div class="public" id="var-url"><h3>url</h3><div class="usage"><code>(url resp)</code></div><pre class="doc">Gets URL from response
-</pre></div></div></body></html>
+</pre></div><div class="public" id="var-websocket"><h3>websocket</h3><div class="usage"><code>(websocket client url &amp; {text-cb :text, byte-cb :byte, open-cb :open, close-cb :close, error-cb :error})</code></div><pre class="doc">Opens WebSocket connection.
+</pre></div><div class="public" id="var-ws-lifecycle-listener"><h3>ws-lifecycle-listener</h3><div class="usage"><code>(ws-lifecycle-listener ws openf closef errorf)</code></div><pre class="doc">Registers WebSocketListener to handle lifecycle of WebSocket.
+
+Stores active socket in atom.</pre></div></div></body></html>

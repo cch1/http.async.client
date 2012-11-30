@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Asynchronous HTTP Client - Clojure - Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-05-06 23:57:58 CEST"/>
+<meta name="generated" content="2012-11-30T09:03+0100"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -168,20 +168,23 @@ org_html_manager.setup();  // activate after the parameters are set
 <ul>
 <li><a href="#sec-2-5-1">2.5.1 Awaiting response</a></li>
 <li><a href="#sec-2-5-2">2.5.2 Reading status line</a></li>
-<li><a href="#sec-2-5-3">2.5.3 Reading headers</a></li>
-<li><a href="#sec-2-5-4">2.5.4 Reading cookies</a></li>
-<li><a href="#sec-2-5-5">2.5.5 Reading body</a></li>
-<li><a href="#sec-2-5-6">2.5.6 Reading body as string</a></li>
-<li><a href="#sec-2-5-7">2.5.7 Reading error</a></li>
-<li><a href="#sec-2-5-8">2.5.8 Canceling request</a></li>
-<li><a href="#sec-2-5-9">2.5.9 Response predicates</a>
+<li><a href="#sec-2-5-3">2.5.3 Is redirect?</a></li>
+<li><a href="#sec-2-5-4">2.5.4 Reading headers</a></li>
+<li><a href="#sec-2-5-5">2.5.5 Reading content-type</a></li>
+<li><a href="#sec-2-5-6">2.5.6 Reading location</a></li>
+<li><a href="#sec-2-5-7">2.5.7 Reading cookies</a></li>
+<li><a href="#sec-2-5-8">2.5.8 Reading body</a></li>
+<li><a href="#sec-2-5-9">2.5.9 Reading body as string</a></li>
+<li><a href="#sec-2-5-10">2.5.10 Reading error</a></li>
+<li><a href="#sec-2-5-11">2.5.11 Canceling request</a></li>
+<li><a href="#sec-2-5-12">2.5.12 Response predicates</a>
 <ul>
-<li><a href="#sec-2-5-9-1">2.5.9.1 done?</a></li>
-<li><a href="#sec-2-5-9-2">2.5.9.2 failed?</a></li>
-<li><a href="#sec-2-5-9-3">2.5.9.3 canceled?</a></li>
+<li><a href="#sec-2-5-12-1">2.5.12.1 done?</a></li>
+<li><a href="#sec-2-5-12-2">2.5.12.2 failed?</a></li>
+<li><a href="#sec-2-5-12-3">2.5.12.3 canceled?</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-5-10">2.5.10 Requested URL</a></li>
+<li><a href="#sec-2-5-13">2.5.13 Requested URL</a></li>
 </ul>
 </li>
 <li><a href="#sec-2-6">2.6 Managing client</a>
@@ -239,7 +242,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>defproject your-project <span style="color: #8b2252;">"1.0.0-SNAPSHOT"</span>
   <span style="color: #008b8b;">:description</span> <span style="color: #8b2252;">"Your project description"</span>
   <span style="color: #008b8b;">:dependencies</span> [[org.clojure/clojure <span style="color: #8b2252;">"1.4.0"</span>]
-                 [http.async.client <span style="color: #8b2252;">"0.4.5"</span>]]<span style="color: #8c8c8c;">)</span>
+                 [http.async.client <span style="color: #8b2252;">"0.5.0"</span>]]<span style="color: #8c8c8c;">)</span>
 </pre>
 
 <p>
@@ -1001,7 +1004,7 @@ org_html_manager.setup();  // activate after the parameters are set
 
 
 <p>
-    Cookie reading is described in <a href="#sec-2-5-4">Reading cookies</a>.
+    Cookie reading is described in <a href="#sec-2-5-7">Reading cookies</a>.
 </p></div>
 
 </div>
@@ -1258,7 +1261,7 @@ org_html_manager.setup();  // activate after the parameters are set
 <li>state is a <b>map</b> with <b>:status</b> and <b>:headers</b> as promises, at
    stage when you get called for body part, both of them should be in
    place already, though it is advised to use convenience methods to
-   read them, see <a href="#sec-2-5-2">Reading status line</a> and <a href="#sec-2-5-3">Reading headers</a>,
+   read them, see <a href="#sec-2-5-2">Reading status line</a> and <a href="#sec-2-5-4">Reading headers</a>,
 </li>
 <li>call-back has to follow guidelines described in <a href="#sec-3-2-3">Body part</a>,
 </li>
@@ -1344,8 +1347,26 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="outline-container-2-5-3" class="outline-4">
-<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> Reading headers</h4>
+<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> Is redirect?</h4>
 <div class="outline-text-4" id="text-2-5-3">
+
+<p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-redirect?"><b>http.async.client/redirect?</b></a> checks if response is redirect.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/await <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">))</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">when</span> <span style="color: #8c8c8c;">(</span>http/redirect? resp<span style="color: #8c8c8c;">)</span>
+      <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8b2252;">"Response is redirect."</span><span style="color: #8c8c8c;">))))</span>
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-5-4" class="outline-4">
+<h4 id="sec-2-5-4"><span class="section-number-4">2.5.4</span> Reading headers</h4>
+<div class="outline-text-4" id="text-2-5-4">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-headers"><b>http.async.client/headers</b></a> returns headers lazy map of response.
     It will wait until HTTP Headers are received.
@@ -1365,9 +1386,47 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2-5-4" class="outline-4">
-<h4 id="sec-2-5-4"><span class="section-number-4">2.5.4</span> Reading cookies</h4>
-<div class="outline-text-4" id="text-2-5-4">
+<div id="outline-container-2-5-5" class="outline-4">
+<h4 id="sec-2-5-5"><span class="section-number-4">2.5.5</span> Reading content-type</h4>
+<div class="outline-text-4" id="text-2-5-5">
+
+<p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-content-type"><b>http.async.client/content-type</b></a> returns value of <b>Content-Type</b>
+    header.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp         <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>
+        content-type <span style="color: #8c8c8c;">(</span>http/content-type resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8b2252;">"Content-Type of response:"</span> content-type<span style="color: #8c8c8c;">)))</span>
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-5-6" class="outline-4">
+<h4 id="sec-2-5-6"><span class="section-number-4">2.5.6</span> Reading location</h4>
+<div class="outline-text-4" id="text-2-5-6">
+
+<p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-location"><b>http.async.client/location</b></a> will return redirect target if
+    response is redirect.
+</p>
+
+
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">Create client</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>
+        loc  <span style="color: #8c8c8c;">(</span>http/location resp<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">println</span> <span style="color: #8b2252;">"Location of redirect:"</span> loc<span style="color: #8c8c8c;">)))</span>
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-5-7" class="outline-4">
+<h4 id="sec-2-5-7"><span class="section-number-4">2.5.7</span> Reading cookies</h4>
+<div class="outline-text-4" id="text-2-5-7">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cookies"><b>http.async.client/cookies</b></a> returns seq of maps representing
     cookies.
@@ -1388,9 +1447,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2-5-5" class="outline-4">
-<h4 id="sec-2-5-5"><span class="section-number-4">2.5.5</span> Reading body</h4>
-<div class="outline-text-4" id="text-2-5-5">
+<div id="outline-container-2-5-8" class="outline-4">
+<h4 id="sec-2-5-8"><span class="section-number-4">2.5.8</span> Reading body</h4>
+<div class="outline-text-4" id="text-2-5-8">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-body"><b>http.async.client/body</b></a> returns either ByteArrayOutputStream or
     seq of it, depending if you used <a href="#sec-2-1-1">Asynchronous operations</a> or
@@ -1401,9 +1460,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2-5-6" class="outline-4">
-<h4 id="sec-2-5-6"><span class="section-number-4">2.5.6</span> Reading body as string</h4>
-<div class="outline-text-4" id="text-2-5-6">
+<div id="outline-container-2-5-9" class="outline-4">
+<h4 id="sec-2-5-9"><span class="section-number-4">2.5.9</span> Reading body as string</h4>
+<div class="outline-text-4" id="text-2-5-9">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-string"><b>http.async.client/string</b></a> returns either string or seq of
     strings, again depending if you used <a href="#sec-2-1-1">Asynchronous operations</a> or
@@ -1439,9 +1498,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2-5-7" class="outline-4">
-<h4 id="sec-2-5-7"><span class="section-number-4">2.5.7</span> Reading error</h4>
-<div class="outline-text-4" id="text-2-5-7">
+<div id="outline-container-2-5-10" class="outline-4">
+<h4 id="sec-2-5-10"><span class="section-number-4">2.5.10</span> Reading error</h4>
+<div class="outline-text-4" id="text-2-5-10">
 
 <p>    <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-error"><b>http.async.client/error</b></a> will return Throwable that was cause of
     request failure iff request failed, else <b>nil</b>.
@@ -1459,9 +1518,9 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2-5-8" class="outline-4">
-<h4 id="sec-2-5-8"><span class="section-number-4">2.5.8</span> Canceling request</h4>
-<div class="outline-text-4" id="text-2-5-8">
+<div id="outline-container-2-5-11" class="outline-4">
+<h4 id="sec-2-5-11"><span class="section-number-4">2.5.11</span> Canceling request</h4>
+<div class="outline-text-4" id="text-2-5-11">
 
 <p>    At any given time of processing HTTP Response you can <b>cancel</b> it
     by calling <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cancel"><b>http.async.client/cancel</b></a>.
@@ -1479,17 +1538,17 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2-5-9" class="outline-4">
-<h4 id="sec-2-5-9"><span class="section-number-4">2.5.9</span> Response predicates</h4>
-<div class="outline-text-4" id="text-2-5-9">
+<div id="outline-container-2-5-12" class="outline-4">
+<h4 id="sec-2-5-12"><span class="section-number-4">2.5.12</span> Response predicates</h4>
+<div class="outline-text-4" id="text-2-5-12">
 
 <p>    You can also check status of request.
 </p>
 </div>
 
-<div id="outline-container-2-5-9-1" class="outline-5">
-<h5 id="sec-2-5-9-1"><span class="section-number-5">2.5.9.1</span> done?</h5>
-<div class="outline-text-5" id="text-2-5-9-1">
+<div id="outline-container-2-5-12-1" class="outline-5">
+<h5 id="sec-2-5-12-1"><span class="section-number-5">2.5.12.1</span> done?</h5>
+<div class="outline-text-5" id="text-2-5-12-1">
 
 <p>     <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-done?"><b>http.async.client/done?</b></a> will tell you if response processing
      has finished:
@@ -1510,30 +1569,30 @@ org_html_manager.setup();  // activate after the parameters are set
 
 </div>
 
-<div id="outline-container-2-5-9-2" class="outline-5">
-<h5 id="sec-2-5-9-2"><span class="section-number-5">2.5.9.2</span> failed?</h5>
-<div class="outline-text-5" id="text-2-5-9-2">
+<div id="outline-container-2-5-12-2" class="outline-5">
+<h5 id="sec-2-5-12-2"><span class="section-number-5">2.5.12.2</span> failed?</h5>
+<div class="outline-text-5" id="text-2-5-12-2">
 
 <p>     <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-failed?"><b>http.async.client/failed?</b></a> will return true iff request has
-     failed. If this return true you can <a href="#sec-2-5-7">read error</a>.
+     failed. If this return true you can <a href="#sec-2-5-10">read error</a>.
 </p></div>
 
 </div>
 
-<div id="outline-container-2-5-9-3" class="outline-5">
-<h5 id="sec-2-5-9-3"><span class="section-number-5">2.5.9.3</span> canceled?</h5>
-<div class="outline-text-5" id="text-2-5-9-3">
+<div id="outline-container-2-5-12-3" class="outline-5">
+<h5 id="sec-2-5-12-3"><span class="section-number-5">2.5.12.3</span> canceled?</h5>
+<div class="outline-text-5" id="text-2-5-12-3">
 
 <p>     <a href="http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-canceled?"><b>http.async.client/canceled?</b></a> will return true iff request has
-     been <a href="#sec-2-5-8">canceled</a>, else false is return.
+     been <a href="#sec-2-5-11">canceled</a>, else false is return.
 </p></div>
 </div>
 
 </div>
 
-<div id="outline-container-2-5-10" class="outline-4">
-<h4 id="sec-2-5-10"><span class="section-number-4">2.5.10</span> Requested URL</h4>
-<div class="outline-text-4" id="text-2-5-10">
+<div id="outline-container-2-5-13" class="outline-4">
+<h4 id="sec-2-5-13"><span class="section-number-4">2.5.13</span> Requested URL</h4>
+<div class="outline-text-4" id="text-2-5-13">
 
 <p>    If you need to get URL of response at hand, there are two
     associations in it that you will find useful:
@@ -1616,7 +1675,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client  <span style="color: #8c8c8c;">(</span>http/create-client {<span style="color: #008b8b;">:follow-redirects</span> true}<span style="color: #8c8c8c;">)</span>]
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client  <span style="color: #8c8c8c;">(</span>http/create-client <span style="color: #008b8b;">:follow-redirects</span> true<span style="color: #8c8c8c;">)</span>]
   <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [resp <span style="color: #8c8c8c;">(</span>http/GET client url<span style="color: #8c8c8c;">)</span>]
     <span style="color: #b22222;">;; </span><span style="color: #b22222;">do stuff with resp</span>
     <span style="color: #8c8c8c;">))</span>
@@ -1911,7 +1970,7 @@ org_html_manager.setup();  // activate after the parameters are set
 
 
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>]
-  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [req <span style="color: #8c8c8c;">(</span>request/prepare-request client
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [req <span style="color: #8c8c8c;">(</span>request/prepare-request 
                                      <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://google.com"</span>
                                      <span style="color: #008b8b;">:headers</span> {<span style="color: #008b8b;">:my-header</span> <span style="color: #8b2252;">"value"</span>}<span style="color: #8c8c8c;">)</span>]
     <span style="color: #b22222;">;; </span><span style="color: #b22222;">now you have request, next thing to do would be to execute it</span>
@@ -1995,7 +2054,7 @@ org_html_manager.setup();  // activate after the parameters are set
 
 
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
-  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request client <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://example.com"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://example.com"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
         status <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">promise</span><span style="color: #8c8c8c;">)</span>                <span style="color: #b22222;">; </span><span style="color: #b22222;">status promise that will be delivered by callback</span>
         response <span style="color: #8c8c8c;">(</span>request/execute-request
                   client request        <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
@@ -2032,7 +2091,7 @@ org_html_manager.setup();  // activate after the parameters are set
 
 
 <pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>] <span style="color: #b22222;">; </span><span style="color: #b22222;">create client</span>
-  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request client <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://example.com"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [request <span style="color: #8c8c8c;">(</span>request/prepare-request <span style="color: #008b8b;">:get</span> <span style="color: #8b2252;">"http://example.com"</span><span style="color: #8c8c8c;">)</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">create request</span>
         headers <span style="color: #8c8c8c;">(</span><span style="color: #a0522d;">promise</span><span style="color: #8c8c8c;">)</span>               <span style="color: #b22222;">; </span><span style="color: #b22222;">headers promise that will be delivered by callback</span>
         response <span style="color: #8c8c8c;">(</span>request/execute-request
                   client request        <span style="color: #b22222;">; </span><span style="color: #b22222;">execute *request*</span>
@@ -2226,9 +2285,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-05-06 23:57:58 CEST</p>
+<p class="date">Date: 2012-11-30T09:03+0100</p>
 <p class="author">Author: Hubert Iwaniuk</p>
-<p class="creator">Org version 7.8.03 with Emacs version 24</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.8.11 with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 
 </div>
