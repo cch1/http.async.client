@@ -639,6 +639,18 @@
     (is (true? (redirect? resp)))
     (is (= "http://localhost:8123/here" (location resp)))))
 
+(deftest following-redirect-with-params
+  (with-open [client (create-client :remove-params-on-redirect false :follow-redirects true)]
+    (let [resp (GET client "http://localhost:8123/redirect" :query {:token "1234"})
+          headers (headers resp)]
+          (are [x y] (= (x headers) (str y)) :token "1234"))))
+
+(deftest following-redirect-without-params
+  (with-open [client (create-client :remove-params-on-redirect true :follow-redirects true)]
+    (let [resp (GET client "http://localhost:8123/redirect" :query {:token "1234"})
+          headers (headers resp)]
+      (is (false? (contains? headers :token))))))
+
 (deftest content-type-fn
   (let [resp (GET *client* "http://localhost:8123/body")]
     (is (.startsWith (content-type resp) "text/plain"))))
