@@ -38,6 +38,7 @@
   - :compression-enabled :: enable HTTP compression
   - :connection-timeout :: connections timeout in ms
   - :follow-redirects :: enable following HTTP redirects
+  - :remove-params-on-redirect :: query parameters removed when a redirect occurs
   - :idle-in-pool-timeout :: idle connection in pool timeout in ms
   - :keep-alive :: enable HTTP keep alive, enabled by default
   - :max-conns-per-host :: max number of polled connections per host
@@ -67,6 +68,7 @@
   [& {:keys [compression-enabled
              connection-timeout
              follow-redirects
+             remove-params-on-redirect
              idle-in-pool-timeout
              keep-alive
              max-conns-per-host
@@ -84,6 +86,7 @@
     (let [b (AsyncHttpClientConfig$Builder.)]
       (when-not (nil? compression-enabled) (.setCompressionEnabled b compression-enabled))
       (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
+      (when-not (nil? remove-params-on-redirect) (.setRemoveQueryParamsOnRedirect b remove-params-on-redirect))
       (when-not (nil? follow-redirects) (.setFollowRedirects b follow-redirects))
       (when idle-in-pool-timeout (.setIdleConnectionInPoolTimeoutInMs b idle-in-pool-timeout))
       (when-not (nil? keep-alive) (.setAllowPoolingConnection b keep-alive))
