@@ -501,7 +501,7 @@
 *** Lazy sequence
     You can get HTTP Stream as lazy sequence of it's body.
     This is very convenient method as *seq* is native type of Clojure
-    so you can apply all mapping, filtering and any other standard
+    so you can apply all mapping, filtering or any other standard
     function that you like to it.
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
@@ -526,10 +526,10 @@
         (println "1: " (first (http/string resp)))
         (println "2: " (first (http/string resp))))
     #+END_SRC
+    Assuming that part1 is first chunk and part2 is second.
     This code will print following:
     : 1: part1
     : 2: part2
-    Assuming that part1 is first chunk and part2 is second.
 
     Second consequence of been directly backed by queue is that you
     can have multiple consumers of same response and non of them will
