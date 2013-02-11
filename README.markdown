@@ -11,7 +11,7 @@ Declare dependency:
 (defproject your-project "1.0.0-SNAPSHOT"
   :description "Your project description"
   :dependencies [[org.clojure/clojure "1.4.0"]
-                 [http.async.client "0.5.0"]])
+                 [http.async.client "0.5.1"]])
 ```
 
 Require:
@@ -54,3 +54,5 @@ using [*YourKit*](http://www.yourkit.com/).
 *http.async.client* is distributed under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 [Changelog](http://neotyk.github.com/http.async.client/changelog.html).
+
+[Contributors](https://github.com/neotyk/http.async.client/graphs/contributors).
