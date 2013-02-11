@@ -3,6 +3,9 @@
 #+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.5.2
+  Compile with Java 1.6
+
 * Release 0.5.1
 ** remove-params-on-redirect
    Issues [[https://github.com/neotyk/http.async.client/issues/46][#46]], [[https://github.com/neotyk/http.async.client/issues/47][#47]] and [[https://github.com/neotyk/http.async.client/issues/48][#48]] by [[https://github.com/josephwilk][Joseph Wilk]].
