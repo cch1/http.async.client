@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="http.async.client - Asynchronous HTTP Client - Clojure"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-11-30T09:06+0100"/>
+<meta name="generated" content="2013-02-11T09:51+0100"/>
 <meta name="author" content="Hubert Iwaniuk"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -61,8 +61,64 @@
   /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" />
-<script type="text/javascript" src="org-info.js"></script>
-<script type="text/javascript" >
+<script type="text/javascript" src="org-info.js">
+/**
+ *
+ * @source: org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in org-info.js.
+ *
+ * Copyright (C) 2012-2013  Sebastian Rose
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
 <!--/*--><![CDATA[/*><!--*/
 org_html_manager.set("TOC_DEPTH", "3");
 org_html_manager.set("LINK_HOME", "http://neotyk.github.com");
@@ -77,6 +133,30 @@ org_html_manager.setup();  // activate after the parameters are set
 /*]]>*///-->
 </script>
 <script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
 <!--/*--><![CDATA[/*><!--*/
  function CodeHighlightOn(elem, id)
  {
@@ -132,10 +212,10 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>defproject your-project <span style="color: #8b2252;">"1.0.0-SNAPSHOT"</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">defproject</span> <span style="color: #0000ff;">your-project</span> <span style="color: #8b2252;">"1.0.0-SNAPSHOT"</span>
   <span style="color: #008b8b;">:description</span> <span style="color: #8b2252;">"Your project description"</span>
   <span style="color: #008b8b;">:dependencies</span> [[org.clojure/clojure <span style="color: #8b2252;">"1.4.0"</span>]
-                 [http.async.client <span style="color: #8b2252;">"0.5.0"</span>]]<span style="color: #8c8c8c;">)</span>
+                 [http.async.client <span style="color: #8b2252;">"0.5.1"</span>]]<span style="color: #8c8c8c;">)</span>
 </pre>
 
 
@@ -144,7 +224,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">ns</span> sample <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:require</span> [http.async.client <span style="color: #008b8b;">:as</span> http]<span style="color: #8c8c8c;">))</span>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">ns</span> sample <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:require</span> [http.async.client <span style="color: #008b8b;">:as</span> http]<span style="color: #8c8c8c;">))</span>
 </pre>
 
 
@@ -153,9 +233,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </p>
 
 
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>]
-  <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">let</span> [response <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"http://github.com/neotyk/http.async.client/"</span><span style="color: #8c8c8c;">)</span>]
-    <span style="color: #8c8c8c;">(</span><span style="color: #483d8b;">-&gt;</span> response
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">let</span> [response <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"http://github.com/neotyk/http.async.client/"</span><span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">-&gt;</span> response
         http/await
         http/string<span style="color: #8c8c8c;">)))</span>
 </pre>
@@ -211,9 +291,9 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-11-30T09:06+0100</p>
+<p class="date">Date: 2013-02-11T09:51+0100</p>
 <p class="author">Author: Hubert Iwaniuk</p>
-<p class="creator"><a href="http://orgmode.org">Org</a> version 7.8.11 with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3e with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 
 </div>
