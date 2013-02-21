@@ -12,6 +12,21 @@
 ** Upgrade AHC to 1.7.10
 
 * Release 0.5.0
+** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-content-type][http.async.client/content-type]]
+   Added utility fn for [[http://neotyk.github.com/http.async.client/docs.html#sec-2-5-5][Reading content-type]].
+** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-redirect%3F][http.async.client/redirect?]]
+   Added utility fn for checking if response [[http://neotyk.github.com/http.async.client/docs.html#sec-2-5-3][Is redirect?]].
+** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-location][http.async.client/location]]
+   Added utility fn for [[http://neotyk.github.com/http.async.client/docs.html#sec-2-5-6][Reading location]].
+** Moved to Leiningen 2
+** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-PATCH][PATCH]]
+   Added support for HTTP PATCH method.
+** Initial WebSocket support
+   Not documented yet, [[https://github.com/neotyk/http.async.client/blob/07b8f1de8f956505185ed224c71abceeff27265f/src/clj/http/async/client.clj#L305][Code is here]].
+   Demo usage can be found in [[https://github.com/neotyk/hac-live][hac-live]] dome for EuroClojure 2012.
+   [[https://github.com/neotyk/hac-live/blob/master/src/hac/live.clj#L261][Request 12]] and [[https://github.com/neotyk/hac-live/blob/master/src/hac/live.clj#L285][Request 13]] are WebSocket examples.
+** Upgrade AHC to v1.7.5
+
 * Release 0.4.5
 ** Multipart support
    Allow POST and PUT to send multipart messages.
