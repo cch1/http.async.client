@@ -282,6 +282,15 @@
     (is (true? (realized? errored)))
     (is (true? (instance? java.net.ConnectException @errored)))))
 
+(deftest test-error-callback-throwing
+  (let [resp (execute-request *client* (prepare-request :get "http://not-existing-host/")
+                              :error (fn [_ _]
+                                       (throw (Exception. "boom!"))))]
+    (await resp)
+    (is (done? resp))
+    (is (failed? resp))
+    (is (= "boom!" (.getMessage (error resp))))))
+
 (deftest test-send-headers
   (let [resp (GET *client* "http://localhost:8123/" :headers {:a 1 :b 2})
         headers (headers resp)]
