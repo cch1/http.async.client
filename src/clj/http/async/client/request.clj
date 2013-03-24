@@ -277,9 +277,12 @@
            (^{:tag void}
             onThrowable [this #^Throwable t]
             (do
-              (deliver (:error resp) ((or error
-                                          (:error *default-callbacks*))
-                                      resp t))
+              (deliver (:error resp) (try
+                                       ((or error
+                                            (:error *default-callbacks*))
+                                        resp t)
+                                       (catch Throwable e
+                                         e)))
               (when-not (realized? (:done resp))
                 (deliver (:done resp) true))))))]
     (with-meta resp {:started (System/currentTimeMillis)
