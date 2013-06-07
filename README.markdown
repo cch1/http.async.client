@@ -33,7 +33,7 @@ GET resource:
 ## Information over *http.async.client*
 
 [*http.async.client*](http://github.com/neotyk/http.async.client) is
-based on [Asynchronous Http Client for Java](http://github.com/sonatype/async-http-client).
+based on [Asynchronous Http Client for Java](http://github.com/AsyncHttpClient/async-http-client).
 
 It runs with Clojure 1.3, development goes against Clojure 1.4.
 
