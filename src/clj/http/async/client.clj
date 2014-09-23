@@ -333,8 +333,8 @@
   [ws openf closef errorf]
   (reify
     WebSocketCloseCodeReasonListener
-    (onClose [_ ws code reason]
-      (when closef (closef ws code reason))
+    (onClose [_ ws* code reason]
+      (when closef (closef ws* code reason))
       (reset! ws nil))
 
     WebSocketListener
