@@ -4,7 +4,7 @@
   :url              "http://neotyk.github.com/http.async.client/"
   :source-paths ["src/clj"]
   :java-source-paths ["src/jvm"]
-  :dependencies     [[org.clojure/clojure "1.4.0"]
+  :dependencies     [[org.clojure/clojure "1.5.1"]
 		     [com.ning/async-http-client "1.7.10"]]
   :min-lein-version "2.0.0"
   :plugins [[codox "0.8.12"]
