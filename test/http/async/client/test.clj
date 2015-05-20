@@ -16,12 +16,15 @@
   "Testing of http.async.client"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [await send])
-  (:use clojure.test
-        http.async.client
-        [http.async.client request util]
-        [clojure.stacktrace :only [print-stack-trace]]
-        [clojure.java.io :only [input-stream]]
-        [clojure.string :only [split]])
+  (:require [http.async.client :refer :all]
+            [http.async.client
+             [request :refer :all]
+             [util :refer :all]]
+            [clojure
+             [test :refer :all]
+             [stacktrace :refer [print-stack-trace]]
+             [string :refer [split]]]
+            [clojure.java.io :refer [input-stream]])
   (:import (com.ning.http.client AsyncHttpClient)
            (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)

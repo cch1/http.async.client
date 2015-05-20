@@ -16,10 +16,11 @@
   "Testing of http.async client x509 certificates"
   {:author "Hubert Iwaniuk / Andrew Diamond / RoomKey.com"}
   (:refer-clojure :exclude [await send])
-  (:use clojure.test
-        http.async.client
-        http.async.client.cert
-        [clojure.stacktrace :only [print-stack-trace]])
+  (:require [http.async.client :refer :all]
+            [http.async.client.cert :refer :all]
+            [clojure
+             [test :refer :all]
+             [stacktrace :only [print-stack-trace]]])
   (:import (com.ning.http.client AsyncHttpClient)
            (java.security KeyStore)
            (java.security.cert X509Certificate)
