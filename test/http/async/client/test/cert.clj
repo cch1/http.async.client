@@ -15,7 +15,7 @@
 (ns http.async.client.test.cert
   "Testing of http.async client x509 certificates"
   {:author "Hubert Iwaniuk / Andrew Diamond / RoomKey.com"}
-  (:refer-clojure :exclude [await])
+  (:refer-clojure :exclude [await send])
   (:use clojure.test
         http.async.client
         http.async.client.cert

@@ -15,7 +15,7 @@
 (ns http.async.client.test
   "Testing of http.async.client"
   {:author "Hubert Iwaniuk"}
-  (:refer-clojure :exclude [await])
+  (:refer-clojure :exclude [await send])
   (:use clojure.test
         http.async.client
         [http.async.client request util]
