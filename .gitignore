@@ -5,10 +5,10 @@ ahc-clj*jar
 pom.xml
 *.hprof
 *.hprof.index
-*.jar
 *.backup
 .cake
 target/
 /.lein-failures
 .lein-deps-sum
 .lein-plugins
+/.nrepl-port
