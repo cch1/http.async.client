@@ -809,9 +809,11 @@
 
 (deftest response-url
   (let [resp (GET *client* "http://localhost:8123/query" :query {:a "1?&" :b "+ ="})]
-    (are [exp real] (= exp real)
-         "http://localhost:8123/query?a=1?&&b=+ =" (raw-url resp)
-         "http://localhost:8123/query?a=1%3F%26&b=%2B%20%3D" (url resp))))
+    (are [exp real] (exp real)
+      #{"http://localhost:8123/query?a=1?&&b=+ =" "http://localhost:8123/query?b=+ =&a=1?&"}
+      (raw-url resp)
+      #{"http://localhost:8123/query?a=1%3F%26&b=%2B%20%3D" "http://localhost:8123/query?b=%2B%20%3D&a=1%3F%26"}
+      (url resp))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET *client* "http://localhost:8123/stream"))
