@@ -7,9 +7,8 @@
   :dependencies     [[org.clojure/clojure "1.4.0"]
 		     [com.ning/async-http-client "1.7.10"]]
   :min-lein-version "2.0.0"
-  :plugins [[codox "0.6.1"]
-            [lein-difftest "1.3.3"
-             :exclusions [org.clojure/clojure org.clojure/clojure-contrib]]]
+  :plugins [[codox "0.8.12"]
+            [lein-difftest "2.0.0"]]
   :profiles {:dev
              {:resource-paths ["test-resources"],
               :dependencies
