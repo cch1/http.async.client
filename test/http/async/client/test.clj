@@ -292,7 +292,7 @@
     (await resp)
     (is (done? resp))
     (is (failed? resp))
-    (is (= "boom!" (.getMessage (error resp))))))
+    (is (= "boom!" (.getMessage ^Exception (error resp))))))
 
 (deftest test-send-headers
   (let [resp (GET *client* "http://localhost:8123/" :headers {:a 1 :b 2})
@@ -665,7 +665,7 @@
 
 (deftest content-type-fn
   (let [resp (GET *client* "http://localhost:8123/body")]
-    (is (.startsWith (content-type resp) "text/plain"))))
+    (is (.startsWith ^String (content-type resp) "text/plain"))))
 
 (deftest single-set-cookie
   (let [resp (GET *client* "http://localhost:8123/cookie")
