@@ -1,14 +1,8 @@
-*~
-lib/
 classes/
-ahc-clj*jar
 pom.xml
-*.hprof
-*.hprof.index
-*.jar
-*.backup
-.cake
 target/
+/doc
 /.lein-failures
 .lein-deps-sum
 .lein-plugins
+/.nrepl-port
