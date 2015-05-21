@@ -110,9 +110,9 @@
 
 (defmacro ^{:private true} gen-methods [& methods]
   (list* 'do
-     (map (fn [method#]
-            (let [fn-name (symbol (.toUpperCase (name method#)))
-                  fn-doc (str "Sends asynchronously HTTP " fn-name " request to url.
+         (map (fn [method#]
+                (let [fn-name (symbol (.toUpperCase (name method#)))
+                      fn-doc (str "Sends asynchronously HTTP " fn-name " request to url.
   Returns a map:
   - :id      - unique ID of request
   - :status  - promise that once status is received is delivered, contains lazy map of:
@@ -152,11 +152,11 @@
       :password - password to be used
       :realm    - realm name to authenticate in
     :timeout - request timeout in ms")]
-              `(defn ~fn-name ~fn-doc [~'client #^String ~'url & {:as ~'options}]
-                 (execute-request ~'client
-                                  (apply prepare-request ~method# ~'url
-                                         (apply concat ~'options))))))
-          methods)))
+                  `(defn ~fn-name ~fn-doc [~'client #^String ~'url & {:as ~'options}]
+                     (execute-request ~'client
+                                      (apply prepare-request ~method# ~'url
+                                             (apply concat ~'options))))))
+              methods)))
 
 (gen-methods :get :post :put :delete :head :options :patch)
 
@@ -244,10 +244,10 @@
   "Converts response to string.
   Or converts body taking encoding from response."
   ([resp]
-     (when-let [body (body resp)]
-       (convert-body body (or (get-encoding (headers resp)) *default-encoding*))))
+   (when-let [body (body resp)]
+     (convert-body body (or (get-encoding (headers resp)) *default-encoding*))))
   ([headers body]
-     (convert-body body (or (get-encoding headers) *default-encoding*))))
+   (convert-body body (or (get-encoding headers) *default-encoding*))))
 
 (defn cookies
   "Gets cookies from response."
@@ -339,12 +339,12 @@
 
     WebSocketListener
     (^{:tag void} onOpen [_ #^WebSocket soc]
-     (reset! ws soc)
-     (when openf (openf soc)))
+      (reset! ws soc)
+      (when openf (openf soc)))
     (^{:tag void} onClose [_ #^WebSocket soc])
     (^{:tag void} onError [_ #^Throwable t]
-     (reset! ws nil)
-     (when errorf (errorf @ws t)))))
+      (reset! ws nil)
+      (when errorf (errorf @ws t)))))
 
 (defn create-ws-close-listener
   "Creates WebSocket close listener."
@@ -358,7 +358,7 @@
     WebSocketListener
     (^{:tag void} onOpen [_ #^WebSocket _])
     (^{:tag void} onClose [_ #^WebSocket _]
-     (println "closing2"))
+      (println "closing2"))
     (^{:tag void} onError [_ #^Throwable _])))
 
 (defn create-ws-text-listener
@@ -367,7 +367,7 @@
   (reify
     WebSocketTextListener
     (^{:tag void} onMessage [_ #^String s]
-     (f @soc s))
+      (f @soc s))
     (^{:tag void} onFragment [_ #^String s #^boolean last])
 
     WebSocketListener
@@ -381,7 +381,7 @@
   (reify
     WebSocketByteListener
     (^{:tag void} onMessage [_ #^bytes b]
-     (f @soc b))
+      (f @soc b))
     (^{:tag void} onFragment [_ #^bytes b #^boolean last])
 
     WebSocketListener
