@@ -28,8 +28,8 @@
            (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
-           (org.eclipse.jetty.continuation Continuation ContinuationSupport)
-           (org.eclipse.jetty.http.security Constraint)
+           (org.eclipse.jetty.continuation ContinuationSupport)
+           (org.eclipse.jetty.util.security Constraint)
            (org.eclipse.jetty.security ConstraintMapping ConstraintSecurityHandler
                                        HashLoginService LoginService)
            (org.eclipse.jetty.security.authentication BasicAuthenticator)
@@ -103,7 +103,7 @@
                        (doto writer
                          (.write "глава")
                          (.flush)))
-          "/proxy-req" (.setHeader hResp "Target" (.. req (getUri) (toString)))
+          "/proxy-req" (.setHeader hResp "Target" (.. req (getRequestURL) (toString)))
           "/cookie" (do
                       (.addCookie hResp (Cookie. "foo" "bar"))
                       (doseq [c (.getCookies hReq)]
@@ -138,7 +138,7 @@
   ([handler]
    (start-jetty handler {:port 8123}))
   ([handler {port :port :as opts :or {:port 8123}}]
-   (let [srv (Server. port)
+   (let [srv (Server. ^Integer port)
          loginSrv (HashLoginService. "MyRealm" "test-resources/realm.properties")
          constraint (Constraint.)
          mapping (ConstraintMapping.)
@@ -153,10 +153,9 @@
        (.setConstraint constraint)
        (.setPathSpec "/basic-auth"))
      (doto security
-       (.setConstraintMappings (into-array #{mapping}) #{"user"})
+       (.setConstraintMappings (vec #{mapping}) #{"user"})
        (.setAuthenticator (BasicAuthenticator.))
        (.setLoginService loginSrv)
-       (.setStrict false)
        (.setHandler handler))
      (doto srv
        (.setHandler security)
