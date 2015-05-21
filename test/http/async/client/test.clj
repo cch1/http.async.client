@@ -45,6 +45,7 @@
 (set! *warn-on-reflection* true)
 
 (def ^:dynamic *client* nil)
+(def ^:dynamic *server* nil)
 (def ^:private ^:dynamic *default-encoding* "UTF-8")
 
 
@@ -165,15 +166,20 @@
 
 (defn- once-fixture [f]
   "Configures Logger before test here are executed, and closes AHC after tests are done."
-  (def srv (start-jetty default-handler))
+  (binding [*server* (start-jetty default-handler)]
+    (try (f)
+         (finally
+           (.stop ^Server *server*)))))
+
+(defn- each-fixture
+  [f]
   (binding [*client* (create-client)]
     (try (f)
          (finally
-          (do
-            (.close ^AsyncHttpClient *client*)
-            (.stop ^Server srv))))))
+           (.close ^AsyncHttpClient *client*)))))
 
 (use-fixtures :once once-fixture)
+(use-fixtures :each each-fixture)
 
 ;; testing
 (deftest test-status
