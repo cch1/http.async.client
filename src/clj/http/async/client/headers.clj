@@ -15,8 +15,8 @@
 ; limitations under the License.
 
 (ns http.async.client.headers "Asynchrounous HTTP Client - Clojure - Lazy headers"
-  {:author "Hubert Iwaniuk"}
-  (:import (com.ning.http.client HttpResponseHeaders FluentCaseInsensitiveStringsMap)))
+    {:author "Hubert Iwaniuk"}
+    (:import (com.ning.http.client HttpResponseHeaders FluentCaseInsensitiveStringsMap)))
 
 (defn- kn [k]
   (if (keyword? k) (name k) k))
@@ -34,29 +34,29 @@
   (let [hds (.getHeaders headers)
         names (.keySet hds)]
     (proxy [clojure.lang.APersistentMap]
-        []
+           []
       (containsKey [k] (.containsKey hds (kn k)))
       (entryAt [k] (when (.containsKey hds (kn k))
                      (proxy [clojure.lang.MapEntry]
-                         [k nil]
+                            [k nil]
                        (val [] (v hds k)))))
       (valAt
-       ([k] (v hds k))
-       ([k default] (if (.containsKey hds k)
-                      (v hds k)
-                      default)))
+        ([k] (v hds k))
+        ([k default] (if (.containsKey hds k)
+                       (v hds k)
+                       default)))
       (cons [m] (throw (UnsupportedOperationException. "Form 'cons' not supported: headers are read only.")))
       (count [] (.size hds))
       (assoc [k v] (throw (UnsupportedOperationException. "Form 'assoc' not supported: headers are read only.")))
       (without [k] (throw (UnsupportedOperationException. "Form 'without' not supported: headers are read only")))
       (seq [] ((fn thisfn [plseq]
-                  (lazy-seq
-                   (when-let [pseq (seq plseq)]
-                     (let [k (keyword (.toLowerCase (first pseq)))]
-                       (cons (proxy [clojure.lang.MapEntry]
-                                 [k nil]
-                               (val [] (v hds k)))
-                             (thisfn (rest pseq)))))))
+                 (lazy-seq
+                  (when-let [pseq (seq plseq)]
+                    (let [k (keyword (.toLowerCase (first pseq)))]
+                      (cons (proxy [clojure.lang.MapEntry]
+                                   [k nil]
+                              (val [] (v hds k)))
+                            (thisfn (rest pseq)))))))
                names)))))
 
 ;; Creates cookies from headers.
