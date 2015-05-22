@@ -3,7 +3,6 @@
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "http://neotyk.github.com/http.async.client/"
   :source-paths ["src/clj"]
-  :java-source-paths ["src/jvm"]
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [com.ning/async-http-client "1.8.16"]]
   :min-lein-version "2.0.0"
