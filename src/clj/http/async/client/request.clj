@@ -15,9 +15,13 @@
 (ns http.async.client.request
   "Asynchronous HTTP Client - Clojure - Requesting API"
   {:author "Hubert Iwaniuk"}
-  (:use [http.async.client status headers util part]
-        [clojure.stacktrace]
-        [clojure.string :only [join]])
+  (:require [http.async.client
+             [status :refer :all]
+             [headers :refer :all]
+             [util :refer :all]
+             [part :refer :all]]
+            [clojure.stacktrace :refer :all]
+            [clojure.string :refer [join]])
   (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
                                  AsyncHandler Cookie
                                  FluentCaseInsensitiveStringsMap
@@ -228,8 +232,9 @@
                            completed :completed
                            error     :error}]
   (let [resp {:id      (gensym "req-id__")
+              :req req
               :url     (.getUrl req)
-              :raw-url (.getRawUrl req)
+              :raw-url (.getUrl req) ; TODO: restore getRawUrl when ning supports it
               :status  (promise)
               :headers (promise)
               :body    (promise)
@@ -240,51 +245,53 @@
          client req
          (reify AsyncHandler
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
-             onStatusReceived [this #^HttpResponseStatus e]
-             (let [[result action] ((or status
-                                        (:status *default-callbacks*))
-                                    resp (convert-status-to-map e))]
-               (deliver (:status resp) result)
-               (convert-action action)))
+            onStatusReceived [this #^HttpResponseStatus e]
+            (let [[result action] ((or status
+                                       (:status *default-callbacks*))
+                                   resp (convert-status-to-map e))]
+              (deliver (:status resp) result)
+              (convert-action action)))
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
-             onHeadersReceived [this #^HttpResponseHeaders e]
-             (let [[result action] ((or headers
-                                        (:headers *default-callbacks*))
-                                    resp (convert-headers-to-map e))]
-               (deliver (:headers resp) result)
-               (convert-action action)))
+            onHeadersReceived [this #^HttpResponseHeaders e]
+            (let [[result action] ((or headers
+                                       (:headers *default-callbacks*))
+                                   resp (convert-headers-to-map e))]
+              (deliver (:headers resp) result)
+              (convert-action action)))
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
-             onBodyPartReceived [this #^HttpResponseBodyPart e]
-             (when-let [bytes (.getBodyPartBytes e)]
-               (let [baos (ByteArrayOutputStream. (alength bytes))]
-                 (.write baos bytes 0 (alength bytes))
-                 (let [[result action] ((or part
-                                            (:part *default-callbacks*))
-                                        resp baos)
-                       body (:body resp)]
-                   (when-not (realized? body)
-                     (deliver body result))
-                   (convert-action action)))))
+            onBodyPartReceived [this #^HttpResponseBodyPart e]
+            (let [l (.length e)]
+              (when (pos? l)
+                ;; TODO: use native getBodyByteBuffer() instead of alloc'ing our own here
+                (let [baos (ByteArrayOutputStream. l)]
+                  (.write baos (.getBodyPartBytes e) 0 l)
+                  (let [[result action] ((or part
+                                             (:part *default-callbacks*))
+                                         resp baos)
+                        body (:body resp)]
+                    (when-not (realized? body)
+                      (deliver body result))
+                    (convert-action action))))))
            (^{:tag Object}
-             onCompleted [this]
-             (do
-               ((or completed
-                    (:completed *default-callbacks*))
-                resp)
-               (when-not (realized? (:body resp))
-                 (deliver (:body resp) nil))
-               (deliver (:done resp) true)))
+            onCompleted [this]
+            (do
+              ((or completed
+                   (:completed *default-callbacks*))
+               resp)
+              (when-not (realized? (:body resp))
+                (deliver (:body resp) nil))
+              (deliver (:done resp) true)))
            (^{:tag void}
-             onThrowable [this #^Throwable t]
-             (do
-               (deliver (:error resp) (try
-                                        ((or error
-                                             (:error *default-callbacks*))
-                                         resp t)
-                                        (catch Throwable e
-                                          e)))
-               (when-not (realized? (:done resp))
-                 (deliver (:done resp) true))))))]
+            onThrowable [this #^Throwable t]
+            (do
+              (deliver (:error resp) (try
+                                       ((or error
+                                            (:error *default-callbacks*))
+                                        resp t)
+                                       (catch Throwable e
+                                         e)))
+              (when-not (realized? (:done resp))
+                (deliver (:done resp) true))))))]
     (with-meta resp {:started (System/currentTimeMillis)
                      :cancelled? (fn [] (.isCancelled resp-future))
                      :cancel (fn [] (.cancel resp-future true))})))
