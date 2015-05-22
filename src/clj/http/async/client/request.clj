@@ -23,12 +23,13 @@
             [clojure.stacktrace :refer :all]
             [clojure.string :refer [join]])
   (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
-                                 AsyncHandler Cookie
+                                 AsyncHandler
                                  FluentCaseInsensitiveStringsMap
                                  HttpResponseStatus HttpResponseHeaders
                                  HttpResponseBodyPart
                                  PerRequestConfig
                                  Request RequestBuilder)
+           (com.ning.http.client.cookie Cookie)
            (ahc RequestBuilderWrapper)
            (java.net URLEncoder)
            (java.io File
@@ -149,12 +150,17 @@
                     name
                     value
                     path
+                    expires
                     max-age
-                    secure]
+                    secure
+                    http-only?]
              :or {path "/"
                   max-age 30
-                  secure false}} cookies]
-      (.addCookie rbw (Cookie. domain name value path max-age secure)))
+                  secure false ; TODO: rename to secure?
+                  expires 0
+                  http-only? false}} cookies]
+      (.addCookie rbw (Cookie/newValidCookie name value domain value path
+                                             expires max-age secure http-only?)))
     ;; query parameters
     (doseq [[k v] query] (if (vector? v)
                            (doseq [vv v]

@@ -6,7 +6,7 @@ import com.ning.http.client.Realm;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.PerRequestConfig;
 import com.ning.http.client.ProxyServer;
-import com.ning.http.client.Cookie;
+import com.ning.http.client.cookie.Cookie;
 import com.ning.http.client.generators.InputStreamBodyGenerator;
 
 public class RequestBuilderWrapper {
