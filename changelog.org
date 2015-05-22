@@ -3,6 +3,16 @@
 #+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.5.3
+** Update Clojure dependency to 1.6
+** Update com.ning/async-http-client dependency to 1.8.16
+** Restructure tests
+*** Update jetty to 9.3.0.RC0
+*** Update log dependencies
+*** Provide fresh client to each test to resolve issue with Clojure 1.6
+*** Fix brittle tests
+** Remove RequestBuilderWrapper
+** Update codox and lein-difftest plugins
 * Release 0.5.2
   Compile with Java 1.6
 
