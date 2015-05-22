@@ -3,6 +3,15 @@
 #+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Release 0.5.3
+** Update Clojure dependency to 1.6
+** Restructure tests
+*** Update jetty to 9.3.0.RC0
+*** Update log dependencies
+*** Provide fresh client to each test to resolve issue with Clojure 1.6
+*** Fix brittle tests
+** Remove RequestBuilderWrapper
+** Update codox and lein-difftest plugins
 * Release 0.5.2
   Compile with Java 1.6
 
@@ -10,7 +19,6 @@
 ** remove-params-on-redirect
    Issues [[https://github.com/neotyk/http.async.client/issues/46][#46]], [[https://github.com/neotyk/http.async.client/issues/47][#47]] and [[https://github.com/neotyk/http.async.client/issues/48][#48]] by [[https://github.com/josephwilk][Joseph Wilk]].
 ** Upgrade AHC to 1.7.10
-
 * Release 0.5.0
 ** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-content-type][http.async.client/content-type]]
    Added utility fn for [[http://neotyk.github.com/http.async.client/docs.html#sec-2-5-5][Reading content-type]].
