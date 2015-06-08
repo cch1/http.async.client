@@ -15,17 +15,21 @@
 (ns http.async.client.request
   "Asynchronous HTTP Client - Clojure - Requesting API"
   {:author "Hubert Iwaniuk"}
-  (:use [http.async.client status headers util part]
-        [clojure.stacktrace]
-        [clojure.string :only [join]])
+  (:require [http.async.client
+             [status :refer :all]
+             [headers :refer :all]
+             [util :refer :all]
+             [part :refer :all]]
+            [clojure.stacktrace :refer :all]
+            [clojure.string :refer [join]])
   (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
-                                 AsyncHandler Cookie
+                                 AsyncHandler
                                  FluentCaseInsensitiveStringsMap
-				 HttpResponseStatus HttpResponseHeaders
-				 HttpResponseBodyPart
+                                 HttpResponseStatus HttpResponseHeaders
+                                 HttpResponseBodyPart
                                  PerRequestConfig
                                  Request RequestBuilder)
-           (ahc RequestBuilderWrapper)
+           (com.ning.http.client.cookie Cookie)
            (java.net URLEncoder)
            (java.io File
                     InputStream
@@ -85,12 +89,12 @@
 (def
   ^{:doc "Default set of callbacks."
     :dynamic true}
- *default-callbacks*
- {:status status-collect
-  :headers headers-collect
-  :part body-collect
-  :completed body-completed
-  :error error-collect})
+  *default-callbacks*
+  {:status status-collect
+   :headers headers-collect
+   :part body-collect
+   :completed body-completed
+   :error error-collect})
 
 (defn url-encode
   "Taken from Clojure Http Client"
@@ -131,63 +135,41 @@
                                  proxy
                                  auth
                                  timeout]}]
-  ;; RequestBuilderWrapper is needed for now, until RequestBuilder
-  ;; is able to be used directly from Clojure.
-  (let [#^RequestBuilderWrapper rbw
-        (RequestBuilderWrapper.
-         (RequestBuilder. (convert-method method)))]
+  (let [rb (RequestBuilder. #^String (convert-method method))]
     ;; headers
-    (doseq [[k v] headers] (.addHeader rbw
-                                       (if (keyword? k) (name k) k)
-                                       (str v)))
+    (doseq [[k v] headers] (.addHeader rb (name k) (str v)))
     ;; cookies
-    (doseq [{:keys [domain
-                    name
-                    value
-                    path
-                    max-age
-                    secure]
-             :or {path "/"
-                  max-age 30
-                  secure false}} cookies]
-      (.addCookie rbw (Cookie. domain name value path max-age secure)))
+    (doseq [{:keys [domain name value path expires max-age secure http-only?]
+             :or {path "/" max-age 30 secure false expires 0 http-only? false}} cookies]
+      (.addCookie rb (Cookie/newValidCookie name value domain value path
+                                            expires max-age secure http-only?)))
     ;; query parameters
     (doseq [[k v] query] (if (vector? v)
-                           (doseq [vv v]
-                             (.addQueryParameter rbw
-                                                 (if (keyword? k) (name k) k)
-                                                 (str vv)))
-                           (.addQueryParameter rbw
-                                               (if (keyword? k) (name k) k)
-                                               (str v))))
+                           (doseq [vv v] (.addQueryParameter rb (name k) (str vv)))
+                           (.addQueryParameter rb (name k)(str v))))
     ;; message body
     (cond
-     (map? body) (doseq [[k v] body]
-                   (.addParameter rbw
-                                  (if (keyword? k) (name k) k)
-                                  (str v)))
-     (string? body) (.setBody rbw (.getBytes (if (= "application/x-www-form-urlencoded" (:content-type headers))
+      (map? body) (doseq [[k v] body] (.addParameter rb (name k) (str v)))
+      (string? body) (.setBody rb (.getBytes (if (= "application/x-www-form-urlencoded" (:content-type headers))
                                                (url-encode body)
                                                body)
                                              "UTF-8"))
-     (instance? InputStream body) (.setBody rbw body)
-     (instance? File body) (.setBody rbw body)
-     (vector? body) (let [#^RequestBuilder rb (.getRequestBuilder rbw)]
-                      (doseq [part body]
-                        ;; each part should be map with all details
-                        ;; needed to create body part
-                        (.addBodyPart rb (create-part part)))))
+      (instance? InputStream body) (.setBody rb #^InputStream body)
+      (instance? File body) (.setBody rb #^File body)
+      (vector? body) (doseq [part body]
+                       ;; each part should be map with all details
+                       ;; needed to create body part
+                       (.addBodyPart rb (create-part part))))
     (when auth
-      (set-realm auth rbw))
+      (set-realm auth rb))
     (when proxy
-      (set-proxy proxy rbw))
+      (set-proxy proxy rb))
     ;; request timeout
     (when timeout
       (let [prc (PerRequestConfig.)]
         (.setRequestTimeoutInMs prc timeout)
-        (.setPerRequestConfig rbw prc)))
-    ;; fine
-    (.. (.getRequestBuilder rbw) (setUrl url) (build))))
+        (.setPerRequestConfig rb prc)))
+    (.. rb (setUrl url) (build))))
 
 (defn convert-action
   "Converts action (:abort, nil) to Async client STATE."
@@ -228,8 +210,9 @@
                            completed :completed
                            error     :error}]
   (let [resp {:id      (gensym "req-id__")
+              :req req
               :url     (.getUrl req)
-              :raw-url (.getRawUrl req)
+              :raw-url (.getUrl req) ; TODO: restore getRawUrl when ning supports it
               :status  (promise)
               :headers (promise)
               :body    (promise)
@@ -255,16 +238,18 @@
               (convert-action action)))
            (^{:tag com.ning.http.client.AsyncHandler$STATE}
             onBodyPartReceived [this #^HttpResponseBodyPart e]
-            (when-let [bytes (.getBodyPartBytes e)]
-              (let [baos (ByteArrayOutputStream. (alength bytes))]
-                (.write baos bytes 0 (alength bytes))
-                (let [[result action] ((or part
-                                           (:part *default-callbacks*))
-                                       resp baos)
-                      body (:body resp)]
-                  (when-not (realized? body)
-                    (deliver body result))
-                  (convert-action action)))))
+            (let [l (.length e)]
+              (when (pos? l)
+                ;; TODO: use native getBodyByteBuffer() instead of alloc'ing our own here
+                (let [baos (ByteArrayOutputStream. l)]
+                  (.write baos (.getBodyPartBytes e) 0 l)
+                  (let [[result action] ((or part
+                                             (:part *default-callbacks*))
+                                         resp baos)
+                        body (:body resp)]
+                    (when-not (realized? body)
+                      (deliver body result))
+                    (convert-action action))))))
            (^{:tag Object}
             onCompleted [this]
             (do

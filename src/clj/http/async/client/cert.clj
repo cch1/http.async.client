@@ -37,7 +37,7 @@
 (defrecord BlindTrustManager
 ;;   "An X509TrustManager that blindly trusts all certificates, chains and issuers.
 ;;    All methods return nil, indicating that the client/server is trusted."
-  []
+           []
   X509TrustManager
   (checkClientTrusted [this chain auth-type] nil)
   (checkServerTrusted [this chain auth-type] nil)
@@ -152,6 +152,3 @@
                                        (list (new BlindTrustManager))))]
     (.init ctx key-managers trust-managers (new SecureRandom))
     ctx))
-
-
-

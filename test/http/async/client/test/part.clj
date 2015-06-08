@@ -15,8 +15,8 @@
 (ns http.async.client.test.part
   "Testing of http.async.client multipart."
   {:author "Hubert Iwaniuk"}
-  (:use clojure.test
-        http.async.client.part)
+  (:require [clojure.test :refer :all]
+            [http.async.client.part :refer :all])
   (:import (com.ning.http.client ByteArrayPart
                                  FilePart
                                  StringPart)

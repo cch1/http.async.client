@@ -3,18 +3,17 @@
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "http://neotyk.github.com/http.async.client/"
   :source-paths ["src/clj"]
-  :java-source-paths ["src/jvm"]
-  :dependencies     [[org.clojure/clojure "1.4.0"]
-		     [com.ning/async-http-client "1.7.10"]]
+  :dependencies [[org.clojure/clojure "1.6.0"]
+                 [com.ning/async-http-client "1.8.16"]]
   :min-lein-version "2.0.0"
-  :plugins [[codox "0.6.1"]
-            [lein-difftest "1.3.3"
-             :exclusions [org.clojure/clojure org.clojure/clojure-contrib]]]
+  :plugins [[codox "0.8.12"]
+            [lein-difftest "2.0.0"]]
   :profiles {:dev
              {:resource-paths ["test-resources"],
               :dependencies
-              [[org.eclipse.jetty/jetty-server "7.1.4.v20100610"]
-               [org.eclipse.jetty/jetty-security "7.1.4.v20100610"]
+              [[org.eclipse.jetty/jetty-server "9.3.0.RC1"]
+               [org.eclipse.jetty/jetty-security "9.3.0.RC1"]
+               [org.eclipse.jetty/jetty-continuation "9.3.0.RC1"]
                [log4j "1.2.17"]
                [org.slf4j/slf4j-log4j12 "1.7.12"]]}}
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
