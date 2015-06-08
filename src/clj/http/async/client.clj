@@ -18,7 +18,10 @@
   "Asynchronous HTTP Client - Clojure"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [await send])
-  (:use [http.async.client request headers util])
+  (:require [http.async.client
+             [request :refer :all]
+             [headers :refer :all]
+             [util :refer :all]])
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
