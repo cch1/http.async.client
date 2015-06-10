@@ -300,7 +300,8 @@
   [resp]
   (:url resp))
 
-(defn raw-url
+(defn ^:deprecated raw-url
+  ;; Deprecated due to lack of support from underlying Java AHC library
   "Gets raw URL from response"
   [resp]
   (:raw-url resp))
