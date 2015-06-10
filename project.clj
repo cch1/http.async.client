@@ -21,6 +21,6 @@
   :autodoc {:web-src-dir "http://github.com/neotyk/http.async.client/blob/"
             :web-home "http://neotyk.github.com/http.async.client/autodoc/"
             :copyright "Copyright 2012 Hubert Iwaniuk"}
-  :licence {:name "Apache License, Version 2.0"
+  :license {:name "Apache License, Version 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0"
             :distribution :repo})
