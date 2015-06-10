@@ -17,10 +17,9 @@
                                   [log4j "1.2.17"]
                                   [org.slf4j/slf4j-log4j12 "1.7.12"]]}}
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
-  :codox {:output-dir "doc"}
-  :autodoc {:web-src-dir "http://github.com/neotyk/http.async.client/blob/"
-            :web-home "http://neotyk.github.com/http.async.client/autodoc/"
-            :copyright "Copyright 2012 Hubert Iwaniuk"}
+  :codox {:output-dir "doc"
+          :src-dir-uri "http://github.com/cch1/http.async.client/blob/master/"
+          :src-linenum-anchor-prefix "L"}
   :license {:name "Apache License, Version 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0"
             :distribution :repo})
