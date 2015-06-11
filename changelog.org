@@ -5,6 +5,9 @@
 
 * Release 0.5.3
 ** Update Clojure dependency to 1.6
+** Deprecate raw-url function and response key
+Due to lack of support in future versions of the com.ning/async-http-client, raw-url will not be
+supported in future versions.
 ** Restructure tests
 *** Update jetty to 9.3.0.RC0
 *** Update log dependencies
