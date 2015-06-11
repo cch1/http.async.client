@@ -1,66 +1,94 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>http.async.client - Asynchronous HTTP Client - Clojure</title>
-<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
-<meta name="title" content="http.async.client - Asynchronous HTTP Client - Clojure"/>
-<meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-02-11T13:53+0100"/>
-<meta name="author" content="Hubert Iwaniuk"/>
-<meta name="description" content=""/>
-<meta name="keywords" content=""/>
+<!-- 2015-06-11 Thu 16:13 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Hubert Iwaniuk" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
-  html { font-family: Times, serif; font-size: 12pt; }
   .title  { text-align: center; }
-  .todo   { color: red; }
+  .todo   { font-family: monospace; color: red; }
   .done   { color: green; }
-  .tag    { background-color: #add8e6; font-weight:normal }
-  .target { }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
-  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
-  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
-  .center {margin-left:auto; margin-right:auto; text-align:center;}
-  p.verse { margin-left: 3% }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
   pre {
-	border: 1pt solid #AEBDCC;
-	background-color: #F3F5F7;
-	padding: 5pt;
-	font-family: courier, monospace;
-        font-size: 90%;
-        overflow:auto;
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
   }
-  table { border-collapse: collapse; }
-  td, th { vertical-align: top;  }
-  th.right  { text-align:center;  }
-  th.left   { text-align:center;   }
-  th.center { text-align:center; }
-  td.right  { text-align:right;  }
-  td.left   { text-align:left;   }
-  td.center { text-align:center; }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
   dt { font-weight: bold; }
-  div.figure { padding: 0.5em; }
-  div.figure p { text-align: center; }
-  div.inlinetask {
-    padding:10px;
-    border:2px solid gray;
-    margin:10px;
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
     background: #ffffcc;
   }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
   textarea { overflow-x: auto; }
-  .linenr { font-size:smaller }
-  .code-highlighted {background-color:#ffff00;}
-  .org-info-js_info-navigation { border-style:none; }
-  #org-info-js_console-label { font-size:10px; font-weight:bold;
-                               white-space:nowrap; }
-  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
-                                 font-weight:bold; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+
 <script type="text/javascript" src="org-info.js">
 /**
  *
@@ -69,7 +97,7 @@
  * @licstart  The following is the entire license notice for the
  *  JavaScript code in org-info.js.
  *
- * Copyright (C) 2012-2013  Sebastian Rose
+ * Copyright (C) 2012-2013 Free Software Foundation, Inc.
  *
  *
  * The JavaScript code in this tag is free software: you can
@@ -120,15 +148,15 @@ for the JavaScript code in this tag.
 */
 
 <!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "3");
-org_html_manager.set("LINK_HOME", "http://neotyk.github.com");
-org_html_manager.set("LINK_UP", "http://neotyk.github.com/http.async.client/");
-org_html_manager.set("LOCAL_TOC", "above");
-org_html_manager.set("VIEW_BUTTONS", "1");
+org_html_manager.set("TOC_DEPTH", "4");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
 org_html_manager.set("MOUSE_HINT", "underline");
-org_html_manager.set("FIXED_TOC", "1");
+org_html_manager.set("FIXED_TOC", "0");
 org_html_manager.set("TOC", "1");
-org_html_manager.set("VIEW", "showall");
+org_html_manager.set("VIEW", "info");
 org_html_manager.setup();  // activate after the parameters are set
 /*]]>*///-->
 </script>
@@ -178,124 +206,101 @@ for the JavaScript code in this tag.
  }
 /*]]>*///-->
 </script>
-
 </head>
 <body>
-
-<div id="preamble">
-
-</div>
-
 <div id="content">
 <h1 class="title">http.async.client - Asynchronous HTTP Client - Clojure</h1>
-
-<p><b>http.async.client</b> is Asynchronous HTTP Client for Clojure.
-</p>
-
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 tl;dr</a></li>
-<li><a href="#sec-2">2 More info</a></li>
+<li><a href="#sec-1">1. tl;dr</a></li>
+<li><a href="#sec-2">2. More info</a></li>
 </ul>
 </div>
 </div>
+<p>
+<b>http.async.client</b> is Asynchronous HTTP Client for Clojure.
+</p>
 
-<div id="outline-container-1" class="outline-2">
+<div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1"><span class="section-number-2">1</span> tl;dr</h2>
 <div class="outline-text-2" id="text-1">
-
-
 <p>
-  Declare dependency:
+Declare dependency:
 </p>
+<div class="org-src-container">
 
-
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">defproject</span> <span style="color: #0000ff;">your-project</span> <span style="color: #8b2252;">"1.0.0-SNAPSHOT"</span>
-  <span style="color: #008b8b;">:description</span> <span style="color: #8b2252;">"Your project description"</span>
-  <span style="color: #008b8b;">:dependencies</span> [[org.clojure/clojure <span style="color: #8b2252;">"1.4.0"</span>]
-                 [http.async.client <span style="color: #8b2252;">"0.5.2"</span>]]<span style="color: #8c8c8c;">)</span>
+<pre class="src src-clojure">(defproject your-project "1.0.0-SNAPSHOT"
+  :description "Your project description"
+  :dependencies [[org.clojure/clojure "1.4.0"]
+		 [http.async.client "0.5.2"]])
 </pre>
-
-
-<p>
-  Require:
-</p>
-
-
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">ns</span> sample <span style="color: #8c8c8c;">(</span><span style="color: #008b8b;">:require</span> [http.async.client <span style="color: #008b8b;">:as</span> http]<span style="color: #8c8c8c;">))</span>
-</pre>
-
-
-<p>
-  GET resource:
-</p>
-
-
-<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">with-open</span> [client <span style="color: #8c8c8c;">(</span>http/create-client<span style="color: #8c8c8c;">)</span>]
-  <span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">let</span> [response <span style="color: #8c8c8c;">(</span>http/GET client <span style="color: #8b2252;">"http://github.com/neotyk/http.async.client/"</span><span style="color: #8c8c8c;">)</span>]
-    <span style="color: #8c8c8c;">(</span><span style="color: #a020f0;">-&gt;</span> response
-        http/await
-        http/string<span style="color: #8c8c8c;">)))</span>
-</pre>
-
-
 </div>
 
+<p>
+Require:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-clojure">(ns sample (:require [http.async.client :as http]))
+</pre>
 </div>
 
-<div id="outline-container-2" class="outline-2">
+<p>
+GET resource:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-clojure">(with-open [client (http/create-client)]
+  (let [response (http/GET client "http://github.com/cch1/http.async.client/")]
+    (-&gt; response
+	http/await
+	http/string)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
 <h2 id="sec-2"><span class="section-number-2">2</span> More info</h2>
 <div class="outline-text-2" id="text-2">
-
-
 <p>
-  <a href="http://github.com/neotyk/http.async.client"><b>http.async.client</b></a> is based on <a href="http://github.com/AsyncHttpClient/async-http-client">Asynchronous Http Client for Java</a>.
-</p>
-<p>
-  It runs with Clojure 1.3, development goes against Clojure 1.4.
-</p>
-<p>
-  For more documentation refer to <a href="./docs.html">docs</a> and for API to <a href="http://neotyk.github.com/http.async.client/doc/">doc</a>.
-</p>
-<p>
-  <b>http.async.client</b> is distributed under <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License, Version 2.0</a>.
-</p>
-<p>
-  If you would like to help please look at <a href="./todo.html">to do</a> or submit ticket
-  <a href="http://github.com/neotyk/http.async.client/issues/">here</a>.
-</p>
-<p>
-  <a href="./changelog.html">Changelog</a>.
+<a href="http://github.com/cch1/http.async.client"><b>http.async.client</b></a> is based on <a href="http://github.com/AsyncHttpClient/async-http-client">Asynchronous Http Client for Java</a>.
 </p>
 
+<p>
+It runs with Clojure 1.3, 1.4, 1.5.1 and 1.6.  Development is against Clojure 1.6.
+</p>
 
+<p>
+For more documentation refer to <a href="./docs.html">docs</a>.
+</p>
 
-<script type="text/javascript">
+<p>
+Auto-generated API documentation is available <a href="./doc/index.html">here</a>.
+</p>
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-28022940-1']);
-  _gaq.push(['_trackPageview']);
+<p>
+<b>http.async.client</b> is distributed under <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License, Version 2.0</a>.
+</p>
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+<p>
+If you would like to help please look at <a href="./todo.html">to do</a> or submit ticket
+<a href="http://github.com/cch1/http.async.client/issues/">here</a>.
+</p>
 
-</script>
-
+<p>
+<a href="./changelog.html">Changelog</a>.
+</p>
 </div>
 </div>
 </div>
-
-<div id="postamble">
-<p class="date">Date: 2013-02-11T13:53+0100</p>
+<div id="postamble" class="status">
 <p class="author">Author: Hubert Iwaniuk</p>
-<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3e with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
-<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
-
+<p class="date">Created: 2015-06-11 Thu 16:13</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
 </html>
