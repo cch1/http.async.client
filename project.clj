@@ -18,7 +18,7 @@
                                   [log4j "1.2.17"]
                                   [org.slf4j/slf4j-log4j12 "1.7.12"]]}}
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
-  :codox {:output-dir "doc"
+  :codox {:output-dir "gh-pages/doc"
           :src-dir-uri "http://github.com/cch1/http.async.client/blob/master/"
           :src-linenum-anchor-prefix "L"}
   :license {:name "Apache License, Version 2.0"
