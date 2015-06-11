@@ -8,7 +8,8 @@
   :min-lein-version "2.0.0"
   :plugins [[codox "0.8.12"]
             [lein-difftest "2.0.0"]]
-  :profiles {:1.4.0 {:dependencies [[org.clojure/clojure "1.4.0"]]}
+  :profiles {:1.3.0 {:dependencies [[org.clojure/clojure "1.4.0"]]}
+             :1.4.0 {:dependencies [[org.clojure/clojure "1.4.0"]]}
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :dev {:resource-paths ["test-resources"],
                    :dependencies [[org.eclipse.jetty/jetty-server "9.3.0.RC0"]
