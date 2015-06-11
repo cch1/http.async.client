@@ -23,7 +23,7 @@
   GET resource:
 #+BEGIN_SRC clojure
   (with-open [client (http/create-client)]
-    (let [response (http/GET client "http://github.com/neotyk/http.async.client/")]
+    (let [response (http/GET client "http://github.com/cch1/http.async.client/")]
       (-> response
           http/await
           http/string)))
@@ -31,18 +31,15 @@
 
 * More info
 
-  [[http://github.com/neotyk/http.async.client][*http.async.client*]] is based on [[http://github.com/AsyncHttpClient/async-http-client][Asynchronous Http Client for Java]].
+  [[http://github.com/cch1/http.async.client][*http.async.client*]] is based on [[http://github.com/AsyncHttpClient/async-http-client][Asynchronous Http Client for Java]].
 
-  It runs with Clojure 1.3, development goes against Clojure 1.4.
+  It runs with Clojure 1.3, 1.4, 1.5.1 and 1.6.  Development is against Clojure 1.6.
 
-  For more documentation refer to [[./docs.org][docs]] and for API to [[http://neotyk.github.com/http.async.client/doc/][doc]].
+  For more documentation refer to [[./docs.org][docs]] and for API to [[http://cch1.github.io/http.async.client/doc/][doc]].
 
   *http.async.client* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
 
   If you would like to help please look at [[./todo.org][to do]] or submit ticket
-  [[http://github.com/neotyk/http.async.client/issues/][here]].
+  [[http://github.com/cch1/http.async.client/issues/][here]].
 
   [[./changelog.org][Changelog]].
-
-
-#+INCLUDE: ga.org

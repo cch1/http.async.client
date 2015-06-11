@@ -20,22 +20,22 @@ supported in future versions.
 
 * Release 0.5.1
 ** remove-params-on-redirect
-   Issues [[https://github.com/neotyk/http.async.client/issues/46][#46]], [[https://github.com/neotyk/http.async.client/issues/47][#47]] and [[https://github.com/neotyk/http.async.client/issues/48][#48]] by [[https://github.com/josephwilk][Joseph Wilk]].
+   Issues [[https://github.com/cch1/http.async.client/issues/46][#46]], [[https://github.com/cch1/http.async.client/issues/47][#47]] and [[https://github.com/cch1/http.async.client/issues/48][#48]] by [[https://github.com/josephwilk][Joseph Wilk]].
 ** Upgrade AHC to 1.7.10
 * Release 0.5.0
-** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-content-type][http.async.client/content-type]]
-   Added utility fn for [[http://neotyk.github.com/http.async.client/docs.html#sec-2-5-5][Reading content-type]].
-** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-redirect%3F][http.async.client/redirect?]]
-   Added utility fn for checking if response [[http://neotyk.github.com/http.async.client/docs.html#sec-2-5-3][Is redirect?]].
-** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-location][http.async.client/location]]
-   Added utility fn for [[http://neotyk.github.com/http.async.client/docs.html#sec-2-5-6][Reading location]].
+** [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-content-type][http.async.client/content-type]]
+   Added utility fn for [[http://cch1.github.io/http.async.client/docs.html#sec-2-5-5][Reading content-type]].
+** [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-redirect%3F][http.async.client/redirect?]]
+   Added utility fn for checking if response [[http://cch1.github.io/http.async.client/docs.html#sec-2-5-3][Is redirect?]].
+** [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-location][http.async.client/location]]
+   Added utility fn for [[http://cch1.github.io/http.async.client/docs.html#sec-2-5-6][Reading location]].
 ** Moved to Leiningen 2
-** [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-PATCH][PATCH]]
+** [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PATCH][PATCH]]
    Added support for HTTP PATCH method.
 ** Initial WebSocket support
-   Not documented yet, [[https://github.com/neotyk/http.async.client/blob/07b8f1de8f956505185ed224c71abceeff27265f/src/clj/http/async/client.clj#L305][Code is here]].
-   Demo usage can be found in [[https://github.com/neotyk/hac-live][hac-live]] dome for EuroClojure 2012.
-   [[https://github.com/neotyk/hac-live/blob/master/src/hac/live.clj#L261][Request 12]] and [[https://github.com/neotyk/hac-live/blob/master/src/hac/live.clj#L285][Request 13]] are WebSocket examples.
+   Not documented yet, [[https://github.com/cch1/http.async.client/blob/07b8f1de8f956505185ed224c71abceeff27265f/src/clj/http/async/client.clj#L305][Code is here]].
+   Demo usage can be found in [[https://github.com/cch1/hac-live][hac-live]] dome for EuroClojure 2012.
+   [[https://github.com/cch1/hac-live/blob/master/src/hac/live.clj#L261][Request 12]] and [[https://github.com/cch1/hac-live/blob/master/src/hac/live.clj#L285][Request 13]] are WebSocket examples.
 ** Upgrade AHC to v1.7.5
 
 * Release 0.4.5
@@ -44,32 +44,32 @@ supported in future versions.
    When *vector* is provided as body it is treated as multipart.
    Please consult documentation and tests for examples of usage.
 ** Add convenience url and raw-url
-   [[https://github.com/neotyk/http.async.client/issues/35][#35]]. Allow easy retrieval of URL used to request resource.
+   [[https://github.com/cch1/http.async.client/issues/35][#35]]. Allow easy retrieval of URL used to request resource.
 ** There's a function for that!
    Listen to what kibit has to say.
 * Release 0.4.4
 ** Simplified callbacks API
-   Issue [[https://github.com/neotyk/http.async.client/issues/32][#32]].
+   Issue [[https://github.com/cch1/http.async.client/issues/32][#32]].
 ** Better documented callbacks
-   This was long outstanding issue [[https://github.com/neotyk/http.async.client/issues/12][#12]].
+   This was long outstanding issue [[https://github.com/cch1/http.async.client/issues/12][#12]].
 ** Upgrade [[https://github.com/sonatype/async-http-client][AHC]] to 1.7.4
 ** Upgrade Clojure to 1.4
 * Release 0.4.3
-** Issue [[https://github.com/neotyk/http.async.client/pull/30][#30]] by [[https://github.com/canassa][Cesar Canassa]]
+** Issue [[https://github.com/cch1/http.async.client/pull/30][#30]] by [[https://github.com/canassa][Cesar Canassa]]
    Fixes issue with single cookie in response.
 ** Upgrade AHC to 1.7.1
 * Release 0.4.2
-** Issue [[https://github.com/neotyk/http.async.client/pull/29][#29]] by [[https://github.com/diamondap][A. Diamond]]
+** Issue [[https://github.com/cch1/http.async.client/pull/29][#29]] by [[https://github.com/diamondap][A. Diamond]]
    Added support for client certificates.
 * Release 0.4.1
 ** Upgrade AHC to 1.7.0
-** Issues [[https://github.com/neotyk/http.async.client/issues/26][#26]], [[https://github.com/neotyk/http.async.client/issues/27][#27]], [[https://github.com/neotyk/http.async.client/issues/28][#28]]
-   - [[https://github.com/neotyk/http.async.client/issues/26][#26]] :: [[https://github.com/jkk][Justin Kramer]], [[https://github.com/btatnall][Brian Tatnall]]
+** Issues [[https://github.com/cch1/http.async.client/issues/26][#26]], [[https://github.com/cch1/http.async.client/issues/27][#27]], [[https://github.com/cch1/http.async.client/issues/28][#28]]
+   - [[https://github.com/cch1/http.async.client/issues/26][#26]] :: [[https://github.com/jkk][Justin Kramer]], [[https://github.com/btatnall][Brian Tatnall]]
             Empty response body hangs c/body, c/string
-   - [[https://github.com/neotyk/http.async.client/issues/27][#27]] :: [[https://github.com/jkk][Justin Kramer]]
+   - [[https://github.com/cch1/http.async.client/issues/27][#27]] :: [[https://github.com/jkk][Justin Kramer]]
             create-client's :idle-in-pool-timeout option not being set
             correctly
-   - [[https://github.com/neotyk/http.async.client/pull/28][#28]] :: [[https://github.com/klang][Karsten Lang]]
+   - [[https://github.com/cch1/http.async.client/pull/28][#28]] :: [[https://github.com/klang][Karsten Lang]]
             Documentation update
 ** Improved logging
    Improved logging configuration for running tests.
@@ -77,9 +77,9 @@ supported in future versions.
 * Release 0.4.0
 ** Clojure 1.3 compatible
 ** Support for multiple values for same key (QString)
-   [[https://github.com/neotyk/http.async.client/issues/22][#22]]
+   [[https://github.com/cch1/http.async.client/issues/22][#22]]
 ** Clojure contrib independent
-   [[https://github.com/neotyk/http.async.client/pull/24][#24]]
+   [[https://github.com/cch1/http.async.client/pull/24][#24]]
 ** Upgrade async-http-client to v1.6.5
 * Release 0.3.1
 ** Upgrade async-http-client to v1.6.4
@@ -156,17 +156,15 @@ supported in future versions.
 * Release 0.2.0
 ** Stream as seq
    Response body can be seq, this allows for easy HTTP Stream
-   handling. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.4][Documentation]].
+   handling. [[http://cch1.github.io/http.async.client/docs.html#sec-1.2.4][Documentation]].
 ** Cookies
-   Added cookies support. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.4][Sending]] and [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.5.4][receiving]].
+   Added cookies support. [[http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.4][Sending]] and [[http://cch1.github.io/http.async.client/docs.html#sec-1.2.5.4][receiving]].
 ** Authentication support
-   Basic and Digest from rfc2617 are supported. [[http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.6][Documentation]].
+   Basic and Digest from rfc2617 are supported. [[http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.6][Documentation]].
 ** Proxy per request
-   Proxy can be specified per request. [[http://neotyk.github.com/http.async.client/http://neotyk.github.com/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
+   Proxy can be specified per request. [[http://cch1.github.io/http.async.client/http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
 ** Branding User-Agent
    Specifying User-Agent per client.
-   [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]].
+   [[http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]].
 ** Keyworded maps in API
-   Like *:options* in [[http://neotyk.github.com/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].
-
-#+INCLUDE: ga.org
+   Like *:options* in [[http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].

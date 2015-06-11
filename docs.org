@@ -11,7 +11,7 @@
      (defproject your-project "1.0.0-SNAPSHOT"
        :description "Your project description"
        :dependencies [[org.clojure/clojure "1.4.0"]
-                      [http.async.client "0.5.2"]])
+                      [http.async.client "0.5.3"]])
    #+END_SRC
    Make sure that your project depends on at least 1.3.0 Clojure as
    *http.async.client* will not run in earlier versions.
@@ -24,7 +24,7 @@
    To get HTTP resource:
    #+BEGIN_SRC clojure
      (with-open [client (http/create-client)] ; Create client
-       (let [response (http/GET client "http://github.com/neotyk/http.async.client/")] ; request http resource
+       (let [response (http/GET client "http://github.com/cch1/http.async.client/")] ; request http resource
          (-> response
              http/await     ; wait for response to be received
              http/string))) ; read body of response as string
@@ -40,12 +40,12 @@
     response.
 
     Following HTTP methods have been covered so far:
-    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-GET][GET]]
-    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-POST][POST]]
-    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-PUT][PUT]]
-    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-DELETE][DELETE]]
-    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-HEAD][HEAD]]
-    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-OPTIONS][OPTIONS]]
+    - [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-GET][GET]]
+    - [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-POST][POST]]
+    - [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PUT][PUT]]
+    - [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-DELETE][DELETE]]
+    - [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-HEAD][HEAD]]
+    - [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-OPTIONS][OPTIONS]]
     For detailed description see [[*HTTP%20methods][HTTP methods]].
 
     You can submit options to HTTP methods as keyworded arguments,
@@ -56,7 +56,7 @@
     Following options are supported:
     - *:query* :: query parameters
     - *:headers* :: custom headers to be sent out
-    - *:body* :: body to be sent, allowed only with [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-PUT][PUT]]/[[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-POST][POST]]
+    - *:body* :: body to be sent, allowed only with [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PUT][PUT]]/[[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-POST][POST]]
     - *:cookies* :: cookies to be sent
     - *:proxy* :: proxy to be used
     For detailed usage of options see [[*Request%20options][Request options]].
@@ -108,10 +108,10 @@
 ** HTTP methods
    HTTP methods and convenience functions to request them.
 *** GET
-    Most basic invocation of [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-GET][*http.async.client/GET*]] is only with
+    Most basic invocation of [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-GET][*http.async.client/GET*]] is only with
     *url* you want to get.
     Extended invocation includes options that can be any options
-    accepted by [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]]
+    accepted by [[http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]]
     [:headers :query ..].
 
     Simple invocation:
@@ -162,11 +162,11 @@
           (doseq [cookie (http/cookies resp)] ; Read cookies from server response
             (println "name:" (:name cookie) ", value:" (:value cookie)))))
     #+END_SRC
-    Notice [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cookies][*http.async.client/cookies*]] function extracts cookies from
+    Notice [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-cookies][*http.async.client/cookies*]] function extracts cookies from
     response headers, so to start processing it you don't need to wait
     for whole response to arrive.
 *** PUT/POST
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-PUT][*http.async.client/PUT*]]/[[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-POST][*http.async.client/POST*]] work the same
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PUT][*http.async.client/PUT*]]/[[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-POST][*http.async.client/POST*]] work the same
     way as [[*GET][*GET*]] but they also accept *:body* argument.
 
     *:body* can be:
@@ -314,7 +314,7 @@
            ))
      #+end_src
 *** DELETE
-    To call [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-DELETE][*http.async.client/DELETE*]] on a resource:
+    To call [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-DELETE][*http.async.client/DELETE*]] on a resource:
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
         (let [resp (http/DELETE "<your url>")]
@@ -322,7 +322,7 @@
           ))
     #+END_SRC
 *** HEAD
-    To call [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-HEAD][*http.async.client/HEAD*]] on a resource:
+    To call [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-HEAD][*http.async.client/HEAD*]] on a resource:
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
         (let [resp (http/HEAD "<your url>")]
@@ -330,7 +330,7 @@
           ))
     #+END_SRC
 *** OPTIONS
-    To call [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-OPTIONS][*http.async.client/OPTIONS*]] on a resource:
+    To call [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-OPTIONS][*http.async.client/OPTIONS*]] on a resource:
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
         (let [resp (http/OPTIONS "<your url>")]
@@ -339,7 +339,7 @@
     #+END_SRC
 ** Request options
    Following options can be provided to requests and are defined by
-   [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]]:
+   [[http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]]:
    - [[*:query][:query]] :: query parameters
    - [[*:headers][:headers]] :: custom headers to be sent out
    - [[*:body][:body]] :: body to be sent, allowed only with PUT/POST
@@ -571,7 +571,7 @@
     you actually asynchronously execute HTTP request.
     Some times you might need to wait for response processing to be
     done before proceeding, in order to do so you call
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-await][*http.async.client/await*]].
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-await][*http.async.client/await*]].
     It takes only one argument, that is response and returns once
     receiving has finished.
     #+BEGIN_SRC clojure
@@ -588,7 +588,7 @@
           (http/string (http/await resp))))
     #+END_SRC
 *** Reading status line
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-status][*http.async.client/status*]] returns status lazy map of response.
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-status][*http.async.client/status*]] returns status lazy map of response.
     It will wait until HTTP Status has been received.
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
@@ -600,7 +600,7 @@
     after this returns headers and body, might not been delivered
     yet.
 *** Is redirect?
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-redirect%3F][*http.async.client/redirect?*]] checks if response is redirect.
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-redirect%3F][*http.async.client/redirect?*]] checks if response is redirect.
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
         (let [resp (http/await (http/GET client url))]
@@ -608,7 +608,7 @@
             (println "Response is redirect."))))
     #+END_SRC
 *** Reading headers
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-headers][*http.async.client/headers*]] returns headers lazy map of response.
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-headers][*http.async.client/headers*]] returns headers lazy map of response.
     It will wait until HTTP Headers are received.
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
@@ -619,7 +619,7 @@
     Again, like in case of status, body might not have been delivered
     yet after this returns.
 *** Reading content-type
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-content-type][*http.async.client/content-type*]] returns value of *Content-Type*
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-content-type][*http.async.client/content-type*]] returns value of *Content-Type*
     header.
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
@@ -628,7 +628,7 @@
           (println "Content-Type of response:" content-type)))
     #+END_SRC
 *** Reading location
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-location][*http.async.client/location*]] will return redirect target if
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-location][*http.async.client/location*]] will return redirect target if
     response is redirect.
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
@@ -637,7 +637,7 @@
           (println "Location of redirect:" loc)))
     #+END_SRC
 *** Reading cookies
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cookies][*http.async.client/cookies*]] returns seq of maps representing
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-cookies][*http.async.client/cookies*]] returns seq of maps representing
     cookies.
     It will wait until HTTP Headers are received.
     #+BEGIN_SRC clojure
@@ -649,13 +649,13 @@
     Sample above will return sequence of cookie names that server has
     set.
 *** Reading body
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-body][*http.async.client/body*]] returns either ByteArrayOutputStream or
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-body][*http.async.client/body*]] returns either ByteArrayOutputStream or
     seq of it, depending if you used [[*Asynchronous%20operations][Asynchronous operations]] or
     [[*Streaming][Streaming]] respectively.
     It will *not* wait for response to be finished, it will return as
     soon as first chunk of HTTP response body is received.
 *** Reading body as string
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-string][*http.async.client/string*]] returns either string or seq of
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-string][*http.async.client/string*]] returns either string or seq of
     strings, again depending if you used [[*Asynchronous%20operations][Asynchronous operations]] or
     [[*Streaming][Streaming]] respectively.
     It will *not* wait for response to be finished, it will return as
@@ -666,7 +666,7 @@
           (http/string (http/await resp))))
     #+END_SRC
     Sample above will return string of response body.
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-string][*http.async.client/string*]] is lazy so you can use it in case of
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-string][*http.async.client/string*]] is lazy so you can use it in case of
     streams as well.
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
@@ -678,7 +678,7 @@
     Sample above will print parts as they are received, and will
     return once response receiving is finished.
 *** Reading error
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-error][*http.async.client/error*]] will return Throwable that was cause of
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-error][*http.async.client/error*]] will return Throwable that was cause of
     request failure iff request failed, else *nil*.
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
@@ -689,7 +689,7 @@
     #+END_SRC
 *** Canceling request
     At any given time of processing HTTP Response you can *cancel* it
-    by calling [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-cancel][*http.async.client/cancel*]].
+    by calling [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-cancel][*http.async.client/cancel*]].
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client)] ; Create client
         (let [resp (http/GET client url)]
@@ -699,7 +699,7 @@
 *** Response predicates
     You can also check status of request.
 **** done?
-     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-done?][*http.async.client/done?*]] will tell you if response processing
+     [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-done?][*http.async.client/done?*]] will tell you if response processing
      has finished:
      #+BEGIN_SRC clojure
        (with-open [client (http/create-client)] ; Create client
@@ -711,10 +711,10 @@
      Sample above will check if response was finished, if not - will
      wait for it and return true as a result of call to done?.
 **** failed?
-     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-failed?][*http.async.client/failed?*]] will return true iff request has
+     [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-failed?][*http.async.client/failed?*]] will return true iff request has
      failed. If this return true you can [[*Reading%20error][read error]].
 **** canceled?
-     [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-canceled?][*http.async.client/canceled?*]] will return true iff request has
+     [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-canceled?][*http.async.client/canceled?*]] will return true iff request has
      been [[*Canceling%20request][canceled]], else false is return.
 *** Requested URL
     If you need to get URL of response at hand, there are two
@@ -723,13 +723,13 @@
     - :raw-url :: not encoded url - DEPRECATED.
 
     And two convenience functions:
-    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-url][*http.async.client/url*]],
-    - [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-raw-url][*http.async.client/raw-url*]] (DEPRECATED).
+    - [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-url][*http.async.client/url*]],
+    - [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-raw-url][*http.async.client/raw-url*]] (DEPRECATED).
 
 ** Managing client
 *** Branding
     *http.async.client* can be configured with User-Agent. To do so
-    you can use [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-create-client][*http.async.client/create-client*]] and remember to
+    you can use [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-create-client][*http.async.client/create-client*]] and remember to
     close created client yourself, best is to use it within macro
     like with-open, though make sure that body of it will wait for
     whole response to finish.
@@ -888,12 +888,12 @@
     #+END_SRC
 
     For more documentation please consult docstring of
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.cert.html#var-ssl-context][*http.async.client.cert/ssl-context*]] and tests.
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.cert.html#var-ssl-context][*http.async.client.cert/ssl-context*]] and tests.
 
 *** Closing *http.async.client*
     Whenever you've created *http.async.client* via
-    [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-create-client][*http.async.client/create-client*]] you will need to close it.
-    To do so you call [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-close][*http.async.client/close*]].
+    [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-create-client][*http.async.client/create-client*]] you will need to close it.
+    To do so you call [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-close][*http.async.client/close*]].
     #+BEGIN_SRC clojure
       (let [client (http/create-client)]
         (try
@@ -909,7 +909,7 @@
   It provides default set of callbacks and functions to create and
   execute requests.
 ** Preparing request
-   [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]] is responsible for
+   [[http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-prepare-request][*http.async.client.request/prepare-request*]] is responsible for
    request preparation, like the name suggests.
    It takes following arguments:
   - HTTP Method like *:get* *:head*
@@ -925,7 +925,7 @@
           ))
     #+END_SRC
 ** Executing request
-   [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-execute-request][*http.async.client.request/execute-request*]] returns same map of promises
+   [[http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-execute-request][*http.async.client.request/execute-request*]] returns same map of promises
    as [[*Asynchronous%20operations][Asynchronous operations]].
    Its arguments are: request to be executed (result of [[*Preparing%20request][Preparing
    request]]) and *options* as keyworded map consisting of call-backs.
@@ -1083,11 +1083,9 @@
           (println @errored)))                 ; print exception from callback
     #+end_src
 ** Default callbacks
-   [[http://neotyk.github.com/http.async.client/doc/http.async.client.request.html#var-*default-callbacks*][*http.async.client.request/*default-callbacks**]] is a map of
+   [[http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-*default-callbacks*][*http.async.client.request/*default-callbacks**]] is a map of
    default callbacks. This will allow you to easy change only few
    callbacks and reuse default for the rest.
 
-   Please look at source of [[http://neotyk.github.com/http.async.client/doc/http.async.client.html#var-stream-seq][*http.async.client/stream-seq*]] to see
+   Please look at source of [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-stream-seq][*http.async.client/stream-seq*]] to see
    how to do it.
-
-#+INCLUDE: ga.org
