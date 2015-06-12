@@ -1,0 +1,45 @@
+#+TITLE: http.async.client - Asynchronous HTTP Client - Clojure
+#+SETUPFILE: setup.org
+
+*http.async.client* is the Asynchronous HTTP Client for Clojure.
+
+* tl;dr
+
+  Declare dependency:
+#+BEGIN_SRC clojure
+  (defproject your-project "1.0.0-SNAPSHOT"
+    :description "Your project description"
+    :dependencies [[org.clojure/clojure "1.6.0"]
+                   [http.async.client "0.5.3"]])
+#+END_SRC
+
+  Require:
+#+BEGIN_SRC clojure
+  (ns sample (:require [http.async.client :as http]))
+#+END_SRC
+
+  GET resource:
+#+BEGIN_SRC clojure
+  (with-open [client (http/create-client)]
+    (let [response (http/GET client "http://github.com/cch1/http.async.client/")]
+      (-> response
+          http/await
+          http/string)))
+#+END_SRC
+
+* More info
+
+  [[http://github.com/cch1/http.async.client][*http.async.client*]] is based on [[http://github.com/AsyncHttpClient/async-http-client][Asynchronous Http Client for Java]].
+
+  It runs with Clojure 1.3, 1.4, 1.5.1 and 1.6.  Development is against Clojure 1.6.
+
+  For more documentation refer to [[./docs.org][docs]].
+
+  Auto-generated API documentation is available [[./doc/index.html][here]].
+
+  *http.async.client* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
+
+  If you would like to help please look at [[./todo.org][to do]] or submit ticket
+  [[http://github.com/cch1/http.async.client/issues/][here]].
+
+  [[./changelog.org][Changelog]].
