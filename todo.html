@@ -4,10 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Asynchronous HTTP Client - Clojure - To Do</title>
-<!-- 2015-06-11 Thu 15:44 -->
+<!-- 2015-06-11 Thu 23:46 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
-<meta  name="author" content="Hubert Iwaniuk" />
+<meta  name="author" content="Chris Hapgood" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -88,6 +88,7 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
 
 <script type="text/javascript" src="org-info.js">
 /**
@@ -148,7 +149,7 @@ for the JavaScript code in this tag.
 */
 
 <!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "4");
+org_html_manager.set("TOC_DEPTH", "3");
 org_html_manager.set("LINK_HOME", "");
 org_html_manager.set("LINK_UP", "");
 org_html_manager.set("LOCAL_TOC", "1");
@@ -269,25 +270,13 @@ for the JavaScript code in this tag.
 <li><a href="#sec-3-1-1">3.1.1. <span class="done DONE">DONE</span> Branding User-agent&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
 <li><a href="#sec-3-1-2">3.1.2. <span class="done DONE">DONE</span> Connection limiting per host.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
 <li><a href="#sec-3-1-3">3.1.3. <span class="done DONE">DONE</span> Global proxy.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#sec-3-1-4">3.1.4. <span class="done DONE">DONE</span> Timeout settings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a>
-<ul>
-<li><a href="#sec-3-1-4-1">3.1.4.1. <span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#sec-3-1-4-2">3.1.4.2. <span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#sec-3-1-4-3">3.1.4.3. <span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-</ul>
-</li>
+<li><a href="#sec-3-1-4">3.1.4. <span class="done DONE">DONE</span> Timeout settings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec-3-2">3.2. <span class="done DONE">DONE</span> Per request configuration <code>[2/2]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a>
 <ul>
 <li><a href="#sec-3-2-1">3.2.1. <span class="done DONE">DONE</span> Proxy configuration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
-<li><a href="#sec-3-2-2">3.2.2. <span class="done DONE">DONE</span> Timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a>
-<ul>
-<li><a href="#sec-3-2-2-1">3.2.2.1. <span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#sec-3-2-2-2">3.2.2.2. <span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#sec-3-2-2-3">3.2.2.3. <span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-</ul>
-</li>
+<li><a href="#sec-3-2-2">3.2.2. <span class="done DONE">DONE</span> Timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
 </ul>
 </li>
 </ul>
@@ -315,12 +304,7 @@ for the JavaScript code in this tag.
 <li><a href="#sec-4-10">4.10. <span class="done DONE">DONE</span> Review documentation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
 <li><a href="#sec-4-11">4.11. <span class="done DONE">DONE</span> Refactoring <code>[1/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
 <ul>
-<li><a href="#sec-4-11-1">4.11.1. <span class="done DONE">DONE</span> Refactor <b>execute-request</b> <code>[2/2]</code></a>
-<ul>
-<li><a href="#sec-4-11-1-1">4.11.1.1. <span class="done DONE">DONE</span> Build checkable promise</a></li>
-<li><a href="#sec-4-11-1-2">4.11.1.2. <span class="done DONE">DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces</a></li>
-</ul>
-</li>
+<li><a href="#sec-4-11-1">4.11.1. <span class="done DONE">DONE</span> Refactor <b>execute-request</b> <code>[2/2]</code></a></li>
 </ul>
 </li>
 <li><a href="#sec-4-12">4.12. <span class="done DONE">DONE</span> Rename to <b>http.async.client</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
@@ -458,15 +442,9 @@ IO operation in separate thread.
 <div id="outline-container-sec-3-1-4" class="outline-4">
 <h4 id="sec-3-1-4"><span class="section-number-4">3.1.4</span> <span class="done DONE">DONE</span> Timeout settings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-3-1-4">
-</div><div id="outline-container-sec-3-1-4-1" class="outline-5">
-<h5 id="sec-3-1-4-1"><span class="section-number-5">3.1.4.1</span> <span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h5>
-</div>
-<div id="outline-container-sec-3-1-4-2" class="outline-5">
-<h5 id="sec-3-1-4-2"><span class="section-number-5">3.1.4.2</span> <span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h5>
-</div>
-<div id="outline-container-sec-3-1-4-3" class="outline-5">
-<h5 id="sec-3-1-4-3"><span class="section-number-5">3.1.4.3</span> <span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h5>
-</div>
+</div><ol class="org-ol"><li><a id="sec-3-1-4-1" name="sec-3-1-4-1"></a><span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li>
+<li><a id="sec-3-1-4-2" name="sec-3-1-4-2"></a><span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li>
+<li><a id="sec-3-1-4-3" name="sec-3-1-4-3"></a><span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li></ol>
 </div>
 </div>
 <div id="outline-container-sec-3-2" class="outline-3">
@@ -478,15 +456,9 @@ IO operation in separate thread.
 <div id="outline-container-sec-3-2-2" class="outline-4">
 <h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> <span class="done DONE">DONE</span> Timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-3-2-2">
-</div><div id="outline-container-sec-3-2-2-1" class="outline-5">
-<h5 id="sec-3-2-2-1"><span class="section-number-5">3.2.2.1</span> <span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h5>
-</div>
-<div id="outline-container-sec-3-2-2-2" class="outline-5">
-<h5 id="sec-3-2-2-2"><span class="section-number-5">3.2.2.2</span> <span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h5>
-</div>
-<div id="outline-container-sec-3-2-2-3" class="outline-5">
-<h5 id="sec-3-2-2-3"><span class="section-number-5">3.2.2.3</span> <span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h5>
-</div>
+</div><ol class="org-ol"><li><a id="sec-3-2-2-1" name="sec-3-2-2-1"></a><span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li>
+<li><a id="sec-3-2-2-2" name="sec-3-2-2-2"></a><span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li>
+<li><a id="sec-3-2-2-3" name="sec-3-2-2-3"></a><span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li></ol>
 </div>
 </div>
 </div>
@@ -591,17 +563,13 @@ As suggested by <a href="http://blog.licenser.net/">Licenser</a> on #clojure <a 
 </div><div id="outline-container-sec-4-11-1" class="outline-4">
 <h4 id="sec-4-11-1"><span class="section-number-4">4.11.1</span> <span class="done DONE">DONE</span> Refactor <b>execute-request</b> <code>[2/2]</code></h4>
 <div class="outline-text-4" id="text-4-11-1">
-</div><div id="outline-container-sec-4-11-1-1" class="outline-5">
-<h5 id="sec-4-11-1-1"><span class="section-number-5">4.11.1.1</span> <span class="done DONE">DONE</span> Build checkable promise</h5>
-<div class="outline-text-5" id="text-4-11-1-1">
+</div><ol class="org-ol"><li><a id="sec-4-11-1-1" name="sec-4-11-1-1"></a><span class="done DONE">DONE</span> Build checkable promise<br  /><div class="outline-text-5" id="text-4-11-1-1">
 <p>
 To check if promise was delivered use <b>delivered?</b>
 </p>
 </div>
-</div>
-<div id="outline-container-sec-4-11-1-2" class="outline-5">
-<h5 id="sec-4-11-1-2"><span class="section-number-5">4.11.1.2</span> <span class="done DONE">DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces</h5>
-<div class="outline-text-5" id="text-4-11-1-2">
+</li>
+<li><a id="sec-4-11-1-2" name="sec-4-11-1-2"></a><span class="done DONE">DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces<br  /><div class="outline-text-5" id="text-4-11-1-2">
 <ul class="org-ul">
 <li>Use new checkable <b>promise</b> for different parts of response
 </li>
@@ -611,7 +579,7 @@ To check if promise was delivered use <b>delivered?</b>
 </li>
 </ul>
 </div>
-</div>
+</li></ol>
 </div>
 </div>
 <div id="outline-container-sec-4-12" class="outline-3">
@@ -620,9 +588,9 @@ To check if promise was delivered use <b>delivered?</b>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Hubert Iwaniuk</p>
-<p class="date">Created: 2015-06-11 Thu 15:44</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="author">Author: Chris Hapgood</p>
+<p class="date">Created: 2015-06-11 Thu 23:46</p>
+<p class="creator">Emacs 24.4.1 (Org mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
