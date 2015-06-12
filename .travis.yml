@@ -9,3 +9,10 @@ branches:
   only:
     - master
     - development
+# Handle git submodules manually
+git:
+    submodules: false
+# Replace the authenticated SSH URL with the public URL, then initialize submodules
+before_install:
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+    - git submodule update --init --recursive
