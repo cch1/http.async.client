@@ -1,6 +1,4 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
-#+AUTHOR: Hubert Iwaniuk
-#+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
 * Release 0.5.3
