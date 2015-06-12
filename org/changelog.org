@@ -1,0 +1,168 @@
+#+TITLE: Asynchronous HTTP Client - Clojure - Changelog
+#+SETUPFILE: setup.org
+
+* Release 0.5.3
+** Update Clojure dependency to 1.6
+** Deprecate raw-url function and response key
+Due to lack of support in future versions of the com.ning/async-http-client, raw-url will not be
+supported in future versions.
+** Restructure tests
+*** Update jetty to 9.3.0.RC0
+*** Update log dependencies
+*** Provide fresh client to each test to resolve issue with Clojure 1.6
+*** Fix brittle tests
+** Remove RequestBuilderWrapper
+** Update codox and lein-difftest plugins
+* Release 0.5.2
+  Compile with Java 1.6
+
+* Release 0.5.1
+** remove-params-on-redirect
+   Issues [[https://github.com/cch1/http.async.client/issues/46][#46]], [[https://github.com/cch1/http.async.client/issues/47][#47]] and [[https://github.com/cch1/http.async.client/issues/48][#48]] by [[https://github.com/josephwilk][Joseph Wilk]].
+** Upgrade AHC to 1.7.10
+* Release 0.5.0
+** [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-content-type][http.async.client/content-type]]
+   Added utility fn for [[http://cch1.github.io/http.async.client/docs.html#sec-2-5-5][Reading content-type]].
+** [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-redirect%3F][http.async.client/redirect?]]
+   Added utility fn for checking if response [[http://cch1.github.io/http.async.client/docs.html#sec-2-5-3][Is redirect?]].
+** [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-location][http.async.client/location]]
+   Added utility fn for [[http://cch1.github.io/http.async.client/docs.html#sec-2-5-6][Reading location]].
+** Moved to Leiningen 2
+** [[http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PATCH][PATCH]]
+   Added support for HTTP PATCH method.
+** Initial WebSocket support
+   Not documented yet, [[https://github.com/cch1/http.async.client/blob/07b8f1de8f956505185ed224c71abceeff27265f/src/clj/http/async/client.clj#L305][Code is here]].
+   Demo usage can be found in [[https://github.com/cch1/hac-live][hac-live]] dome for EuroClojure 2012.
+   [[https://github.com/cch1/hac-live/blob/master/src/hac/live.clj#L261][Request 12]] and [[https://github.com/cch1/hac-live/blob/master/src/hac/live.clj#L285][Request 13]] are WebSocket examples.
+** Upgrade AHC to v1.7.5
+
+* Release 0.4.5
+** Multipart support
+   Allow POST and PUT to send multipart messages.
+   When *vector* is provided as body it is treated as multipart.
+   Please consult documentation and tests for examples of usage.
+** Add convenience url and raw-url
+   [[https://github.com/cch1/http.async.client/issues/35][#35]]. Allow easy retrieval of URL used to request resource.
+** There's a function for that!
+   Listen to what kibit has to say.
+* Release 0.4.4
+** Simplified callbacks API
+   Issue [[https://github.com/cch1/http.async.client/issues/32][#32]].
+** Better documented callbacks
+   This was long outstanding issue [[https://github.com/cch1/http.async.client/issues/12][#12]].
+** Upgrade [[https://github.com/sonatype/async-http-client][AHC]] to 1.7.4
+** Upgrade Clojure to 1.4
+* Release 0.4.3
+** Issue [[https://github.com/cch1/http.async.client/pull/30][#30]] by [[https://github.com/canassa][Cesar Canassa]]
+   Fixes issue with single cookie in response.
+** Upgrade AHC to 1.7.1
+* Release 0.4.2
+** Issue [[https://github.com/cch1/http.async.client/pull/29][#29]] by [[https://github.com/diamondap][A. Diamond]]
+   Added support for client certificates.
+* Release 0.4.1
+** Upgrade AHC to 1.7.0
+** Issues [[https://github.com/cch1/http.async.client/issues/26][#26]], [[https://github.com/cch1/http.async.client/issues/27][#27]], [[https://github.com/cch1/http.async.client/issues/28][#28]]
+   - [[https://github.com/cch1/http.async.client/issues/26][#26]] :: [[https://github.com/jkk][Justin Kramer]], [[https://github.com/btatnall][Brian Tatnall]]
+            Empty response body hangs c/body, c/string
+   - [[https://github.com/cch1/http.async.client/issues/27][#27]] :: [[https://github.com/jkk][Justin Kramer]]
+            create-client's :idle-in-pool-timeout option not being set
+            correctly
+   - [[https://github.com/cch1/http.async.client/pull/28][#28]] :: [[https://github.com/klang][Karsten Lang]]
+            Documentation update
+** Improved logging
+   Improved logging configuration for running tests.
+** Tested against Clojure 1.4.0-beta1
+* Release 0.4.0
+** Clojure 1.3 compatible
+** Support for multiple values for same key (QString)
+   [[https://github.com/cch1/http.async.client/issues/22][#22]]
+** Clojure contrib independent
+   [[https://github.com/cch1/http.async.client/pull/24][#24]]
+** Upgrade async-http-client to v1.6.5
+* Release 0.3.1
+** Upgrade async-http-client to v1.6.4
+* Release 0.3.0
+** Upgrade async-http-client to v1.6.3
+** Control over preemptive authentication
+   Patch provided by xeqi.
+** Explicit client usage
+   Now following functions require client as first argument:
+   - GET
+   - PUT
+   - POST
+   - DELETE
+   - HEAD
+   - OPTIONS
+   - request-stream
+   - stream-seq
+   - execute-request
+   You still create client with create-client function.
+** Removed with-client macro
+   This didn't really bring much value.
+   Migration path.
+   From:
+   #+begin_src clojure
+     (with-client {:key val}
+       ;; client usage
+       (let [resp (GET url)]))
+   #+end_src
+   To:
+   #+begin_src clojure
+     (with-open [client (create-client :key val)]
+       ;; client usage
+       (let [resp (GET client url)]))
+   #+end_src
+** Clojure 1.2.1
+   Fixed cyclic dependency that was preventing http.async.client from
+   been used in Clojure 1.2.1.
+* Release 0.2.2
+** get-encoding helper works w/o Content-Type header
+** Upgrade async-http-client to v.1.5.0
+** Exposed more configuration options
+*** Timeouts
+*** Proxy
+*** Authentication
+** Zero byte copy mode
+   If sending File as body, zero byte copy is used.
+** Allow providing your own poll
+   Vadim Geshel contribution.
+** Allow Asynchronous Connect
+   Vadim Geshel contribution.
+** Fix seq streaming API
+   Previous versions of seq streaming API have been holding to head,
+   not anymore.
+** Lots of performance improvements
+   Underlying async-http-client has undergone serious optimization
+   changes.
+* Release 0.2.1
+** Terminate body seq if errored                                        :bug:
+** Canceling request
+   *http.async.client/cancel* and *http.async.client/canceled?*
+** Request timeout
+   Per request configuration of request timeout in ms.
+   #+BEGIN_SRC clojure
+   (GET url :timeout 100)
+   #+END_SRC
+** Close client
+   *http.async.client/close*.
+   #+BEGIN_SRC clojure
+   (c/close)
+   ;; or
+   (c/close hac)
+   #+END_SRC
+** Upgrade to v1.3.2 of async-http-client
+* Release 0.2.0
+** Stream as seq
+   Response body can be seq, this allows for easy HTTP Stream
+   handling. [[http://cch1.github.io/http.async.client/docs.html#sec-1.2.4][Documentation]].
+** Cookies
+   Added cookies support. [[http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.4][Sending]] and [[http://cch1.github.io/http.async.client/docs.html#sec-1.2.5.4][receiving]].
+** Authentication support
+   Basic and Digest from rfc2617 are supported. [[http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.6][Documentation]].
+** Proxy per request
+   Proxy can be specified per request. [[http://cch1.github.io/http.async.client/http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.5][Documentation]].
+** Branding User-Agent
+   Specifying User-Agent per client.
+   [[http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client][*http.async.client/create-client*]] and [[http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client][*http.async.client/with-client*]].
+** Keyworded maps in API
+   Like *:options* in [[http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET][*http.async.client/GET*]].
