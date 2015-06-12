@@ -3,15 +3,12 @@
 
 (setq org-publish-project-alist
       '(("gh-notes"
-	  :base-directory "."
+	  :base-directory "./org/"
 	  :base-extension "org"
 	  :publishing-directory "./gh-pages"
 	  :recursive t
 	  :publishing-function org-html-publish-to-html
 	  :headline-levels 4
-	  :auto-sitemap t
-	  :sitemap-title "Sitemap"
-	  :sitemap-filename "sitemap.org"
 	  :auto-preamble t)
 	("gh-assets"
 	 :base-directory "./org/"
