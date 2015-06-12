@@ -1,4 +1,4 @@
 [submodule "gh-pages"]
 	path = gh-pages
-	url = ./
+	url = git@github.com:cch1/http.async.client.git
 	branch = gh-pages
