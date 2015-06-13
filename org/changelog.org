@@ -1,11 +1,26 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+SETUPFILE: setup.org
 
+* Release 0.6.0
+** Modernize Clojure syntax with `:require` and `:refer` instead of `:use`
+** Update com.ning/async-http-client dependency to 1.8.16
+*** Handle new options and refactoring of Cookie class with maximum BC
+    Add `expires`, `http-only?` and `wrap?` options to Cookie options
+*** Return java.net.UnknownHostException instead of java.net.ConnectException (with UnresolvedAddressexception cause) on bad host
+*** Add wrap? option to cookies
+*** Return timeout and connection limit exceptions in `error` function instead of throwing an exception on request execution thread
+*** Return java.nio.charset.Charsets on multipart parts
+*** Default charset on StringPart (typically) is US-ASCII
+*** Remove `raw-url` function -it is no longer supported by the underlying Java AsyncHttpclient
+*** Add `uri` function to partially back fill for raw-url
+*** Remove async connect functionality -connections are now always async
+*** Handle empty HttpResponseBodyPart in onBodyPartReceived
+    With an empty response body, 1.8.0 calls onBodyPartReceived with a zero- length HttpResponseBodyPart, while version 1.7.x did not even call onBodyPartReceived.
 * Release 0.5.3
 ** Update Clojure dependency to 1.6
 ** Deprecate raw-url function and response key
-Due to lack of support in future versions of the com.ning/async-http-client, raw-url will not be
-supported in future versions.
+   Due to lack of support in future versions of the com.ning/async-http-client, raw-url will not be
+   supported in future versions.
 ** Restructure tests
 *** Update jetty to 9.3.0.RC0
 *** Update log dependencies
