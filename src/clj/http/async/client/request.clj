@@ -212,7 +212,6 @@
   (let [resp {:id      (gensym "req-id__")
               :req req
               :url     (.getUrl req)
-              :raw-url (.getUrl req) ; TODO: restore getRawUrl when ning supports it
               :status  (promise)
               :headers (promise)
               :body    (promise)

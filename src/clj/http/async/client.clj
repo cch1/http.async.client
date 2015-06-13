@@ -303,12 +303,6 @@
   [resp]
   (:url resp))
 
-(defn ^:deprecated raw-url
-  ;; Deprecated due to lack of support from underlying Java AHC library
-  "Gets raw URL from response"
-  [resp]
-  (:raw-url resp))
-
 ;; websocket
 (defprotocol IWebSocket
   (-sendText [this text])
