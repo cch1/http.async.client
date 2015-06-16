@@ -20,7 +20,7 @@
             [http.async.client.cert :refer :all]
             [clojure
              [test :refer :all]
-             [stacktrace :only [print-stack-trace]]])
+             [stacktrace :refer [print-stack-trace]]])
   (:import (com.ning.http.client AsyncHttpClient)
            (java.security KeyStore)
            (java.security.cert X509Certificate)
