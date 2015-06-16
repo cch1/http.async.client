@@ -162,8 +162,9 @@
        (.start))
      srv)))
 
-(defn- once-fixture [f]
+(defn- once-fixture
   "Configures Logger before test here are executed, and closes AHC after tests are done."
+  [f]
   (binding [*server* (start-jetty default-handler)]
     (try (f)
          (finally

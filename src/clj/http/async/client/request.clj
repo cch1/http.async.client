@@ -20,7 +20,6 @@
              [headers :refer :all]
              [util :refer :all]
              [part :refer :all]]
-            [clojure.stacktrace :refer :all]
             [clojure.string :refer [join]])
   (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
                                  AsyncHandler
@@ -61,13 +60,15 @@
 ;; default set of callbacks
 
 ;; status callbacks
-(defn status-collect [_ status]
+(defn status-collect
   "Returns all status and procides with execution"
+  [_ status]
   [status :continue])
 
 ;; header callbacks
-(defn headers-collect [_ headers]
+(defn headers-collect
   "Reurns all headers, or aborts if no headers provided."
+  [_ headers]
   [headers (if-not headers :abort)])
 
 ;; body callbacks
