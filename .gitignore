@@ -1,5 +1,6 @@
 classes/
 pom.xml
+pom.xml.asc
 target/
 /doc
 /.lein-failures
