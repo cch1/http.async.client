@@ -35,7 +35,7 @@
                     ByteArrayInputStream
                     ByteArrayOutputStream)))
 
-(def ^:dynamic *user-agent* "http.async.client/0.5.2")
+(def ^:dynamic *user-agent* "http.async.client")
 
 (def convert-method
   ^{:doc   "Converts clj method (:get, :put, . ..) to Async Client specific."}
