@@ -234,7 +234,7 @@
       b)))
 
 (defn- convert [#^ByteArrayOutputStream baos enc]
-  (.toString baos enc))
+  (.toString baos #^String enc))
 
 (defn- convert-body [body enc]
   (if (seq? body)
