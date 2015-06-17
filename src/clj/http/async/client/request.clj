@@ -28,6 +28,7 @@
                                  HttpResponseBodyPart
                                  PerRequestConfig
                                  Request RequestBuilder)
+           (com.ning.http.client.generators InputStreamBodyGenerator)
            (com.ning.http.client.cookie Cookie)
            (java.net URLEncoder)
            (java.io File
@@ -153,7 +154,7 @@
                                                (url-encode body)
                                                body)
                                              "UTF-8"))
-      (instance? InputStream body) (.setBody rb #^InputStream body)
+      (instance? InputStream body) (.setBody rb (InputStreamBodyGenerator. #^InputStream body))
       (instance? File body) (.setBody rb #^File body)
       (vector? body) (doseq [part body]
                        ;; each part should be map with all details
