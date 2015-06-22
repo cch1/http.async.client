@@ -1,7 +1,7 @@
 (defproject http.async.client "0.5.3"
   :name             "http.async.client"
   :description      "Asynchronous HTTP Client for Clojure"
-  :url              "http://cch1.github.com/http.async.client/"
+  :url              "https://github.com/cch1/http.async.client"
   :source-paths ["src/clj"]
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [com.ning/async-http-client "1.8.16"]]
