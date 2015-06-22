@@ -19,8 +19,8 @@
 #+HTML_DOCTYPE: xhtml-strict
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="stylesheet.css" />
 #+HTML_HEAD_EXTRA:
-#+HTML_LINK_HOME:
-#+HTML_LINK_UP:
+#+HTML_LINK_HOME: https://github.com/cch1/http.async.client
+#+HTML_LINK_UP: index.html
 #+HTML_MATHJAX:
 #+INFOJS_OPT: path:org-info.js
 #+INFOJS_OPT: view:content toc:t ftoc:t ltoc:above tdepth:3 mouse:underline buttons:t
