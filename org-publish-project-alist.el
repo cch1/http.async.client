@@ -5,6 +5,7 @@
       '(("gh-notes"
 	  :base-directory "./org/"
 	  :base-extension "org"
+	  :exclude "setup.org"
 	  :publishing-directory "./gh-pages"
 	  :recursive t
 	  :publishing-function org-html-publish-to-html
