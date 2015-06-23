@@ -13,10 +13,9 @@
 
   [[http://clojars.org/http.async.client/latest-version.svg]]
 
-* Build status
-  TravisCI is used to track the build status of intermediate commits
-  on both the [[https://secure.travis-ci.org/cch1/http.async.client.png?branch=master][master branch]] and
-  the [[https://secure.travis-ci.org/cch1/http.async.client.png?branch=development][development branch]].
+* Build status [[https://secure.travis-ci.org/cch1/http.async.client.png?branch=master]] [[https://secure.travis-ci.org/cch1/http.async.client.png?branch=development]]
+  [[https://travis-ci.org/cch1/http.async.client][TravisCI]] is used to track the build status of intermediate commits
+  on both the master branch and the development branch.
 
 * Example
   Declare dependency (using leiningen, in this example):
