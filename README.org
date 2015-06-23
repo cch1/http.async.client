@@ -47,3 +47,5 @@
   *http.async.client* is distributed under [[http://www.apache.org/licenses/LICENSE-2.0.html][Apache License, Version 2.0]].
 
   If you would like to report an problem or submit a request, [[http://github.com/cch1/http.async.client/issues/][create an issue]].
+
+  Finally, much thanks is owed to those [[https://github.com/cch1/http.async.client/graphs/contributors][contributors]] who have made this project so successful.
