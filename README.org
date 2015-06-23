@@ -19,12 +19,12 @@
   the [[https://secure.travis-ci.org/cch1/http.async.client.png?branch=development][development branch]].
 
 * Example
-  Declare dependency:
-#+BEGIN_SRC leiningen -n
+  Declare dependency (using leiningen, in this example):
+#+BEGIN_SRC clojure -n
   (defproject your-project "1.0.0-SNAPSHOT"
     :description "Your project description"
     :dependencies [[org.clojure/clojure "1.6.0"]
-                   [http.async.client "0.5.3"]])
+                   [http.async.client "0.6.0"]])
 #+END_SRC
 
   Source:
