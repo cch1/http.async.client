@@ -3,8 +3,8 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Asynchronous HTTP Client - Clojure - Documentation</title>
-<!-- 2015-06-12 Fri 15:56 -->
+<title>Asynchronous HTTP Client - Clojure - Documentation Asynchronous HTTP Client for Clojure - Documentation</title>
+<!-- 2015-06-23 Tue 09:40 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Chris Hapgood" />
@@ -150,8 +150,8 @@ for the JavaScript code in this tag.
 
 <!--/*--><![CDATA[/*><!--*/
 org_html_manager.set("TOC_DEPTH", "3");
-org_html_manager.set("LINK_HOME", "");
-org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LINK_HOME", "https://github.com/cch1/http.async.client");
+org_html_manager.set("LINK_UP", "index.html");
 org_html_manager.set("LOCAL_TOC", "1");
 org_html_manager.set("VIEW_BUTTONS", "0");
 org_html_manager.set("MOUSE_HINT", "underline");
@@ -209,103 +209,100 @@ for the JavaScript code in this tag.
 </script>
 </head>
 <body>
-<div id="content">
-<h1 class="title">Asynchronous HTTP Client - Clojure - Documentation</h1>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="https://github.com/cch1/http.async.client"> HOME </a>
+</div><div id="content">
+<h1 class="title">Asynchronous HTTP Client - Clojure - Documentation Asynchronous HTTP Client for Clojure - Documentation</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1. Quick start</a>
+<li><a href="#sec-1">1. Detailed documentation</a>
 <ul>
-<li><a href="#sec-1-1">1.1. Dependency</a></li>
-<li><a href="#sec-1-2">1.2. Require</a></li>
-<li><a href="#sec-1-3">1.3. GETting</a></li>
+<li><a href="#sec-1-1">1.1. Work modes</a>
+<ul>
+<li><a href="#sec-1-1-1">1.1.1. Asynchronous operations</a></li>
+<li><a href="#sec-1-1-2">1.1.2. Streaming</a></li>
+<li><a href="#sec-1-1-3">1.1.3. Raw mode</a></li>
 </ul>
 </li>
-<li><a href="#sec-2">2. Detailed start</a>
+<li><a href="#sec-1-2">1.2. HTTP methods</a>
 <ul>
-<li><a href="#sec-2-1">2.1. Work modes</a>
-<ul>
-<li><a href="#sec-2-1-1">2.1.1. Asynchronous operations</a></li>
-<li><a href="#sec-2-1-2">2.1.2. Streaming</a></li>
-<li><a href="#sec-2-1-3">2.1.3. Raw mode</a></li>
+<li><a href="#sec-1-2-1">1.2.1. GET</a></li>
+<li><a href="#sec-1-2-2">1.2.2. PUT/POST</a></li>
+<li><a href="#sec-1-2-3">1.2.3. DELETE</a></li>
+<li><a href="#sec-1-2-4">1.2.4. HEAD</a></li>
+<li><a href="#sec-1-2-5">1.2.5. OPTIONS</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-2">2.2. HTTP methods</a>
+<li><a href="#sec-1-3">1.3. Request options</a>
 <ul>
-<li><a href="#sec-2-2-1">2.2.1. GET</a></li>
-<li><a href="#sec-2-2-2">2.2.2. PUT/POST</a></li>
-<li><a href="#sec-2-2-3">2.2.3. DELETE</a></li>
-<li><a href="#sec-2-2-4">2.2.4. HEAD</a></li>
-<li><a href="#sec-2-2-5">2.2.5. OPTIONS</a></li>
+<li><a href="#sec-1-3-1">1.3.1. :query</a></li>
+<li><a href="#sec-1-3-2">1.3.2. :headers</a></li>
+<li><a href="#sec-1-3-3">1.3.3. :body</a></li>
+<li><a href="#sec-1-3-4">1.3.4. :cookies</a></li>
+<li><a href="#sec-1-3-5">1.3.5. :proxy</a></li>
+<li><a href="#sec-1-3-6">1.3.6. :auth</a></li>
+<li><a href="#sec-1-3-7">1.3.7. :timeout</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-3">2.3. Request options</a>
+<li><a href="#sec-1-4">1.4. Streaming</a>
 <ul>
-<li><a href="#sec-2-3-1">2.3.1. :query</a></li>
-<li><a href="#sec-2-3-2">2.3.2. :headers</a></li>
-<li><a href="#sec-2-3-3">2.3.3. :body</a></li>
-<li><a href="#sec-2-3-4">2.3.4. :cookies</a></li>
-<li><a href="#sec-2-3-5">2.3.5. :proxy</a></li>
-<li><a href="#sec-2-3-6">2.3.6. :auth</a></li>
-<li><a href="#sec-2-3-7">2.3.7. :timeout</a></li>
+<li><a href="#sec-1-4-1">1.4.1. Lazy sequence</a></li>
+<li><a href="#sec-1-4-2">1.4.2. Call-back</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-4">2.4. Streaming</a>
+<li><a href="#sec-1-5">1.5. Response handling</a>
 <ul>
-<li><a href="#sec-2-4-1">2.4.1. Lazy sequence</a></li>
-<li><a href="#sec-2-4-2">2.4.2. Call-back</a></li>
+<li><a href="#sec-1-5-1">1.5.1. Awaiting response</a></li>
+<li><a href="#sec-1-5-2">1.5.2. Reading status line</a></li>
+<li><a href="#sec-1-5-3">1.5.3. Is redirect?</a></li>
+<li><a href="#sec-1-5-4">1.5.4. Reading headers</a></li>
+<li><a href="#sec-1-5-5">1.5.5. Reading content-type</a></li>
+<li><a href="#sec-1-5-6">1.5.6. Reading location</a></li>
+<li><a href="#sec-1-5-7">1.5.7. Reading cookies</a></li>
+<li><a href="#sec-1-5-8">1.5.8. Reading body</a></li>
+<li><a href="#sec-1-5-9">1.5.9. Reading body as string</a></li>
+<li><a href="#sec-1-5-10">1.5.10. Reading error</a></li>
+<li><a href="#sec-1-5-11">1.5.11. Canceling request</a></li>
+<li><a href="#sec-1-5-12">1.5.12. Response predicates</a></li>
+<li><a href="#sec-1-5-13">1.5.13. Requested URL</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-5">2.5. Response handling</a>
+<li><a href="#sec-1-6">1.6. Managing client</a>
 <ul>
-<li><a href="#sec-2-5-1">2.5.1. Awaiting response</a></li>
-<li><a href="#sec-2-5-2">2.5.2. Reading status line</a></li>
-<li><a href="#sec-2-5-3">2.5.3. Is redirect?</a></li>
-<li><a href="#sec-2-5-4">2.5.4. Reading headers</a></li>
-<li><a href="#sec-2-5-5">2.5.5. Reading content-type</a></li>
-<li><a href="#sec-2-5-6">2.5.6. Reading location</a></li>
-<li><a href="#sec-2-5-7">2.5.7. Reading cookies</a></li>
-<li><a href="#sec-2-5-8">2.5.8. Reading body</a></li>
-<li><a href="#sec-2-5-9">2.5.9. Reading body as string</a></li>
-<li><a href="#sec-2-5-10">2.5.10. Reading error</a></li>
-<li><a href="#sec-2-5-11">2.5.11. Canceling request</a></li>
-<li><a href="#sec-2-5-12">2.5.12. Response predicates</a></li>
-<li><a href="#sec-2-5-13">2.5.13. Requested URL</a></li>
-</ul>
-</li>
-<li><a href="#sec-2-6">2.6. Managing client</a>
-<ul>
-<li><a href="#sec-2-6-1">2.6.1. Branding</a></li>
-<li><a href="#sec-2-6-2">2.6.2. Enabling HTTP compression</a></li>
-<li><a href="#sec-2-6-3">2.6.3. Follow redirects</a></li>
-<li><a href="#sec-2-6-4">2.6.4. Remove parameters on redirect</a></li>
-<li><a href="#sec-2-6-5">2.6.5. Keep alive</a></li>
-<li><a href="#sec-2-6-6">2.6.6. Max connections per host</a></li>
-<li><a href="#sec-2-6-7">2.6.7. Max connections total count</a></li>
-<li><a href="#sec-2-6-8">2.6.8. Max redirects to follow</a></li>
-<li><a href="#sec-2-6-9">2.6.9. Timeouts</a></li>
-<li><a href="#sec-2-6-10">2.6.10. Proxy</a></li>
-<li><a href="#sec-2-6-11">2.6.11. Authentication</a></li>
-<li><a href="#sec-2-6-12">2.6.12. SSL Certificates</a></li>
-<li><a href="#sec-2-6-13">2.6.13. Closing <b>http.async.client</b></a></li>
+<li><a href="#sec-1-6-1">1.6.1. Branding</a></li>
+<li><a href="#sec-1-6-2">1.6.2. Enabling HTTP compression</a></li>
+<li><a href="#sec-1-6-3">1.6.3. Follow redirects</a></li>
+<li><a href="#sec-1-6-4">1.6.4. Remove parameters on redirect</a></li>
+<li><a href="#sec-1-6-5">1.6.5. Keep alive</a></li>
+<li><a href="#sec-1-6-6">1.6.6. Max connections per host</a></li>
+<li><a href="#sec-1-6-7">1.6.7. Max connections total count</a></li>
+<li><a href="#sec-1-6-8">1.6.8. Max redirects to follow</a></li>
+<li><a href="#sec-1-6-9">1.6.9. Timeouts</a></li>
+<li><a href="#sec-1-6-10">1.6.10. Proxy</a></li>
+<li><a href="#sec-1-6-11">1.6.11. Authentication</a></li>
+<li><a href="#sec-1-6-12">1.6.12. SSL Certificates</a></li>
+<li><a href="#sec-1-6-13">1.6.13. Closing <b>http.async.client</b></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#sec-3">3. Low level</a>
+<li><a href="#sec-2">2. Low level</a>
 <ul>
-<li><a href="#sec-3-1">3.1. Preparing request</a></li>
-<li><a href="#sec-3-2">3.2. Executing request</a>
+<li><a href="#sec-2-1">2.1. Preparing request</a></li>
+<li><a href="#sec-2-2">2.2. Executing request</a>
 <ul>
-<li><a href="#sec-3-2-1">3.2.1. Status line</a></li>
-<li><a href="#sec-3-2-2">3.2.2. Headers</a></li>
-<li><a href="#sec-3-2-3">3.2.3. Body part</a></li>
-<li><a href="#sec-3-2-4">3.2.4. Body completed</a></li>
-<li><a href="#sec-3-2-5">3.2.5. Error</a></li>
+<li><a href="#sec-2-2-1">2.2.1. Status line</a></li>
+<li><a href="#sec-2-2-2">2.2.2. Headers</a></li>
+<li><a href="#sec-2-2-3">2.2.3. Body part</a></li>
+<li><a href="#sec-2-2-4">2.2.4. Body completed</a></li>
+<li><a href="#sec-2-2-5">2.2.5. Error</a></li>
 </ul>
 </li>
-<li><a href="#sec-3-3">3.3. Default callbacks</a></li>
+<li><a href="#sec-2-3">2.3. Default callbacks</a></li>
 </ul>
 </li>
 </ul>
@@ -313,72 +310,14 @@ for the JavaScript code in this tag.
 </div>
 
 <div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Quick start</h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Detailed documentation</h2>
 <div class="outline-text-2" id="text-1">
-<p>
-If you just want to use it already.
-</p>
-</div>
-<div id="outline-container-sec-1-1" class="outline-3">
-<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Dependency</h3>
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Work modes</h3>
 <div class="outline-text-3" id="text-1-1">
-<p>
-Declare dependency in your project.clj:
-</p>
-<div class="org-src-container">
-
-<pre class="src src-clojure">(defproject your-project "1.0.0-SNAPSHOT"
-  :description "Your project description"
-  :dependencies [[org.clojure/clojure "1.4.0"]
-		 [http.async.client "0.5.3"]])
-</pre>
-</div>
-<p>
-Make sure that your project depends on at least 1.3.0 Clojure as
-<b>http.async.client</b> will not run in earlier versions.
-</p>
-</div>
-</div>
-<div id="outline-container-sec-1-2" class="outline-3">
-<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Require</h3>
-<div class="outline-text-3" id="text-1-2">
-<p>
-Require it from your code:
-</p>
-<div class="org-src-container">
-
-<pre class="src src-clojure">(ns your.ns (:require [http.async.client :as http]))
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-sec-1-3" class="outline-3">
-<h3 id="sec-1-3"><span class="section-number-3">1.3</span> GETting</h3>
-<div class="outline-text-3" id="text-1-3">
-<p>
-To get HTTP resource:
-</p>
-<div class="org-src-container">
-
-<pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
-  (let [response (http/GET client "http://github.com/cch1/http.async.client/")] ; request http resource
-    (-&gt; response
-	http/await     ; wait for response to be received
-	http/string))) ; read body of response as string
-</pre>
-</div>
-</div>
-</div>
-</div>
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Detailed start</h2>
-<div class="outline-text-2" id="text-2">
-</div><div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Work modes</h3>
-<div class="outline-text-3" id="text-2-1">
-</div><div id="outline-container-sec-2-1-1" class="outline-4">
-<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> Asynchronous operations</h4>
-<div class="outline-text-4" id="text-2-1-1">
+</div><div id="outline-container-sec-1-1-1" class="outline-4">
+<h4 id="sec-1-1-1"><span class="section-number-4">1.1.1</span> Asynchronous operations</h4>
+<div class="outline-text-4" id="text-1-1-1">
 <p>
 When you do:
 </p>
@@ -478,9 +417,9 @@ is done
 </dl>
 </div>
 </div>
-<div id="outline-container-sec-2-1-2" class="outline-4">
-<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> Streaming</h4>
-<div class="outline-text-4" id="text-2-1-2">
+<div id="outline-container-sec-1-1-2" class="outline-4">
+<h4 id="sec-1-1-2"><span class="section-number-4">1.1.2</span> Streaming</h4>
+<div class="outline-text-4" id="text-1-1-2">
 <p>
 For consuming HTTP streams use:
 </p>
@@ -504,9 +443,9 @@ For more details please see <i>Lazy sequence</i>.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-1-3" class="outline-4">
-<h4 id="sec-2-1-3"><span class="section-number-4">2.1.3</span> Raw mode</h4>
-<div class="outline-text-4" id="text-2-1-3">
+<div id="outline-container-sec-1-1-3" class="outline-4">
+<h4 id="sec-1-1-3"><span class="section-number-4">1.1.3</span> Raw mode</h4>
+<div class="outline-text-4" id="text-1-1-3">
 <p>
 This allows you to provide callbacks that will get triggered on HTTP
 response events like:
@@ -537,16 +476,16 @@ level</i>.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-2" class="outline-3">
-<h3 id="sec-2-2"><span class="section-number-3">2.2</span> HTTP methods</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> HTTP methods</h3>
+<div class="outline-text-3" id="text-1-2">
 <p>
 HTTP methods and convenience functions to request them.
 </p>
 </div>
-<div id="outline-container-sec-2-2-1" class="outline-4">
-<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> GET</h4>
-<div class="outline-text-4" id="text-2-2-1">
+<div id="outline-container-sec-1-2-1" class="outline-4">
+<h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> GET</h4>
+<div class="outline-text-4" id="text-1-2-1">
 <p>
 Most basic invocation of <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-GET"><b>http.async.client/GET</b></a> is only with
 <b>url</b> you want to get.
@@ -626,12 +565,12 @@ for whole response to arrive.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-2-2" class="outline-4">
-<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> PUT/POST</h4>
-<div class="outline-text-4" id="text-2-2-2">
+<div id="outline-container-sec-1-2-2" class="outline-4">
+<h4 id="sec-1-2-2"><span class="section-number-4">1.2.2</span> PUT/POST</h4>
+<div class="outline-text-4" id="text-1-2-2">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PUT"><b>http.async.client/PUT</b></a>/<a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-POST"><b>http.async.client/POST</b></a> work the same
-way as <a href="#sec-2-2-1"><b>GET</b></a> but they also accept <b>:body</b> argument.
+way as <a href="#sec-1-2-1"><b>GET</b></a> but they also accept <b>:body</b> argument.
 </p>
 
 <p>
@@ -650,7 +589,7 @@ way as <a href="#sec-2-2-1"><b>GET</b></a> but they also accept <b>:body</b> arg
 </li>
 </ul>
 </div>
-<ol class="org-ol"><li><a id="sec-2-2-2-1" name="sec-2-2-2-1"></a>Submitting body as String<br  /><div class="outline-text-5" id="text-2-2-2-1">
+<ol class="org-ol"><li><a id="sec-1-2-2-1" name="sec-1-2-2-1"></a>Submitting body as String<br  /><div class="outline-text-5" id="text-1-2-2-1">
 <p>
 You can send String as body with PUT/POST:
 </p>
@@ -664,7 +603,7 @@ You can send String as body with PUT/POST:
 </div>
 </div>
 </li>
-<li><a id="sec-2-2-2-2" name="sec-2-2-2-2"></a>Submitting form parameters<br  /><div class="outline-text-5" id="text-2-2-2-2">
+<li><a id="sec-1-2-2-2" name="sec-1-2-2-2"></a>Submitting form parameters<br  /><div class="outline-text-5" id="text-1-2-2-2">
 <p>
 Submitting form parameters is done via body map:
 </p>
@@ -678,7 +617,7 @@ Submitting form parameters is done via body map:
 </div>
 </div>
 </li>
-<li><a id="sec-2-2-2-3" name="sec-2-2-2-3"></a>Submitting multipart messages<br  /><div class="outline-text-5" id="text-2-2-2-3">
+<li><a id="sec-1-2-2-3" name="sec-1-2-2-3"></a>Submitting multipart messages<br  /><div class="outline-text-5" id="text-1-2-2-3">
 <p>
 To send multipart messages in body use vector of maps.
 Each map describes one multipart part.
@@ -825,7 +764,7 @@ contain multiple maps:
 </div>
 </div>
 </li>
-<li><a id="sec-2-2-2-4" name="sec-2-2-2-4"></a>Submitting body as InputStream<br  /><div class="outline-text-5" id="text-2-2-2-4">
+<li><a id="sec-1-2-2-4" name="sec-1-2-2-4"></a>Submitting body as InputStream<br  /><div class="outline-text-5" id="text-1-2-2-4">
 <p>
 Another method to provide body is via InputStream:
 </p>
@@ -840,7 +779,7 @@ Another method to provide body is via InputStream:
 </div>
 </div>
 </li>
-<li><a id="sec-2-2-2-5" name="sec-2-2-2-5"></a>Submitting body as File, a.k.a. zero byte copy<br  /><div class="outline-text-5" id="text-2-2-2-5">
+<li><a id="sec-1-2-2-5" name="sec-1-2-2-5"></a>Submitting body as File, a.k.a. zero byte copy<br  /><div class="outline-text-5" id="text-1-2-2-5">
 <p>
 To use zero byte copy future, provide a File as :body
 </p>
@@ -856,9 +795,9 @@ To use zero byte copy future, provide a File as :body
 </div>
 </li></ol>
 </div>
-<div id="outline-container-sec-2-2-3" class="outline-4">
-<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> DELETE</h4>
-<div class="outline-text-4" id="text-2-2-3">
+<div id="outline-container-sec-1-2-3" class="outline-4">
+<h4 id="sec-1-2-3"><span class="section-number-4">1.2.3</span> DELETE</h4>
+<div class="outline-text-4" id="text-1-2-3">
 <p>
 To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-DELETE"><b>http.async.client/DELETE</b></a> on a resource:
 </p>
@@ -872,9 +811,9 @@ To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.h
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-2-4" class="outline-4">
-<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> HEAD</h4>
-<div class="outline-text-4" id="text-2-2-4">
+<div id="outline-container-sec-1-2-4" class="outline-4">
+<h4 id="sec-1-2-4"><span class="section-number-4">1.2.4</span> HEAD</h4>
+<div class="outline-text-4" id="text-1-2-4">
 <p>
 To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-HEAD"><b>http.async.client/HEAD</b></a> on a resource:
 </p>
@@ -888,9 +827,9 @@ To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.h
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-2-5" class="outline-4">
-<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> OPTIONS</h4>
-<div class="outline-text-4" id="text-2-2-5">
+<div id="outline-container-sec-1-2-5" class="outline-4">
+<h4 id="sec-1-2-5"><span class="section-number-4">1.2.5</span> OPTIONS</h4>
+<div class="outline-text-4" id="text-1-2-5">
 <p>
 To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-OPTIONS"><b>http.async.client/OPTIONS</b></a> on a resource:
 </p>
@@ -905,33 +844,33 @@ To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.h
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-3" class="outline-3">
-<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Request options</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Request options</h3>
+<div class="outline-text-3" id="text-1-3">
 <p>
 Following options can be provided to requests and are defined by
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-prepare-request"><b>http.async.client.request/prepare-request</b></a>:
 </p>
 <dl class="org-dl">
-<dt> <a href="#sec-2-3-1">:query</a> </dt><dd>query parameters
+<dt> <a href="#sec-1-3-1">:query</a> </dt><dd>query parameters
 </dd>
-<dt> <a href="#sec-2-3-2">:headers</a> </dt><dd>custom headers to be sent out
+<dt> <a href="#sec-1-3-2">:headers</a> </dt><dd>custom headers to be sent out
 </dd>
-<dt> <a href="#sec-2-3-3">:body</a> </dt><dd>body to be sent, allowed only with PUT/POST
+<dt> <a href="#sec-1-3-3">:body</a> </dt><dd>body to be sent, allowed only with PUT/POST
 </dd>
-<dt> <a href="#sec-2-3-4">:cookies</a> </dt><dd>cookies to be sent
+<dt> <a href="#sec-1-3-4">:cookies</a> </dt><dd>cookies to be sent
 </dd>
-<dt> <a href="#sec-2-3-5">:proxy</a> </dt><dd>proxy to be used
+<dt> <a href="#sec-1-3-5">:proxy</a> </dt><dd>proxy to be used
 </dd>
-<dt> <a href="#sec-2-3-6">:auth</a> </dt><dd>authentication map
+<dt> <a href="#sec-1-3-6">:auth</a> </dt><dd>authentication map
 </dd>
-<dt> <a href="#sec-2-3-7">:timeout</a> </dt><dd>timeout configuration
+<dt> <a href="#sec-1-3-7">:timeout</a> </dt><dd>timeout configuration
 </dd>
 </dl>
 </div>
-<div id="outline-container-sec-2-3-1" class="outline-4">
-<h4 id="sec-2-3-1"><span class="section-number-4">2.3.1</span> :query</h4>
-<div class="outline-text-4" id="text-2-3-1">
+<div id="outline-container-sec-1-3-1" class="outline-4">
+<h4 id="sec-1-3-1"><span class="section-number-4">1.3.1</span> :query</h4>
+<div class="outline-text-4" id="text-1-3-1">
 <p>
 Query parameters is a map of keywords and their values. You use
 it like so:
@@ -946,11 +885,11 @@ it like so:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-3-2" class="outline-4">
-<h4 id="sec-2-3-2"><span class="section-number-4">2.3.2</span> :headers</h4>
-<div class="outline-text-4" id="text-2-3-2">
+<div id="outline-container-sec-1-3-2" class="outline-4">
+<h4 id="sec-1-3-2"><span class="section-number-4">1.3.2</span> :headers</h4>
+<div class="outline-text-4" id="text-1-3-2">
 <p>
-Custom headers can be submitted same way as <a href="#sec-2-3-1">:query</a>:
+Custom headers can be submitted same way as <a href="#sec-1-3-1">:query</a>:
 </p>
 <div class="org-src-container">
 
@@ -963,12 +902,12 @@ Custom headers can be submitted same way as <a href="#sec-2-3-1">:query</a>:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-3-3" class="outline-4">
-<h4 id="sec-2-3-3"><span class="section-number-4">2.3.3</span> :body</h4>
-<div class="outline-text-4" id="text-2-3-3">
+<div id="outline-container-sec-1-3-3" class="outline-4">
+<h4 id="sec-1-3-3"><span class="section-number-4">1.3.3</span> :body</h4>
+<div class="outline-text-4" id="text-1-3-3">
 <p>
-Body can be provided with a message only with <a href="#sec-2-2-2">PUT/POST</a>, it
-doesn't make sense to have body with other <a href="#sec-2-2">HTTP methods</a>.
+Body can be provided with a message only with <a href="#sec-1-2-2">PUT/POST</a>, it
+doesn't make sense to have body with other <a href="#sec-1-2">HTTP methods</a>.
 </p>
 <div class="org-src-container">
 
@@ -995,13 +934,13 @@ doesn't make sense to have body with other <a href="#sec-2-2">HTTP methods</a>.
 </ul>
 
 <p>
-Please see <a href="#sec-2-2-2">PUT/POST</a> for more documentation.
+Please see <a href="#sec-1-2-2">PUT/POST</a> for more documentation.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-3-4" class="outline-4">
-<h4 id="sec-2-3-4"><span class="section-number-4">2.3.4</span> :cookies</h4>
-<div class="outline-text-4" id="text-2-3-4">
+<div id="outline-container-sec-1-3-4" class="outline-4">
+<h4 id="sec-1-3-4"><span class="section-number-4">1.3.4</span> :cookies</h4>
+<div class="outline-text-4" id="text-1-3-4">
 <p>
 Cookies can be provided to request as follows:
 </p>
@@ -1042,13 +981,13 @@ needed.
 </dl>
 
 <p>
-Cookie reading is described in <a href="#sec-2-5-7">Reading cookies</a>.
+Cookie reading is described in <a href="#sec-1-5-7">Reading cookies</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-3-5" class="outline-4">
-<h4 id="sec-2-3-5"><span class="section-number-4">2.3.5</span> :proxy</h4>
-<div class="outline-text-4" id="text-2-3-5">
+<div id="outline-container-sec-1-3-5" class="outline-4">
+<h4 id="sec-1-3-5"><span class="section-number-4">1.3.5</span> :proxy</h4>
+<div class="outline-text-4" id="text-1-3-5">
 <p>
 Proxy can be configured per request basis as follows:
 </p>
@@ -1081,9 +1020,9 @@ Must be provided with :user.
 </dl>
 </div>
 </div>
-<div id="outline-container-sec-2-3-6" class="outline-4">
-<h4 id="sec-2-3-6"><span class="section-number-4">2.3.6</span> :auth</h4>
-<div class="outline-text-4" id="text-2-3-6">
+<div id="outline-container-sec-1-3-6" class="outline-4">
+<h4 id="sec-1-3-6"><span class="section-number-4">1.3.6</span> :auth</h4>
+<div class="outline-text-4" id="text-1-3-6">
 <p>
 Authentication can be configured per request basis.
 For now BASIC and DIGEST methods are supported.
@@ -1136,9 +1075,9 @@ Controlling preemptive authentication behavior is also possible:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-3-7" class="outline-4">
-<h4 id="sec-2-3-7"><span class="section-number-4">2.3.7</span> :timeout</h4>
-<div class="outline-text-4" id="text-2-3-7">
+<div id="outline-container-sec-1-3-7" class="outline-4">
+<h4 id="sec-1-3-7"><span class="section-number-4">1.3.7</span> :timeout</h4>
+<div class="outline-text-4" id="text-1-3-7">
 <p>
 Response timeout can be configured per request as well.
 Timeout value is time in milliseconds in which response has to be
@@ -1179,9 +1118,9 @@ example contains check if response has failed.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-4" class="outline-3">
-<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Streaming</h3>
-<div class="outline-text-3" id="text-2-4">
+<div id="outline-container-sec-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Streaming</h3>
+<div class="outline-text-3" id="text-1-4">
 <p>
 HTTP Stream is response with chunked content encoding.
 Those streams might not be meant to ever finish, see twitter.com
@@ -1194,15 +1133,15 @@ been received.
 Two ways of consuming a HTTP Stream are supported:
 </p>
 <ul class="org-ul">
-<li><a href="#sec-2-4-1">Lazy sequence</a>
+<li><a href="#sec-1-4-1">Lazy sequence</a>
 </li>
-<li><a href="#sec-2-4-2">Call-back</a>
+<li><a href="#sec-1-4-2">Call-back</a>
 </li>
 </ul>
 </div>
-<div id="outline-container-sec-2-4-1" class="outline-4">
-<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> Lazy sequence</h4>
-<div class="outline-text-4" id="text-2-4-1">
+<div id="outline-container-sec-1-4-1" class="outline-4">
+<h4 id="sec-1-4-1"><span class="section-number-4">1.4.1</span> Lazy sequence</h4>
+<div class="outline-text-4" id="text-1-4-1">
 <p>
 You can get HTTP Stream as lazy sequence of it's body.
 This is very convenient method as <b>seq</b> is native type of Clojure
@@ -1265,9 +1204,9 @@ And finally this implementation is not holding to it's head.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-4-2" class="outline-4">
-<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> Call-back</h4>
-<div class="outline-text-4" id="text-2-4-2">
+<div id="outline-container-sec-1-4-2" class="outline-4">
+<h4 id="sec-1-4-2"><span class="section-number-4">1.4.2</span> Call-back</h4>
+<div class="outline-text-4" id="text-1-4-2">
 <p>
 Consuming HTTP Stream with call-back is quite straight forward with
 <b>http.async.client</b>. You will need to know what HTTP Method you will call,
@@ -1309,19 +1248,19 @@ to agent.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-5" class="outline-3">
-<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Response handling</h3>
-<div class="outline-text-3" id="text-2-5">
+<div id="outline-container-sec-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Response handling</h3>
+<div class="outline-text-3" id="text-1-5">
 <p>
 <b>http.async.client</b> exposes some convenience functions for
 response handling.
 </p>
 </div>
-<div id="outline-container-sec-2-5-1" class="outline-4">
-<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> Awaiting response</h4>
-<div class="outline-text-4" id="text-2-5-1">
+<div id="outline-container-sec-1-5-1" class="outline-4">
+<h4 id="sec-1-5-1"><span class="section-number-4">1.5.1</span> Awaiting response</h4>
+<div class="outline-text-4" id="text-1-5-1">
 <p>
-If you call any of <i>Asynchronous operations</i>, <a href="#sec-2-1-2">Streaming</a> or <i>Raw mode</i>
+If you call any of <i>Asynchronous operations</i>, <a href="#sec-1-1-2">Streaming</a> or <i>Raw mode</i>
 you actually asynchronously execute HTTP request.
 Some times you might need to wait for response processing to be
 done before proceeding, in order to do so you call
@@ -1350,9 +1289,9 @@ further, for example like that:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-5-2" class="outline-4">
-<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> Reading status line</h4>
-<div class="outline-text-4" id="text-2-5-2">
+<div id="outline-container-sec-1-5-2" class="outline-4">
+<h4 id="sec-1-5-2"><span class="section-number-4">1.5.2</span> Reading status line</h4>
+<div class="outline-text-4" id="text-1-5-2">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-status"><b>http.async.client/status</b></a> returns status lazy map of response.
 It will wait until HTTP Status has been received.
@@ -1372,9 +1311,9 @@ yet.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-5-3" class="outline-4">
-<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> Is redirect?</h4>
-<div class="outline-text-4" id="text-2-5-3">
+<div id="outline-container-sec-1-5-3" class="outline-4">
+<h4 id="sec-1-5-3"><span class="section-number-4">1.5.3</span> Is redirect?</h4>
+<div class="outline-text-4" id="text-1-5-3">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-redirect?"><b>http.async.client/redirect?</b></a> checks if response is redirect.
 </p>
@@ -1388,9 +1327,9 @@ yet.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-5-4" class="outline-4">
-<h4 id="sec-2-5-4"><span class="section-number-4">2.5.4</span> Reading headers</h4>
-<div class="outline-text-4" id="text-2-5-4">
+<div id="outline-container-sec-1-5-4" class="outline-4">
+<h4 id="sec-1-5-4"><span class="section-number-4">1.5.4</span> Reading headers</h4>
+<div class="outline-text-4" id="text-1-5-4">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-headers"><b>http.async.client/headers</b></a> returns headers lazy map of response.
 It will wait until HTTP Headers are received.
@@ -1409,9 +1348,9 @@ yet after this returns.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-5-5" class="outline-4">
-<h4 id="sec-2-5-5"><span class="section-number-4">2.5.5</span> Reading content-type</h4>
-<div class="outline-text-4" id="text-2-5-5">
+<div id="outline-container-sec-1-5-5" class="outline-4">
+<h4 id="sec-1-5-5"><span class="section-number-4">1.5.5</span> Reading content-type</h4>
+<div class="outline-text-4" id="text-1-5-5">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-content-type"><b>http.async.client/content-type</b></a> returns value of <b>Content-Type</b>
 header.
@@ -1426,9 +1365,9 @@ header.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-5-6" class="outline-4">
-<h4 id="sec-2-5-6"><span class="section-number-4">2.5.6</span> Reading location</h4>
-<div class="outline-text-4" id="text-2-5-6">
+<div id="outline-container-sec-1-5-6" class="outline-4">
+<h4 id="sec-1-5-6"><span class="section-number-4">1.5.6</span> Reading location</h4>
+<div class="outline-text-4" id="text-1-5-6">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-location"><b>http.async.client/location</b></a> will return redirect target if
 response is redirect.
@@ -1443,9 +1382,9 @@ response is redirect.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-5-7" class="outline-4">
-<h4 id="sec-2-5-7"><span class="section-number-4">2.5.7</span> Reading cookies</h4>
-<div class="outline-text-4" id="text-2-5-7">
+<div id="outline-container-sec-1-5-7" class="outline-4">
+<h4 id="sec-1-5-7"><span class="section-number-4">1.5.7</span> Reading cookies</h4>
+<div class="outline-text-4" id="text-1-5-7">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-cookies"><b>http.async.client/cookies</b></a> returns seq of maps representing
 cookies.
@@ -1465,25 +1404,25 @@ set.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-5-8" class="outline-4">
-<h4 id="sec-2-5-8"><span class="section-number-4">2.5.8</span> Reading body</h4>
-<div class="outline-text-4" id="text-2-5-8">
+<div id="outline-container-sec-1-5-8" class="outline-4">
+<h4 id="sec-1-5-8"><span class="section-number-4">1.5.8</span> Reading body</h4>
+<div class="outline-text-4" id="text-1-5-8">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-body"><b>http.async.client/body</b></a> returns either ByteArrayOutputStream or
 seq of it, depending if you used <i>Asynchronous operations</i> or
-<a href="#sec-2-1-2">Streaming</a> respectively.
+<a href="#sec-1-1-2">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
 soon as first chunk of HTTP response body is received.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-5-9" class="outline-4">
-<h4 id="sec-2-5-9"><span class="section-number-4">2.5.9</span> Reading body as string</h4>
-<div class="outline-text-4" id="text-2-5-9">
+<div id="outline-container-sec-1-5-9" class="outline-4">
+<h4 id="sec-1-5-9"><span class="section-number-4">1.5.9</span> Reading body as string</h4>
+<div class="outline-text-4" id="text-1-5-9">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-string"><b>http.async.client/string</b></a> returns either string or seq of
 strings, again depending if you used <i>Asynchronous operations</i> or
-<a href="#sec-2-1-2">Streaming</a> respectively.
+<a href="#sec-1-1-2">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
 soon as first chunk of HTTP response body is received.
 </p>
@@ -1514,9 +1453,9 @@ return once response receiving is finished.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-5-10" class="outline-4">
-<h4 id="sec-2-5-10"><span class="section-number-4">2.5.10</span> Reading error</h4>
-<div class="outline-text-4" id="text-2-5-10">
+<div id="outline-container-sec-1-5-10" class="outline-4">
+<h4 id="sec-1-5-10"><span class="section-number-4">1.5.10</span> Reading error</h4>
+<div class="outline-text-4" id="text-1-5-10">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-error"><b>http.async.client/error</b></a> will return Throwable that was cause of
 request failure iff request failed, else <b>nil</b>.
@@ -1532,9 +1471,9 @@ request failure iff request failed, else <b>nil</b>.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-5-11" class="outline-4">
-<h4 id="sec-2-5-11"><span class="section-number-4">2.5.11</span> Canceling request</h4>
-<div class="outline-text-4" id="text-2-5-11">
+<div id="outline-container-sec-1-5-11" class="outline-4">
+<h4 id="sec-1-5-11"><span class="section-number-4">1.5.11</span> Canceling request</h4>
+<div class="outline-text-4" id="text-1-5-11">
 <p>
 At any given time of processing HTTP Response you can <b>cancel</b> it
 by calling <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-cancel"><b>http.async.client/cancel</b></a>.
@@ -1551,14 +1490,14 @@ Please see <b>canceling-request</b> test.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-5-12" class="outline-4">
-<h4 id="sec-2-5-12"><span class="section-number-4">2.5.12</span> Response predicates</h4>
-<div class="outline-text-4" id="text-2-5-12">
+<div id="outline-container-sec-1-5-12" class="outline-4">
+<h4 id="sec-1-5-12"><span class="section-number-4">1.5.12</span> Response predicates</h4>
+<div class="outline-text-4" id="text-1-5-12">
 <p>
 You can also check status of request.
 </p>
 </div>
-<ol class="org-ol"><li><a id="sec-2-5-12-1" name="sec-2-5-12-1"></a>done?<br  /><div class="outline-text-5" id="text-2-5-12-1">
+<ol class="org-ol"><li><a id="sec-1-5-12-1" name="sec-1-5-12-1"></a>done?<br  /><div class="outline-text-5" id="text-1-5-12-1">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-done?"><b>http.async.client/done?</b></a> will tell you if response processing
 has finished:
@@ -1578,14 +1517,14 @@ wait for it and return true as a result of call to done?.
 </p>
 </div>
 </li>
-<li><a id="sec-2-5-12-2" name="sec-2-5-12-2"></a>failed?<br  /><div class="outline-text-5" id="text-2-5-12-2">
+<li><a id="sec-1-5-12-2" name="sec-1-5-12-2"></a>failed?<br  /><div class="outline-text-5" id="text-1-5-12-2">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-failed?"><b>http.async.client/failed?</b></a> will return true iff request has
 failed. If this return true you can <i>read error</i>.
 </p>
 </div>
 </li>
-<li><a id="sec-2-5-12-3" name="sec-2-5-12-3"></a>canceled?<br  /><div class="outline-text-5" id="text-2-5-12-3">
+<li><a id="sec-1-5-12-3" name="sec-1-5-12-3"></a>canceled?<br  /><div class="outline-text-5" id="text-1-5-12-3">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-canceled?"><b>http.async.client/canceled?</b></a> will return true iff request has
 been <i>canceled</i>, else false is return.
@@ -1593,39 +1532,35 @@ been <i>canceled</i>, else false is return.
 </div>
 </li></ol>
 </div>
-<div id="outline-container-sec-2-5-13" class="outline-4">
-<h4 id="sec-2-5-13"><span class="section-number-4">2.5.13</span> Requested URL</h4>
-<div class="outline-text-4" id="text-2-5-13">
+<div id="outline-container-sec-1-5-13" class="outline-4">
+<h4 id="sec-1-5-13"><span class="section-number-4">1.5.13</span> Requested URL</h4>
+<div class="outline-text-4" id="text-1-5-13">
 <p>
-If you need to get URL of response at hand, there are two
-associations in it that you will find useful:
+If you need to get the URL of the response at hand, there is an
+association in it that you will find useful:
 </p>
 <dl class="org-dl">
 <dt> :url </dt><dd>encoded url,
 </dd>
-<dt> :raw-url </dt><dd>not encoded url - DEPRECATED.
-</dd>
 </dl>
 
 <p>
-And two convenience functions:
+And a convenience functions:
 </p>
 <ul class="org-ul">
-<li><a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-url"><b>http.async.client/url</b></a>,
-</li>
-<li><a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-raw-url"><b>http.async.client/raw-url</b></a> (DEPRECATED).
+<li><a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-url"><b>http.async.client/url</b></a>.
 </li>
 </ul>
 </div>
 </div>
 </div>
 
-<div id="outline-container-sec-2-6" class="outline-3">
-<h3 id="sec-2-6"><span class="section-number-3">2.6</span> Managing client</h3>
-<div class="outline-text-3" id="text-2-6">
-</div><div id="outline-container-sec-2-6-1" class="outline-4">
-<h4 id="sec-2-6-1"><span class="section-number-4">2.6.1</span> Branding</h4>
-<div class="outline-text-4" id="text-2-6-1">
+<div id="outline-container-sec-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> Managing client</h3>
+<div class="outline-text-3" id="text-1-6">
+</div><div id="outline-container-sec-1-6-1" class="outline-4">
+<h4 id="sec-1-6-1"><span class="section-number-4">1.6.1</span> Branding</h4>
+<div class="outline-text-4" id="text-1-6-1">
 <p>
 <b>http.async.client</b> can be configured with User-Agent. To do so
 you can use <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-create-client"><b>http.async.client/create-client</b></a> and remember to
@@ -1643,9 +1578,9 @@ whole response to finish.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-2" class="outline-4">
-<h4 id="sec-2-6-2"><span class="section-number-4">2.6.2</span> Enabling HTTP compression</h4>
-<div class="outline-text-4" id="text-2-6-2">
+<div id="outline-container-sec-1-6-2" class="outline-4">
+<h4 id="sec-1-6-2"><span class="section-number-4">1.6.2</span> Enabling HTTP compression</h4>
+<div class="outline-text-4" id="text-1-6-2">
 <p>
 <b>http.async.client</b> can be configured to allow, or not, HTTP
 compression.
@@ -1660,9 +1595,9 @@ compression.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-3" class="outline-4">
-<h4 id="sec-2-6-3"><span class="section-number-4">2.6.3</span> Follow redirects</h4>
-<div class="outline-text-4" id="text-2-6-3">
+<div id="outline-container-sec-1-6-3" class="outline-4">
+<h4 id="sec-1-6-3"><span class="section-number-4">1.6.3</span> Follow redirects</h4>
+<div class="outline-text-4" id="text-1-6-3">
 <p>
 Enabling HTTP redirects following.
 </p>
@@ -1676,9 +1611,9 @@ Enabling HTTP redirects following.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-4" class="outline-4">
-<h4 id="sec-2-6-4"><span class="section-number-4">2.6.4</span> Remove parameters on redirect</h4>
-<div class="outline-text-4" id="text-2-6-4">
+<div id="outline-container-sec-1-6-4" class="outline-4">
+<h4 id="sec-1-6-4"><span class="section-number-4">1.6.4</span> Remove parameters on redirect</h4>
+<div class="outline-text-4" id="text-1-6-4">
 <p>
 Query parameters are not passed on to any redirect that is followed (by default parameters are removed).
 </p>
@@ -1692,9 +1627,9 @@ Query parameters are not passed on to any redirect that is followed (by default 
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-5" class="outline-4">
-<h4 id="sec-2-6-5"><span class="section-number-4">2.6.5</span> Keep alive</h4>
-<div class="outline-text-4" id="text-2-6-5">
+<div id="outline-container-sec-1-6-5" class="outline-4">
+<h4 id="sec-1-6-5"><span class="section-number-4">1.6.5</span> Keep alive</h4>
+<div class="outline-text-4" id="text-1-6-5">
 <p>
 Keep Alive is enabled by default. This implies using pool for
 connections.
@@ -1709,9 +1644,9 @@ connections.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-6" class="outline-4">
-<h4 id="sec-2-6-6"><span class="section-number-4">2.6.6</span> Max connections per host</h4>
-<div class="outline-text-4" id="text-2-6-6">
+<div id="outline-container-sec-1-6-6" class="outline-4">
+<h4 id="sec-1-6-6"><span class="section-number-4">1.6.6</span> Max connections per host</h4>
+<div class="outline-text-4" id="text-1-6-6">
 <p>
 Maximum number of connections to be cached per host.
 Above this number connections will still be created but will not
@@ -1727,9 +1662,9 @@ be kept alive.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-7" class="outline-4">
-<h4 id="sec-2-6-7"><span class="section-number-4">2.6.7</span> Max connections total count</h4>
-<div class="outline-text-4" id="text-2-6-7">
+<div id="outline-container-sec-1-6-7" class="outline-4">
+<h4 id="sec-1-6-7"><span class="section-number-4">1.6.7</span> Max connections total count</h4>
+<div class="outline-text-4" id="text-1-6-7">
 <p>
 Maximum number of total connections opened, submitting new
 request while all allowed connections are active, will result in
@@ -1745,9 +1680,9 @@ rejection.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-8" class="outline-4">
-<h4 id="sec-2-6-8"><span class="section-number-4">2.6.8</span> Max redirects to follow</h4>
-<div class="outline-text-4" id="text-2-6-8">
+<div id="outline-container-sec-1-6-8" class="outline-4">
+<h4 id="sec-1-6-8"><span class="section-number-4">1.6.8</span> Max redirects to follow</h4>
+<div class="outline-text-4" id="text-1-6-8">
 <p>
 Maximum number of redirects to follow.
 </p>
@@ -1761,11 +1696,11 @@ Maximum number of redirects to follow.
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-9" class="outline-4">
-<h4 id="sec-2-6-9"><span class="section-number-4">2.6.9</span> Timeouts</h4>
-<div class="outline-text-4" id="text-2-6-9">
+<div id="outline-container-sec-1-6-9" class="outline-4">
+<h4 id="sec-1-6-9"><span class="section-number-4">1.6.9</span> Timeouts</h4>
+<div class="outline-text-4" id="text-1-6-9">
 <p>
-With <b>http.async.client</b> apart from per connection <a href="#sec-2-3-7">:timeout</a> you
+With <b>http.async.client</b> apart from per connection <a href="#sec-1-3-7">:timeout</a> you
 can globally configure <b>connection</b>, <b>request</b> and <b>idle</b>
 timeouts. All timeout values are in milliseconds and magic value
 <b>-1</b> is interpreted as infinite wait.
@@ -1790,9 +1725,9 @@ when it was idling in pool for more than 100ms.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-6-10" class="outline-4">
-<h4 id="sec-2-6-10"><span class="section-number-4">2.6.10</span> Proxy</h4>
-<div class="outline-text-4" id="text-2-6-10">
+<div id="outline-container-sec-1-6-10" class="outline-4">
+<h4 id="sec-1-6-10"><span class="section-number-4">1.6.10</span> Proxy</h4>
+<div class="outline-text-4" id="text-1-6-10">
 <p>
 Client can be also configured with global HTTP Proxy settings.
 </p>
@@ -1825,9 +1760,9 @@ Must be provided with :user.
 </dl>
 </div>
 </div>
-<div id="outline-container-sec-2-6-11" class="outline-4">
-<h4 id="sec-2-6-11"><span class="section-number-4">2.6.11</span> Authentication</h4>
-<div class="outline-text-4" id="text-2-6-11">
+<div id="outline-container-sec-1-6-11" class="outline-4">
+<h4 id="sec-1-6-11"><span class="section-number-4">1.6.11</span> Authentication</h4>
+<div class="outline-text-4" id="text-1-6-11">
 <p>
 Default authentication realm to be used globally can be
 configured.
@@ -1880,9 +1815,9 @@ Preemptive authentication can be enabled or disabled globally per client:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-6-12" class="outline-4">
-<h4 id="sec-2-6-12"><span class="section-number-4">2.6.12</span> SSL Certificates</h4>
-<div class="outline-text-4" id="text-2-6-12">
+<div id="outline-container-sec-1-6-12" class="outline-4">
+<h4 id="sec-1-6-12"><span class="section-number-4">1.6.12</span> SSL Certificates</h4>
+<div class="outline-text-4" id="text-1-6-12">
 <p>
 Since v0.4.2 it is possible to use SSL certificates with client.
 </p>
@@ -1911,9 +1846,9 @@ For more documentation please consult docstring of
 </div>
 </div>
 
-<div id="outline-container-sec-2-6-13" class="outline-4">
-<h4 id="sec-2-6-13"><span class="section-number-4">2.6.13</span> Closing <b>http.async.client</b></h4>
-<div class="outline-text-4" id="text-2-6-13">
+<div id="outline-container-sec-1-6-13" class="outline-4">
+<h4 id="sec-1-6-13"><span class="section-number-4">1.6.13</span> Closing <b>http.async.client</b></h4>
+<div class="outline-text-4" id="text-1-6-13">
 <p>
 Whenever you've created <b>http.async.client</b> via
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-create-client"><b>http.async.client/create-client</b></a> you will need to close it.
@@ -1934,9 +1869,9 @@ To do so you call <a href="http://cch1.github.io/http.async.client/doc/http.asyn
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Low level</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Low level</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 This is lowest level access to <b>http.async.client</b>.
 Mechanics here is based on asynchronous call-backs.
@@ -1944,9 +1879,9 @@ It provides default set of callbacks and functions to create and
 execute requests.
 </p>
 </div>
-<div id="outline-container-sec-3-1" class="outline-3">
-<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Preparing request</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Preparing request</h3>
+<div class="outline-text-3" id="text-2-1">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-prepare-request"><b>http.async.client.request/prepare-request</b></a> is responsible for
 request preparation, like the name suggests.
@@ -1973,9 +1908,9 @@ Sample:
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-3-2" class="outline-3">
-<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Executing request</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Executing request</h3>
+<div class="outline-text-3" id="text-2-2">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-execute-request"><b>http.async.client.request/execute-request</b></a> returns same map of promises
 as <i>Asynchronous operations</i>.
@@ -1986,13 +1921,13 @@ Following <b>options</b> keys are recognized:
 <dl class="org-dl">
 <dt> <b>:status</b> </dt><dd><i>Status line</i>
 </dd>
-<dt> <b>:headers</b> </dt><dd><a href="#sec-3-2-2">Headers</a>
+<dt> <b>:headers</b> </dt><dd><a href="#sec-2-2-2">Headers</a>
 </dd>
 <dt> <b>:part</b> </dt><dd><i>Body part</i>
 </dd>
 <dt> <b>:completed</b> </dt><dd><i>Body completed</i>
 </dd>
-<dt> <b>:error</b> </dt><dd><a href="#sec-3-2-5">Error</a>
+<dt> <b>:error</b> </dt><dd><a href="#sec-2-2-5">Error</a>
 </dd>
 </dl>
 <p>
@@ -2010,9 +1945,9 @@ continuation.
 </dd>
 </dl>
 </div>
-<div id="outline-container-sec-3-2-1" class="outline-4">
-<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> Status line</h4>
-<div class="outline-text-4" id="text-3-2-1">
+<div id="outline-container-sec-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> Status line</h4>
+<div class="outline-text-4" id="text-2-2-1">
 <p>
 Status line callback gets called after status line has been
 received with arguments:
@@ -2056,9 +1991,9 @@ Sample code to illustrate how to use status callback:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3-2-2" class="outline-4">
-<h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> Headers</h4>
-<div class="outline-text-4" id="text-3-2-2">
+<div id="outline-container-sec-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> Headers</h4>
+<div class="outline-text-4" id="text-2-2-2">
 <p>
 Headers callback gets called after headers have been received
 with arguments:
@@ -2092,9 +2027,9 @@ Sample code to illustrate how to use headers callback:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3-2-3" class="outline-4">
-<h4 id="sec-3-2-3"><span class="section-number-4">3.2.3</span> Body part</h4>
-<div class="outline-text-4" id="text-3-2-3">
+<div id="outline-container-sec-2-2-3" class="outline-4">
+<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> Body part</h4>
+<div class="outline-text-4" id="text-2-2-3">
 <p>
 Body part callback gets called after each part of body has been
 received with arguments:
@@ -2149,9 +2084,9 @@ Next sample will collect body parts:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3-2-4" class="outline-4">
-<h4 id="sec-3-2-4"><span class="section-number-4">3.2.4</span> Body completed</h4>
-<div class="outline-text-4" id="text-3-2-4">
+<div id="outline-container-sec-2-2-4" class="outline-4">
+<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> Body completed</h4>
+<div class="outline-text-4" id="text-2-2-4">
 <p>
 This callback gets called when receiving of response body has
 finished with only one argument, i.e. response map.
@@ -2197,9 +2132,9 @@ only on successful response. Next snippet will show that
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3-2-5" class="outline-4">
-<h4 id="sec-3-2-5"><span class="section-number-4">3.2.5</span> Error</h4>
-<div class="outline-text-4" id="text-3-2-5">
+<div id="outline-container-sec-2-2-5" class="outline-4">
+<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> Error</h4>
+<div class="outline-text-4" id="text-2-2-5">
 <p>
 Error callback gets called when error while processing has been
 encountered with arguments
@@ -2231,9 +2166,9 @@ Next code snippet shows error callback in use:
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3-3" class="outline-3">
-<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Default callbacks</h3>
-<div class="outline-text-3" id="text-3-3">
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Default callbacks</h3>
+<div class="outline-text-3" id="text-2-3">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-*default-callbacks*"><b>http.async.client.request/*default-callbacks*</b></a> is a map of
 default callbacks. This will allow you to easy change only few
@@ -2250,7 +2185,7 @@ how to do it.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Chris Hapgood</p>
-<p class="date">Created: 2015-06-12 Fri 15:56</p>
+<p class="date">Created: 2015-06-23 Tue 09:40</p>
 <p class="creator">Emacs 24.4.1 (Org mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
