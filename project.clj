@@ -12,9 +12,9 @@
              :1.4.0 {:dependencies [[org.clojure/clojure "1.4.0"]]}
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :dev {:resource-paths ["test-resources"],
-                   :dependencies [[org.eclipse.jetty/jetty-server "9.3.0.RC1"]
-                                  [org.eclipse.jetty/jetty-security "9.3.0.RC1"]
-                                  [org.eclipse.jetty/jetty-continuation "9.3.0.RC1"]
+                   :dependencies [[org.eclipse.jetty/jetty-server "9.3.0.RC0"]
+                                  [org.eclipse.jetty/jetty-security "9.3.0.RC0"]
+                                  [org.eclipse.jetty/jetty-continuation "9.3.0.RC0"]
                                   [log4j "1.2.17"]
                                   [org.slf4j/slf4j-log4j12 "1.7.12"]]}}
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
