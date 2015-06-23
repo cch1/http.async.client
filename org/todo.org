@@ -1,8 +1,10 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - To Do
-#+AUTHOR: Hubert Iwaniuk
-#+EMAIL: hubert@happyhacking.nl
 #+SETUPFILE: setup.org
 
+* Documentation
+** TODO Determine how to show TravisCI build status via README.org
+** TODO Determine how to export a sitemap from org publish
+** TODO Extract quick start example code to its own file
 * Receive [6/6]                                                   :code:rel1:
 ** DONE Status Line                                                    :rel1:
 ** DONE Headers                                                        :rel1:
