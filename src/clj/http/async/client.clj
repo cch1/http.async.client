@@ -21,7 +21,8 @@
   (:require [http.async.client
              [request :refer :all]
              [headers :refer :all]
-             [util :refer :all]])
+             [util :refer :all]]
+            [clojure.tools.logging :as log])
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
@@ -84,32 +85,34 @@
              async-connect
              executor-service
              ssl-context]}]
-  (AsyncHttpClient.
-   (.build
-    (let [b (AsyncHttpClientConfig$Builder.)]
-      (when-not (nil? compression-enabled) (.setCompressionEnabled b compression-enabled))
-      (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
-      (when-not (nil? remove-params-on-redirect) (.setRemoveQueryParamsOnRedirect b remove-params-on-redirect))
-      (when-not (nil? follow-redirects) (.setFollowRedirects b follow-redirects))
-      (when idle-in-pool-timeout (.setIdleConnectionInPoolTimeoutInMs b idle-in-pool-timeout))
-      (when-not (nil? keep-alive) (.setAllowPoolingConnection b keep-alive))
-      (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
-      (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
-      (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
-      (when async-connect
-        (let [provider-config (doto (NettyAsyncHttpProviderConfig.)
-                                (.removeProperty NettyAsyncHttpProviderConfig/USE_BLOCKING_IO)
-                                (.addProperty NettyAsyncHttpProviderConfig/EXECUTE_ASYNC_CONNECT true))]
-          (.setAsyncHttpClientProviderConfig b provider-config)))
-      (when executor-service (.setExecutorService b executor-service))
-      (when proxy
-        (set-proxy proxy b))
-      (when auth
-        (set-realm auth b))
-      (when request-timeout (.setRequestTimeoutInMs b request-timeout))
-      (.setUserAgent b (if user-agent user-agent *user-agent*))
-      (when-not (nil? ssl-context) (.setSSLContext b ssl-context))
-      b))))
+  (let [client (AsyncHttpClient.
+                (.build
+                 (let [b (AsyncHttpClientConfig$Builder.)]
+                   (when-not (nil? compression-enabled) (.setCompressionEnabled b compression-enabled))
+                   (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
+                   (when-not (nil? remove-params-on-redirect) (.setRemoveQueryParamsOnRedirect b remove-params-on-redirect))
+                   (when-not (nil? follow-redirects) (.setFollowRedirects b follow-redirects))
+                   (when idle-in-pool-timeout (.setIdleConnectionInPoolTimeoutInMs b idle-in-pool-timeout))
+                   (when-not (nil? keep-alive) (.setAllowPoolingConnection b keep-alive))
+                   (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
+                   (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
+                   (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
+                   (when async-connect
+                     (let [provider-config (doto (NettyAsyncHttpProviderConfig.)
+                                             (.removeProperty NettyAsyncHttpProviderConfig/USE_BLOCKING_IO)
+                                             (.addProperty NettyAsyncHttpProviderConfig/EXECUTE_ASYNC_CONNECT true))]
+                       (.setAsyncHttpClientProviderConfig b provider-config)))
+                   (when executor-service (.setExecutorService b executor-service))
+                   (when proxy
+                     (set-proxy proxy b))
+                   (when auth
+                     (set-realm auth b))
+                   (when request-timeout (.setRequestTimeoutInMs b request-timeout))
+                   (.setUserAgent b (if user-agent user-agent *user-agent*))
+                   (when-not (nil? ssl-context) (.setSSLContext b ssl-context))
+                   b)))]
+    (log/debug "Created client: " client)
+    client))
 
 (defmacro ^{:private true} gen-methods [& methods]
   (list* 'do
@@ -420,7 +423,9 @@
   "Closes client."
   [client]
   (when (satisfies? IClosable client)
-    (-close client)))
+    (let [result (-close client)]
+      (log/debug "Closed client: " client)
+      result)))
 
 (defn open?
   "Checks if client is open."
