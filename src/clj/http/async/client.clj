@@ -394,13 +394,15 @@
                           byte-cb  :byte
                           open-cb  :open
                           close-cb :close
-                          error-cb :error}]
+                          error-cb :error
+                          :as opts}]
   (let [b (WebSocketUpgradeHandler$Builder.)
         ws (atom nil)]
     (.addWebSocketListener b (ws-lifecycle-listener ws open-cb close-cb error-cb))
     (when text-cb (.addWebSocketListener b (create-ws-text-listener ws text-cb)))
     (when byte-cb (.addWebSocketListener b (create-ws-byte-listener ws byte-cb)))
-    (.get (.executeRequest client (prepare-request :get url) (.build b)))))
+    (.get (.executeRequest client (apply prepare-request :get url (apply concat opts)) (.build b)))))
+
 
 ;; closing
 (defprotocol IClosable
