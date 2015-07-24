@@ -33,7 +33,7 @@
   (ns sample (:require [http.async.client :as http]))
 
   (with-open [client (http/create-client)]
-    (let [response (http/GET client "http://github.com/cch1/http.async.client/")]
+    (let [response (http/GET client "https://github.com/cch1/http.async.client/")]
       (-> response
           http/await
           http/string)))
