@@ -41,7 +41,7 @@
 
 * More info
 
-  It runs with Clojure 1.4.0, 1.5.1 and 1.6.0.  Development is against Clojure 1.6.0.
+  It runs with Clojure 1.4.0, 1.5.1, 1.6.0 and 1.7.0.  Development is against Clojure 1.7.0.
 
   For complete documentation refer to the [[http://cch1.github.io/http.async.client/][project documentation index]].
 
