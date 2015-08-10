@@ -750,7 +750,7 @@
     (is (true? (cancelled? resp)))
     (is (true? (done? resp)))))
 
-(deftest reqeust-timeout
+(deftest request-timeout
   (testing "timing out"
     (let [resp (GET *client* "http://localhost:8123/timeout" :timeout 100)]
       (await resp)
@@ -798,8 +798,8 @@
       (is (instance? ConnectException (error resp))))))
 
 (deftest closing-client
-  (let [client (create-client)
-        _ (await (GET client "http://localhost:8123/"))]
+  (let [client (create-client)]
+    (await (GET client "http://localhost:8123/"))
     (close client)
     (is (thrown-with-msg? IOException #"Closed" (GET client "http://localhost:8123/")))))
 
