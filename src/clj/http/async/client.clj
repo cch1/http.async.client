@@ -21,17 +21,19 @@
   (:require [http.async.client
              [request :refer :all]
              [headers :refer :all]
-             [util :refer :all]]
+             [util :refer :all]
+             [websocket :as ws]]
             [clojure.tools.logging :as log])
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
-           (com.ning.http.client.websocket WebSocket
-                                           WebSocketUpgradeHandler$Builder
-                                           WebSocketListener
-                                           WebSocketByteListener
-                                           WebSocketTextListener
-                                           WebSocketCloseCodeReasonListener)
+           (com.ning.http.client.ws WebSocket
+                                    WebSocketUpgradeHandler$Builder
+                                    WebSocketListener
+                                    WebSocketByteListener WebSocketByteFragmentListener
+                                    WebSocketTextListener WebSocketTextFragmentListener
+                                    WebSocketCloseCodeReasonListener)
+           (com.ning.http.client.providers.netty.ws NettyWebSocket)
            (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
 
 ;; # Client Lifecycle
@@ -42,7 +44,6 @@
   - :compression-enabled :: enable HTTP compression
   - :connection-timeout :: connections timeout in ms
   - :follow-redirects :: enable following HTTP redirects
-  - :remove-params-on-redirect :: query parameters removed when a redirect occurs
   - :idle-in-pool-timeout :: idle connection in pool timeout in ms
   - :keep-alive :: enable HTTP keep alive, enabled by default
   - :max-conns-per-host :: max number of polled connections per host
@@ -72,7 +73,6 @@
   [& {:keys [compression-enabled
              connection-timeout
              follow-redirects
-             remove-params-on-redirect
              idle-in-pool-timeout
              keep-alive
              max-conns-per-host
@@ -85,34 +85,26 @@
              async-connect
              executor-service
              ssl-context]}]
-  (let [client (AsyncHttpClient.
-                (.build
-                 (let [b (AsyncHttpClientConfig$Builder.)]
-                   (when-not (nil? compression-enabled) (.setCompressionEnabled b compression-enabled))
-                   (when connection-timeout (.setConnectionTimeoutInMs b connection-timeout))
-                   (when-not (nil? remove-params-on-redirect) (.setRemoveQueryParamsOnRedirect b remove-params-on-redirect))
-                   (when-not (nil? follow-redirects) (.setFollowRedirects b follow-redirects))
-                   (when idle-in-pool-timeout (.setIdleConnectionInPoolTimeoutInMs b idle-in-pool-timeout))
-                   (when-not (nil? keep-alive) (.setAllowPoolingConnection b keep-alive))
-                   (when max-conns-per-host (.setMaximumConnectionsPerHost b max-conns-per-host))
-                   (when max-conns-total (.setMaximumConnectionsTotal b max-conns-total))
-                   (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
-                   (when async-connect
-                     (let [provider-config (doto (NettyAsyncHttpProviderConfig.)
-                                             (.removeProperty NettyAsyncHttpProviderConfig/USE_BLOCKING_IO)
-                                             (.addProperty NettyAsyncHttpProviderConfig/EXECUTE_ASYNC_CONNECT true))]
-                       (.setAsyncHttpClientProviderConfig b provider-config)))
-                   (when executor-service (.setExecutorService b executor-service))
-                   (when proxy
-                     (set-proxy proxy b))
-                   (when auth
-                     (set-realm auth b))
-                   (when request-timeout (.setRequestTimeoutInMs b request-timeout))
-                   (.setUserAgent b (if user-agent user-agent *user-agent*))
-                   (when-not (nil? ssl-context) (.setSSLContext b ssl-context))
-                   b)))]
-    (log/debug "Created client: " client)
-    client))
+  (AsyncHttpClient.
+   (.build
+    (let [b (AsyncHttpClientConfig$Builder.)]
+      (when-not (nil? compression-enabled) (.setCompressionEnabled b compression-enabled))
+      (when connection-timeout (.setConnectTimeout b connection-timeout))
+      (when-not (nil? follow-redirects) (.setFollowRedirect b follow-redirects))
+      (when idle-in-pool-timeout (.setPooledConnectionIdleTimeout b idle-in-pool-timeout))
+      (when-not (nil? keep-alive) (.setAllowPoolingConnection b keep-alive))
+      (when max-conns-per-host (.setMaxConnectionsPerHost b max-conns-per-host))
+      (when max-conns-total (.setMaxConnections b max-conns-total))
+      (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
+      (when executor-service (.setExecutorService b executor-service))
+      (when proxy
+        (set-proxy proxy b))
+      (when auth
+        (set-realm auth b))
+      (when request-timeout (.setRequestTimeout b request-timeout))
+      (.setUserAgent b (if user-agent user-agent *user-agent*))
+      (when-not (nil? ssl-context) (.setSSLContext b ssl-context))
+      b))))
 
 (defmacro ^{:private true} gen-methods [& methods]
   (list* 'do
@@ -306,13 +298,18 @@
   [resp]
   (:url resp))
 
+(defn uri
+  "Get the request URI from the response"
+  [resp]
+  (.toJavaNetURI (.getUri (:req resp))))
+
 ;; websocket
 (defprotocol IWebSocket
   (-sendText [this text])
   (-sendByte [this byte]))
 
 (extend-protocol IWebSocket
-  WebSocket
+  NettyWebSocket
   (-sendText [ws text]
     (.sendTextMessage ws text))
   (-sendByte [ws byte]
@@ -327,84 +324,12 @@
       (-sendText ws text)
       (-sendByte ws byte))))
 
-(defn ws-lifecycle-listener
-  "Registers WebSocketListener to handle lifecycle of WebSocket.
-
-   Stores active socket in atom."
-  [ws openf closef errorf]
-  (reify
-    WebSocketCloseCodeReasonListener
-    (onClose [_ ws* code reason]
-      (when closef (closef ws* code reason))
-      (reset! ws nil))
-
-    WebSocketListener
-    (^{:tag void} onOpen [_ #^WebSocket soc]
-      (reset! ws soc)
-      (when openf (openf soc)))
-    (^{:tag void} onClose [_ #^WebSocket soc])
-    (^{:tag void} onError [_ #^Throwable t]
-      (reset! ws nil)
-      (when errorf (errorf @ws t)))))
-
-(defn create-ws-close-listener
-  "Creates WebSocket close listener."
-  [f]
-  (reify
-    WebSocketCloseCodeReasonListener
-    (onClose [_ ws code reason]
-      (println "closing")
-      (f ws code reason))
-
-    WebSocketListener
-    (^{:tag void} onOpen [_ #^WebSocket _])
-    (^{:tag void} onClose [_ #^WebSocket _]
-      (println "closing2"))
-    (^{:tag void} onError [_ #^Throwable _])))
-
-(defn create-ws-text-listener
-  "Creates WebSocket text listener."
-  [soc f]
-  (reify
-    WebSocketTextListener
-    (^{:tag void} onMessage [_ #^String s]
-      (f @soc s))
-    (^{:tag void} onFragment [_ #^String s #^boolean last])
-
-    WebSocketListener
-    (^{:tag void} onOpen [_ #^WebSocket _])
-    (^{:tag void} onClose [_ #^WebSocket _])
-    (^{:tag void} onError [_ #^Throwable _])))
-
-(defn create-ws-byte-listener
-  "Creates WebSocket binary listner."
-  [soc f]
-  (reify
-    WebSocketByteListener
-    (^{:tag void} onMessage [_ #^bytes b]
-      (f @soc b))
-    (^{:tag void} onFragment [_ #^bytes b #^boolean last])
-
-    WebSocketListener
-    (^{:tag void} onOpen [_ #^WebSocket _])
-    (^{:tag void} onClose [_ #^WebSocket _])
-    (^{:tag void} onError [_ #^Throwable _])))
-
 (defn websocket
   "Opens WebSocket connection."
   {:tag WebSocket}
-  [client #^String url & {text-cb  :text
-                          byte-cb  :byte
-                          open-cb  :open
-                          close-cb :close
-                          error-cb :error
-                          :as opts}]
-  (let [b (WebSocketUpgradeHandler$Builder.)
-        ws (atom nil)]
-    (.addWebSocketListener b (ws-lifecycle-listener ws open-cb close-cb error-cb))
-    (when text-cb (.addWebSocketListener b (create-ws-text-listener ws text-cb)))
-    (when byte-cb (.addWebSocketListener b (create-ws-byte-listener ws byte-cb)))
-    (.get (.executeRequest client (apply prepare-request :get url (apply concat opts)) (.build b)))))
+  [client #^String url & options]
+  (let [wsugh (ws/upgrade-handler options)]
+    (.get (.executeRequest client (prepare-request :get url) wsugh))))
 
 
 ;; closing
@@ -417,7 +342,7 @@
   (-close [client] (.close client))
   (-open? [client] (not (.isClosed client)))
 
-  WebSocket
+  NettyWebSocket
   (-close [soc] (.close soc))
   (-open? [soc] (.isOpen soc)))
 

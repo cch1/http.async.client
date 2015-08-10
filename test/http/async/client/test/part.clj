@@ -17,9 +17,10 @@
   {:author "Hubert Iwaniuk"}
   (:require [clojure.test :refer :all]
             [http.async.client.part :refer :all])
-  (:import (com.ning.http.client ByteArrayPart
-                                 FilePart
-                                 StringPart)
+  (:import (java.nio.charset Charset)
+           (com.ning.http.client.multipart ByteArrayPart
+                                           FilePart
+                                           StringPart)
            (java.io File)))
 
 (set! *warn-on-reflection* true)
@@ -31,17 +32,17 @@
       (are [expected tested] (= expected tested)
            "test-name" (.getName #^StringPart p)
            "test-value" (.getValue #^StringPart p)
-           "UTF-8" (.getCharset #^StringPart p))))
+           (StringPart/DEFAULT_CHARSET) (.getCharset #^StringPart p))))
   (testing "With encoding"
     (let [p (create-part {:type    :string
                           :name    "test-name"
                           :value   "test-value"
-                          :charset "test-encoding"})]
+                          :charset "US-ASCII"})]
       (is (instance? StringPart p))
       (are [expected tested] (= expected tested)
            "test-name" (.getName #^StringPart p)
            "test-value" (.getValue #^StringPart p)
-           "test-encoding" (.getCharset #^StringPart p)))))
+           (Charset/forName "US-ASCII") (.getCharset #^StringPart p)))))
 
 (deftest file-part
   (let [p (create-part {:type      :file
@@ -53,8 +54,8 @@
     (are [expected tested] (= expected tested)
          "test-name" (.getName #^FilePart p)
          (File. "test-resources/test.txt") (.getFile #^FilePart p)
-         "text/plain" (.getMimeType #^FilePart p)
-         "UTF-8" (.getCharSet #^FilePart p))))
+         "text/plain" (.getContentType #^FilePart p)
+         (Charset/forName "UTF-8") (.getCharset #^FilePart p))))
 
 (deftest bytearray-part
   (let [p (create-part {:type      :bytearray
@@ -67,6 +68,6 @@
     (are [expected tested] (= expected tested)
          "test-name" (.getName #^ByteArrayPart p)
          "test-file-name" (.getFileName #^ByteArrayPart p)
-         "test-content" (String. (.getData #^ByteArrayPart p))
-         "text/plain" (.getMimeType #^ByteArrayPart p)
-         "UTF-8" (.getCharSet #^ByteArrayPart p))))
+         "test-content" (String. (.getBytes #^ByteArrayPart p))
+         "text/plain" (.getContentType #^ByteArrayPart p)
+         (Charset/forName "UTF-8") (.getCharset #^ByteArrayPart p))))

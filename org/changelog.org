@@ -1,6 +1,14 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+SETUPFILE: setup.org
 
+* Release 1.0.0
+** Update to the latest version of AsyncHttpClient (1.9.30)
+*** Remove `remove-params-on-redirect` option
+    No longer supported by the underlying AsyncHttpClient library and of dubious value.
+*** Overhaul character set handling for multipart functions
+*** Use more precise exceptions
+** Use more idiomatic Clojure
+** Extract websocket code to separate namespace
 * Release 0.6.1
 ** Allow websocket to take request options :enhancement:
 ** Add logging to client create/close calls

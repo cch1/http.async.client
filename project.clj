@@ -4,7 +4,7 @@
   :url              "https://github.com/cch1/http.async.client"
   :source-paths ["src/clj"]
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [com.ning/async-http-client "1.8.16"]
+                 [com.ning/async-http-client "1.9.30"]
                  [org.clojure/tools.logging "0.3.1"]]
   :min-lein-version "2.5.1"
   :plugins [[codox "0.8.12"]
