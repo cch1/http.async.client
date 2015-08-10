@@ -1,6 +1,10 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+SETUPFILE: setup.org
 
+* Release 0.6.1
+** Allow websocket to take request options :enhancement:
+** Add logging to client create/close calls
+** Update dependencies, including Clojure
 * Release 0.6.0
 ** Modernize Clojure syntax with `:require` and `:refer` instead of `:use`
 ** Update com.ning/async-http-client dependency to 1.8.16
