@@ -1,7 +1,7 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - To Do
 #+SETUPFILE: setup.org
 
-* Documentation
+* Documentation [0/3]
 ** TODO Determine how to show TravisCI build status via README.org
 ** TODO Determine how to export a sitemap from org publish
 ** TODO Extract quick start example code to its own file
@@ -94,3 +94,5 @@
      - Use normal map for response instead of (ref {})
      - Provide helper functions to deal with metadata on response
 ** DONE Rename to *http.async.client*                                  :rel3:
+* Dependencies [0/1]
+** Update AsyncHttpClient to 1.9.x
