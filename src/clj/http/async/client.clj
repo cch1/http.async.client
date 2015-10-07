@@ -66,7 +66,6 @@
       :preemptive - assume authentication is required
   - :request-timeout :: request timeout in ms
   - :user-agent :: User-Agent branding string
-  - :async-connect :: Execute connect asynchronously
   - :executor-service :: provide your own executor service for callbacks to be executed on
   - :ssl-context :: provide your own SSL Context"
   {:tag AsyncHttpClient}
@@ -82,20 +81,19 @@
              auth
              request-timeout
              user-agent
-             async-connect
              executor-service
              ssl-context]}]
   (AsyncHttpClient.
    (.build
     (let [b (AsyncHttpClientConfig$Builder.)]
-      (when-not (nil? compression-enabled) (.setCompressionEnabled b compression-enabled))
+      (when-not (nil? compression-enabled) (.setCompressionEnforced b compression-enabled))
       (when connection-timeout (.setConnectTimeout b connection-timeout))
       (when-not (nil? follow-redirects) (.setFollowRedirect b follow-redirects))
       (when idle-in-pool-timeout (.setPooledConnectionIdleTimeout b idle-in-pool-timeout))
-      (when-not (nil? keep-alive) (.setAllowPoolingConnection b keep-alive))
+      (when-not (nil? keep-alive) (.setAllowPoolingConnections b keep-alive))
       (when max-conns-per-host (.setMaxConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaxConnections b max-conns-total))
-      (when max-redirects (.setMaximumNumberOfRedirects b max-redirects))
+      (when max-redirects (.setMaxRedirects b max-redirects))
       (when executor-service (.setExecutorService b executor-service))
       (when proxy
         (set-proxy proxy b))

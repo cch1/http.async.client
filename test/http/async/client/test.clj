@@ -39,8 +39,8 @@
                     File
                     IOException)
            (java.net ServerSocket
-                     ConnectException)
-           (java.nio.channels UnresolvedAddressException)
+                     ConnectException
+                     UnknownHostException)
            (java.util.concurrent TimeoutException)))
 (set! *warn-on-reflection* true)
 
@@ -286,7 +286,7 @@
                                        (deliver errored e)))]
     (await resp)
     (is (true? (realized? errored)))
-    (is (true? (instance? java.net.UnknownHostException @errored)))))
+    (is (true? (instance? UnknownHostException @errored)))))
 
 (deftest test-error-callback-throwing
   (let [resp (execute-request *client* (prepare-request :get "http://not-existing-host/")

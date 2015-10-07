@@ -138,10 +138,10 @@
     ;; headers
     (doseq [[k v] headers] (.addHeader rb (name k) (str v)))
     ;; cookies
-    (doseq [{:keys [domain name value wrap? path expires max-age secure http-only?]
-             :or {path "/" max-age 30 secure false wrap? false expires 0 http-only? false}} cookies]
+    (doseq [{:keys [domain name value wrap? path max-age secure http-only?]
+             :or {path "/" max-age 30 secure false wrap? false http-only? false}} cookies]
       (.addCookie rb (Cookie/newValidCookie name value wrap? domain path
-                                            expires max-age secure http-only?)))
+                                            max-age secure http-only?)))
     ;; query parameters
     (doseq [[k v] query] (if (vector? v)
                            (doseq [vv v] (.addQueryParam rb (name k) (str vv)))
