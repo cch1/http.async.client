@@ -27,12 +27,7 @@
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
            (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
-           (com.ning.http.client.ws WebSocket
-                                    WebSocketUpgradeHandler$Builder
-                                    WebSocketListener
-                                    WebSocketByteListener WebSocketByteFragmentListener
-                                    WebSocketTextListener WebSocketTextFragmentListener
-                                    WebSocketCloseCodeReasonListener)
+           (com.ning.http.client.ws WebSocket)
            (com.ning.http.client.providers.netty.ws NettyWebSocket)
            (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
 
@@ -301,26 +296,14 @@
   [resp]
   (.toJavaNetURI (.getUri (:req resp))))
 
-;; websocket
-(defprotocol IWebSocket
-  (-sendText [this text])
-  (-sendByte [this byte]))
-
-(extend-protocol IWebSocket
-  NettyWebSocket
-  (-sendText [ws text]
-    (.sendTextMessage ws text))
-  (-sendByte [ws byte]
-    (.sendMessage ws byte)))
-
 (defn send
   "Send message via WebSocket."
   [ws & {text :text
          byte :byte}]
-  (when (satisfies? IWebSocket ws)
+  (when (satisfies? ws/IWebSocket ws)
     (if text
-      (-sendText ws text)
-      (-sendByte ws byte))))
+      (ws/-sendText ws text)
+      (ws/-sendByte ws byte))))
 
 (defn websocket
   "Opens WebSocket connection."
