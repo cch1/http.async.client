@@ -45,7 +45,7 @@
 
 (defn set-realm
   "Sets realm on builder."
-  [{:keys [type user password realm preemptive]
+  [{:keys [type user password realm preemptive target-proxy]
     :or {:type :basic}} b]
   (let [rbld (Realm$RealmBuilder.)]
     (.setScheme rbld (type->auth-scheme type))
@@ -61,6 +61,8 @@
       (.setRealmName rbld realm))
     (when-not (nil? preemptive)
       (.setUsePreemptiveAuth rbld preemptive))
+    (when-not (nil? target-proxy)
+      (.setTargetProxy rbld target-proxy))
     (doto rbld
       (.setPrincipal user)
       (.setPassword password))
