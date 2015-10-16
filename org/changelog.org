@@ -12,7 +12,12 @@
 *** Move WebSocket implementation to its own namespace
 ** Use more idiomatic Clojure
 ** Extract websocket code to separate namespace
-** There is an issue with the AsyncHttpClient Java library. See https://github.com/AsyncHttpClient/async-http-client/issues/996. To workaround, set a realm with {:preemptive true :target-proxy true}.
+** Issue with the AsyncHttpClient Java library.
+   See [[https://github.com/AsyncHttpClient/async-http-client/issues/996]] \\
+   To workaround, set a realm with
+   #+BEGIN_SRC clojure
+{:preemptive true :target-proxy true}
+   #+END_SRC
 * Release 0.6.1
 ** Allow websocket to take request options :enhancement:
 ** Add logging to client create/close calls
