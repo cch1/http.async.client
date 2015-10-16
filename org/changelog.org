@@ -12,6 +12,7 @@
 *** Move WebSocket implementation to its own namespace
 ** Use more idiomatic Clojure
 ** Extract websocket code to separate namespace
+** There is an issue with the AsyncHttpClient Java library. See https://github.com/AsyncHttpClient/async-http-client/issues/996. To workaround, set a realm with {:preemptive true :target-proxy true}.
 * Release 0.6.1
 ** Allow websocket to take request options :enhancement:
 ** Add logging to client create/close calls
@@ -45,7 +46,6 @@
 ** Update codox and lein-difftest plugins
 * Release 0.5.2
   Compile with Java 1.6
-
 * Release 0.5.1
 ** remove-params-on-redirect
    Issues [[https://github.com/cch1/http.async.client/issues/46][#46]], [[https://github.com/cch1/http.async.client/issues/47][#47]] and [[https://github.com/cch1/http.async.client/issues/48][#48]] by [[https://github.com/josephwilk][Joseph Wilk]].
