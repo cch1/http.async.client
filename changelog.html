@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Asynchronous HTTP Client - Clojure - Changelog</title>
-<!-- 2015-10-15 Thu 21:25 -->
+<!-- 2015-10-16 Fri 13:42 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Chris Hapgood" />
@@ -232,7 +232,7 @@ for the JavaScript code in this tag.
 </li>
 <li><a href="#sec-1-2">1.2. Use more idiomatic Clojure</a></li>
 <li><a href="#sec-1-3">1.3. Extract websocket code to separate namespace</a></li>
-<li><a href="#sec-1-4">1.4. There is an issue with the AsyncHttpClient Java library. See . To workaround, set a realm with {:preemptive true :target-proxy true}.</a></li>
+<li><a href="#sec-1-4">1.4. Issue with the AsyncHttpClient Java library.</a></li>
 </ul>
 </li>
 <li><a href="#sec-2">2. Release 0.6.1</a>
@@ -431,7 +431,18 @@ No longer supported by the underlying AsyncHttpClient library; all connections a
 <h3 id="sec-1-3"><span class="section-number-3">1.3</span> Extract websocket code to separate namespace</h3>
 </div>
 <div id="outline-container-sec-1-4" class="outline-3">
-<h3 id="sec-1-4"><span class="section-number-3">1.4</span> There is an issue with the AsyncHttpClient Java library. See <a href="https://github.com/AsyncHttpClient/async-http-client/issues/996">https://github.com/AsyncHttpClient/async-http-client/issues/996</a>. To workaround, set a realm with {:preemptive true :target-proxy true}.</h3>
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Issue with the AsyncHttpClient Java library.</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+See <a href="https://github.com/AsyncHttpClient/async-http-client/issues/996">https://github.com/AsyncHttpClient/async-http-client/issues/996</a> <br  />
+   To workaround, set a realm with
+</p>
+<div class="org-src-container">
+
+<pre class="src src-clojure">{:preemptive true :target-proxy true}
+</pre>
+</div>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-2" class="outline-2">
@@ -1013,7 +1024,7 @@ Like <b>:options</b> in <a href="http://cch1.github.io/http.async.client/autodoc
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Chris Hapgood</p>
-<p class="date">Created: 2015-10-15 Thu 21:25</p>
+<p class="date">Created: 2015-10-16 Fri 13:42</p>
 <p class="creator">Emacs 24.4.1 (Org mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
