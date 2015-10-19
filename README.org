@@ -64,13 +64,13 @@
 
 (defn -main []
   (println "Connecting...")
-  (with-open [client (client/create-client)]
-    (let [ws (client/websocket client 
-                               url
-                               :open  on-open
-                               :close on-close
-                               :error on-error
-                               :byte  handle-message)]
+  (with-open [client (http/create-client)]
+    (let [ws (http/websocket client
+                             url
+                             :open  on-open
+                             :close on-close
+                             :error on-error
+                             :byte  handle-message)]
       ; this loop-recur is here as a placeholder to keep the process
       ; from ending, so that the message-handling function will continue to
       ; print messages to STDOUT until Ctrl-C is pressed
