@@ -19,7 +19,7 @@
 | master      | [[https://secure.travis-ci.org/cch1/http.async.client.png?branch=master]]      |
 | development | [[https://secure.travis-ci.org/cch1/http.async.client.png?branch=development]] |
 
-* Example
+* Examples
   Declare dependency (using leiningen, in this example):
 #+BEGIN_SRC clojure -n
   (defproject your-project "1.0.0-SNAPSHOT"
@@ -28,15 +28,54 @@
                    [http.async.client "0.6.0"]])
 #+END_SRC
 
-  Source:
+** Asynchronous GET request
+
 #+BEGIN_SRC clojure -n
-  (ns sample (:require [http.async.client :as http]))
+  (ns async-get
+    (:require [http.async.client :as http]))
 
   (with-open [client (http/create-client)]
     (let [response (http/GET client "https://github.com/cch1/http.async.client/")]
       (-> response
           http/await
           http/string)))
+#+END_SRC
+
+** WebSocket client
+
+#+BEGIN_SRC clojure -n
+(ns ws-client
+  (:require [http.async.client :as http]))
+
+(def url "ws://remote-websocket-url:1337")
+
+(defn on-open [ws]
+  (println "Connected to WebSocket."))
+
+(defn on-close [ws code reason]
+  (println "Connection to WebSocket closed.\n"
+           (format "[%s] %s" code reason)))
+
+(defn on-error [ws e]
+  (println "ERROR:" e))
+
+(defn handle-message [ws msg]
+  (prn "got message:" msg))
+
+(defn -main []
+  (println "Connecting...")
+  (with-open [client (http/create-client)]
+    (let [ws (http/websocket client
+                             url
+                             :open  on-open
+                             :close on-close
+                             :error on-error
+                             :byte  handle-message)]
+      ; this loop-recur is here as a placeholder to keep the process
+      ; from ending, so that the message-handling function will continue to
+      ; print messages to STDOUT until Ctrl-C is pressed
+      (loop [] (recur)))))
+
 #+END_SRC
 
 * More info
