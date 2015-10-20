@@ -7,7 +7,7 @@ jdk:
 branches:
   only:
     - master
-    - development
+    - /^release\/.*$/
 # Handle git submodules manually
 git:
     submodules: false
