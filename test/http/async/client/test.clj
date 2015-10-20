@@ -23,6 +23,8 @@
              [test :refer :all]
              [stacktrace :refer [print-stack-trace]]
              [string :refer [split]]]
+            [aleph.http :as http]
+            [manifold.stream :as stream]
             [clojure.java.io :refer [input-stream]])
   (:import (java.net URI)
            (com.ning.http.client AsyncHttpClient)
@@ -36,6 +38,7 @@
            (org.eclipse.jetty.security.authentication BasicAuthenticator)
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
            (java.io ByteArrayOutputStream
+                    Closeable
                     File
                     IOException)
            (java.net ServerSocket
@@ -46,6 +49,7 @@
 
 (def ^:dynamic *client* nil)
 (def ^:dynamic *server* nil)
+(def ^:dynamic *ws-server* nil)
 (def ^:private ^:dynamic *default-encoding* "UTF-8")
 
 
@@ -53,6 +57,7 @@
 (def default-handler
   (proxy [AbstractHandler] []
     (handle [target #^Request req #^HttpServletRequest hReq #^HttpServletResponse hResp]
+      (println :target target req)
       (do
         (.setHeader hResp "test-header" "test-value")
         (let [hdrs (enumeration-seq (.getHeaderNames hReq))]
@@ -164,13 +169,29 @@
        (.start))
      srv)))
 
+(def non-websocket-request
+  {:status 400
+   :headers {"content-type" "application/text"}
+   :body "Expected a websocket request."})
+
+(defn ws-echo-handler
+  [req]
+  (if-let [socket (try
+                    @(http/websocket-connection req)
+                    (catch Exception e
+                      nil))]
+    (stream/connect socket socket)
+    non-websocket-request))
+
 (defn- once-fixture
   "Configures Logger before test here are executed, and closes AHC after tests are done."
   [f]
-  (binding [*server* (start-jetty default-handler)]
+  (binding [*server* (start-jetty default-handler)
+            *ws-server* (http/start-server ws-echo-handler {:port 10000})]
     (try (f)
          (finally
-           (.stop ^Server *server*)))))
+           (.stop ^Server *server*)
+           (.close ^Closeable *ws-server*)))))
 
 (defn- each-fixture
   [f]
@@ -814,6 +835,14 @@
         uri1 "http://localhost:8123/query?a=1%3F%26&b=%2B%20%3D"
         resp (GET *client* "http://localhost:8123/query" :query {:a "1?&" :b "+ ="})]
     (is (contains? #{uri0 uri1} (.toString ^URI (uri resp))))))
+
+(deftest basic-ws
+  (let [socket-state (atom nil)
+        ws (websocket *client* "ws://localhost:10000"
+                      :text (fn [_ m] (reset! socket-state m)))]
+    (send ws :text "hello")
+    (Thread/sleep 100)
+    (is (= @socket-state "hello"))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET *client* "http://localhost:8123/stream"))

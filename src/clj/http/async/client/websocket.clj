@@ -36,7 +36,7 @@
 (extend-protocol IWebSocket
   NettyWebSocket
   (-sendText [ws text]
-    (.sendTextMessage ws text))
+    (.sendMessage ws text))
   (-sendByte [ws byte]
     (.sendMessage ws byte)))
 
