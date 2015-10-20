@@ -1,10 +1,10 @@
-(defproject http.async.client "0.6.1"
+(defproject http.async.client "1.0.1"
   :name             "http.async.client"
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "https://github.com/cch1/http.async.client"
   :source-paths ["src/clj"]
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [com.ning/async-http-client "1.8.16"]
+                 [com.ning/async-http-client "1.9.31"]
                  [org.clojure/tools.logging "0.3.1"]]
   :min-lein-version "2.5.1"
   :plugins [[codox "0.8.12"]
@@ -17,6 +17,7 @@
                    :dependencies [[org.eclipse.jetty/jetty-server "9.3.2.v20150730"]
                                   [org.eclipse.jetty/jetty-security "9.3.2.v20150730"]
                                   [org.eclipse.jetty/jetty-continuation "9.3.2.v20150730"]
+                                  [aleph "0.4.0"]
                                   [log4j "1.2.17"]
                                   [org.slf4j/slf4j-log4j12 "1.7.12"]]}}
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}

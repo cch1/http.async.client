@@ -728,14 +728,6 @@
           ;; do stuff with resp
           ))
     #+end_src
-*** Remove parameters on redirect
-  Query parameters are not passed on to any redirect that is followed (by default parameters are removed).
-  #+begin_src clojure
-  (with-open [client (http/create-client :remove-params-on-redirect true)]
-    (let [resp (http/GET client url)]
-      ;; do stuff with resp
-      ))
-  #+end_src
 *** Keep alive
     Keep Alive is enabled by default. This implies using pool for
     connections.

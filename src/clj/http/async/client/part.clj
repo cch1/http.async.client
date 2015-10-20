@@ -15,26 +15,28 @@
 (ns http.async.client.part
   "Asynchronous HTTP Client - Clojure - Multipart API"
   {:author "Hubert Iwaniuk"}
-  (:import (com.ning.http.client ByteArrayPart
-                                 FilePart
-                                 StringPart)))
+  (:import (java.nio.charset Charset)
+           (com.ning.http.client.multipart ByteArrayPart
+                                           FilePart
+                                           StringPart)))
 
 (defn create-string-part
   "Create string multipart part"
-  [{:keys [name value charset]}]
-  (if charset
-    (StringPart. name value charset)
-    (StringPart. name value)))
+  [{:keys [name value mime-type charset]}]
+  (let [mime-type (or mime-type "text/plain")]
+    (if charset
+      (StringPart. name value mime-type (Charset/forName charset))
+      (StringPart. name value mime-type))))
 
 (defn create-file-part
   "Create file multipart part"
   [{:keys [name file mime-type charset]}]
-  (FilePart. name file mime-type charset))
+  (FilePart. name file mime-type (Charset/forName charset)))
 
 (defn create-bytearray-part
   "Create byte array multipart part"
   [{:keys [name file-name data mime-type charset]}]
-  (ByteArrayPart. name file-name data mime-type charset))
+  (ByteArrayPart. name data mime-type (Charset/forName charset) file-name))
 
 (defn create-part
   "Create multipart part according to spec"

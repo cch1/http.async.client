@@ -23,8 +23,11 @@
              [test :refer :all]
              [stacktrace :refer [print-stack-trace]]
              [string :refer [split]]]
+            [aleph.http :as http]
+            [manifold.stream :as stream]
             [clojure.java.io :refer [input-stream]])
-  (:import (com.ning.http.client AsyncHttpClient)
+  (:import (java.net URI)
+           (com.ning.http.client AsyncHttpClient)
            (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
@@ -35,16 +38,18 @@
            (org.eclipse.jetty.security.authentication BasicAuthenticator)
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
            (java.io ByteArrayOutputStream
+                    Closeable
                     File
                     IOException)
            (java.net ServerSocket
-                     ConnectException)
-           (java.nio.channels UnresolvedAddressException)
+                     ConnectException
+                     UnknownHostException)
            (java.util.concurrent TimeoutException)))
 (set! *warn-on-reflection* true)
 
 (def ^:dynamic *client* nil)
 (def ^:dynamic *server* nil)
+(def ^:dynamic *ws-server* nil)
 (def ^:private ^:dynamic *default-encoding* "UTF-8")
 
 
@@ -52,6 +57,7 @@
 (def default-handler
   (proxy [AbstractHandler] []
     (handle [target #^Request req #^HttpServletRequest hReq #^HttpServletResponse hResp]
+      (println :target target req)
       (do
         (.setHeader hResp "test-header" "test-value")
         (let [hdrs (enumeration-seq (.getHeaderNames hReq))]
@@ -125,6 +131,7 @@
           "/empty" (.setHeader hResp "Nothing" "Yep")
           "/multi-query" (.setHeader hResp "query" (.getQueryString hReq))
           "/redirect" (.sendRedirect hResp "here")
+          "/here" (.write (.getWriter hResp) "Yugo")
           (doseq [n (enumeration-seq (.getParameterNames hReq))]
             (doseq [v (.getParameterValues hReq n)]
               (.addHeader hResp n v))))
@@ -162,13 +169,29 @@
        (.start))
      srv)))
 
+(def non-websocket-request
+  {:status 400
+   :headers {"content-type" "application/text"}
+   :body "Expected a websocket request."})
+
+(defn ws-echo-handler
+  [req]
+  (if-let [socket (try
+                    @(http/websocket-connection req)
+                    (catch Exception e
+                      nil))]
+    (stream/connect socket socket)
+    non-websocket-request))
+
 (defn- once-fixture
   "Configures Logger before test here are executed, and closes AHC after tests are done."
   [f]
-  (binding [*server* (start-jetty default-handler)]
+  (binding [*server* (start-jetty default-handler)
+            *ws-server* (http/start-server ws-echo-handler {:port 10000})]
     (try (f)
          (finally
-           (.stop ^Server *server*)))))
+           (.stop ^Server *server*)
+           (.close ^Closeable *ws-server*)))))
 
 (defn- each-fixture
   [f]
@@ -182,14 +205,13 @@
 
 ;; testing
 (deftest test-status
-  (let [status# (promise)
-        _ (execute-request *client*
-                           (prepare-request :get "http://localhost:8123/")
-                           :status (fn [_ st]
-                                     (deliver status# st)
-                                     [st :abort]))
-        status @status#]
-    (are [k v] (= (k status) v)
+  (let [status (promise)]
+    (execute-request *client*
+                     (prepare-request :get "http://localhost:8123/")
+                     :status (fn [_ st]
+                               (deliver status st)
+                               [st :abort]))
+    (are [k v] (= (k @status) v)
       :code 200
       :msg "OK"
       :protocol "HTTP/1.1"
@@ -197,38 +219,35 @@
       :minor 1)))
 
 (deftest test-receive-headers
-  (let [headers# (promise)
-        _ (execute-request *client*
-                           (prepare-request :get "http://localhost:8123/")
-                           :headers (fn [_ hds]
-                                      (deliver headers# hds)
-                                      [hds :abort]))
-        headers @headers#]
-    (is (= (:test-header headers) "test-value"))
-    (is (thrown? UnsupportedOperationException (.cons ^clojure.lang.APersistentMap headers '())))
-    (is (thrown? UnsupportedOperationException (assoc ^clojure.lang.APersistentMap headers :a 1)))
-    (is (thrown? UnsupportedOperationException (.without ^clojure.lang.APersistentMap headers :a)))))
+  (let [headers (promise)]
+    (execute-request *client*
+                     (prepare-request :get "http://localhost:8123/")
+                     :headers (fn [_ hds]
+                                (deliver headers hds)
+                                [hds :abort]))
+    (is (= (:test-header @headers) "test-value"))
+    (is (thrown? UnsupportedOperationException (.cons ^clojure.lang.APersistentMap @headers '())))
+    (is (thrown? UnsupportedOperationException (assoc ^clojure.lang.APersistentMap @headers :a 1)))
+    (is (thrown? UnsupportedOperationException (.without ^clojure.lang.APersistentMap @headers :a)))))
 
 (deftest test-status-and-header-callbacks
-  (let [status# (promise)
-        headers# (promise)
-        _ (execute-request *client*
-                           (prepare-request :get "http://localhost:8123/")
-                           :status (fn [_ st]
-                                     (deliver status# st)
-                                     [st :continue])
-                           :headers (fn [_ hds]
-                                      (deliver headers# hds)
-                                      [hds :abort]))
-        status @status#
-        headers @headers#]
-    (are [k v] (= (k status) v)
+  (let [status (promise)
+        headers (promise)]
+    (execute-request *client*
+                     (prepare-request :get "http://localhost:8123/")
+                     :status (fn [_ st]
+                               (deliver status st)
+                               [st :continue])
+                     :headers (fn [_ hds]
+                                (deliver headers hds)
+                                [hds :abort]))
+    (are [k v] (= (k @status) v)
       :code 200
       :msg "OK"
       :protocol "HTTP/1.1"
       :major 1
       :minor 1)
-    (is (= (:test-header headers) "test-value"))))
+    (is (= (:test-header @headers) "test-value"))))
 
 (deftest test-body-part-callback
   (testing "callecting body callback"
@@ -288,7 +307,7 @@
                                        (deliver errored e)))]
     (await resp)
     (is (true? (realized? errored)))
-    (is (true? (instance? java.net.ConnectException @errored)))))
+    (is (true? (instance? UnknownHostException @errored)))))
 
 (deftest test-error-callback-throwing
   (let [resp (execute-request *client* (prepare-request :get "http://not-existing-host/")
@@ -648,26 +667,23 @@
   (with-open [client (create-client :max-conns-per-host 1
                                     :max-conns-total 1)]
     (let [url "http://localhost:8123/timeout"
-          r1 (GET client url)]
-      (is (thrown-with-msg? IOException #"Too many connections 1" (GET client url)))
-      (is (not (failed? (await r1)))))))
+          r1 (GET client url)
+          r2 (GET client url)]
+      (is (not (failed? (await r1))))
+      (is (failed? r2))
+      (is (instance? IOException (error r2))))))
 
 (deftest redirect-convenience-fns
   (let [resp (GET *client* "http://localhost:8123/redirect")]
     (is (true? (redirect? resp)))
     (is (= "http://localhost:8123/here" (location resp)))))
 
-(deftest following-redirect-with-params
-  (with-open [client (create-client :remove-params-on-redirect false :follow-redirects true)]
+(deftest following-redirect
+  (with-open [client (create-client :follow-redirects true)]
     (let [resp (GET client "http://localhost:8123/redirect" :query {:token "1234"})
           headers (headers resp)]
-      (are [x y] (= (x headers) (str y)) :token "1234"))))
-
-(deftest following-redirect-without-params
-  (with-open [client (create-client :remove-params-on-redirect true :follow-redirects true)]
-    (let [resp (GET client "http://localhost:8123/redirect" :query {:token "1234"})
-          headers (headers resp)]
-      (is (false? (contains? headers :token))))))
+      (is (false? (contains? headers :token)))
+      (is (= "Yugo" (string resp))))))
 
 (deftest content-type-fn
   (let [resp (GET *client* "http://localhost:8123/body")]
@@ -689,7 +705,7 @@
 (deftest no-host
   (let [resp (GET *client* "http://notexisting/")]
     (await resp)
-    (is (= (class (.getCause ^Throwable (error resp))) UnresolvedAddressException))
+    (is (= (class (error resp)) java.net.UnknownHostException))
     (is (true? (failed? resp)))))
 
 (deftest no-realm-for-digest
@@ -750,7 +766,7 @@
     (is (true? (cancelled? resp)))
     (is (true? (done? resp)))))
 
-(deftest reqeust-timeout
+(deftest request-timeout
   (testing "timing out"
     (let [resp (GET *client* "http://localhost:8123/timeout" :timeout 100)]
       (await resp)
@@ -798,10 +814,12 @@
       (is (instance? ConnectException (error resp))))))
 
 (deftest closing-client
-  (let [client (create-client)
-        _ (await (GET client "http://localhost:8123/"))]
+  (let [client (create-client)]
+    (await (GET client "http://localhost:8123/"))
     (close client)
-    (is (thrown-with-msg? IOException #"Closed" (GET client "http://localhost:8123/")))))
+    (let [resp (GET client "http://localhost:8123/")]
+      (is (true? (failed? resp)))
+      (is (instance? IOException (error resp))))))
 
 (deftest extract-empty-body
   (let [resp (GET *client* "http://localhost:8123/empty")]
@@ -811,6 +829,20 @@
   (let [resp (GET *client* "http://localhost:8123/query" :query {:a "1?&" :b "+ ="})]
     (is (contains? #{"http://localhost:8123/query?a=1%3F%26&b=%2B%20%3D" "http://localhost:8123/query?b=%2B%20%3D&a=1%3F%26"}
                    (url resp)))))
+
+(deftest request-uri
+  (let [uri0 "http://localhost:8123/query?b=%2B%20%3D&a=1%3F%26"
+        uri1 "http://localhost:8123/query?a=1%3F%26&b=%2B%20%3D"
+        resp (GET *client* "http://localhost:8123/query" :query {:a "1?&" :b "+ ="})]
+    (is (contains? #{uri0 uri1} (.toString ^URI (uri resp))))))
+
+(deftest basic-ws
+  (let [socket-state (atom nil)
+        ws (websocket *client* "ws://localhost:10000"
+                      :text (fn [_ m] (reset! socket-state m)))]
+    (send ws :text "hello")
+    (Thread/sleep 100)
+    (is (= @socket-state "hello"))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET *client* "http://localhost:8123/stream"))

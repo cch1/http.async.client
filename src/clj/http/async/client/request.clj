@@ -26,7 +26,6 @@
                                  FluentCaseInsensitiveStringsMap
                                  HttpResponseStatus HttpResponseHeaders
                                  HttpResponseBodyPart
-                                 PerRequestConfig
                                  Request RequestBuilder)
            (com.ning.http.client.generators InputStreamBodyGenerator)
            (com.ning.http.client.cookie Cookie)
@@ -139,17 +138,17 @@
     ;; headers
     (doseq [[k v] headers] (.addHeader rb (name k) (str v)))
     ;; cookies
-    (doseq [{:keys [domain name value path expires max-age secure http-only?]
-             :or {path "/" max-age 30 secure false expires 0 http-only? false}} cookies]
-      (.addCookie rb (Cookie/newValidCookie name value domain value path
-                                            expires max-age secure http-only?)))
+    (doseq [{:keys [domain name value wrap? path max-age secure http-only?]
+             :or {path "/" max-age 30 secure false wrap? false http-only? false}} cookies]
+      (.addCookie rb (Cookie/newValidCookie name value wrap? domain path
+                                            max-age secure http-only?)))
     ;; query parameters
     (doseq [[k v] query] (if (vector? v)
-                           (doseq [vv v] (.addQueryParameter rb (name k) (str vv)))
-                           (.addQueryParameter rb (name k)(str v))))
+                           (doseq [vv v] (.addQueryParam rb (name k) (str vv)))
+                           (.addQueryParam rb (name k)(str v))))
     ;; message body
     (cond
-      (map? body) (doseq [[k v] body] (.addParameter rb (name k) (str v)))
+      (map? body) (doseq [[k v] body] (.addFormParam rb (name k) (str v)))
       (string? body) (.setBody rb (.getBytes (if (= "application/x-www-form-urlencoded" (:content-type headers))
                                                (url-encode body)
                                                body)
@@ -166,9 +165,7 @@
       (set-proxy proxy rb))
     ;; request timeout
     (when timeout
-      (let [prc (PerRequestConfig.)]
-        (.setRequestTimeoutInMs prc timeout)
-        (.setPerRequestConfig rb prc)))
+      (.setRequestTimeout rb timeout))
     (.. rb (setUrl url) (build))))
 
 (defn convert-action
