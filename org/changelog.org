@@ -1,6 +1,9 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+SETUPFILE: setup.org
 
+* Release 1.1.0
+** Fix issue #69
+** Add support for asynchronous close
 * Release 1.0.1
 ** Fix websocket support
    [[https://github.com/cch1/http.async.client/issues/66][#66]]
