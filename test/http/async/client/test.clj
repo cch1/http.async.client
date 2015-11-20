@@ -813,6 +813,26 @@
       (is (true? (failed? resp)))
       (is (instance? ConnectException (error resp))))))
 
+(deftest test-close-empty-body
+  (let [closed (promise)
+        client (create-client)
+        resp (execute-request client (prepare-request :get "http://localhost:8123/empty")
+                              :completed (fn [response]
+                                           @(:body response)))
+        _ (future (Thread/sleep 300) (close client) (deliver closed true))]
+    (Thread/sleep 600)
+    (is (realized? closed))))
+
+(deftest test-close-async-slow-callback
+  (let [closed (promise)
+        client (create-client)
+        resp (execute-request client (prepare-request :get "http://localhost:8123/empty")
+                              :completed (fn [response]
+                                           (Thread/sleep 1000)))
+        _ (future (Thread/sleep 300) (close-async client) (deliver closed true))]
+    (Thread/sleep 600)
+    (is (realized? closed))))
+
 (deftest closing-client
   (let [client (create-client)]
     (await (GET client "http://localhost:8123/"))

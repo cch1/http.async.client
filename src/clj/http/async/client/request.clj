@@ -20,7 +20,8 @@
              [headers :refer :all]
              [util :refer :all]
              [part :refer :all]]
-            [clojure.string :refer [join]])
+            [clojure.string :refer [join]]
+            [clojure.tools.logging :as log])
   (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
                                  AsyncHandler
                                  FluentCaseInsensitiveStringsMap
@@ -249,11 +250,12 @@
            (^{:tag Object}
             onCompleted [this]
             (do
+              (when-not (realized? (:body resp))
+                (log/debug "Response contains empty body")
+                (deliver (:body resp) nil))
               ((or completed
                    (:completed *default-callbacks*))
                resp)
-              (when-not (realized? (:body resp))
-                (deliver (:body resp) nil))
               (deliver (:done resp) true)))
            (^{:tag void}
             onThrowable [this #^Throwable t]
