@@ -1,4 +1,4 @@
-(defproject http.async.client "1.0.1"
+(defproject http.async.client "1.1.0"
   :name             "http.async.client"
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "https://github.com/cch1/http.async.client"
