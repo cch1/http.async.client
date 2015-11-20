@@ -335,8 +335,16 @@
       (log/debug "Closed client: " client)
       result)))
 
+(defn close-async
+  "Asynchronously closes the underlying AsyncHttpProvider by spawning
+  a thread and avoid blocking AsyncHttpClient. Does not support
+  websocket clients."
+  [^AsyncHttpClient client]
+  (.closeAsynchronously client))
+
 (defn open?
   "Checks if client is open."
   [client]
   (when (satisfies? IClosable client)
     (-open? client)))
+
