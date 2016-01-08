@@ -117,9 +117,9 @@
 
    :keystore-file - Path to Java keystore containing any private keys and
    trusted certificate authority certificates required for this connection.
-   If this is empty, will use default keystore.
+   If this is nil or missing, a default keystore will be used.
 
-   :keystore-password - Password to unlock KeyStore.
+   :keystore-password - Password to unlock KeyStore if keystore file is provided.
 
    :certificate-file The path to the file containing an X509 certificate
    (or certificate chain) to be used in the https connection
@@ -138,7 +138,7 @@
              certificate-file
              trust-managers]}]
   (let [initial-keystore (load-keystore
-                          (resource-stream keystore-file)
+                          (when keystore-file (resource-stream keystore-file))
                           keystore-password)
         keystore-with-cert (add-x509-cert
                             initial-keystore

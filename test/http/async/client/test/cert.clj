@@ -46,6 +46,9 @@
 (deftest test-load-keystore
   (is (= KeyStore (class (load-test-keystore)))))
 
+(deftest load-default-keystore
+  (is (instance? KeyStore (load-keystore nil "whatever"))))
+
 (deftest test-blind-trust-manager
   (let [b (BlindTrustManager.)
         chain (into-array X509Certificate (list (load-test-certificate)))]
@@ -75,6 +78,14 @@
                           :certificate-alias other-cert-alias)]
     (is (= SSLContext (class ctx1)))
     (is (= SSLContext (class ctx2)))))
+
+(deftest context-with-default-keystore
+  (is (instance? SSLContext
+                 (ssl-context :keystore-file nil
+                              :keystore-password nil
+                              :certificate-file cert-file
+                              :certificate-alias other-cert-alias
+                              :trust-managers [(BlindTrustManager.)]))))
 
 (deftest test-client
   (let [ctx (ssl-context :keystore-file ks-file
