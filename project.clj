@@ -14,9 +14,9 @@
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :1.6.0 {:dependencies [[org.clojure/clojure "1.6.0"]]}
              :dev {:resource-paths ["test-resources"],
-                   :dependencies [[org.eclipse.jetty/jetty-server "9.3.2.v20150730"]
-                                  [org.eclipse.jetty/jetty-security "9.3.2.v20150730"]
-                                  [org.eclipse.jetty/jetty-continuation "9.3.2.v20150730"]
+                   :dependencies [[org.eclipse.jetty/jetty-server "9.3.7.RC0"]
+                                  [org.eclipse.jetty/jetty-security "9.3.7.RC0"]
+                                  [org.eclipse.jetty/jetty-continuation "9.3.7.RC0"]
                                   [aleph "0.4.0"]
                                   [log4j "1.2.17"]
                                   [org.slf4j/slf4j-log4j12 "1.7.13"]]}}
