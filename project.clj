@@ -19,7 +19,7 @@
                                   [org.eclipse.jetty/jetty-continuation "9.3.2.v20150730"]
                                   [aleph "0.4.0"]
                                   [log4j "1.2.17"]
-                                  [org.slf4j/slf4j-log4j12 "1.7.12"]]}}
+                                  [org.slf4j/slf4j-log4j12 "1.7.13"]]}}
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
   :codox {:output-dir "gh-pages/doc"
           :src-dir-uri "http://github.com/cch1/http.async.client/blob/master/"
