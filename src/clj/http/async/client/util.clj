@@ -50,7 +50,7 @@
   Note that in v.1.0.0 you must set a realm to enable HTTPS traffic
   via the proxy."
   [{:keys [type user password realm preemptive target-proxy]
-    :or {:type :basic}} b]
+    :or {type :basic}} b]
   (let [rbld (Realm$RealmBuilder.)]
     (.setScheme rbld (type->auth-scheme type))
     (when (nil? user)
