@@ -767,7 +767,7 @@
     #+end_src
 *** Timeouts
     With *http.async.client* apart from per connection [[*:timeout][:timeout]] you
-    can globally configure *connection*, *request* and *idle*
+    can globally configure *connection*, *request*, *idle*, and *read*
     timeouts. All timeout values are in milliseconds and magic value
     *-1* is interpreted as infinite wait.
     *idle* connection in pool timeout works only on connections in
@@ -776,14 +776,15 @@
     #+BEGIN_SRC clojure
       (with-open [client (http/create-client :connection-timeout 10
                                              :request-timeout 1000
+                                             :read-timeout 500
                                              :idle-in-pool-timeout 100)]
         (let [resp (http/GET client url)]
           ;; request processing
           ))
     #+END_SRC
     Example above will timeout connection if it was not established
-    in 10ms, request if it was not received in 1sec, or connection
-    when it was idling in pool for more than 100ms.
+    in 10ms, request if it was not received in 1sec, request if no bytes were
+    transfered for 500ms, or connection when it was idling in pool for more than 100ms.
 *** Proxy
     Client can be also configured with global HTTP Proxy settings.
     #+begin_src clojure

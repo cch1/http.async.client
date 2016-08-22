@@ -813,6 +813,15 @@
       (is (true? (failed? resp)))
       (is (instance? ConnectException (error resp))))))
 
+(deftest read-timeout
+  ;; timeout after 1ms
+  (with-open [client (create-client :read-timeout 1)]
+    (let [resp (GET client "http://localhost:8123/timeout")]
+      (await resp)
+      (print resp)
+      (is (true? (failed? resp)))
+      (is (instance? TimeoutException (error resp))))))
+
 (deftest test-close-empty-body
   (let [closed (promise)
         client (create-client)
