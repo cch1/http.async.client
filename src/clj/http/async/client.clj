@@ -313,7 +313,7 @@
   {:tag WebSocket}
   [client #^String url & options]
   (let [wsugh (apply ws/upgrade-handler options)]
-    (.get (.executeRequest client (prepare-request :get url) wsugh))))
+    (.get (.executeRequest client (apply prepare-request :get url options) wsugh))))
 
 
 ;; closing
