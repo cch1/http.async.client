@@ -59,6 +59,7 @@
       :password   - password to be used
       :realm      - realm name to authenticate in
       :preemptive - assume authentication is required
+  - :read-timeout :: read timeout in ms
   - :request-timeout :: request timeout in ms
   - :user-agent :: User-Agent branding string
   - :executor-service :: provide your own executor service for callbacks to be executed on
@@ -74,6 +75,7 @@
              max-redirects
              proxy
              auth
+             read-timeout
              request-timeout
              user-agent
              executor-service
@@ -94,6 +96,7 @@
         (set-proxy proxy b))
       (when auth
         (set-realm auth b))
+      (when read-timeout (.setReadTimeout b read-timeout))
       (when request-timeout (.setRequestTimeout b request-timeout))
       (.setUserAgent b (if user-agent user-agent *user-agent*))
       (when-not (nil? ssl-context) (.setSSLContext b ssl-context))
