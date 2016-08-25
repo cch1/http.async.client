@@ -1,6 +1,12 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+SETUPFILE: setup.org
 
+* Release 1.2.0
+** Update dependencies
+*** Update async-http-client to 1.9.39 (fixes issue #74)
+** Fix bug when destructuring map (blocker for clojure.spec)
+** Add ability to configure read timeout
+** Allow request options to be passed for websockets
 * Release 1.1.0
 ** Fix issue #69
 ** Add support for asynchronous close
