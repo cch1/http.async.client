@@ -1,5 +1,5 @@
 #+TITLE: http.async.client - Asynchronous HTTP Client - Clojure
-#+SETUPFILE: setup.org
+#+SETUPFILE: org/setup.org
 
 *http.async.client* is the Asynchronous HTTP Client for Clojure.  It is promise-based and uses the
 [[http://github.com/AsyncHttpClient/async-http-client][Asynchronous Http Client for Java]] for the heavy lifting.

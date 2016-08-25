@@ -1,5 +1,5 @@
-;; This file configures org modes publish functionality to generate the gh-pages site for this project.
-;; Load this file/buffer and then execute: M-x org-publish-project RET gh-pages RET
+;; This file configures org mode's publish functionality to generate the gh-pages site for this project.
+;; Load this file/buffer, evaluate it, and then execute: M-x org-publish-project RET gh-pages RET
 
 (setq org-publish-project-alist
       '(("gh-notes"
