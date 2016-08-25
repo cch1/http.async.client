@@ -3,7 +3,7 @@
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "https://github.com/cch1/http.async.client"
   :source-paths ["src/clj"]
-  :dependencies [[org.clojure/clojure "1.7.0"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
                  [com.ning/async-http-client "1.9.39"]
                  [org.clojure/tools.logging "0.3.1"]]
   :min-lein-version "2.5.1"
@@ -13,13 +13,14 @@
              :1.4.0 {:dependencies [[org.clojure/clojure "1.4.0"]]}
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :1.6.0 {:dependencies [[org.clojure/clojure "1.6.0"]]}
+             :1.7.0 {:dependencies [[org.clojure/clojure "1.7.0"]]}
              :dev {:resource-paths ["test-resources"],
-                   :dependencies [[org.eclipse.jetty/jetty-server "9.3.7.RC0"]
-                                  [org.eclipse.jetty/jetty-security "9.3.7.RC0"]
-                                  [org.eclipse.jetty/jetty-continuation "9.3.7.RC0"]
-                                  [aleph "0.4.0"]
+                   :dependencies [[org.eclipse.jetty/jetty-server "9.4.0.M1"]
+                                  [org.eclipse.jetty/jetty-security "9.4.0.M1"]
+                                  [org.eclipse.jetty/jetty-continuation "9.4.0.M1"]
+                                  [aleph "0.4.1"]
                                   [log4j "1.2.17"]
-                                  [org.slf4j/slf4j-log4j12 "1.7.13"]]}}
+                                  [org.slf4j/slf4j-log4j12 "1.7.12" :upgrade? false]]}}
   ;; :repositories {"snapshots" "http://oss.sonatype.org/content/repositories/snapshots/"}
   :codox {:output-dir "gh-pages/doc"
           :src-dir-uri "http://github.com/cch1/http.async.client/blob/master/"
