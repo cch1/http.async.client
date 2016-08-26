@@ -25,6 +25,7 @@
              [string :refer [split]]]
             [clojure.tools.logging :as log]
             [aleph.http :as http]
+            [aleph.netty]
             [manifold.stream :as stream]
             [clojure.java.io :refer [input-stream]])
   (:import (java.net URI)
@@ -49,8 +50,9 @@
 (set! *warn-on-reflection* true)
 
 (def ^:dynamic *client* nil)
-(def ^:dynamic *server* nil)
-(def ^:dynamic *ws-server* nil)
+(def ^:dynamic *http-port* nil)
+(def ^:dynamic *http-url* nil)
+(def ^:dynamic *ws-url* nil)
 (def ^:private ^:dynamic *default-encoding* "UTF-8")
 
 
@@ -144,8 +146,8 @@
 
 (defn- start-jetty
   ([handler]
-   (start-jetty handler {:port 8123}))
-  ([handler {port :port :as opts :or {:port 8123}}]
+   (start-jetty handler {}))
+  ([handler {port :port :as opts :or {port 0}}]
    (let [srv (Server. ^Integer port)
          loginSrv (HashLoginService. "MyRealm" "test-resources/realm.properties")
          constraint (Constraint.)
@@ -187,12 +189,18 @@
 (defn- once-fixture
   "Configures Logger before test here are executed, and closes AHC after tests are done."
   [f]
-  (binding [*server* (start-jetty default-handler)
-            *ws-server* (http/start-server ws-echo-handler {:port 10000})]
-    (try (f)
+  (let [server (start-jetty default-handler)
+        server-port (.getLocalPort ^org.eclipse.jetty.server.NetworkConnector
+                                   (first (.getConnectors ^Server server)))
+        ws-server (http/start-server ws-echo-handler {:port 0})
+        ws-port (aleph.netty/port ws-server)]
+    (try (binding [*http-port* server-port
+                   *http-url* (format "http://localhost:%d/" server-port)
+                   *ws-url* (format "ws://localhost:%d/" ws-port)]
+           (f))
          (finally
-           (.stop ^Server *server*)
-           (.close ^Closeable *ws-server*)))))
+           (.stop ^Server server)
+           (.close ^Closeable ws-server)))))
 
 (defn- each-fixture
   [f]
@@ -208,7 +216,7 @@
 (deftest test-status
   (let [status (promise)]
     (execute-request *client*
-                     (prepare-request :get "http://localhost:8123/")
+                     (prepare-request :get *http-url*)
                      :status (fn [_ st]
                                (deliver status st)
                                [st :abort]))
@@ -222,7 +230,7 @@
 (deftest test-receive-headers
   (let [headers (promise)]
     (execute-request *client*
-                     (prepare-request :get "http://localhost:8123/")
+                     (prepare-request :get *http-url*)
                      :headers (fn [_ hds]
                                 (deliver headers hds)
                                 [hds :abort]))
@@ -235,7 +243,7 @@
   (let [status (promise)
         headers (promise)]
     (execute-request *client*
-                     (prepare-request :get "http://localhost:8123/")
+                     (prepare-request :get *http-url*)
                      :status (fn [_ st]
                                (deliver status st)
                                [st :continue])
@@ -254,7 +262,7 @@
   (testing "callecting body callback"
     (let [parts (atom #{})
           resp (execute-request *client*
-                                (prepare-request :get "http://localhost:8123/stream")
+                                (prepare-request :get (str *http-url* "stream"))
                                 :part (fn [response ^ByteArrayOutputStream part]
                                         (let [p (.toString part ^String *default-encoding*)]
                                           (swap! parts conj p)
@@ -266,7 +274,7 @@
   (testing "counting body parts callback"
     (let [cnt (atom 0)
           resp (execute-request *client*
-                                (prepare-request :get "http://localhost:8123/stream")
+                                (prepare-request :get (str *http-url* "stream"))
                                 :part (fn [_ ^ByteArrayOutputStream p]
                                         (swap! cnt inc)
                                         [p :continue]))]
@@ -277,7 +285,7 @@
   (testing "successful response"
     (let [finished (promise)
           resp (execute-request *client*
-                                (prepare-request :get "http://localhost:8123/")
+                                (prepare-request :get *http-url*)
                                 :completed (fn [response]
                                              (deliver finished true)))]
       (await resp)
@@ -285,7 +293,7 @@
       (is (true? @finished))))
   (testing "execution time"
     (let [finished (promise)
-          req (prepare-request :get "http://localhost:8123/body")
+          req (prepare-request :get (str *http-url* "body"))
           start (System/currentTimeMillis)
           resp (execute-request *client* req
                                 :completed (fn [_]
@@ -320,7 +328,7 @@
     (is (= "boom!" (.getMessage ^Exception (error resp))))))
 
 (deftest test-send-headers
-  (let [resp (GET *client* "http://localhost:8123/" :headers {:a 1 :b 2})
+  (let [resp (GET *client* *http-url* :headers {:a 1 :b 2})
         headers (headers resp)]
     (if (realized? (:error resp))
       (print-stack-trace @(:error resp)))
@@ -331,7 +339,7 @@
       :b 2)))
 
 (deftest test-body
-  (let [resp (GET *client* "http://localhost:8123/body")
+  (let [resp (GET *client* (str *http-url* "body"))
         headers (headers resp)
         body (body resp)]
     (is (not (nil? body)))
@@ -340,7 +348,7 @@
       (is (= (count (string resp)) (Integer/parseInt (:content-length headers)))))))
 
 (deftest test-query-params
-  (let [resp (GET *client* "http://localhost:8123/" :query {:a 3 :b 4})
+  (let [resp (GET *client* *http-url* :query {:a 3 :b 4})
         headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
@@ -348,7 +356,7 @@
       :b 4)))
 
 (deftest test-query-params-multiple-values
-  (let [resp (GET *client* "http://localhost:8123/multi-query" :query {:multi [3 4]})
+  (let [resp (GET *client* (str *http-url* "multi-query") :query {:multi [3 4]})
         headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "multi=3&multi=4" (:query headers)))))
@@ -358,10 +366,10 @@
 ;; (deftest test-get-params-not-allowed
 ;;   (is (thrown?
 ;;        IllegalArgumentException
-;;        (GET *client* "http://localhost:8123/" :body "Boo!"))))
+;;        (GET *client* *http-url* :body "Boo!"))))
 
 (deftest test-post-no-body
-  (let [resp (POST *client* "http://localhost:8123/post")
+  (let [resp (POST *client* (str *http-url* "post"))
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -373,7 +381,7 @@
     (is (nil? (string resp)))))
 
 (deftest test-post-params
-  (let [resp (POST *client* "http://localhost:8123/" :body {:a 5 :b 6})
+  (let [resp (POST *client* *http-url* :body {:a 5 :b 6})
         headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= (x headers) (str y))
@@ -381,13 +389,13 @@
       :b 6)))
 
 (deftest test-post-string-body
-  (let [resp (POST *client* "http://localhost:8123/body-str" :body "TestBody  Encoded?")
+  (let [resp (POST *client* (str *http-url* "body-str") :body "TestBody  Encoded?")
         headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "TestBody  Encoded?" (string resp)))))
 
 (deftest test-post-string-body-content-type-encoded
-  (let [resp (POST *client* "http://localhost:8123/body-str"
+  (let [resp (POST *client* (str *http-url* "body-str")
                :headers {:content-type "application/x-www-form-urlencoded"}
                :body "Encode this & string?")
         headers (headers resp)]
@@ -395,7 +403,7 @@
     (is (= "Encode+this+%26+string%3F" (string resp)))))
 
 (deftest test-post-map-body
-  (let [resp (POST *client* "http://localhost:8123/"
+  (let [resp (POST *client* *http-url*
                :body {:u "user" :p "s3cr3t"})
         headers (headers resp)]
     (is (not (empty? headers)))
@@ -404,21 +412,21 @@
       "s3cr3t" :p)))
 
 (deftest test-post-input-stream-body
-  (let [resp (POST *client* "http://localhost:8123/body-str"
+  (let [resp (POST *client* (str *http-url* "body-str")
                :body (input-stream (.getBytes "TestContent" "UTF-8")))
         headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-post-file-body
-  (let [resp (POST *client* "http://localhost:8123/body-str"
+  (let [resp (POST *client* (str *http-url* "body-str")
                :body (File. "test-resources/test.txt"))]
     (is (false? (empty? (headers resp))))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-post-multipart
   (testing "String multipart part"
-    (let [resp (POST *client* "http://localhost:8123/body-multi"
+    (let [resp (POST *client* (str *http-url* "body-multi")
                  :body [{:type  :string
                          :name  "test-name"
                          :value "test-value"}])]
@@ -428,7 +436,7 @@
         (are [v] #(.contains s %)
           "test-name" "test-value"))))
   (testing "File multipart part"
-    (let [resp (POST *client* "http://localhost:8123/body-multi"
+    (let [resp (POST *client* (str *http-url* "body-multi")
                  :body [{:type      :file
                          :name      "test-name"
                          :file      (File. "test-resources/test.txt")
@@ -440,7 +448,7 @@
         (are [v] #(.contains s %)
           "test-name" "TestContent"))))
   (testing "Byte array multipart part"
-    (let [resp (POST *client* "http://localhost:8123/body-multi"
+    (let [resp (POST *client* (str *http-url* "body-multi")
                  :body [{:type      :bytearray
                          :name      "test-name"
                          :file-name "test-file-name"
@@ -453,7 +461,7 @@
         (are [v] #(.contains s %)
           "test-name" "test-file-name" "test-content"))))
   (testing "Multiple multipart parts"
-    (let [resp (POST *client* "http://localhost:8123/body-multi"
+    (let [resp (POST *client* (str *http-url* "body-multi")
                  :body [{:type  :string
                          :name  "test-str-name"
                          :value "test-str-value"}
@@ -477,7 +485,7 @@
           "test-ba-name" "test-ba-file-name" "test-ba-content")))))
 
 (deftest test-put
-  (let [resp (PUT *client* "http://localhost:8123/put" :body "TestContent")
+  (let [resp (PUT *client* (str *http-url* "put") :body "TestContent")
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -489,7 +497,7 @@
     (is (nil? (string resp)))))
 
 (deftest test-put-no-body
-  (let [resp (PUT *client* "http://localhost:8123/put")
+  (let [resp (PUT *client* (str *http-url* "put"))
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -499,7 +507,7 @@
     (is (= "PUT" (:method headers)))))
 
 (deftest test-delete
-  (let [resp (DELETE *client* "http://localhost:8123/delete")
+  (let [resp (DELETE *client* (str *http-url* "delete"))
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -509,7 +517,7 @@
     (is (= "DELETE" (:method headers)))))
 
 (deftest test-head
-  (let [resp (HEAD *client* "http://localhost:8123/head")
+  (let [resp (HEAD *client* (str *http-url* "head"))
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -519,7 +527,7 @@
     (is (= "HEAD" (:method headers)))))
 
 (deftest test-options
-  (let [resp (OPTIONS *client* "http://localhost:8123/options")
+  (let [resp (OPTIONS *client* (str *http-url* "options"))
         status (status resp)
         headers (headers resp)]
     (are [x] (not (empty? x))
@@ -530,7 +538,7 @@
 
 (deftest test-stream
   (let [stream (ref #{})
-        resp (request-stream *client* :get "http://localhost:8123/stream"
+        resp (request-stream *client* :get (str *http-url* "stream")
                              (fn [_ ^ByteArrayOutputStream baos]
                                (dosync (alter stream conj (.toString baos ^String *default-encoding*)))
                                [baos :continue]))
@@ -545,13 +553,13 @@
         (is (contains? #{"part1" "part2"} part))))))
 
 (deftest test-get-stream
-  (let [resp (GET *client* "http://localhost:8123/stream")]
+  (let [resp (GET *client* (str *http-url* "stream"))]
     (await resp)
     (is (= "part1part2" (string resp)))))
 
 (deftest test-stream-seq
   (testing "Simple stream."
-    (let [resp (stream-seq *client* :get "http://localhost:8123/stream")
+    (let [resp (stream-seq *client* :get (str *http-url* "stream"))
           status (status resp)
           headers (headers resp)
           body (body resp)]
@@ -562,7 +570,7 @@
       (doseq [s (string headers body)]
         (is (or (= "part1" s) (= "part2" s))))))
   (testing "Backed by queue contract."
-    (let [resp (stream-seq *client* :get "http://localhost:8123/stream")
+    (let [resp (stream-seq *client* :get (str *http-url* "stream"))
           status (status resp)
           headers (headers resp)]
       (are [e p] (= e p)
@@ -573,12 +581,12 @@
 
 
 (deftest issue-1
-  (is (= "глава" (string (GET *client* "http://localhost:8123/issue-1")))))
+  (is (= "глава" (string (GET *client* (str *http-url* "issue-1"))))))
 
 (deftest get-via-proxy
-  (let [resp (GET *client* "http://localhost:8123/proxy-req" :proxy {:host "localhost" :port 8123})
+  (let [resp (GET *client* (str *http-url* "proxy-req") :proxy {:host "localhost" :port *http-port*})
         headers (headers resp)]
-    (is (= "http://localhost:8123/proxy-req" (:target headers)))))
+    (is (= (str *http-url* "proxy-req") (:target headers)))))
 
 (deftest proxy-creation
   (testing "host and port missing"
@@ -638,8 +646,8 @@
 
 (deftest get-with-cookie
   (let [cv "sample-value"
-        resp (GET *client* "http://localhost:8123/cookie"
-               :cookies #{{:domain "http://localhost:8123/"
+        resp (GET *client* (str *http-url* "cookie")
+               :cookies #{{:domain *http-url*
                            :name "sample-name"
                            :value cv
                            :path "/cookie"
@@ -660,14 +668,14 @@
 (deftest get-with-user-agent-branding
   (let [ua-brand "Branded User Agent/1.0"]
     (with-open [client (create-client :user-agent ua-brand)]
-      (let [headers (headers (GET client "http://localhost:8123/branding"))]
+      (let [headers (headers (GET client (str *http-url* "branding")))]
         (is (contains? headers :x-user-agent))
         (is (= (:x-user-agent headers) ua-brand))))))
 
 (deftest connection-limiting
   (with-open [client (create-client :max-conns-per-host 1
                                     :max-conns-total 1)]
-    (let [url "http://localhost:8123/timeout"
+    (let [url (str *http-url* "timeout")
           r1 (GET client url)
           r2 (GET client url)]
       (is (not (failed? (await r1))))
@@ -675,23 +683,23 @@
       (is (instance? IOException (error r2))))))
 
 (deftest redirect-convenience-fns
-  (let [resp (GET *client* "http://localhost:8123/redirect")]
+  (let [resp (GET *client* (str *http-url* "redirect"))]
     (is (true? (redirect? resp)))
-    (is (= "http://localhost:8123/here" (location resp)))))
+    (is (= (str *http-url* "here") (location resp)))))
 
 (deftest following-redirect
   (with-open [client (create-client :follow-redirects true)]
-    (let [resp (GET client "http://localhost:8123/redirect" :query {:token "1234"})
+    (let [resp (GET client (str *http-url* "redirect") :query {:token "1234"})
           headers (headers resp)]
       (is (false? (contains? headers :token)))
       (is (= "Yugo" (string resp))))))
 
 (deftest content-type-fn
-  (let [resp (GET *client* "http://localhost:8123/body")]
+  (let [resp (GET *client* (str *http-url* "body"))]
     (is (.startsWith ^String (content-type resp) "text/plain"))))
 
 (deftest single-set-cookie
-  (let [resp (GET *client* "http://localhost:8123/cookie")
+  (let [resp (GET *client* (str *http-url* "cookie"))
         cookie (first (cookies resp))
         header (headers resp)]
     (is (string? (:set-cookie header)))
@@ -699,7 +707,7 @@
     (is (= (:value cookie) "bar"))))
 
 (deftest await-string
-  (let [resp (GET *client* "http://localhost:8123/stream")
+  (let [resp (GET *client* (str *http-url* "stream"))
         body (string (await resp))]
     (is (= body "part1part2"))))
 
@@ -729,13 +737,13 @@
 
 (deftest basic-authentication
   (is (=
-       (:code (status (GET *client* "http://localhost:8123/basic-auth"
+       (:code (status (GET *client* (str *http-url* "basic-auth")
                         :auth {:user "beastie"
                                :password "boys"})))
        200)))
 
 (deftest preemptive-authentication
-  (let [url "http://localhost:8123/preemptive-auth"
+  (let [url (str *http-url* "preemptive-auth")
         cred {:user "beastie"
               :password "boys"}]
     (testing "Per request configuration"
@@ -760,7 +768,7 @@
                  (:code (status (GET c url :auth (assoc cred :preemptive false)))))))))))
 
 (deftest canceling-request
-  (let [resp (GET *client* "http://localhost:8123/")]
+  (let [resp (GET *client* *http-url*)]
     (is (false? (cancelled? resp)))
     (is (true? (cancel resp)))
     (await resp)
@@ -769,14 +777,14 @@
 
 (deftest request-timeout
   (testing "timing out"
-    (let [resp (GET *client* "http://localhost:8123/timeout" :timeout 100)]
+    (let [resp (GET *client* (str *http-url* "timeout") :timeout 100)]
       (await resp)
       (is (true? (failed? resp)))
       (if (failed? resp)
         (is (instance? TimeoutException (error resp)))
         (println "headers of response that was supposed to timeout." (headers resp)))))
   (testing "infinite timeout"
-    (let [resp (GET *client* "http://localhost:8123/timeout" :timeout -1)]
+    (let [resp (GET *client* (str *http-url* "timeout") :timeout -1)]
       (await resp)
       (is (not (failed? resp)))
       (if (failed? resp)
@@ -786,7 +794,7 @@
       (is (true? (done? resp)))))
   (testing "global timeout"
     (with-open [client (create-client :request-timeout 100)]
-      (let [resp (GET client "http://localhost:8123/timeout")]
+      (let [resp (GET client (str *http-url* "timeout"))]
         (await resp)
         (is (true? (failed? resp)))
         (if (failed? resp)
@@ -794,13 +802,13 @@
           (println "headers of response that was supposed to timeout" (headers resp))))))
   (testing "global timeout overwritten by local infinite"
     (with-open [client (create-client :request-timeout 100)]
-      (let [resp (GET client "http://localhost:8123/timeout" :timeout -1)]
+      (let [resp (GET client (str *http-url* "timeout") :timeout -1)]
         (await resp)
         (is (false? (failed? resp)))
         (is (done? resp)))))
   (testing "global idle connection in pool timeout"
     (with-open [client (create-client :idle-in-pool-timeout 100)]
-      (let [resp (GET client "http://localhost:8123/timeout")]
+      (let [resp (GET client (str *http-url* "timeout"))]
         (await resp)
         (is (false? (failed? resp)))
         (when (failed? resp)
@@ -817,7 +825,7 @@
 (deftest read-timeout
   ;; timeout after 1ms
   (with-open [client (create-client :read-timeout 1)]
-    (let [resp (GET client "http://localhost:8123/timeout")]
+    (let [resp (GET client (str *http-url* "timeout"))]
       (await resp)
       (is (true? (failed? resp)))
       (is (instance? TimeoutException (error resp))))))
@@ -825,7 +833,7 @@
 (deftest test-close-empty-body
   (let [closed (promise)
         client (create-client)
-        resp (execute-request client (prepare-request :get "http://localhost:8123/empty")
+        resp (execute-request client (prepare-request :get (str *http-url* "empty"))
                               :completed (fn [response]
                                            @(:body response)))
         _ (future (Thread/sleep 300) (close client) (deliver closed true))]
@@ -834,7 +842,7 @@
 (deftest test-close-async-slow-callback
   (let [closed (promise)
         client (create-client)
-        resp (execute-request client (prepare-request :get "http://localhost:8123/empty")
+        resp (execute-request client (prepare-request :get (str *http-url* "empty"))
                               :completed (fn [response]
                                            (Thread/sleep 1000)))
         _ (future (Thread/sleep 300) (close-async client) (deliver closed true))]
@@ -842,37 +850,38 @@
 
 (deftest closing-client
   (let [client (create-client)]
-    (await (GET client "http://localhost:8123/"))
+    (await (GET client *http-url*))
     (close client)
-    (let [resp (GET client "http://localhost:8123/")]
+    (let [resp (GET client *http-url*)]
       (is (true? (failed? resp)))
       (is (instance? IOException (error resp))))))
 
 (deftest extract-empty-body
-  (let [resp (GET *client* "http://localhost:8123/empty")]
+  (let [resp (GET *client* (str *http-url* "empty"))]
     (is (nil? (string resp)))))
 
 (deftest response-url
-  (let [resp (GET *client* "http://localhost:8123/query" :query {:a "1?&" :b "+ ="})]
-    (is (contains? #{"http://localhost:8123/query?a=1%3F%26&b=%2B%20%3D" "http://localhost:8123/query?b=%2B%20%3D&a=1%3F%26"}
+  (let [resp (GET *client* (str *http-url* "query") :query {:a "1?&" :b "+ ="})]
+    (is (contains? #{(str *http-url* "query?a=1%3F%26&b=%2B%20%3D")
+                     (str *http-url* "query?b=%2B%20%3D&a=1%3F%26")}
                    (url resp)))))
 
 (deftest request-uri
-  (let [uri0 "http://localhost:8123/query?b=%2B%20%3D&a=1%3F%26"
-        uri1 "http://localhost:8123/query?a=1%3F%26&b=%2B%20%3D"
-        resp (GET *client* "http://localhost:8123/query" :query {:a "1?&" :b "+ ="})]
+  (let [uri0 (str *http-url* "query?b=%2B%20%3D&a=1%3F%26")
+        uri1 (str *http-url* "query?a=1%3F%26&b=%2B%20%3D")
+        resp (GET *client* (str *http-url* "query") :query {:a "1?&" :b "+ ="})]
     (is (contains? #{uri0 uri1} (.toString ^URI (uri resp))))))
 
 (deftest basic-ws
   (let [latch (promise)
-        ws (websocket *client* "ws://localhost:10000"
+        ws (websocket *client* *ws-url*
                       :text (fn [_ m] (deliver latch m)))]
     (send ws :text "hello")
     (is (= (deref latch 1000 nil) "hello"))))
 
 ;;(deftest profile-get-stream
-;;  (let [gets (repeat (GET *client* "http://localhost:8123/stream"))
-;;        seqs (repeat (stream-seq *client* :get "http://localhost:8123/stream"))
+;;  (let [gets (repeat (GET *client* (str *http-url* "stream")))
+;;        seqs (repeat (stream-seq *client* :get (str *http-url* "stream")))
 ;;        f (fn [resps] (doseq [resp resps] (is (= "part1part2" (prof :get-stream (string resp))))))
 ;;        g (fn [resps] (doseq [resp resps] (doseq [s (prof :seq-stream (doall (string resp)))]
 ;;                                                (is (or (= "part1" s) (= "part2 s"))))))]
