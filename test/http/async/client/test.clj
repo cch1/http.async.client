@@ -829,8 +829,7 @@
                               :completed (fn [response]
                                            @(:body response)))
         _ (future (Thread/sleep 300) (close client) (deliver closed true))]
-    (Thread/sleep 600)
-    (is (realized? closed))))
+    (is (deref closed 1000 false))))
 
 (deftest test-close-async-slow-callback
   (let [closed (promise)
@@ -839,8 +838,7 @@
                               :completed (fn [response]
                                            (Thread/sleep 1000)))
         _ (future (Thread/sleep 300) (close-async client) (deliver closed true))]
-    (Thread/sleep 600)
-    (is (realized? closed))))
+    (is (deref closed 1000 false))))
 
 (deftest closing-client
   (let [client (create-client)]
@@ -866,12 +864,11 @@
     (is (contains? #{uri0 uri1} (.toString ^URI (uri resp))))))
 
 (deftest basic-ws
-  (let [socket-state (atom nil)
+  (let [latch (promise)
         ws (websocket *client* "ws://localhost:10000"
-                      :text (fn [_ m] (reset! socket-state m)))]
+                      :text (fn [_ m] (deliver latch m)))]
     (send ws :text "hello")
-    (Thread/sleep 100)
-    (is (= @socket-state "hello"))))
+    (is (= (deref latch 1000 nil) "hello"))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET *client* "http://localhost:8123/stream"))
