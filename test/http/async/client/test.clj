@@ -23,6 +23,7 @@
              [test :refer :all]
              [stacktrace :refer [print-stack-trace]]
              [string :refer [split]]]
+            [clojure.tools.logging :as log]
             [aleph.http :as http]
             [manifold.stream :as stream]
             [clojure.java.io :refer [input-stream]])
@@ -57,7 +58,7 @@
 (def default-handler
   (proxy [AbstractHandler] []
     (handle [target #^Request req #^HttpServletRequest hReq #^HttpServletResponse hResp]
-      (println :target target req)
+      (log/debug "target: " target req)
       (do
         (.setHeader hResp "test-header" "test-value")
         (let [hdrs (enumeration-seq (.getHeaderNames hReq))]
@@ -818,7 +819,6 @@
   (with-open [client (create-client :read-timeout 1)]
     (let [resp (GET client "http://localhost:8123/timeout")]
       (await resp)
-      (print resp)
       (is (true? (failed? resp)))
       (is (instance? TimeoutException (error resp))))))
 
