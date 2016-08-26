@@ -182,6 +182,7 @@
   (if-let [socket (try
                     @(http/websocket-connection req)
                     (catch Exception e
+                      (log/warn e "Can't open websocket for request" req)
                       nil))]
     (stream/connect socket socket)
     non-websocket-request))
@@ -189,17 +190,17 @@
 (defn- once-fixture
   "Configures Logger before test here are executed, and closes AHC after tests are done."
   [f]
-  (let [server (start-jetty default-handler)
-        server-port (.getLocalPort ^org.eclipse.jetty.server.NetworkConnector
-                                   (first (.getConnectors ^Server server)))
+  (let [http-server (start-jetty default-handler)
+        http-port (.getLocalPort ^org.eclipse.jetty.server.NetworkConnector
+                                   (first (.getConnectors ^Server http-server)))
         ws-server (http/start-server ws-echo-handler {:port 0})
         ws-port (aleph.netty/port ws-server)]
-    (try (binding [*http-port* server-port
-                   *http-url* (format "http://localhost:%d/" server-port)
+    (try (binding [*http-port* http-port
+                   *http-url* (format "http://localhost:%d/" http-port)
                    *ws-url* (format "ws://localhost:%d/" ws-port)]
            (f))
          (finally
-           (.stop ^Server server)
+           (.stop ^Server http-server)
            (.close ^Closeable ws-server)))))
 
 (defn- each-fixture
@@ -875,9 +876,10 @@
 (deftest basic-ws
   (let [latch (promise)
         ws (websocket *client* *ws-url*
-                      :text (fn [_ m] (deliver latch m)))]
+                      :text (fn [_ m] (log/infof "Received websocket text message: %s" m)
+                              (deliver latch m)))]
     (send ws :text "hello")
-    (is (= (deref latch 1000 nil) "hello"))))
+    (is (= (deref latch 3000 nil) "hello"))))
 
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET *client* (str *http-url* "stream")))
