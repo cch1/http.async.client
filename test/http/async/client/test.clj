@@ -292,15 +292,15 @@
       (await resp)
       (is (true? (realized? finished)))
       (is (true? @finished))))
-  (testing "execution time"
-    (let [finished (promise)
+  (testing "execution time" ; What is this actually testing?
+    (let [delta (promise)
           req (prepare-request :get (str *http-url* "body"))
-          start (System/currentTimeMillis)
+          start (System/nanoTime)
           resp (execute-request *client* req
                                 :completed (fn [_]
-                                             (deliver finished
-                                                      (- (System/currentTimeMillis) start))))]
-      (is (pos? @finished))))
+                                             (deliver delta
+                                                      (- (System/nanoTime) start))))]
+      (is (pos? @delta))))
   (testing "failed response"
     (let [finished (promise)
           resp (execute-request *client*
