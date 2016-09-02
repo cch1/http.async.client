@@ -184,7 +184,8 @@
                     (catch Exception e
                       (log/warn e "Can't open websocket for request" req)
                       nil))]
-    (stream/connect socket socket)
+    (do (log/info "Received websocket request, implementing loopback")
+        (stream/connect socket socket))
     non-websocket-request))
 
 (defn- once-fixture
@@ -874,12 +875,15 @@
     (is (contains? #{uri0 uri1} (.toString ^URI (uri resp))))))
 
 (deftest basic-ws
-  (let [latch (promise)
-        ws (websocket *client* *ws-url*
-                      :text (fn [_ m] (log/infof "Received websocket text message: %s" m)
-                              (deliver latch m)))]
-    (send ws :text "hello")
-    (is (= (deref latch 3000 nil) "hello"))))
+  (let [latch (promise)]
+    (with-open [ws (websocket *client* *ws-url*
+                              :text (fn [_ m] (log/infof "Received websocket text message: %s" m)
+                                      (deliver latch m))
+                              :open (fn [& args] (log/infof "Websocket open"))
+                              :close (fn [& args] (log/infof "Websocket close"))
+                              :error (fn [& args] (log/errorf "Websocket error")))]
+      (send ws :text "hello")
+      (is (= (deref latch 1000 :timeout) "hello")))))
 
 (deftest ws-xor-text-or-byte
   (let [ws (try (websocket *client* *ws-url* :text (fn [& _]) :byte (fn [& _]))
