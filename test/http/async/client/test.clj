@@ -875,15 +875,21 @@
     (is (contains? #{uri0 uri1} (.toString ^URI (uri resp))))))
 
 (deftest basic-ws
-  (let [latch (promise)]
+  (let [open-latch (promise)
+        close-latch (promise)
+        receive-latch (promise)]
     (with-open [ws (websocket *client* *ws-url*
                               :text (fn [_ m] (log/infof "Received websocket text message: %s" m)
-                                      (deliver latch m))
-                              :open (fn [& args] (log/infof "Websocket open"))
-                              :close (fn [& args] (log/infof "Websocket close"))
+                                      (deliver receive-latch m))
+                              :open (fn [& args] (log/infof "Websocket open")
+                                      (deliver open-latch :open))
+                              :close (fn [& args] (log/infof "Websocket close")
+                                       (deliver close-latch :close))
                               :error (fn [& args] (log/errorf "Websocket error")))]
+      (is (= (deref open-latch 1000 :timeout) :open))
       (send ws :text "hello")
-      (is (= (deref latch 1000 :timeout) "hello")))))
+      (is (= (deref receive-latch 1000 :timeout) "hello")))
+    (is (= (deref close-latch 1000 :timeout) :close))))
 
 (deftest ws-xor-text-or-byte
   (let [ws (try (websocket *client* *ws-url* :text (fn [& _]) :byte (fn [& _]))
