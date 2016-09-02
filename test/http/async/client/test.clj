@@ -881,6 +881,11 @@
     (send ws :text "hello")
     (is (= (deref latch 3000 nil) "hello"))))
 
+(deftest ws-xor-text-or-byte
+  (let [ws (try (websocket *client* *ws-url* :text (fn [& _]) :byte (fn [& _]))
+                (catch java.lang.AssertionError e :boom))]
+    (is (= :boom ws))))
+
 ;;(deftest profile-get-stream
 ;;  (let [gets (repeat (GET *client* (str *http-url* "stream")))
 ;;        seqs (repeat (stream-seq *client* :get (str *http-url* "stream")))
