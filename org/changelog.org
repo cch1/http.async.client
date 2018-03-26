@@ -1,6 +1,11 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+SETUPFILE: setup.org
 
+* Release 1.2.1
+** Update documentation
+** Update tests
+** Update dependencies
+** Switch to [[https://github.com/roomkey/lein-v][lein-v]] for version management
 * Release 1.2.0
 ** Update dependencies
 *** Update async-http-client to 1.9.39 (fixes issue #74)
