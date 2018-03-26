@@ -28,4 +28,8 @@
           :src-linenum-anchor-prefix "L"}
   :license {:name "Apache License, Version 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0"
-            :distribution :repo})
+            :distribution :repo}
+  :release-tasks [["vcs" "assert-committed"]
+                  ["v" "update"]
+                  ["vcs" "push"]
+                  ["deploy" "clojars"]])
