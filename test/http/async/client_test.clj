@@ -11,7 +11,7 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns http.async.client.test
+(ns http.async.client-test
   "Testing of http.async.client"
   {:author "Hubert Iwaniuk"}
   (:refer-clojure :exclude [await send])

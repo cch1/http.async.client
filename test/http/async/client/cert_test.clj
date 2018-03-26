@@ -12,7 +12,7 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns http.async.client.test.cert
+(ns http.async.client.cert-test
   "Testing of http.async client x509 certificates"
   {:author "Hubert Iwaniuk / Andrew Diamond / RoomKey.com"}
   (:refer-clojure :exclude [await send])

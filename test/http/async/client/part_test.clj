@@ -12,7 +12,7 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns http.async.client.test.part
+(ns http.async.client.part-test
   "Testing of http.async.client multipart."
   {:author "Hubert Iwaniuk"}
   (:require [clojure.test :refer :all]
