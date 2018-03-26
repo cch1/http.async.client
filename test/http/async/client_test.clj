@@ -1,16 +1,16 @@
-; Copyright 2010 Hubert Iwaniuk
-;
-; Licensed under the Apache License, Version 2.0 (the "License");
-; you may not use this file except in compliance with the License.
-; You may obtain a copy of the License at
-;
-;   http://www.apache.org/licenses/LICENSE-2.0
-;
-; Unless required by applicable law or agreed to in writing, software
-; distributed under the License is distributed on an "AS IS" BASIS,
-; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-; See the License for the specific language governing permissions and
-; limitations under the License.
+;;; Copyright 2010 Hubert Iwaniuk
+
+;;; Licensed under the Apache License, Version 2.0 (the "License");
+;;; you may not use this file except in compliance with the License.
+;;; You may obtain a copy of the License at
+
+;;; http://www.apache.org/licenses/LICENSE-2.0
+
+;;; Unless required by applicable law or agreed to in writing, software
+;;; distributed under the License is distributed on an "AS IS" BASIS,
+;;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+;;; See the License for the specific language governing permissions and
+;;; limitations under the License.
 (ns http.async.client-test
   "Testing of http.async.client"
   {:author "Hubert Iwaniuk"}
@@ -193,7 +193,7 @@
   [f]
   (let [http-server (start-jetty default-handler)
         http-port (.getLocalPort ^org.eclipse.jetty.server.NetworkConnector
-                                   (first (.getConnectors ^Server http-server)))
+                                 (first (.getConnectors ^Server http-server)))
         ws-server (http/start-server ws-echo-handler {:port 0})
         ws-port (aleph.netty/port ws-server)]
     (try (binding [*http-port* http-port
@@ -398,15 +398,15 @@
 
 (deftest test-post-string-body-content-type-encoded
   (let [resp (POST *client* (str *http-url* "body-str")
-               :headers {:content-type "application/x-www-form-urlencoded"}
-               :body "Encode this & string?")
+                   :headers {:content-type "application/x-www-form-urlencoded"}
+                   :body "Encode this & string?")
         headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "Encode+this+%26+string%3F" (string resp)))))
 
 (deftest test-post-map-body
   (let [resp (POST *client* *http-url*
-               :body {:u "user" :p "s3cr3t"})
+                   :body {:u "user" :p "s3cr3t"})
         headers (headers resp)]
     (is (not (empty? headers)))
     (are [x y] (= x (y headers))
@@ -415,23 +415,23 @@
 
 (deftest test-post-input-stream-body
   (let [resp (POST *client* (str *http-url* "body-str")
-               :body (input-stream (.getBytes "TestContent" "UTF-8")))
+                   :body (input-stream (.getBytes "TestContent" "UTF-8")))
         headers (headers resp)]
     (is (not (empty? headers)))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-post-file-body
   (let [resp (POST *client* (str *http-url* "body-str")
-               :body (File. "test-resources/test.txt"))]
+                   :body (File. "test-resources/test.txt"))]
     (is (false? (empty? (headers resp))))
     (is (= "TestContent" (string resp)))))
 
 (deftest test-post-multipart
   (testing "String multipart part"
     (let [resp (POST *client* (str *http-url* "body-multi")
-                 :body [{:type  :string
-                         :name  "test-name"
-                         :value "test-value"}])]
+                     :body [{:type  :string
+                             :name  "test-name"
+                             :value "test-value"}])]
       (is (false? (empty? (headers resp))))
       (let [#^String s (string resp)]
         (is (true? (.startsWith s "--")))
@@ -439,11 +439,11 @@
           "test-name" "test-value"))))
   (testing "File multipart part"
     (let [resp (POST *client* (str *http-url* "body-multi")
-                 :body [{:type      :file
-                         :name      "test-name"
-                         :file      (File. "test-resources/test.txt")
-                         :mime-type "text/plain"
-                         :charset   "UTF-8"}])]
+                     :body [{:type      :file
+                             :name      "test-name"
+                             :file      (File. "test-resources/test.txt")
+                             :mime-type "text/plain"
+                             :charset   "UTF-8"}])]
       (is (false? (empty? (headers resp))))
       (let [#^String s (string resp)]
         (is (true? (.startsWith s "--")))
@@ -451,12 +451,12 @@
           "test-name" "TestContent"))))
   (testing "Byte array multipart part"
     (let [resp (POST *client* (str *http-url* "body-multi")
-                 :body [{:type      :bytearray
-                         :name      "test-name"
-                         :file-name "test-file-name"
-                         :data       (.getBytes "test-content" "UTF-8")
-                         :mime-type  "text/plain"
-                         :charset    "UTF-8"}])]
+                     :body [{:type      :bytearray
+                             :name      "test-name"
+                             :file-name "test-file-name"
+                             :data       (.getBytes "test-content" "UTF-8")
+                             :mime-type  "text/plain"
+                             :charset    "UTF-8"}])]
       (is (false? (empty? (headers resp))))
       (let [#^String s (string resp)]
         (is (true? (.startsWith s "--")))
@@ -464,20 +464,20 @@
           "test-name" "test-file-name" "test-content"))))
   (testing "Multiple multipart parts"
     (let [resp (POST *client* (str *http-url* "body-multi")
-                 :body [{:type  :string
-                         :name  "test-str-name"
-                         :value "test-str-value"}
-                        {:type      :file
-                         :name      "test-file-name"
-                         :file      (File. "test-resources/test.txt")
-                         :mime-type "text/plain"
-                         :charset   "UTF-8"}
-                        {:type      :bytearray
-                         :name      "test-ba-name"
-                         :file-name "test-ba-file-name"
-                         :data       (.getBytes "test-ba-content" "UTF-8")
-                         :mime-type  "text/plain"
-                         :charset    "UTF-8"}])]
+                     :body [{:type  :string
+                             :name  "test-str-name"
+                             :value "test-str-value"}
+                            {:type      :file
+                             :name      "test-file-name"
+                             :file      (File. "test-resources/test.txt")
+                             :mime-type "text/plain"
+                             :charset   "UTF-8"}
+                            {:type      :bytearray
+                             :name      "test-ba-name"
+                             :file-name "test-ba-file-name"
+                             :data       (.getBytes "test-ba-content" "UTF-8")
+                             :mime-type  "text/plain"
+                             :charset    "UTF-8"}])]
       (is (false? (empty? (headers resp))))
       (let [#^String s (string resp)]
         (is (true? (.startsWith s "--")))
@@ -649,12 +649,12 @@
 (deftest get-with-cookie
   (let [cv "sample-value"
         resp (GET *client* (str *http-url* "cookie")
-               :cookies #{{:domain *http-url*
-                           :name "sample-name"
-                           :value cv
-                           :path "/cookie"
-                           :max-age 10
-                           :secure false}})
+                  :cookies #{{:domain *http-url*
+                              :name "sample-name"
+                              :value cv
+                              :path "/cookie"
+                              :max-age 10
+                              :secure false}})
         headers (headers resp)]
     (is (contains? headers :set-cookie))
     (let [cookies (cookies resp)]
@@ -722,26 +722,26 @@
 (deftest no-realm-for-digest
   (is (thrown-with-msg? IllegalArgumentException #"For DIGEST authentication realm is required"
                         (GET *client* "http://not-important/"
-                          :auth {:type :digest
-                                 :user "user"
-                                 :password "secret"}))))
+                             :auth {:type :digest
+                                    :user "user"
+                                    :password "secret"}))))
 
 (deftest authentication-without-user-or-password
   (is (thrown-with-msg? IllegalArgumentException #"For authentication user is required"
                         (GET *client* "http://not-important/"
-                          :auth {:password "secret"})))
+                             :auth {:password "secret"})))
   (is (thrown-with-msg? IllegalArgumentException #"For authentication password is required"
                         (GET *client* "http://not-important/"
-                          :auth {:user "user"})))
+                             :auth {:user "user"})))
   (is (thrown-with-msg? IllegalArgumentException #"For authentication user and password is required"
                         (GET *client* "http://not-important/"
-                          :auth {:type :basic}))))
+                             :auth {:type :basic}))))
 
 (deftest basic-authentication
   (is (=
        (:code (status (GET *client* (str *http-url* "basic-auth")
-                        :auth {:user "beastie"
-                               :password "boys"})))
+                           :auth {:user "beastie"
+                                  :password "boys"})))
        200)))
 
 (deftest preemptive-authentication
@@ -751,11 +751,11 @@
     (testing "Per request configuration"
       (is (=
            (:code (status (GET *client* url
-                            :auth cred)))
+                               :auth cred)))
            401))
       (is (=
            (:code (status (GET *client* url
-                            :auth (assoc cred :preemptive true))))
+                               :auth (assoc cred :preemptive true))))
            200)))
     (testing "Global configuration"
       (with-open [c (create-client :auth (assoc cred :preemptive true))]
@@ -895,13 +895,3 @@
   (let [ws (try (websocket *client* *ws-url* :text (fn [& _]) :byte (fn [& _]))
                 (catch java.lang.AssertionError e :boom))]
     (is (= :boom ws))))
-
-;;(deftest profile-get-stream
-;;  (let [gets (repeat (GET *client* (str *http-url* "stream")))
-;;        seqs (repeat (stream-seq *client* :get (str *http-url* "stream")))
-;;        f (fn [resps] (doseq [resp resps] (is (= "part1part2" (prof :get-stream (string resp))))))
-;;        g (fn [resps] (doseq [resp resps] (doseq [s (prof :seq-stream (doall (string resp)))]
-;;                                                (is (or (= "part1" s) (= "part2 s"))))))]
-;;    (profile (dotimes [i 10]
-;;               (f (take 1000 (nthnext gets (* i 1000))))
-;;               (g (take 1000 (nthnext seqs (* i 1000))))))))
