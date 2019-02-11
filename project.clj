@@ -9,7 +9,8 @@
   :min-lein-version "2.5.1"
   :plugins [[codox "0.8.12"]
             [lein-difftest "2.0.0"]
-            [com.roomkey/lein-v "6.2.0"]]
+            [com.roomkey/lein-v "7.0.0"]]
+  :middleware [lein-v.plugin/middleware]
   :profiles {:1.3.0 {:dependencies [[org.clojure/clojure "1.3.0" :upgrade? false]]}
              :1.4.0 {:dependencies [[org.clojure/clojure "1.4.0" :upgrade? false]]}
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1" :upgrade? false]]}
