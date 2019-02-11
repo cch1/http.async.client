@@ -3,7 +3,7 @@
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "https://github.com/cch1/http.async.client"
   :source-paths ["src/clj"]
-  :dependencies [[org.clojure/clojure "1.9.0"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
                  [com.ning/async-http-client "1.9.40"]
                  [org.clojure/tools.logging "0.4.0"]]
   :min-lein-version "2.5.1"
@@ -17,6 +17,7 @@
              :1.6.0 {:dependencies [[org.clojure/clojure "1.6.0" :upgrade? false]]}
              :1.7.0 {:dependencies [[org.clojure/clojure "1.7.0" :upgrade? false]]}
              :1.8.0 {:dependencies [[org.clojure/clojure "1.8.0" :upgrade? false]]}
+             :1.9.0 {:dependencies [[org.clojure/clojure "1.9.0" :upgrade? false]]}
              :dev {:resource-paths ["test-resources"],
                    :dependencies [[org.eclipse.jetty/jetty-server "9.4.0.RC3"]
                                   [org.eclipse.jetty/jetty-security "9.4.0.RC3"]
