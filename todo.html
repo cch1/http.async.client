@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-08-25 Thu 15:41 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<!-- 2019-02-10 Sun 20:48 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Asynchronous HTTP Client - Clojure - To Do</title>
-<meta  name="generator" content="Org-mode" />
-<meta  name="author" content="Chris Hapgood" />
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Chris Hapgood" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -53,13 +53,98 @@
     border: 1px solid black;
   }
   pre.src:hover:before { display: inline;}
-  pre.src-sh:before    { content: 'sh'; }
-  pre.src-bash:before  { content: 'sh'; }
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
   pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-R:before     { content: 'R'; }
-  pre.src-perl:before  { content: 'Perl'; }
-  pre.src-java:before  { content: 'Java'; }
-  pre.src-sql:before   { content: 'SQL'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
 
   table { border-collapse:collapse; }
   caption.t-above { caption-side: top; }
@@ -76,6 +161,19 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -92,6 +190,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" />
@@ -104,7 +203,7 @@
  * @licstart  The following is the entire license notice for the
  *  JavaScript code in org-info.js.
  *
- * Copyright (C) 2012-2013 Free Software Foundation, Inc.
+ * Copyright (C) 2012-2019 Free Software Foundation, Inc.
  *
  *
  * The JavaScript code in this tag is free software: you can
@@ -133,7 +232,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -172,7 +271,7 @@ org_html_manager.setup();  // activate after the parameters are set
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -225,141 +324,143 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgheadline4">1. Documentation <code>[0/3]</code></a>
+<li><a href="#org303ba02">1. Documentation <code>[0/3]</code></a>
 <ul>
-<li><a href="#orgheadline1">1.1. <span class="todo TODO">TODO</span> Determine how to show TravisCI build status via README.org</a></li>
-<li><a href="#orgheadline2">1.2. <span class="todo TODO">TODO</span> Determine how to export a sitemap from org publish</a></li>
-<li><a href="#orgheadline3">1.3. <span class="todo TODO">TODO</span> Extract quick start example code to its own file</a></li>
+<li><a href="#org30fe55d">1.1. <span class="todo TODO">TODO</span> Determine how to show TravisCI build status via README.org</a></li>
+<li><a href="#org61fca09">1.2. <span class="todo TODO">TODO</span> Determine how to export a sitemap from org publish</a></li>
+<li><a href="#org97d4afd">1.3. <span class="todo TODO">TODO</span> Extract quick start example code to its own file</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline11">2. Receive <code>[6/6]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="code">code</span>&#xa0;<span class="rel1">rel1</span></span></a>
+<li><a href="#org1b51445">2. Receive <code>[6/6]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="code">code</span>&#xa0;<span class="rel1">rel1</span></span></a>
 <ul>
-<li><a href="#orgheadline5">2.1. <span class="done DONE">DONE</span> Status Line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline6">2.2. <span class="done DONE">DONE</span> Headers&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline7">2.3. <span class="done DONE">DONE</span> Body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline8">2.4. <span class="done DONE">DONE</span> Implement response <b>promise</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline9">2.5. <span class="done DONE">DONE</span> Consume stream&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline10">2.6. <span class="done DONE">DONE</span> Error function&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org934720f">2.1. <span class="done DONE">DONE</span> Status Line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org6751560">2.2. <span class="done DONE">DONE</span> Headers&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org2a79b34">2.3. <span class="done DONE">DONE</span> Body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org1e38259">2.4. <span class="done DONE">DONE</span> Implement response <b>promise</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org716ca4c">2.5. <span class="done DONE">DONE</span> Consume stream&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org12d1845">2.6. <span class="done DONE">DONE</span> Error function&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgheadline34">3. Send <code>[8/10]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="code">code</span></span></a>
+<li><a href="#org007a3ed">3. Send <code>[8/10]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="code">code</span></span></a>
 <ul>
-<li><a href="#orgheadline12">3.1. <span class="done DONE">DONE</span> Query parameters&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline13">3.2. <span class="done DONE">DONE</span> Parameters&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline14">3.3. <span class="done DONE">DONE</span> Parameters allowed only on PUT/POST&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline16">3.4. <span class="done DONE">DONE</span> Cookies&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
+<li><a href="#orgf969388">3.1. <span class="done DONE">DONE</span> Query parameters&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org32c2b57">3.2. <span class="done DONE">DONE</span> Parameters&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org2ba5b60">3.3. <span class="done DONE">DONE</span> Parameters allowed only on PUT/POST&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org5f28b7b">3.4. <span class="done DONE">DONE</span> Cookies&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
 <ul>
-<li><a href="#orgheadline15">3.4.1. <span class="done DONE">DONE</span> Describe&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+<li><a href="#orga8ce520">3.4.1. <span class="done DONE">DONE</span> Describe&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgheadline20">3.5. <span class="done DONE">DONE</span> PUT/POST body <code>[3/3]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a>
+<li><a href="#org2b9b711">3.5. <span class="done DONE">DONE</span> PUT/POST body <code>[3/3]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a>
 <ul>
-<li><a href="#orgheadline17">3.5.1. <span class="done DONE">DONE</span> Support sending strings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline18">3.5.2. <span class="done DONE">DONE</span> Support sending map as form encoded data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline19">3.5.3. <span class="done DONE">DONE</span> Support InputStream body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org741bf0a">3.5.1. <span class="done DONE">DONE</span> Support sending strings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org0e4e4e7">3.5.2. <span class="done DONE">DONE</span> Support sending map as form encoded data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org960b71d">3.5.3. <span class="done DONE">DONE</span> Support InputStream body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgheadline28">3.6. <span class="done DONE">DONE</span> All HTTP verbs <code>[7/7]</code></a>
+<li><a href="#org334d4a9">3.6. <span class="done DONE">DONE</span> All HTTP verbs <code>[7/7]</code></a>
 <ul>
-<li><a href="#orgheadline21">3.6.1. <span class="done DONE">DONE</span> GET&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline22">3.6.2. <span class="done DONE">DONE</span> POST&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline23">3.6.3. <span class="done DONE">DONE</span> PUT&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline24">3.6.4. <span class="done DONE">DONE</span> DELETE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline25">3.6.5. <span class="done DONE">DONE</span> HEAD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline26">3.6.6. <span class="done DONE">DONE</span> OPTIONS&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline27">3.6.7. <span class="done DONE">DONE</span> Others, once supported by AHC-Java&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
+<li><a href="#org863a215">3.6.1. <span class="done DONE">DONE</span> GET&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org2ddf5c4">3.6.2. <span class="done DONE">DONE</span> POST&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#orgb4f5121">3.6.3. <span class="done DONE">DONE</span> PUT&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org111c347">3.6.4. <span class="done DONE">DONE</span> DELETE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org9080f5e">3.6.5. <span class="done DONE">DONE</span> HEAD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#orgcc62ec1">3.6.6. <span class="done DONE">DONE</span> OPTIONS&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org6a1ac73">3.6.7. <span class="done DONE">DONE</span> Others, once supported by AHC-Java&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgheadline29">3.7. <span class="todo TODO">TODO</span> PUT/POST streaming body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#orgheadline30">3.8. <span class="done DONE">DONE</span> Multipart&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#orgheadline31">3.9. <span class="todo TODO">TODO</span> Request queuing</a></li>
-<li><a href="#orgheadline33">3.10. <span class="done DONE">DONE</span> Authentication&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
+<li><a href="#org9776970">3.7. <span class="todo TODO">TODO</span> PUT/POST streaming body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
+<li><a href="#org1fa3960">3.8. <span class="done DONE">DONE</span> Multipart&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
+<li><a href="#org7a11583">3.9. <span class="todo TODO">TODO</span> Request queuing</a></li>
+<li><a href="#orgc131c74">3.10. <span class="done DONE">DONE</span> Authentication&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
 <ul>
-<li><a href="#orgheadline32">3.10.1. <span class="done DONE">DONE</span> Test Authentication</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orgheadline49">4. Configuration <code>[2/2]</code></a>
-<ul>
-<li><a href="#orgheadline42">4.1. <span class="done DONE">DONE</span> Global configuration of AHC <code>[4/4]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a>
-<ul>
-<li><a href="#orgheadline35">4.1.1. <span class="done DONE">DONE</span> Branding User-agent&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
-<li><a href="#orgheadline36">4.1.2. <span class="done DONE">DONE</span> Connection limiting per host.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#orgheadline37">4.1.3. <span class="done DONE">DONE</span> Global proxy.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-<li><a href="#orgheadline41">4.1.4. <span class="done DONE">DONE</span> Timeout settings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
-</ul>
-</li>
-<li><a href="#orgheadline48">4.2. <span class="done DONE">DONE</span> Per request configuration <code>[2/2]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a>
-<ul>
-<li><a href="#orgheadline43">4.2.1. <span class="done DONE">DONE</span> Proxy configuration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
-<li><a href="#orgheadline47">4.2.2. <span class="done DONE">DONE</span> Timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
+<li><a href="#org7e95aaf">3.10.1. <span class="done DONE">DONE</span> Test Authentication</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgheadline68">5. Tasks <code>[12/12]</code></a>
+<li><a href="#org98c7346">4. Configuration <code>[2/2]</code></a>
 <ul>
-<li><a href="#orgheadline50">5.1. <span class="done DONE">DONE</span> License&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline53">5.2. <span class="done DONE">DONE</span> Cleanup namespaces&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a>
+<li><a href="#orgd4fb936">4.1. <span class="done DONE">DONE</span> Global configuration of AHC <code>[4/4]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a>
 <ul>
-<li><a href="#orgheadline51">5.2.1. async.http.client</a></li>
-<li><a href="#orgheadline52">5.2.2. async.http.client.request</a></li>
+<li><a href="#orgafc9535">4.1.1. <span class="done DONE">DONE</span> Branding User-agent&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+<li><a href="#orgd27dce0">4.1.2. <span class="done DONE">DONE</span> Connection limiting per host.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
+<li><a href="#org2ffba2c">4.1.3. <span class="done DONE">DONE</span> Global proxy.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
+<li><a href="#orgcc9293c">4.1.4. <span class="done DONE">DONE</span> Timeout settings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgheadline54">5.3. <span class="done DONE">DONE</span> Release 0.1.0&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline55">5.4. <span class="done DONE">DONE</span> Release 0.1.1&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel2">rel2</span></span></a></li>
-<li><a href="#orgheadline57">5.5. <span class="done DONE">DONE</span> Release 0.2.0&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
+<li><a href="#orge2b815e">4.2. <span class="done DONE">DONE</span> Per request configuration <code>[2/2]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a>
 <ul>
-<li><a href="#orgheadline56">5.5.1. <span class="done DONE">DONE</span> Create a changelog&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+<li><a href="#org828f1f4">4.2.1. <span class="done DONE">DONE</span> Proxy configuration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+<li><a href="#org20816bc">4.2.2. <span class="done DONE">DONE</span> Timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgheadline58">5.6. <span class="done DONE">DONE</span> Release 0.2.1</a></li>
-<li><a href="#orgheadline59">5.7. <span class="done DONE">DONE</span> Make tests stand-alone&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline60">5.8. <span class="done DONE">DONE</span> Simplify request preparation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
-<li><a href="#orgheadline61">5.9. <span class="done DONE">DONE</span> Use last argument as key worded map&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
-<li><a href="#orgheadline62">5.10. <span class="done DONE">DONE</span> Review documentation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
-<li><a href="#orgheadline66">5.11. <span class="done DONE">DONE</span> Refactoring <code>[1/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
-<ul>
-<li><a href="#orgheadline65">5.11.1. <span class="done DONE">DONE</span> Refactor <b>execute-request</b> <code>[2/2]</code></a></li>
 </ul>
 </li>
-<li><a href="#orgheadline67">5.12. <span class="done DONE">DONE</span> Rename to <b>http.async.client</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+<li><a href="#org85e850b">5. Tasks <code>[12/12]</code></a>
+<ul>
+<li><a href="#org5c69088">5.1. <span class="done DONE">DONE</span> License&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org2571714">5.2. <span class="done DONE">DONE</span> Cleanup namespaces&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a>
+<ul>
+<li><a href="#org9f85c8c">5.2.1. async.http.client</a></li>
+<li><a href="#org109a936">5.2.2. async.http.client.request</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline70">6. Dependencies <code>[0/1]</code></a>
+<li><a href="#org06810f3">5.3. <span class="done DONE">DONE</span> Release 0.1.0&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#orga80cd2f">5.4. <span class="done DONE">DONE</span> Release 0.1.1&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel2">rel2</span></span></a></li>
+<li><a href="#org73befb7">5.5. <span class="done DONE">DONE</span> Release 0.2.0&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
 <ul>
-<li><a href="#orgheadline69">6.1. Update AsyncHttpClient to 1.9.x</a></li>
+<li><a href="#org9b40468">5.5.1. <span class="done DONE">DONE</span> Create a changelog&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+</ul>
+</li>
+<li><a href="#org371ccc0">5.6. <span class="done DONE">DONE</span> Release 0.2.1</a></li>
+<li><a href="#org01e467c">5.7. <span class="done DONE">DONE</span> Make tests stand-alone&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#org816a28a">5.8. <span class="done DONE">DONE</span> Simplify request preparation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></a></li>
+<li><a href="#orge9ed0db">5.9. <span class="done DONE">DONE</span> Use last argument as key worded map&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+<li><a href="#org7bd05b4">5.10. <span class="done DONE">DONE</span> Review documentation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+<li><a href="#org9736654">5.11. <span class="done DONE">DONE</span> Refactoring <code>[1/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a>
+<ul>
+<li><a href="#org952e0fe">5.11.1. <span class="done DONE">DONE</span> Refactor <b>execute-request</b> <code>[2/2]</code></a></li>
+</ul>
+</li>
+<li><a href="#org8db4ced">5.12. <span class="done DONE">DONE</span> Rename to <b>http.async.client</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></a></li>
+</ul>
+</li>
+<li><a href="#orgfec688d">6. Dependencies <code>[0/1]</code></a>
+<ul>
+<li><a href="#orgdeb839f">6.1. Update AsyncHttpClient to 1.9.x</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4"><span class="section-number-2">1</span> Documentation <code>[0/3]</code></h2>
+<div id="outline-container-org303ba02" class="outline-2">
+<h2 id="org303ba02"><span class="section-number-2">1</span> Documentation <code>[0/3]</code></h2>
 <div class="outline-text-2" id="text-1">
-</div><div id="outline-container-orgheadline1" class="outline-3">
-<h3 id="orgheadline1"><span class="section-number-3">1.1</span> <span class="todo TODO">TODO</span> Determine how to show TravisCI build status via README.org</h3>
 </div>
-<div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2"><span class="section-number-3">1.2</span> <span class="todo TODO">TODO</span> Determine how to export a sitemap from org publish</h3>
+<div id="outline-container-org30fe55d" class="outline-3">
+<h3 id="org30fe55d"><span class="section-number-3">1.1</span> <span class="todo TODO">TODO</span> Determine how to show TravisCI build status via README.org</h3>
 </div>
-<div id="outline-container-orgheadline3" class="outline-3">
-<h3 id="orgheadline3"><span class="section-number-3">1.3</span> <span class="todo TODO">TODO</span> Extract quick start example code to its own file</h3>
+<div id="outline-container-org61fca09" class="outline-3">
+<h3 id="org61fca09"><span class="section-number-3">1.2</span> <span class="todo TODO">TODO</span> Determine how to export a sitemap from org publish</h3>
+</div>
+<div id="outline-container-org97d4afd" class="outline-3">
+<h3 id="org97d4afd"><span class="section-number-3">1.3</span> <span class="todo TODO">TODO</span> Extract quick start example code to its own file</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline11" class="outline-2">
-<h2 id="orgheadline11"><span class="section-number-2">2</span> Receive <code>[6/6]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="code">code</span>&#xa0;<span class="rel1">rel1</span></span></h2>
+<div id="outline-container-org1b51445" class="outline-2">
+<h2 id="org1b51445"><span class="section-number-2">2</span> Receive <code>[6/6]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="code">code</span>&#xa0;<span class="rel1">rel1</span></span></h2>
 <div class="outline-text-2" id="text-2">
-</div><div id="outline-container-orgheadline5" class="outline-3">
-<h3 id="orgheadline5"><span class="section-number-3">2.1</span> <span class="done DONE">DONE</span> Status Line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline6" class="outline-3">
-<h3 id="orgheadline6"><span class="section-number-3">2.2</span> <span class="done DONE">DONE</span> Headers&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org934720f" class="outline-3">
+<h3 id="org934720f"><span class="section-number-3">2.1</span> <span class="done DONE">DONE</span> Status Line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline7" class="outline-3">
-<h3 id="orgheadline7"><span class="section-number-3">2.3</span> <span class="done DONE">DONE</span> Body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org6751560" class="outline-3">
+<h3 id="org6751560"><span class="section-number-3">2.2</span> <span class="done DONE">DONE</span> Headers&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+</div>
+<div id="outline-container-org2a79b34" class="outline-3">
+<h3 id="org2a79b34"><span class="section-number-3">2.3</span> <span class="done DONE">DONE</span> Body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Instead of <b>id</b>, pass <b>(ref {})</b> to callbacks so they have their own
@@ -367,75 +468,79 @@ STM ref'ed map.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8"><span class="section-number-3">2.4</span> <span class="done DONE">DONE</span> Implement response <b>promise</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org1e38259" class="outline-3">
+<h3 id="org1e38259"><span class="section-number-3">2.4</span> <span class="done DONE">DONE</span> Implement response <b>promise</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline9" class="outline-3">
-<h3 id="orgheadline9"><span class="section-number-3">2.5</span> <span class="done DONE">DONE</span> Consume stream&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org716ca4c" class="outline-3">
+<h3 id="org716ca4c"><span class="section-number-3">2.5</span> <span class="done DONE">DONE</span> Consume stream&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline10" class="outline-3">
-<h3 id="orgheadline10"><span class="section-number-3">2.6</span> <span class="done DONE">DONE</span> Error function&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org12d1845" class="outline-3">
+<h3 id="org12d1845"><span class="section-number-3">2.6</span> <span class="done DONE">DONE</span> Error function&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
 </div>
-<div id="outline-container-orgheadline34" class="outline-2">
-<h2 id="orgheadline34"><span class="section-number-2">3</span> Send <code>[8/10]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="code">code</span></span></h2>
+<div id="outline-container-org007a3ed" class="outline-2">
+<h2 id="org007a3ed"><span class="section-number-2">3</span> Send <code>[8/10]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="code">code</span></span></h2>
 <div class="outline-text-2" id="text-3">
-</div><div id="outline-container-orgheadline12" class="outline-3">
-<h3 id="orgheadline12"><span class="section-number-3">3.1</span> <span class="done DONE">DONE</span> Query parameters&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline13" class="outline-3">
-<h3 id="orgheadline13"><span class="section-number-3">3.2</span> <span class="done DONE">DONE</span> Parameters&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-orgf969388" class="outline-3">
+<h3 id="orgf969388"><span class="section-number-3">3.1</span> <span class="done DONE">DONE</span> Query parameters&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline14" class="outline-3">
-<h3 id="orgheadline14"><span class="section-number-3">3.3</span> <span class="done DONE">DONE</span> Parameters allowed only on PUT/POST&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org32c2b57" class="outline-3">
+<h3 id="org32c2b57"><span class="section-number-3">3.2</span> <span class="done DONE">DONE</span> Parameters&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline16" class="outline-3">
-<h3 id="orgheadline16"><span class="section-number-3">3.4</span> <span class="done DONE">DONE</span> Cookies&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div id="outline-container-org2ba5b60" class="outline-3">
+<h3 id="org2ba5b60"><span class="section-number-3">3.3</span> <span class="done DONE">DONE</span> Parameters allowed only on PUT/POST&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+</div>
+<div id="outline-container-org5f28b7b" class="outline-3">
+<h3 id="org5f28b7b"><span class="section-number-3">3.4</span> <span class="done DONE">DONE</span> Cookies&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-3-4">
-</div><div id="outline-container-orgheadline15" class="outline-4">
-<h4 id="orgheadline15"><span class="section-number-4">3.4.1</span> <span class="done DONE">DONE</span> Describe&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h4>
+</div>
+<div id="outline-container-orga8ce520" class="outline-4">
+<h4 id="orga8ce520"><span class="section-number-4">3.4.1</span> <span class="done DONE">DONE</span> Describe&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h4>
 </div>
 </div>
-<div id="outline-container-orgheadline20" class="outline-3">
-<h3 id="orgheadline20"><span class="section-number-3">3.5</span> <span class="done DONE">DONE</span> PUT/POST body <code>[3/3]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org2b9b711" class="outline-3">
+<h3 id="org2b9b711"><span class="section-number-3">3.5</span> <span class="done DONE">DONE</span> PUT/POST body <code>[3/3]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-3-5">
-</div><div id="outline-container-orgheadline17" class="outline-4">
-<h4 id="orgheadline17"><span class="section-number-4">3.5.1</span> <span class="done DONE">DONE</span> Support sending strings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
-<div id="outline-container-orgheadline18" class="outline-4">
-<h4 id="orgheadline18"><span class="section-number-4">3.5.2</span> <span class="done DONE">DONE</span> Support sending map as form encoded data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div id="outline-container-org741bf0a" class="outline-4">
+<h4 id="org741bf0a"><span class="section-number-4">3.5.1</span> <span class="done DONE">DONE</span> Support sending strings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
-<div id="outline-container-orgheadline19" class="outline-4">
-<h4 id="orgheadline19"><span class="section-number-4">3.5.3</span> <span class="done DONE">DONE</span> Support InputStream body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div id="outline-container-org0e4e4e7" class="outline-4">
+<h4 id="org0e4e4e7"><span class="section-number-4">3.5.2</span> <span class="done DONE">DONE</span> Support sending map as form encoded data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+</div>
+<div id="outline-container-org960b71d" class="outline-4">
+<h4 id="org960b71d"><span class="section-number-4">3.5.3</span> <span class="done DONE">DONE</span> Support InputStream body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
 </div>
-<div id="outline-container-orgheadline28" class="outline-3">
-<h3 id="orgheadline28"><span class="section-number-3">3.6</span> <span class="done DONE">DONE</span> All HTTP verbs <code>[7/7]</code></h3>
+<div id="outline-container-org334d4a9" class="outline-3">
+<h3 id="org334d4a9"><span class="section-number-3">3.6</span> <span class="done DONE">DONE</span> All HTTP verbs <code>[7/7]</code></h3>
 <div class="outline-text-3" id="text-3-6">
-</div><div id="outline-container-orgheadline21" class="outline-4">
-<h4 id="orgheadline21"><span class="section-number-4">3.6.1</span> <span class="done DONE">DONE</span> GET&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
-<div id="outline-container-orgheadline22" class="outline-4">
-<h4 id="orgheadline22"><span class="section-number-4">3.6.2</span> <span class="done DONE">DONE</span> POST&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div id="outline-container-org863a215" class="outline-4">
+<h4 id="org863a215"><span class="section-number-4">3.6.1</span> <span class="done DONE">DONE</span> GET&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
-<div id="outline-container-orgheadline23" class="outline-4">
-<h4 id="orgheadline23"><span class="section-number-4">3.6.3</span> <span class="done DONE">DONE</span> PUT&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div id="outline-container-org2ddf5c4" class="outline-4">
+<h4 id="org2ddf5c4"><span class="section-number-4">3.6.2</span> <span class="done DONE">DONE</span> POST&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
-<div id="outline-container-orgheadline24" class="outline-4">
-<h4 id="orgheadline24"><span class="section-number-4">3.6.4</span> <span class="done DONE">DONE</span> DELETE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div id="outline-container-orgb4f5121" class="outline-4">
+<h4 id="orgb4f5121"><span class="section-number-4">3.6.3</span> <span class="done DONE">DONE</span> PUT&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
-<div id="outline-container-orgheadline25" class="outline-4">
-<h4 id="orgheadline25"><span class="section-number-4">3.6.5</span> <span class="done DONE">DONE</span> HEAD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div id="outline-container-org111c347" class="outline-4">
+<h4 id="org111c347"><span class="section-number-4">3.6.4</span> <span class="done DONE">DONE</span> DELETE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
-<div id="outline-container-orgheadline26" class="outline-4">
-<h4 id="orgheadline26"><span class="section-number-4">3.6.6</span> <span class="done DONE">DONE</span> OPTIONS&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+<div id="outline-container-org9080f5e" class="outline-4">
+<h4 id="org9080f5e"><span class="section-number-4">3.6.5</span> <span class="done DONE">DONE</span> HEAD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
 </div>
-<div id="outline-container-orgheadline27" class="outline-4">
-<h4 id="orgheadline27"><span class="section-number-4">3.6.7</span> <span class="done DONE">DONE</span> Others, once supported by AHC-Java&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div id="outline-container-orgcc62ec1" class="outline-4">
+<h4 id="orgcc62ec1"><span class="section-number-4">3.6.6</span> <span class="done DONE">DONE</span> OPTIONS&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h4>
+</div>
+<div id="outline-container-org6a1ac73" class="outline-4">
+<h4 id="org6a1ac73"><span class="section-number-4">3.6.7</span> <span class="done DONE">DONE</span> Others, once supported by AHC-Java&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
 </div>
 </div>
-<div id="outline-container-orgheadline29" class="outline-3">
-<h3 id="orgheadline29"><span class="section-number-3">3.7</span> <span class="todo TODO">TODO</span> PUT/POST streaming body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div id="outline-container-org9776970" class="outline-3">
+<h3 id="org9776970"><span class="section-number-3">3.7</span> <span class="todo TODO">TODO</span> PUT/POST streaming body&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-3-7">
 <p>
 That can be done with <b>clojure.core/add-watch</b>.
@@ -445,69 +550,81 @@ IO operation in separate thread.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline30" class="outline-3">
-<h3 id="orgheadline30"><span class="section-number-3">3.8</span> <span class="done DONE">DONE</span> Multipart&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div id="outline-container-org1fa3960" class="outline-3">
+<h3 id="org1fa3960"><span class="section-number-3">3.8</span> <span class="done DONE">DONE</span> Multipart&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h3>
 </div>
-<div id="outline-container-orgheadline31" class="outline-3">
-<h3 id="orgheadline31"><span class="section-number-3">3.9</span> <span class="todo TODO">TODO</span> Request queuing</h3>
+<div id="outline-container-org7a11583" class="outline-3">
+<h3 id="org7a11583"><span class="section-number-3">3.9</span> <span class="todo TODO">TODO</span> Request queuing</h3>
 </div>
-<div id="outline-container-orgheadline33" class="outline-3">
-<h3 id="orgheadline33"><span class="section-number-3">3.10</span> <span class="done DONE">DONE</span> Authentication&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div id="outline-container-orgc131c74" class="outline-3">
+<h3 id="orgc131c74"><span class="section-number-3">3.10</span> <span class="done DONE">DONE</span> Authentication&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-3-10">
-</div><div id="outline-container-orgheadline32" class="outline-4">
-<h4 id="orgheadline32"><span class="section-number-4">3.10.1</span> <span class="done DONE">DONE</span> Test Authentication</h4>
+</div>
+<div id="outline-container-org7e95aaf" class="outline-4">
+<h4 id="org7e95aaf"><span class="section-number-4">3.10.1</span> <span class="done DONE">DONE</span> Test Authentication</h4>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline49" class="outline-2">
-<h2 id="orgheadline49"><span class="section-number-2">4</span> Configuration <code>[2/2]</code></h2>
+<div id="outline-container-org98c7346" class="outline-2">
+<h2 id="org98c7346"><span class="section-number-2">4</span> Configuration <code>[2/2]</code></h2>
 <div class="outline-text-2" id="text-4">
-</div><div id="outline-container-orgheadline42" class="outline-3">
-<h3 id="orgheadline42"><span class="section-number-3">4.1</span> <span class="done DONE">DONE</span> Global configuration of AHC <code>[4/4]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h3>
+</div>
+<div id="outline-container-orgd4fb936" class="outline-3">
+<h3 id="orgd4fb936"><span class="section-number-3">4.1</span> <span class="done DONE">DONE</span> Global configuration of AHC <code>[4/4]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-4-1">
-</div><div id="outline-container-orgheadline35" class="outline-4">
-<h4 id="orgheadline35"><span class="section-number-4">4.1.1</span> <span class="done DONE">DONE</span> Branding User-agent&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h4>
 </div>
-<div id="outline-container-orgheadline36" class="outline-4">
-<h4 id="orgheadline36"><span class="section-number-4">4.1.2</span> <span class="done DONE">DONE</span> Connection limiting per host.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div id="outline-container-orgafc9535" class="outline-4">
+<h4 id="orgafc9535"><span class="section-number-4">4.1.1</span> <span class="done DONE">DONE</span> Branding User-agent&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h4>
 </div>
-<div id="outline-container-orgheadline37" class="outline-4">
-<h4 id="orgheadline37"><span class="section-number-4">4.1.3</span> <span class="done DONE">DONE</span> Global proxy.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div id="outline-container-orgd27dce0" class="outline-4">
+<h4 id="orgd27dce0"><span class="section-number-4">4.1.2</span> <span class="done DONE">DONE</span> Connection limiting per host.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
 </div>
-<div id="outline-container-orgheadline41" class="outline-4">
-<h4 id="orgheadline41"><span class="section-number-4">4.1.4</span> <span class="done DONE">DONE</span> Timeout settings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div id="outline-container-org2ffba2c" class="outline-4">
+<h4 id="org2ffba2c"><span class="section-number-4">4.1.3</span> <span class="done DONE">DONE</span> Global proxy.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
+</div>
+<div id="outline-container-orgcc9293c" class="outline-4">
+<h4 id="orgcc9293c"><span class="section-number-4">4.1.4</span> <span class="done DONE">DONE</span> Timeout settings&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-4-1-4">
-</div><ol class="org-ol"><li><a id="orgheadline38"></a><span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li>
-<li><a id="orgheadline39"></a><span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li>
-<li><a id="orgheadline40"></a><span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li></ol>
+</div>
+<ol class="org-ol">
+<li><a id="org67d77e8"></a><span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br /></li>
+<li><a id="org97f8950"></a><span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br /></li>
+<li><a id="orgb67b792"></a><span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br /></li>
+</ol>
 </div>
 </div>
-<div id="outline-container-orgheadline48" class="outline-3">
-<h3 id="orgheadline48"><span class="section-number-3">4.2</span> <span class="done DONE">DONE</span> Per request configuration <code>[2/2]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h3>
+<div id="outline-container-orge2b815e" class="outline-3">
+<h3 id="orge2b815e"><span class="section-number-3">4.2</span> <span class="done DONE">DONE</span> Per request configuration <code>[2/2]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h3>
 <div class="outline-text-3" id="text-4-2">
-</div><div id="outline-container-orgheadline43" class="outline-4">
-<h4 id="orgheadline43"><span class="section-number-4">4.2.1</span> <span class="done DONE">DONE</span> Proxy configuration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h4>
 </div>
-<div id="outline-container-orgheadline47" class="outline-4">
-<h4 id="orgheadline47"><span class="section-number-4">4.2.2</span> <span class="done DONE">DONE</span> Timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
+<div id="outline-container-org828f1f4" class="outline-4">
+<h4 id="org828f1f4"><span class="section-number-4">4.2.1</span> <span class="done DONE">DONE</span> Proxy configuration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h4>
+</div>
+<div id="outline-container-org20816bc" class="outline-4">
+<h4 id="org20816bc"><span class="section-number-4">4.2.2</span> <span class="done DONE">DONE</span> Timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span></h4>
 <div class="outline-text-4" id="text-4-2-2">
-</div><ol class="org-ol"><li><a id="orgheadline44"></a><span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li>
-<li><a id="orgheadline45"></a><span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li>
-<li><a id="orgheadline46"></a><span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br  /></li></ol>
+</div>
+<ol class="org-ol">
+<li><a id="org6a65ffd"></a><span class="done DONE">DONE</span> Request timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br /></li>
+<li><a id="org7aaebe2"></a><span class="done DONE">DONE</span> Connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br /></li>
+<li><a id="org0ae82f3"></a><span class="done DONE">DONE</span> Idle connection timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel4">rel4</span></span><br /></li>
+</ol>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline68" class="outline-2">
-<h2 id="orgheadline68"><span class="section-number-2">5</span> Tasks <code>[12/12]</code></h2>
+<div id="outline-container-org85e850b" class="outline-2">
+<h2 id="org85e850b"><span class="section-number-2">5</span> Tasks <code>[12/12]</code></h2>
 <div class="outline-text-2" id="text-5">
-</div><div id="outline-container-orgheadline50" class="outline-3">
-<h3 id="orgheadline50"><span class="section-number-3">5.1</span> <span class="done DONE">DONE</span> License&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline53" class="outline-3">
-<h3 id="orgheadline53"><span class="section-number-3">5.2</span> <span class="done DONE">DONE</span> Cleanup namespaces&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org5c69088" class="outline-3">
+<h3 id="org5c69088"><span class="section-number-3">5.1</span> <span class="done DONE">DONE</span> License&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+</div>
+<div id="outline-container-org2571714" class="outline-3">
+<h3 id="org2571714"><span class="section-number-3">5.2</span> <span class="done DONE">DONE</span> Cleanup namespaces&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-5-2">
-</div><div id="outline-container-orgheadline51" class="outline-4">
-<h4 id="orgheadline51"><span class="section-number-4">5.2.1</span> async.http.client</h4>
+</div>
+<div id="outline-container-org9f85c8c" class="outline-4">
+<h4 id="org9f85c8c"><span class="section-number-4">5.2.1</span> async.http.client</h4>
 <div class="outline-text-4" id="text-5-2-1">
 <p>
 Should contain helper functions to call all HTTP verbs.
@@ -515,8 +632,8 @@ Default set of call-backs.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline52" class="outline-4">
-<h4 id="orgheadline52"><span class="section-number-4">5.2.2</span> async.http.client.request</h4>
+<div id="outline-container-org109a936" class="outline-4">
+<h4 id="org109a936"><span class="section-number-4">5.2.2</span> async.http.client.request</h4>
 <div class="outline-text-4" id="text-5-2-2">
 <p>
 Lower level of requesting:
@@ -528,14 +645,14 @@ Lower level of requesting:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline54" class="outline-3">
-<h3 id="orgheadline54"><span class="section-number-3">5.3</span> <span class="done DONE">DONE</span> Release 0.1.0&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org06810f3" class="outline-3">
+<h3 id="org06810f3"><span class="section-number-3">5.3</span> <span class="done DONE">DONE</span> Release 0.1.0&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 </div>
-<div id="outline-container-orgheadline55" class="outline-3">
-<h3 id="orgheadline55"><span class="section-number-3">5.4</span> <span class="done DONE">DONE</span> Release 0.1.1&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel2">rel2</span></span></h3>
+<div id="outline-container-orga80cd2f" class="outline-3">
+<h3 id="orga80cd2f"><span class="section-number-3">5.4</span> <span class="done DONE">DONE</span> Release 0.1.1&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel2">rel2</span></span></h3>
 </div>
-<div id="outline-container-orgheadline57" class="outline-3">
-<h3 id="orgheadline57"><span class="section-number-3">5.5</span> <span class="done DONE">DONE</span> Release 0.2.0&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div id="outline-container-org73befb7" class="outline-3">
+<h3 id="org73befb7"><span class="section-number-3">5.5</span> <span class="done DONE">DONE</span> Release 0.2.0&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-5-5">
 <p>
 Changes:
@@ -546,28 +663,28 @@ Changes:
 <li>keyworded maps are used in api</li>
 </ul>
 </div>
-<div id="outline-container-orgheadline56" class="outline-4">
-<h4 id="orgheadline56"><span class="section-number-4">5.5.1</span> <span class="done DONE">DONE</span> Create a changelog&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h4>
+<div id="outline-container-org9b40468" class="outline-4">
+<h4 id="org9b40468"><span class="section-number-4">5.5.1</span> <span class="done DONE">DONE</span> Create a changelog&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h4>
 </div>
 </div>
-<div id="outline-container-orgheadline58" class="outline-3">
-<h3 id="orgheadline58"><span class="section-number-3">5.6</span> <span class="done DONE">DONE</span> Release 0.2.1</h3>
+<div id="outline-container-org371ccc0" class="outline-3">
+<h3 id="org371ccc0"><span class="section-number-3">5.6</span> <span class="done DONE">DONE</span> Release 0.2.1</h3>
 <div class="outline-text-3" id="text-5-6">
 <p>
 Release bumps version of async-http-client to v1.3.2.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline59" class="outline-3">
-<h3 id="orgheadline59"><span class="section-number-3">5.7</span> <span class="done DONE">DONE</span> Make tests stand-alone&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org01e467c" class="outline-3">
+<h3 id="org01e467c"><span class="section-number-3">5.7</span> <span class="done DONE">DONE</span> Make tests stand-alone&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-5-7">
 <p>
 Test suite should not fail when there is now hello-www on port 8080.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline60" class="outline-3">
-<h3 id="orgheadline60"><span class="section-number-3">5.8</span> <span class="done DONE">DONE</span> Simplify request preparation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
+<div id="outline-container-org816a28a" class="outline-3">
+<h3 id="org816a28a"><span class="section-number-3">5.8</span> <span class="done DONE">DONE</span> Simplify request preparation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel1">rel1</span></span></h3>
 <div class="outline-text-3" id="text-5-8">
 <p>
 For now fns like GET will call prepare-get that will call
@@ -576,52 +693,61 @@ should be quite fine to only use <b>prepare-request</b>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline61" class="outline-3">
-<h3 id="orgheadline61"><span class="section-number-3">5.9</span> <span class="done DONE">DONE</span> Use last argument as key worded map&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div id="outline-container-orge9ed0db" class="outline-3">
+<h3 id="orge9ed0db"><span class="section-number-3">5.9</span> <span class="done DONE">DONE</span> Use last argument as key worded map&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-5-9">
 <p>
 As suggested by <a href="http://blog.licenser.net/">Licenser</a> on #clojure <a href="http://clojure-log.n01se.net/date/2010-07-08.html#i25">here</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline62" class="outline-3">
-<h3 id="orgheadline62"><span class="section-number-3">5.10</span> <span class="done DONE">DONE</span> Review documentation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div id="outline-container-org7bd05b4" class="outline-3">
+<h3 id="org7bd05b4"><span class="section-number-3">5.10</span> <span class="done DONE">DONE</span> Review documentation&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
 </div>
-<div id="outline-container-orgheadline66" class="outline-3">
-<h3 id="orgheadline66"><span class="section-number-3">5.11</span> <span class="done DONE">DONE</span> Refactoring <code>[1/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div id="outline-container-org9736654" class="outline-3">
+<h3 id="org9736654"><span class="section-number-3">5.11</span> <span class="done DONE">DONE</span> Refactoring <code>[1/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
 <div class="outline-text-3" id="text-5-11">
-</div><div id="outline-container-orgheadline65" class="outline-4">
-<h4 id="orgheadline65"><span class="section-number-4">5.11.1</span> <span class="done DONE">DONE</span> Refactor <b>execute-request</b> <code>[2/2]</code></h4>
+</div>
+<div id="outline-container-org952e0fe" class="outline-4">
+<h4 id="org952e0fe"><span class="section-number-4">5.11.1</span> <span class="done DONE">DONE</span> Refactor <b>execute-request</b> <code>[2/2]</code></h4>
 <div class="outline-text-4" id="text-5-11-1">
-</div><ol class="org-ol"><li><a id="orgheadline63"></a><span class="done DONE">DONE</span> Build checkable promise<br  /><div class="outline-text-5" id="text-5-11-1-1">
+</div>
+<ol class="org-ol">
+<li><a id="org697ad2c"></a><span class="done DONE">DONE</span> Build checkable promise<br />
+<div class="outline-text-5" id="text-5-11-1-1">
 <p>
 To check if promise was delivered use <b>delivered?</b>
 </p>
-</div></li>
-<li><a id="orgheadline64"></a><span class="done DONE">DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces<br  /><div class="outline-text-5" id="text-5-11-1-2">
+</div>
+</li>
+<li><a id="org5a5ba97"></a><span class="done DONE">DONE</span> Unify <b>execute-request</b> and <b>consume-stream</b> interfaces<br />
+<div class="outline-text-5" id="text-5-11-1-2">
 <ul class="org-ul">
 <li>Use new checkable <b>promise</b> for different parts of response</li>
 <li>Use normal map for response instead of (ref {})</li>
 <li>Provide helper functions to deal with metadata on response</li>
 </ul>
-</div></li></ol>
+</div>
+</li>
+</ol>
 </div>
 </div>
-<div id="outline-container-orgheadline67" class="outline-3">
-<h3 id="orgheadline67"><span class="section-number-3">5.12</span> <span class="done DONE">DONE</span> Rename to <b>http.async.client</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
+<div id="outline-container-org8db4ced" class="outline-3">
+<h3 id="org8db4ced"><span class="section-number-3">5.12</span> <span class="done DONE">DONE</span> Rename to <b>http.async.client</b>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="rel3">rel3</span></span></h3>
 </div>
 </div>
-<div id="outline-container-orgheadline70" class="outline-2">
-<h2 id="orgheadline70"><span class="section-number-2">6</span> Dependencies <code>[0/1]</code></h2>
+<div id="outline-container-orgfec688d" class="outline-2">
+<h2 id="orgfec688d"><span class="section-number-2">6</span> Dependencies <code>[0/1]</code></h2>
 <div class="outline-text-2" id="text-6">
-</div><div id="outline-container-orgheadline69" class="outline-3">
-<h3 id="orgheadline69"><span class="section-number-3">6.1</span> Update AsyncHttpClient to 1.9.x</h3>
+</div>
+<div id="outline-container-orgdeb839f" class="outline-3">
+<h3 id="orgdeb839f"><span class="section-number-3">6.1</span> Update AsyncHttpClient to 1.9.x</h3>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Chris Hapgood</p>
-<p class="date">Created: 2016-08-25 Thu 15:41</p>
+<p class="date">Created: 2019-02-10 Sun 20:48</p>
 <p class="creator">Emacs 24.4.1 (Org mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

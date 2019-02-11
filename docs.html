@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-08-25 Thu 15:41 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<!-- 2019-02-10 Sun 20:48 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Asynchronous HTTP Client - Clojure - Documentation Asynchronous HTTP Client for Clojure - Documentation</title>
-<meta  name="generator" content="Org-mode" />
-<meta  name="author" content="Hubert Iwaniuk Chris Hapgood" />
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Hubert Iwaniuk Chris Hapgood" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -53,13 +53,98 @@
     border: 1px solid black;
   }
   pre.src:hover:before { display: inline;}
-  pre.src-sh:before    { content: 'sh'; }
-  pre.src-bash:before  { content: 'sh'; }
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
   pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-R:before     { content: 'R'; }
-  pre.src-perl:before  { content: 'Perl'; }
-  pre.src-java:before  { content: 'Java'; }
-  pre.src-sql:before   { content: 'SQL'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
 
   table { border-collapse:collapse; }
   caption.t-above { caption-side: top; }
@@ -76,6 +161,19 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -92,6 +190,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" />
@@ -104,7 +203,7 @@
  * @licstart  The following is the entire license notice for the
  *  JavaScript code in org-info.js.
  *
- * Copyright (C) 2012-2013 Free Software Foundation, Inc.
+ * Copyright (C) 2012-2019 Free Software Foundation, Inc.
  *
  *
  * The JavaScript code in this tag is free software: you can
@@ -133,7 +232,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -172,7 +271,7 @@ org_html_manager.setup();  // activate after the parameters are set
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -225,109 +324,110 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgheadline59">1. Detailed documentation</a>
+<li><a href="#org31d78a1">1. Detailed documentation</a>
 <ul>
-<li><a href="#orgheadline8">1.1. Work modes</a>
+<li><a href="#org4431e0d">1.1. Work modes</a>
 <ul>
-<li><a href="#orgheadline3">1.1.1. Asynchronous operations</a></li>
-<li><a href="#orgheadline5">1.1.2. Streaming</a></li>
-<li><a href="#orgheadline7">1.1.3. Raw mode</a></li>
+<li><a href="#org1bb70e9">1.1.1. Asynchronous operations</a></li>
+<li><a href="#org901b30e">1.1.2. Streaming</a></li>
+<li><a href="#org573e34c">1.1.3. Raw mode</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline1">1.2. HTTP methods</a>
+<li><a href="#org0a7ffd7">1.2. HTTP methods</a>
 <ul>
-<li><a href="#orgheadline9">1.2.1. GET</a></li>
-<li><a href="#orgheadline15">1.2.2. PUT/POST</a></li>
-<li><a href="#orgheadline16">1.2.3. DELETE</a></li>
-<li><a href="#orgheadline17">1.2.4. HEAD</a></li>
-<li><a href="#orgheadline18">1.2.5. OPTIONS</a></li>
+<li><a href="#org499ad86">1.2.1. GET</a></li>
+<li><a href="#org921d091">1.2.2. PUT/POST</a></li>
+<li><a href="#orgcf53b1b">1.2.3. DELETE</a></li>
+<li><a href="#orgf2016d9">1.2.4. HEAD</a></li>
+<li><a href="#org3aca6cb">1.2.5. OPTIONS</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline2">1.3. Request options</a>
+<li><a href="#org1541b9d">1.3. Request options</a>
 <ul>
-<li><a href="#orgheadline19">1.3.1. :query</a></li>
-<li><a href="#orgheadline20">1.3.2. :headers</a></li>
-<li><a href="#orgheadline21">1.3.3. :body</a></li>
-<li><a href="#orgheadline22">1.3.4. :cookies</a></li>
-<li><a href="#orgheadline23">1.3.5. :proxy</a></li>
-<li><a href="#orgheadline24">1.3.6. :auth</a></li>
-<li><a href="#orgheadline25">1.3.7. :timeout</a></li>
+<li><a href="#orga05f983">1.3.1. :query</a></li>
+<li><a href="#orga2c3727">1.3.2. :headers</a></li>
+<li><a href="#org52bb861">1.3.3. :body</a></li>
+<li><a href="#org2cb1be0">1.3.4. :cookies</a></li>
+<li><a href="#org03a15ce">1.3.5. :proxy</a></li>
+<li><a href="#org09f3bf3">1.3.6. :auth</a></li>
+<li><a href="#orgc02f799">1.3.7. :timeout</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline31">1.4. Streaming</a>
+<li><a href="#org4770d02">1.4. Streaming</a>
 <ul>
-<li><a href="#orgheadline4">1.4.1. Lazy sequence</a></li>
-<li><a href="#orgheadline27">1.4.2. Call-back</a></li>
+<li><a href="#org7c8b4ce">1.4.1. Lazy sequence</a></li>
+<li><a href="#orgb53c74f">1.4.2. Call-back</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline45">1.5. Response handling</a>
+<li><a href="#org9cd2a54">1.5. Response handling</a>
 <ul>
-<li><a href="#orgheadline32">1.5.1. Awaiting response</a></li>
-<li><a href="#orgheadline28">1.5.2. Reading status line</a></li>
-<li><a href="#orgheadline33">1.5.3. Is redirect?</a></li>
-<li><a href="#orgheadline29">1.5.4. Reading headers</a></li>
-<li><a href="#orgheadline34">1.5.5. Reading content-type</a></li>
-<li><a href="#orgheadline35">1.5.6. Reading location</a></li>
-<li><a href="#orgheadline26">1.5.7. Reading cookies</a></li>
-<li><a href="#orgheadline36">1.5.8. Reading body</a></li>
-<li><a href="#orgheadline37">1.5.9. Reading body as string</a></li>
-<li><a href="#orgheadline38">1.5.10. Reading error</a></li>
-<li><a href="#orgheadline39">1.5.11. Canceling request</a></li>
-<li><a href="#orgheadline43">1.5.12. Response predicates</a></li>
-<li><a href="#orgheadline44">1.5.13. Requested URL</a></li>
+<li><a href="#org732794a">1.5.1. Awaiting response</a></li>
+<li><a href="#org14153ec">1.5.2. Reading status line</a></li>
+<li><a href="#orgd17a296">1.5.3. Is redirect?</a></li>
+<li><a href="#org9118fbf">1.5.4. Reading headers</a></li>
+<li><a href="#orgea1f63f">1.5.5. Reading content-type</a></li>
+<li><a href="#org72e1b12">1.5.6. Reading location</a></li>
+<li><a href="#orgebcadd8">1.5.7. Reading cookies</a></li>
+<li><a href="#org02dc190">1.5.8. Reading body</a></li>
+<li><a href="#org8097605">1.5.9. Reading body as string</a></li>
+<li><a href="#org85a87ad">1.5.10. Reading error</a></li>
+<li><a href="#org12043c4">1.5.11. Canceling request</a></li>
+<li><a href="#org1236b90">1.5.12. Response predicates</a></li>
+<li><a href="#orgc19fd1c">1.5.13. Requested URL</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline58">1.6. Managing client</a>
+<li><a href="#orgfb03375">1.6. Managing client</a>
 <ul>
-<li><a href="#orgheadline46">1.6.1. Branding</a></li>
-<li><a href="#orgheadline47">1.6.2. Enabling HTTP compression</a></li>
-<li><a href="#orgheadline48">1.6.3. Follow redirects</a></li>
-<li><a href="#orgheadline49">1.6.4. Keep alive</a></li>
-<li><a href="#orgheadline50">1.6.5. Max connections per host</a></li>
-<li><a href="#orgheadline51">1.6.6. Max connections total count</a></li>
-<li><a href="#orgheadline52">1.6.7. Max redirects to follow</a></li>
-<li><a href="#orgheadline53">1.6.8. Timeouts</a></li>
-<li><a href="#orgheadline54">1.6.9. Proxy</a></li>
-<li><a href="#orgheadline55">1.6.10. Authentication</a></li>
-<li><a href="#orgheadline56">1.6.11. SSL Certificates</a></li>
-<li><a href="#orgheadline57">1.6.12. Closing <b>http.async.client</b></a></li>
+<li><a href="#orgc621732">1.6.1. Branding</a></li>
+<li><a href="#orga86ac44">1.6.2. Enabling HTTP compression</a></li>
+<li><a href="#org651f739">1.6.3. Follow redirects</a></li>
+<li><a href="#org1aa5d79">1.6.4. Keep alive</a></li>
+<li><a href="#orgebffa61">1.6.5. Max connections per host</a></li>
+<li><a href="#org0ee3817">1.6.6. Max connections total count</a></li>
+<li><a href="#org2999b9a">1.6.7. Max redirects to follow</a></li>
+<li><a href="#org9182263">1.6.8. Timeouts</a></li>
+<li><a href="#org3bfc8bd">1.6.9. Proxy</a></li>
+<li><a href="#org6b3d830">1.6.10. Authentication</a></li>
+<li><a href="#org96a4ce2">1.6.11. SSL Certificates</a></li>
+<li><a href="#org92cf056">1.6.12. Closing <b>http.async.client</b></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgheadline6">2. Low level</a>
+<li><a href="#org783ee73">2. Low level</a>
 <ul>
-<li><a href="#orgheadline60">2.1. Preparing request</a></li>
-<li><a href="#orgheadline65">2.2. Executing request</a>
+<li><a href="#org62f64dc">2.1. Preparing request</a></li>
+<li><a href="#orge99496c">2.2. Executing request</a>
 <ul>
-<li><a href="#orgheadline61">2.2.1. Status line</a></li>
-<li><a href="#orgheadline62">2.2.2. Headers</a></li>
-<li><a href="#orgheadline30">2.2.3. Body part</a></li>
-<li><a href="#orgheadline63">2.2.4. Body completed</a></li>
-<li><a href="#orgheadline64">2.2.5. Error</a></li>
+<li><a href="#orga27e673">2.2.1. Status line</a></li>
+<li><a href="#org5ba110c">2.2.2. Headers</a></li>
+<li><a href="#orgd03092b">2.2.3. Body part</a></li>
+<li><a href="#orgd670db0">2.2.4. Body completed</a></li>
+<li><a href="#org808e938">2.2.5. Error</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline66">2.3. Default callbacks</a></li>
+<li><a href="#org7fdac51">2.3. Default callbacks</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgheadline59" class="outline-2">
-<h2 id="orgheadline59"><span class="section-number-2">1</span> Detailed documentation</h2>
+<div id="outline-container-org31d78a1" class="outline-2">
+<h2 id="org31d78a1"><span class="section-number-2">1</span> Detailed documentation</h2>
 <div class="outline-text-2" id="text-1">
-</div><div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8"><span class="section-number-3">1.1</span> Work modes</h3>
+</div>
+<div id="outline-container-org4431e0d" class="outline-3">
+<h3 id="org4431e0d"><span class="section-number-3">1.1</span> Work modes</h3>
 <div class="outline-text-3" id="text-1-1">
-</div><div id="outline-container-orgheadline3" class="outline-4">
-<h4 id="orgheadline3"><span class="section-number-4">1.1.1</span> Asynchronous operations</h4>
+</div>
+<div id="outline-container-org1bb70e9" class="outline-4">
+<h4 id="org1bb70e9"><span class="section-number-4">1.1.1</span> Asynchronous operations</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 When you do:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(http/GET &lt;client&gt; url)
 </pre>
 </div>
@@ -348,7 +448,7 @@ Following HTTP methods have been covered so far:
 <li><a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-OPTIONS">OPTIONS</a></li>
 </ul>
 <p>
-For detailed description see <a href="#orgheadline1">HTTP methods</a>.
+For detailed description see <a href="#org0a7ffd7">HTTP methods</a>.
 </p>
 
 <p>
@@ -356,7 +456,6 @@ You can submit options to HTTP methods as keyworded arguments,
 like this:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(http/GET &lt;client&gt; url :query {:key "value"})
 </pre>
 </div>
@@ -371,7 +470,7 @@ Following options are supported:
 <dt><b>:proxy</b></dt><dd>proxy to be used</dd>
 </dl>
 <p>
-For detailed usage of options see <a href="#orgheadline2">Request options</a>.
+For detailed usage of options see <a href="#org1541b9d">Request options</a>.
 </p>
 
 <p>
@@ -393,7 +492,6 @@ promise of response body, this is ByteArrayOutputStream, but you
 have convenience functions to convert it for example to string:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(http/string (http/GET &lt;client&gt; &lt;url&gt;))
 </pre>
 </div></dd>
@@ -403,19 +501,18 @@ is done</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-orgheadline5" class="outline-4">
-<h4 id="orgheadline5"><span class="section-number-4">1.1.2</span> Streaming</h4>
+<div id="outline-container-org901b30e" class="outline-4">
+<h4 id="org901b30e"><span class="section-number-4">1.1.2</span> Streaming</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 For consuming HTTP streams use:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(http/stream-seq &lt;client&gt; :get url)
 </pre>
 </div>
 <p>
-Response here is same as in <a href="#orgheadline3">Asynchronous operations</a> but <b>:body</b>
+Response here is same as in <a href="#org1bb70e9">Asynchronous operations</a> but <b>:body</b>
 will be lazy sequence of ByteArrayOutputStreams.
 </p>
 
@@ -425,12 +522,12 @@ but remember that you are dealing now with <b>seq</b>.
 </p>
 
 <p>
-For more details please see <a href="#orgheadline4">Lazy sequence</a>.
+For more details please see <a href="#org7c8b4ce">Lazy sequence</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline7" class="outline-4">
-<h4 id="orgheadline7"><span class="section-number-4">1.1.3</span> Raw mode</h4>
+<div id="outline-container-org573e34c" class="outline-4">
+<h4 id="org573e34c"><span class="section-number-4">1.1.3</span> Raw mode</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <p>
 This allows you to provide callbacks that will get triggered on HTTP
@@ -451,21 +548,21 @@ second element is controlling execution and if you make it
 </p>
 
 <p>
-For detailed information on how to use this mode please see <a href="#orgheadline6">Low
+For detailed information on how to use this mode please see <a href="#org783ee73">Low
 level</a>.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline1" class="outline-3">
-<h3 id="orgheadline1"><span class="section-number-3">1.2</span> HTTP methods</h3>
+<div id="outline-container-org0a7ffd7" class="outline-3">
+<h3 id="org0a7ffd7"><span class="section-number-3">1.2</span> HTTP methods</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 HTTP methods and convenience functions to request them.
 </p>
 </div>
-<div id="outline-container-orgheadline9" class="outline-4">
-<h4 id="orgheadline9"><span class="section-number-4">1.2.1</span> GET</h4>
+<div id="outline-container-org499ad86" class="outline-4">
+<h4 id="org499ad86"><span class="section-number-4">1.2.1</span> GET</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
 Most basic invocation of <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-GET"><b>http.async.client/GET</b></a> is only with
@@ -479,7 +576,6 @@ accepted by <a href="http://cch1.github.io/http.async.client/doc/http.async.clie
 Simple invocation:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client "&lt;your url&gt;")
 	status (http/status resp)
@@ -494,7 +590,6 @@ Simple invocation:
 Invocation with query parameters:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client "&lt;your url&gt;" :query {:param-name "some-value"})
 	status (http/status resp)
@@ -509,7 +604,6 @@ Invocation with query parameters:
 Invocation with proxy:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client "&lt;your url&gt;"
 		       :query {:param-name "some-value"}
@@ -525,7 +619,6 @@ Invocation with proxy:
 Invocation with cookies:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client "http://localhost:8123/cookie"
 		       ;; Send cookie
@@ -546,12 +639,12 @@ for whole response to arrive.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline15" class="outline-4">
-<h4 id="orgheadline15"><span class="section-number-4">1.2.2</span> PUT/POST</h4>
+<div id="outline-container-org921d091" class="outline-4">
+<h4 id="org921d091"><span class="section-number-4">1.2.2</span> PUT/POST</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PUT"><b>http.async.client/PUT</b></a>/<a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-POST"><b>http.async.client/POST</b></a> work the same
-way as <a href="#orgheadline9"><b>GET</b></a> but they also accept <b>:body</b> argument.
+way as <a href="#org499ad86"><b>GET</b></a> but they also accept <b>:body</b> argument.
 </p>
 
 <p>
@@ -565,33 +658,37 @@ way as <a href="#orgheadline9"><b>GET</b></a> but they also accept <b>:body</b> 
 <li>java.io.File, this will be sent using zero byte copy.</li>
 </ul>
 </div>
-<ol class="org-ol"><li><a id="orgheadline10"></a>Submitting body as String<br  /><div class="outline-text-5" id="text-1-2-2-1">
+<ol class="org-ol">
+<li><a id="org9a7f859"></a>Submitting body as String<br />
+<div class="outline-text-5" id="text-1-2-2-1">
 <p>
 You can send String as body with PUT/POST:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/POST client "&lt;your url&gt;" :body "SampleBody")]
     ;; do something with resp
     ))
 </pre>
 </div>
-</div></li>
-<li><a id="orgheadline11"></a>Submitting form parameters<br  /><div class="outline-text-5" id="text-1-2-2-2">
+</div>
+</li>
+<li><a id="orgdfe478b"></a>Submitting form parameters<br />
+<div class="outline-text-5" id="text-1-2-2-2">
 <p>
 Submitting form parameters is done via body map:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/POST client "&lt;your url&gt;" :body {:u "user" :p "s3cr3t"})]
     ;; do something with resp
     ))
 </pre>
 </div>
-</div></li>
-<li><a id="orgheadline12"></a>Submitting multipart messages<br  /><div class="outline-text-5" id="text-1-2-2-3">
+</div>
+</li>
+<li><a id="orgab8f60a"></a>Submitting multipart messages<br />
+<div class="outline-text-5" id="text-1-2-2-3">
 <p>
 To send multipart messages in body use vector of maps.
 Each map describes one multipart part.
@@ -606,7 +703,7 @@ Following values for <b>:type</b> are recognized:
 </p>
 <dl class="org-dl">
 <dt>:string</dt><dd><p>
-       Will send named string value in multipart part.
+Will send named string value in multipart part.
 Map spec:
 </p>
 <dl class="org-dl">
@@ -615,11 +712,11 @@ Map spec:
 <dt>:charset</dt><dd><b>optional</b>, default <b>UTF-8</b>, charset used to encode
 value of field set in multipart part.</dd>
 </dl>
+
 <p>
 Example of string part in use:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/POST client "&lt;your url&gt;"
 			:body [{:type    :string
@@ -633,7 +730,7 @@ Example of string part in use:
 </pre>
 </div></dd>
 <dt>:file</dt><dd><p>
-       Will send named file in multipart part.
+Will send named file in multipart part.
 Map spec:
 </p>
 <dl class="org-dl">
@@ -645,11 +742,11 @@ multipart part.</dd>
 <dt>:charset</dt><dd><b>required</b>, charset of <i>Content-Type</i> of this
 multipart part.</dd>
 </dl>
+
 <p>
 Example of file part in use:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/POST client "&lt;your url&gt;"
 			:body [{:type      :file
@@ -662,7 +759,7 @@ Example of file part in use:
 </pre>
 </div></dd>
 <dt>:bytearray</dt><dd><p>
-       Will send named byte array part.
+Will send named byte array part.
 </p>
 
 <p>
@@ -678,11 +775,11 @@ multipart part.</dd>
 <dt>:charset</dt><dd><b>required</b>, charset of <i>Content-Type</i> of this
 multipart part.</dd>
 </dl>
+
 <p>
 Example of <b>:bytearray</b> in use:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/POST client "&lt;your url&gt;"
 			:body [{:type      :bytearray
@@ -702,7 +799,6 @@ To send request with multiple multiparts <b>:body</b> vector needs to
 contain multiple maps:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/POST client "&lt;your url&gt;"
 			:body [{:type    :string
@@ -727,13 +823,14 @@ contain multiple maps:
     ))
 </pre>
 </div>
-</div></li>
-<li><a id="orgheadline13"></a>Submitting body as InputStream<br  /><div class="outline-text-5" id="text-1-2-2-4">
+</div>
+</li>
+<li><a id="orgb256634"></a>Submitting body as InputStream<br />
+<div class="outline-text-5" id="text-1-2-2-4">
 <p>
 Another method to provide body is via InputStream:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(use '[clojure.java.io :only [input-stream]])
 (with-open [client (http/create-client)] ; Create client
   (let [resp (http/PUT client "&lt;your url&gt;" :body (input-stream (.getBytes "SampleContent" "UTF-8")))]
@@ -741,13 +838,14 @@ Another method to provide body is via InputStream:
     ))
 </pre>
 </div>
-</div></li>
-<li><a id="orgheadline14"></a>Submitting body as File, a.k.a. zero byte copy<br  /><div class="outline-text-5" id="text-1-2-2-5">
+</div>
+</li>
+<li><a id="org8c33f5d"></a>Submitting body as File, a.k.a. zero byte copy<br />
+<div class="outline-text-5" id="text-1-2-2-5">
 <p>
 To use zero byte copy future, provide a File as :body
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(import '(java.io File))
 (with-open [client (http/create-client)] ; Create client
   (let [resp (http/PUT "&lt;your url&gt;" :body (File. "&lt;path to file&gt;"))]
@@ -755,16 +853,17 @@ To use zero byte copy future, provide a File as :body
     ))
 </pre>
 </div>
-</div></li></ol>
 </div>
-<div id="outline-container-orgheadline16" class="outline-4">
-<h4 id="orgheadline16"><span class="section-number-4">1.2.3</span> DELETE</h4>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgcf53b1b" class="outline-4">
+<h4 id="orgcf53b1b"><span class="section-number-4">1.2.3</span> DELETE</h4>
 <div class="outline-text-4" id="text-1-2-3">
 <p>
 To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-DELETE"><b>http.async.client/DELETE</b></a> on a resource:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/DELETE "&lt;your url&gt;")]
     ;; do something with resp
@@ -773,14 +872,13 @@ To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.h
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline17" class="outline-4">
-<h4 id="orgheadline17"><span class="section-number-4">1.2.4</span> HEAD</h4>
+<div id="outline-container-orgf2016d9" class="outline-4">
+<h4 id="orgf2016d9"><span class="section-number-4">1.2.4</span> HEAD</h4>
 <div class="outline-text-4" id="text-1-2-4">
 <p>
 To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-HEAD"><b>http.async.client/HEAD</b></a> on a resource:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/HEAD "&lt;your url&gt;")]
     ;; do something with resp
@@ -789,14 +887,13 @@ To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.h
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline18" class="outline-4">
-<h4 id="orgheadline18"><span class="section-number-4">1.2.5</span> OPTIONS</h4>
+<div id="outline-container-org3aca6cb" class="outline-4">
+<h4 id="org3aca6cb"><span class="section-number-4">1.2.5</span> OPTIONS</h4>
 <div class="outline-text-4" id="text-1-2-5">
 <p>
 To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-OPTIONS"><b>http.async.client/OPTIONS</b></a> on a resource:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/OPTIONS "&lt;your url&gt;")]
     ;; do something with resp
@@ -806,32 +903,31 @@ To call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.h
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2"><span class="section-number-3">1.3</span> Request options</h3>
+<div id="outline-container-org1541b9d" class="outline-3">
+<h3 id="org1541b9d"><span class="section-number-3">1.3</span> Request options</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 Following options can be provided to requests and are defined by
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-prepare-request"><b>http.async.client.request/prepare-request</b></a>:
 </p>
 <dl class="org-dl">
-<dt><a href="#orgheadline19">:query</a></dt><dd>query parameters</dd>
-<dt><a href="#orgheadline20">:headers</a></dt><dd>custom headers to be sent out</dd>
-<dt><a href="#orgheadline21">:body</a></dt><dd>body to be sent, allowed only with PUT/POST</dd>
-<dt><a href="#orgheadline22">:cookies</a></dt><dd>cookies to be sent</dd>
-<dt><a href="#orgheadline23">:proxy</a></dt><dd>proxy to be used</dd>
-<dt><a href="#orgheadline24">:auth</a></dt><dd>authentication map</dd>
-<dt><a href="#orgheadline25">:timeout</a></dt><dd>timeout configuration</dd>
+<dt><a href="#orga05f983">:query</a></dt><dd>query parameters</dd>
+<dt><a href="#orga2c3727">:headers</a></dt><dd>custom headers to be sent out</dd>
+<dt><a href="#org52bb861">:body</a></dt><dd>body to be sent, allowed only with PUT/POST</dd>
+<dt><a href="#org2cb1be0">:cookies</a></dt><dd>cookies to be sent</dd>
+<dt><a href="#org03a15ce">:proxy</a></dt><dd>proxy to be used</dd>
+<dt><a href="#org09f3bf3">:auth</a></dt><dd>authentication map</dd>
+<dt><a href="#orgc02f799">:timeout</a></dt><dd>timeout configuration</dd>
 </dl>
 </div>
-<div id="outline-container-orgheadline19" class="outline-4">
-<h4 id="orgheadline19"><span class="section-number-4">1.3.1</span> :query</h4>
+<div id="outline-container-orga05f983" class="outline-4">
+<h4 id="orga05f983"><span class="section-number-4">1.3.1</span> :query</h4>
 <div class="outline-text-4" id="text-1-3-1">
 <p>
 Query parameters is a map of keywords and their values. You use
 it like so:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url :query {:key1 "value1" :key2 "value2"})]
     (http/await resp)
@@ -840,14 +936,13 @@ it like so:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline20" class="outline-4">
-<h4 id="orgheadline20"><span class="section-number-4">1.3.2</span> :headers</h4>
+<div id="outline-container-orga2c3727" class="outline-4">
+<h4 id="orga2c3727"><span class="section-number-4">1.3.2</span> :headers</h4>
 <div class="outline-text-4" id="text-1-3-2">
 <p>
-Custom headers can be submitted same way as <a href="#orgheadline19">:query</a>:
+Custom headers can be submitted same way as <a href="#orga05f983">:query</a>:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url :headers {:header-name1 "value1"
 					    :header-name2 "value2"})]
@@ -857,15 +952,14 @@ Custom headers can be submitted same way as <a href="#orgheadline19">:query</a>:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline21" class="outline-4">
-<h4 id="orgheadline21"><span class="section-number-4">1.3.3</span> :body</h4>
+<div id="outline-container-org52bb861" class="outline-4">
+<h4 id="org52bb861"><span class="section-number-4">1.3.3</span> :body</h4>
 <div class="outline-text-4" id="text-1-3-3">
 <p>
-Body can be provided with a message only with <a href="#orgheadline15">PUT/POST</a>, it
-doesn't make sense to have body with other <a href="#orgheadline1">HTTP methods</a>.
+Body can be provided with a message only with <a href="#org921d091">PUT/POST</a>, it
+doesn't make sense to have body with other <a href="#org0a7ffd7">HTTP methods</a>.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/PUT client url :body "sample body")]
     (http/await resp)
@@ -884,18 +978,17 @@ doesn't make sense to have body with other <a href="#orgheadline1">HTTP methods<
 </ul>
 
 <p>
-Please see <a href="#orgheadline15">PUT/POST</a> for more documentation.
+Please see <a href="#org921d091">PUT/POST</a> for more documentation.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline22" class="outline-4">
-<h4 id="orgheadline22"><span class="section-number-4">1.3.4</span> :cookies</h4>
+<div id="outline-container-org2cb1be0" class="outline-4">
+<h4 id="org2cb1be0"><span class="section-number-4">1.3.4</span> :cookies</h4>
 <div class="outline-text-4" id="text-1-3-4">
 <p>
 Cookies can be provided to request as follows:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client "http://localhost:8123/cookie"
 		       :cookies #{{:domain "http://localhost:8123/"
@@ -925,18 +1018,17 @@ needed.</dd>
 </dl>
 
 <p>
-Cookie reading is described in <a href="#orgheadline26">Reading cookies</a>.
+Cookie reading is described in <a href="#orgebcadd8">Reading cookies</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline23" class="outline-4">
-<h4 id="orgheadline23"><span class="section-number-4">1.3.5</span> :proxy</h4>
+<div id="outline-container-org03a15ce" class="outline-4">
+<h4 id="org03a15ce"><span class="section-number-4">1.3.5</span> :proxy</h4>
 <div class="outline-text-4" id="text-1-3-5">
 <p>
 Proxy can be configured per request basis as follows:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url :proxy {:host h :port p})]
     (http/await resp)
@@ -959,8 +1051,8 @@ Must be provided with :user.</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-orgheadline24" class="outline-4">
-<h4 id="orgheadline24"><span class="section-number-4">1.3.6</span> :auth</h4>
+<div id="outline-container-org09f3bf3" class="outline-4">
+<h4 id="org09f3bf3"><span class="section-number-4">1.3.6</span> :auth</h4>
 <div class="outline-text-4" id="text-1-3-6">
 <p>
 Authentication can be configured per request basis.
@@ -971,7 +1063,6 @@ For now BASIC and DIGEST methods are supported.
 Basic method is default, so you don't have to specify it:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url :auth {:user u :password p})]
     ;; Check if response is not 401 or so and process response
@@ -982,7 +1073,6 @@ Basic method is default, so you don't have to specify it:
 Though you can:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url :auth {:type :basic :user u :password p})]
     ;; Check if response is not 401 or so and process response
@@ -993,7 +1083,6 @@ Though you can:
 And for digest method you will need realm as well:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url
 		       :auth {:type :digest :user u :password p :realm r})]
@@ -1005,7 +1094,6 @@ And for digest method you will need realm as well:
 Controlling preemptive authentication behavior is also possible:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)]
   (let [resp (http/GET client url :auth {:user u :password p :preemptive true})]
     ;; process response
@@ -1014,8 +1102,8 @@ Controlling preemptive authentication behavior is also possible:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline25" class="outline-4">
-<h4 id="orgheadline25"><span class="section-number-4">1.3.7</span> :timeout</h4>
+<div id="outline-container-orgc02f799" class="outline-4">
+<h4 id="orgc02f799"><span class="section-number-4">1.3.7</span> :timeout</h4>
 <div class="outline-text-4" id="text-1-3-7">
 <p>
 Response timeout can be configured per request as well.
@@ -1024,7 +1112,6 @@ received.
 There is special value <b>-1</b> that indicates infinite timeout.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url :timeout -1)]
     (http/await resp)
@@ -1037,7 +1124,6 @@ Sample above will wait until response is fully received, as long
 as it takes (-1 timeout).
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url :timeout 100)]
     (http/await resp)
@@ -1057,8 +1143,8 @@ example contains check if response has failed.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline31" class="outline-3">
-<h3 id="orgheadline31"><span class="section-number-3">1.4</span> Streaming</h3>
+<div id="outline-container-org4770d02" class="outline-3">
+<h3 id="org4770d02"><span class="section-number-3">1.4</span> Streaming</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 HTTP Stream is response with chunked content encoding.
@@ -1072,12 +1158,12 @@ been received.
 Two ways of consuming a HTTP Stream are supported:
 </p>
 <ul class="org-ul">
-<li><a href="#orgheadline4">Lazy sequence</a></li>
-<li><a href="#orgheadline27">Call-back</a></li>
+<li><a href="#org7c8b4ce">Lazy sequence</a></li>
+<li><a href="#orgb53c74f">Call-back</a></li>
 </ul>
 </div>
-<div id="outline-container-orgheadline4" class="outline-4">
-<h4 id="orgheadline4"><span class="section-number-4">1.4.1</span> Lazy sequence</h4>
+<div id="outline-container-org7c8b4ce" class="outline-4">
+<h4 id="org7c8b4ce"><span class="section-number-4">1.4.1</span> Lazy sequence</h4>
 <div class="outline-text-4" id="text-1-4-1">
 <p>
 You can get HTTP Stream as lazy sequence of it's body.
@@ -1086,7 +1172,6 @@ so you can apply all mapping, filtering or any other standard
 function that you like to it.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/stream-seq client :get url)]
     (doseq [s (http/string resp)]
@@ -1101,7 +1186,7 @@ function that you like to it.
 makes sense only to use <b>:get</b>, <b>:put</b> and
 <b>:post</b></dd>
 <dt>url</dt><dd>URL of HTTP resource</dd>
-<dt>options</dt><dd>same as normal <a href="#orgheadline2">Request options</a>.</dd>
+<dt>options</dt><dd>same as normal <a href="#org1541b9d">Request options</a>.</dd>
 </dl>
 
 <p>
@@ -1112,7 +1197,6 @@ parts they will not be available anymore.
 Let's see code speak for itself.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(let [resp (http/stream-seq :get url)]
   (println "1: " (first (http/string resp)))
   (println "2: " (first (http/string resp))))
@@ -1127,6 +1211,7 @@ This code will print following:
 2: part2
 </pre>
 
+
 <p>
 Second consequence of been directly backed by queue is that you
 can have multiple consumers of same response and non of them will
@@ -1138,8 +1223,8 @@ And finally this implementation is not holding to it's head.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline27" class="outline-4">
-<h4 id="orgheadline27"><span class="section-number-4">1.4.2</span> Call-back</h4>
+<div id="outline-container-orgb53c74f" class="outline-4">
+<h4 id="orgb53c74f"><span class="section-number-4">1.4.2</span> Call-back</h4>
 <div class="outline-text-4" id="text-1-4-2">
 <p>
 Consuming HTTP Stream with call-back is quite straight forward with
@@ -1148,7 +1233,6 @@ what URL and provide a call back function to handle body parts been
 received.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [parts (ref #{})
 	resp (http/request-stream client :get url
@@ -1167,8 +1251,8 @@ Few notes on implementing body part callback:
 <li>state is a <b>map</b> with <b>:status</b> and <b>:headers</b> as promises, at
 stage when you get called for body part, both of them should be in
 place already, though it is advised to use convenience methods to
-read them, see <a href="#orgheadline28">Reading status line</a> and <a href="#orgheadline29">Reading headers</a>,</li>
-<li>call-back has to follow guidelines described in <a href="#orgheadline30">Body part</a>,</li>
+read them, see <a href="#org14153ec">Reading status line</a> and <a href="#org9118fbf">Reading headers</a>,</li>
+<li>call-back has to follow guidelines described in <a href="#orgd03092b">Body part</a>,</li>
 <li>some streams are not meant to be finished, in that case don't
 collect body parts, as for sure you will run out of available
 resources,</li>
@@ -1178,19 +1262,19 @@ to agent.</li>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline45" class="outline-3">
-<h3 id="orgheadline45"><span class="section-number-3">1.5</span> Response handling</h3>
+<div id="outline-container-org9cd2a54" class="outline-3">
+<h3 id="org9cd2a54"><span class="section-number-3">1.5</span> Response handling</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 <b>http.async.client</b> exposes some convenience functions for
 response handling.
 </p>
 </div>
-<div id="outline-container-orgheadline32" class="outline-4">
-<h4 id="orgheadline32"><span class="section-number-4">1.5.1</span> Awaiting response</h4>
+<div id="outline-container-org732794a" class="outline-4">
+<h4 id="org732794a"><span class="section-number-4">1.5.1</span> Awaiting response</h4>
 <div class="outline-text-4" id="text-1-5-1">
 <p>
-If you call any of <a href="#orgheadline3">Asynchronous operations</a>, <a href="#orgheadline5">Streaming</a> or <a href="#orgheadline7">Raw mode</a>
+If you call any of <a href="#org1bb70e9">Asynchronous operations</a>, <a href="#org901b30e">Streaming</a> or <a href="#org573e34c">Raw mode</a>
 you actually asynchronously execute HTTP request.
 Some times you might need to wait for response processing to be
 done before proceeding, in order to do so you call
@@ -1199,7 +1283,6 @@ It takes only one argument, that is response and returns once
 receiving has finished.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url)]
     (http/await resp)))
@@ -1211,7 +1294,6 @@ For convenience it returns same response so you can use it
 further, for example like that:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url)]
     (http/string (http/await resp))))
@@ -1219,15 +1301,14 @@ further, for example like that:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline28" class="outline-4">
-<h4 id="orgheadline28"><span class="section-number-4">1.5.2</span> Reading status line</h4>
+<div id="outline-container-org14153ec" class="outline-4">
+<h4 id="org14153ec"><span class="section-number-4">1.5.2</span> Reading status line</h4>
 <div class="outline-text-4" id="text-1-5-2">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-status"><b>http.async.client/status</b></a> returns status lazy map of response.
 It will wait until HTTP Status has been received.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp   (http/GET client url)
 	status (http/status resp)]
@@ -1241,14 +1322,13 @@ yet.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline33" class="outline-4">
-<h4 id="orgheadline33"><span class="section-number-4">1.5.3</span> Is redirect?</h4>
+<div id="outline-container-orgd17a296" class="outline-4">
+<h4 id="orgd17a296"><span class="section-number-4">1.5.3</span> Is redirect?</h4>
 <div class="outline-text-4" id="text-1-5-3">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-redirect?"><b>http.async.client/redirect?</b></a> checks if response is redirect.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/await (http/GET client url))]
     (when (http/redirect? resp)
@@ -1257,15 +1337,14 @@ yet.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline29" class="outline-4">
-<h4 id="orgheadline29"><span class="section-number-4">1.5.4</span> Reading headers</h4>
+<div id="outline-container-org9118fbf" class="outline-4">
+<h4 id="org9118fbf"><span class="section-number-4">1.5.4</span> Reading headers</h4>
 <div class="outline-text-4" id="text-1-5-4">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-headers"><b>http.async.client/headers</b></a> returns headers lazy map of response.
 It will wait until HTTP Headers are received.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp    (http/GET client url)
 	headers (http/headers resp)]
@@ -1278,15 +1357,14 @@ yet after this returns.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline34" class="outline-4">
-<h4 id="orgheadline34"><span class="section-number-4">1.5.5</span> Reading content-type</h4>
+<div id="outline-container-orgea1f63f" class="outline-4">
+<h4 id="orgea1f63f"><span class="section-number-4">1.5.5</span> Reading content-type</h4>
 <div class="outline-text-4" id="text-1-5-5">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-content-type"><b>http.async.client/content-type</b></a> returns value of <b>Content-Type</b>
 header.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp         (http/GET client url)
 	content-type (http/content-type resp)]
@@ -1295,15 +1373,14 @@ header.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline35" class="outline-4">
-<h4 id="orgheadline35"><span class="section-number-4">1.5.6</span> Reading location</h4>
+<div id="outline-container-org72e1b12" class="outline-4">
+<h4 id="org72e1b12"><span class="section-number-4">1.5.6</span> Reading location</h4>
 <div class="outline-text-4" id="text-1-5-6">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-location"><b>http.async.client/location</b></a> will return redirect target if
 response is redirect.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url)
 	loc  (http/location resp)]
@@ -1312,8 +1389,8 @@ response is redirect.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline26" class="outline-4">
-<h4 id="orgheadline26"><span class="section-number-4">1.5.7</span> Reading cookies</h4>
+<div id="outline-container-orgebcadd8" class="outline-4">
+<h4 id="orgebcadd8"><span class="section-number-4">1.5.7</span> Reading cookies</h4>
 <div class="outline-text-4" id="text-1-5-7">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-cookies"><b>http.async.client/cookies</b></a> returns seq of maps representing
@@ -1321,7 +1398,6 @@ cookies.
 It will wait until HTTP Headers are received.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp    (http/GET client url)
 	cookies (http/cookies resp)]
@@ -1334,30 +1410,29 @@ set.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline36" class="outline-4">
-<h4 id="orgheadline36"><span class="section-number-4">1.5.8</span> Reading body</h4>
+<div id="outline-container-org02dc190" class="outline-4">
+<h4 id="org02dc190"><span class="section-number-4">1.5.8</span> Reading body</h4>
 <div class="outline-text-4" id="text-1-5-8">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-body"><b>http.async.client/body</b></a> returns either ByteArrayOutputStream or
-seq of it, depending if you used <a href="#orgheadline3">Asynchronous operations</a> or
-<a href="#orgheadline5">Streaming</a> respectively.
+seq of it, depending if you used <a href="#org1bb70e9">Asynchronous operations</a> or
+<a href="#org901b30e">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
 soon as first chunk of HTTP response body is received.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline37" class="outline-4">
-<h4 id="orgheadline37"><span class="section-number-4">1.5.9</span> Reading body as string</h4>
+<div id="outline-container-org8097605" class="outline-4">
+<h4 id="org8097605"><span class="section-number-4">1.5.9</span> Reading body as string</h4>
 <div class="outline-text-4" id="text-1-5-9">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-string"><b>http.async.client/string</b></a> returns either string or seq of
-strings, again depending if you used <a href="#orgheadline3">Asynchronous operations</a> or
-<a href="#orgheadline5">Streaming</a> respectively.
+strings, again depending if you used <a href="#org1bb70e9">Asynchronous operations</a> or
+<a href="#org901b30e">Streaming</a> respectively.
 It will <b>not</b> wait for response to be finished, it will return as
 soon as first chunk of HTTP response body is received.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url)]
     (http/string (http/await resp))))
@@ -1369,7 +1444,6 @@ Sample above will return string of response body.
 streams as well.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp    (http/stream-seq client :get url)
 	strings (http/string resp)]
@@ -1383,15 +1457,14 @@ return once response receiving is finished.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline38" class="outline-4">
-<h4 id="orgheadline38"><span class="section-number-4">1.5.10</span> Reading error</h4>
+<div id="outline-container-org85a87ad" class="outline-4">
+<h4 id="org85a87ad"><span class="section-number-4">1.5.10</span> Reading error</h4>
 <div class="outline-text-4" id="text-1-5-10">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-error"><b>http.async.client/error</b></a> will return Throwable that was cause of
 request failure iff request failed, else <b>nil</b>.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url)]
     (http/await resp)
@@ -1401,15 +1474,14 @@ request failure iff request failed, else <b>nil</b>.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline39" class="outline-4">
-<h4 id="orgheadline39"><span class="section-number-4">1.5.11</span> Canceling request</h4>
+<div id="outline-container-org12043c4" class="outline-4">
+<h4 id="org12043c4"><span class="section-number-4">1.5.11</span> Canceling request</h4>
 <div class="outline-text-4" id="text-1-5-11">
 <p>
 At any given time of processing HTTP Response you can <b>cancel</b> it
 by calling <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-cancel"><b>http.async.client/cancel</b></a>.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url)]
     (http/cancel resp)))
@@ -1420,20 +1492,21 @@ Please see <b>canceling-request</b> test.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline43" class="outline-4">
-<h4 id="orgheadline43"><span class="section-number-4">1.5.12</span> Response predicates</h4>
+<div id="outline-container-org1236b90" class="outline-4">
+<h4 id="org1236b90"><span class="section-number-4">1.5.12</span> Response predicates</h4>
 <div class="outline-text-4" id="text-1-5-12">
 <p>
 You can also check status of request.
 </p>
 </div>
-<ol class="org-ol"><li><a id="orgheadline40"></a>done?<br  /><div class="outline-text-5" id="text-1-5-12-1">
+<ol class="org-ol">
+<li><a id="org465e67f"></a>done?<br />
+<div class="outline-text-5" id="text-1-5-12-1">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-done?"><b>http.async.client/done?</b></a> will tell you if response processing
 has finished:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; Create client
   (let [resp (http/GET client url)]
     (when-not (http/done? resp)
@@ -1445,22 +1518,28 @@ has finished:
 Sample above will check if response was finished, if not - will
 wait for it and return true as a result of call to done?.
 </p>
-</div></li>
-<li><a id="orgheadline41"></a>failed?<br  /><div class="outline-text-5" id="text-1-5-12-2">
+</div>
+</li>
+<li><a id="org59bfdf4"></a>failed?<br />
+<div class="outline-text-5" id="text-1-5-12-2">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-failed?"><b>http.async.client/failed?</b></a> will return true iff request has
-failed. If this return true you can <a href="#orgheadline38">read error</a>.
+failed. If this return true you can <a href="#org85a87ad">read error</a>.
 </p>
-</div></li>
-<li><a id="orgheadline42"></a>canceled?<br  /><div class="outline-text-5" id="text-1-5-12-3">
+</div>
+</li>
+<li><a id="org386b8b1"></a>canceled?<br />
+<div class="outline-text-5" id="text-1-5-12-3">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-canceled?"><b>http.async.client/canceled?</b></a> will return true iff request has
-been <a href="#orgheadline39">canceled</a>, else false is return.
+been <a href="#org12043c4">canceled</a>, else false is return.
 </p>
-</div></li></ol>
 </div>
-<div id="outline-container-orgheadline44" class="outline-4">
-<h4 id="orgheadline44"><span class="section-number-4">1.5.13</span> Requested URL</h4>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgc19fd1c" class="outline-4">
+<h4 id="orgc19fd1c"><span class="section-number-4">1.5.13</span> Requested URL</h4>
 <div class="outline-text-4" id="text-1-5-13">
 <p>
 If you need to get the URL of the response at hand, there is an
@@ -1480,11 +1559,12 @@ And a convenience functions:
 </div>
 </div>
 
-<div id="outline-container-orgheadline58" class="outline-3">
-<h3 id="orgheadline58"><span class="section-number-3">1.6</span> Managing client</h3>
+<div id="outline-container-orgfb03375" class="outline-3">
+<h3 id="orgfb03375"><span class="section-number-3">1.6</span> Managing client</h3>
 <div class="outline-text-3" id="text-1-6">
-</div><div id="outline-container-orgheadline46" class="outline-4">
-<h4 id="orgheadline46"><span class="section-number-4">1.6.1</span> Branding</h4>
+</div>
+<div id="outline-container-orgc621732" class="outline-4">
+<h4 id="orgc621732"><span class="section-number-4">1.6.1</span> Branding</h4>
 <div class="outline-text-4" id="text-1-6-1">
 <p>
 <b>http.async.client</b> can be configured with User-Agent. To do so
@@ -1494,7 +1574,6 @@ like with-open, though make sure that body of it will wait for
 whole response to finish.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :user-agent "Your User Agent/1.0")]
   (let [resp (http/GET client url)]
     ;; do stuff with resp
@@ -1503,15 +1582,14 @@ whole response to finish.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline47" class="outline-4">
-<h4 id="orgheadline47"><span class="section-number-4">1.6.2</span> Enabling HTTP compression</h4>
+<div id="outline-container-orga86ac44" class="outline-4">
+<h4 id="orga86ac44"><span class="section-number-4">1.6.2</span> Enabling HTTP compression</h4>
 <div class="outline-text-4" id="text-1-6-2">
 <p>
 <b>http.async.client</b> can be configured to allow, or not, HTTP
 compression.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :compression-enabled true)]
   (let [resp (http/GET client url)]
     ;; do stuff with resp
@@ -1520,14 +1598,13 @@ compression.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline48" class="outline-4">
-<h4 id="orgheadline48"><span class="section-number-4">1.6.3</span> Follow redirects</h4>
+<div id="outline-container-org651f739" class="outline-4">
+<h4 id="org651f739"><span class="section-number-4">1.6.3</span> Follow redirects</h4>
 <div class="outline-text-4" id="text-1-6-3">
 <p>
 Enabling HTTP redirects following.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client  (http/create-client :follow-redirects true)]
   (let [resp (http/GET client url)]
     ;; do stuff with resp
@@ -1536,15 +1613,14 @@ Enabling HTTP redirects following.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline49" class="outline-4">
-<h4 id="orgheadline49"><span class="section-number-4">1.6.4</span> Keep alive</h4>
+<div id="outline-container-org1aa5d79" class="outline-4">
+<h4 id="org1aa5d79"><span class="section-number-4">1.6.4</span> Keep alive</h4>
 <div class="outline-text-4" id="text-1-6-4">
 <p>
 Keep Alive is enabled by default. This implies using pool for
 connections.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :keep-alive true)]
   (let [resp (http/GET client url)]
     ;; do stuff with resp
@@ -1553,8 +1629,8 @@ connections.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline50" class="outline-4">
-<h4 id="orgheadline50"><span class="section-number-4">1.6.5</span> Max connections per host</h4>
+<div id="outline-container-orgebffa61" class="outline-4">
+<h4 id="orgebffa61"><span class="section-number-4">1.6.5</span> Max connections per host</h4>
 <div class="outline-text-4" id="text-1-6-5">
 <p>
 Maximum number of connections to be cached per host.
@@ -1562,7 +1638,6 @@ Above this number connections will still be created but will not
 be kept alive.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :max-conns-per-host 10)]
   (let [resp (http/GET client url)]
     ;; do stuff with resp
@@ -1571,8 +1646,8 @@ be kept alive.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline51" class="outline-4">
-<h4 id="orgheadline51"><span class="section-number-4">1.6.6</span> Max connections total count</h4>
+<div id="outline-container-org0ee3817" class="outline-4">
+<h4 id="org0ee3817"><span class="section-number-4">1.6.6</span> Max connections total count</h4>
 <div class="outline-text-4" id="text-1-6-6">
 <p>
 Maximum number of total connections opened, submitting new
@@ -1580,7 +1655,6 @@ request while all allowed connections are active, will result in
 rejection.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :max-conns-total 100)]
   (let [resp (http/GET client url)]
     ;; do stuff with resp
@@ -1589,14 +1663,13 @@ rejection.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline52" class="outline-4">
-<h4 id="orgheadline52"><span class="section-number-4">1.6.7</span> Max redirects to follow</h4>
+<div id="outline-container-org2999b9a" class="outline-4">
+<h4 id="org2999b9a"><span class="section-number-4">1.6.7</span> Max redirects to follow</h4>
 <div class="outline-text-4" id="text-1-6-7">
 <p>
 Maximum number of redirects to follow.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :max-redirects 3)]
   (let [resp (http/GET client url)]
     ;; do stuff with resp
@@ -1605,11 +1678,11 @@ Maximum number of redirects to follow.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline53" class="outline-4">
-<h4 id="orgheadline53"><span class="section-number-4">1.6.8</span> Timeouts</h4>
+<div id="outline-container-org9182263" class="outline-4">
+<h4 id="org9182263"><span class="section-number-4">1.6.8</span> Timeouts</h4>
 <div class="outline-text-4" id="text-1-6-8">
 <p>
-With <b>http.async.client</b> apart from per connection <a href="#orgheadline25">:timeout</a> you
+With <b>http.async.client</b> apart from per connection <a href="#orgc02f799">:timeout</a> you
 can globally configure <b>connection</b>, <b>request</b>, <b>idle</b>, and <b>read</b>
 timeouts. All timeout values are in milliseconds and magic value
 <b>-1</b> is interpreted as infinite wait.
@@ -1618,7 +1691,6 @@ pool, connections idle, for configured time, in pool will be
 closed.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :connection-timeout 10
 				       :request-timeout 1000
 				       :read-timeout 500
@@ -1635,14 +1707,13 @@ transfered for 500ms, or connection when it was idling in pool for more than 100
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline54" class="outline-4">
-<h4 id="orgheadline54"><span class="section-number-4">1.6.9</span> Proxy</h4>
+<div id="outline-container-org3bfc8bd" class="outline-4">
+<h4 id="org3bfc8bd"><span class="section-number-4">1.6.9</span> Proxy</h4>
 <div class="outline-text-4" id="text-1-6-9">
 <p>
 Client can be also configured with global HTTP Proxy settings.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :proxy {:host h :port p})]
   (let [resp (http/GET client url)]
     ;; do stuff with resp
@@ -1665,8 +1736,8 @@ Must be provided with :user.</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-orgheadline55" class="outline-4">
-<h4 id="orgheadline55"><span class="section-number-4">1.6.10</span> Authentication</h4>
+<div id="outline-container-org6b3d830" class="outline-4">
+<h4 id="org6b3d830"><span class="section-number-4">1.6.10</span> Authentication</h4>
 <div class="outline-text-4" id="text-1-6-10">
 <p>
 Default authentication realm to be used globally can be
@@ -1678,7 +1749,6 @@ For now BASIC and DIGEST methods are supported.
 Basic method is default, so you don't have to specify it:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :auth {:user u :password p})] 
   (let [resp (http/GET client url)]
     ;; Check if response is not 401 or so and process response
@@ -1689,7 +1759,6 @@ Basic method is default, so you don't have to specify it:
 Though you can:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :auth {:type :basic :user u :password p})]
   (let [resp (http/GET client url)]
     ;; Check if response is not 401 or so and process response
@@ -1700,7 +1769,6 @@ Though you can:
 And for digest method you will need realm as well:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :auth {:type :digest :user u :password p :realm r})]
   (let [resp (http/GET client url)]
     ;; Check if response is not 401 or so and process response
@@ -1711,7 +1779,6 @@ And for digest method you will need realm as well:
 Preemptive authentication can be enabled or disabled globally per client:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client :auth {:type :basic :user u :passowrd p :preemptive true})]
   (let [resp (http/GET client url)]
     ;; process response
@@ -1720,8 +1787,8 @@ Preemptive authentication can be enabled or disabled globally per client:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline56" class="outline-4">
-<h4 id="orgheadline56"><span class="section-number-4">1.6.11</span> SSL Certificates</h4>
+<div id="outline-container-org96a4ce2" class="outline-4">
+<h4 id="org96a4ce2"><span class="section-number-4">1.6.11</span> SSL Certificates</h4>
 <div class="outline-text-4" id="text-1-6-11">
 <p>
 Since v0.4.2 it is possible to use SSL certificates with client.
@@ -1731,7 +1798,6 @@ Since v0.4.2 it is possible to use SSL certificates with client.
 For client to use SSL you need to provide it with <b>ssl-context</b>.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(require [http.async.client.cert :as cert])
 (let [ctx (cert/ssl-context :keystore-file ks-file
 			    :keystore-password password
@@ -1751,8 +1817,8 @@ For more documentation please consult docstring of
 </div>
 </div>
 
-<div id="outline-container-orgheadline57" class="outline-4">
-<h4 id="orgheadline57"><span class="section-number-4">1.6.12</span> Closing <b>http.async.client</b></h4>
+<div id="outline-container-org92cf056" class="outline-4">
+<h4 id="org92cf056"><span class="section-number-4">1.6.12</span> Closing <b>http.async.client</b></h4>
 <div class="outline-text-4" id="text-1-6-12">
 <p>
 Whenever you've created <b>http.async.client</b> via
@@ -1760,7 +1826,6 @@ Whenever you've created <b>http.async.client</b> via
 To do so you call <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-close"><b>http.async.client/close</b></a>.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(let [client (http/create-client)]
   (try
     (let [resp (http/GET client url)]
@@ -1774,8 +1839,8 @@ To do so you call <a href="http://cch1.github.io/http.async.client/doc/http.asyn
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline6" class="outline-2">
-<h2 id="orgheadline6"><span class="section-number-2">2</span> Low level</h2>
+<div id="outline-container-org783ee73" class="outline-2">
+<h2 id="org783ee73"><span class="section-number-2">2</span> Low level</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 This is lowest level access to <b>http.async.client</b>.
@@ -1784,8 +1849,8 @@ It provides default set of callbacks and functions to create and
 execute requests.
 </p>
 </div>
-<div id="outline-container-orgheadline60" class="outline-3">
-<h3 id="orgheadline60"><span class="section-number-3">2.1</span> Preparing request</h3>
+<div id="outline-container-org62f64dc" class="outline-3">
+<h3 id="org62f64dc"><span class="section-number-3">2.1</span> Preparing request</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-prepare-request"><b>http.async.client.request/prepare-request</b></a> is responsible for
@@ -1796,11 +1861,10 @@ It takes following arguments:
 <li>HTTP Method like <b>:get</b> <b>:head</b></li>
 <li><b>url</b> that you want to call</li>
 <li><p>
-and <b>options</b>, a keyworded map described already in <a href="#orgheadline2">Request options</a>.
+and <b>options</b>, a keyworded map described already in <a href="#org1541b9d">Request options</a>.
 Sample:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)]
   (let [req (request/prepare-request 
 				     :get "http://google.com"
@@ -1812,22 +1876,22 @@ Sample:
 </ul>
 </div>
 </div>
-<div id="outline-container-orgheadline65" class="outline-3">
-<h3 id="orgheadline65"><span class="section-number-3">2.2</span> Executing request</h3>
+<div id="outline-container-orge99496c" class="outline-3">
+<h3 id="orge99496c"><span class="section-number-3">2.2</span> Executing request</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-execute-request"><b>http.async.client.request/execute-request</b></a> returns same map of promises
-as <a href="#orgheadline3">Asynchronous operations</a>.
-Its arguments are: request to be executed (result of <a href="#orgheadline60">Preparing
+as <a href="#org1bb70e9">Asynchronous operations</a>.
+Its arguments are: request to be executed (result of <a href="#org62f64dc">Preparing
 request</a>) and <b>options</b> as keyworded map consisting of call-backs.
 Following <b>options</b> keys are recognized:
 </p>
 <dl class="org-dl">
-<dt><b>:status</b></dt><dd><a href="#orgheadline61">Status line</a></dd>
-<dt><b>:headers</b></dt><dd><a href="#orgheadline62">Headers</a></dd>
-<dt><b>:part</b></dt><dd><a href="#orgheadline30">Body part</a></dd>
-<dt><b>:completed</b></dt><dd><a href="#orgheadline63">Body completed</a></dd>
-<dt><b>:error</b></dt><dd><a href="#orgheadline64">Error</a></dd>
+<dt><b>:status</b></dt><dd><a href="#orga27e673">Status line</a></dd>
+<dt><b>:headers</b></dt><dd><a href="#org5ba110c">Headers</a></dd>
+<dt><b>:part</b></dt><dd><a href="#orgd03092b">Body part</a></dd>
+<dt><b>:completed</b></dt><dd><a href="#orgd670db0">Body completed</a></dd>
+<dt><b>:error</b></dt><dd><a href="#org808e938">Error</a></dd>
 </dl>
 <p>
 All callbacks take response map as first argument and callback
@@ -1842,8 +1906,8 @@ will be aborted, anything else here will result in
 continuation.</dd>
 </dl>
 </div>
-<div id="outline-container-orgheadline61" class="outline-4">
-<h4 id="orgheadline61"><span class="section-number-4">2.2.1</span> Status line</h4>
+<div id="outline-container-orga27e673" class="outline-4">
+<h4 id="orga27e673"><span class="section-number-4">2.2.1</span> Status line</h4>
 <div class="outline-text-4" id="text-2-2-1">
 <p>
 Status line callback gets called after status line has been
@@ -1865,7 +1929,6 @@ received with arguments:
 Sample code to illustrate how to use status callback:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; create client
   (let [request (request/prepare-request :get "http://example.com") ; create request
 	status (promise)                ; status promise that will be delivered by callback
@@ -1881,8 +1944,8 @@ Sample code to illustrate how to use status callback:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline62" class="outline-4">
-<h4 id="orgheadline62"><span class="section-number-4">2.2.2</span> Headers</h4>
+<div id="outline-container-org5ba110c" class="outline-4">
+<h4 id="org5ba110c"><span class="section-number-4">2.2.2</span> Headers</h4>
 <div class="outline-text-4" id="text-2-2-2">
 <p>
 Headers callback gets called after headers have been received
@@ -1899,7 +1962,6 @@ with arguments:
 Sample code to illustrate how to use headers callback:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; create client
   (let [request (request/prepare-request :get "http://example.com") ; create request
 	headers (promise)               ; headers promise that will be delivered by callback
@@ -1915,8 +1977,8 @@ Sample code to illustrate how to use headers callback:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline30" class="outline-4">
-<h4 id="orgheadline30"><span class="section-number-4">2.2.3</span> Body part</h4>
+<div id="outline-container-orgd03092b" class="outline-4">
+<h4 id="orgd03092b"><span class="section-number-4">2.2.3</span> Body part</h4>
 <div class="outline-text-4" id="text-2-2-3">
 <p>
 Body part callback gets called after each part of body has been
@@ -1932,7 +1994,6 @@ Following code sample will show how to count number of body parts
 received:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; create client
   (let [cnt (atom 0)                    ; body parts counter
 	request (request/prepare-request :get "http://localhost:8123/stream") ; create request
@@ -1952,7 +2013,6 @@ received:
 Next sample will collect body parts:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; create client
   (let [parts (atom #{})                ; body parts collector
 	request (request/prepare-request :get "http://localhost:8123/stream") ; create request
@@ -1970,8 +2030,8 @@ Next sample will collect body parts:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline63" class="outline-4">
-<h4 id="orgheadline63"><span class="section-number-4">2.2.4</span> Body completed</h4>
+<div id="outline-container-orgd670db0" class="outline-4">
+<h4 id="orgd670db0"><span class="section-number-4">2.2.4</span> Body completed</h4>
 <div class="outline-text-4" id="text-2-2-4">
 <p>
 This callback gets called when receiving of response body has
@@ -1982,7 +2042,6 @@ finished with only one argument, i.e. response map.
 Following snippet shows how to measure execution time:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; create client
   (let [request (request/prepare-request :get "http://localhost:8123/") ; create request
 	finished (promise)               ; execution time will be stored here
@@ -2003,7 +2062,6 @@ only on successful response. Next snippet will show that
 <b>:completed</b> callback is not called when request errors:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; create client
   (let [request (request/prepare-request :get "http://not-existing-host/") ; create request
 	finished (promise)               ; would get delivered if :completed callback would get executed
@@ -2018,8 +2076,8 @@ only on successful response. Next snippet will show that
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline64" class="outline-4">
-<h4 id="orgheadline64"><span class="section-number-4">2.2.5</span> Error</h4>
+<div id="outline-container-org808e938" class="outline-4">
+<h4 id="org808e938"><span class="section-number-4">2.2.5</span> Error</h4>
 <div class="outline-text-4" id="text-2-2-5">
 <p>
 Error callback gets called when error while processing has been
@@ -2034,7 +2092,6 @@ encountered with arguments
 Next code snippet shows error callback in use:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (http/create-client)] ; create client
   (let [request (request/prepare-request :get "http://not-existing-host/") ; create request
 	errored (promise)                ; will store exception
@@ -2050,8 +2107,8 @@ Next code snippet shows error callback in use:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline66" class="outline-3">
-<h3 id="orgheadline66"><span class="section-number-3">2.3</span> Default callbacks</h3>
+<div id="outline-container-org7fdac51" class="outline-3">
+<h3 id="org7fdac51"><span class="section-number-3">2.3</span> Default callbacks</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 <a href="http://cch1.github.io/http.async.client/doc/http.async.client.request.html#var-*default-callbacks*"><b>http.async.client.request/*default-callbacks*</b></a> is a map of
@@ -2069,7 +2126,7 @@ how to do it.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Hubert Iwaniuk Chris Hapgood</p>
-<p class="date">Created: 2016-08-25 Thu 15:41</p>
+<p class="date">Created: 2019-02-10 Sun 20:48</p>
 <p class="creator">Emacs 24.4.1 (Org mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

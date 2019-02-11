@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-08-25 Thu 15:50 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<!-- 2019-02-10 Sun 20:48 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Asynchronous HTTP Client - Clojure - Changelog</title>
-<meta  name="generator" content="Org-mode" />
-<meta  name="author" content="Chris Hapgood" />
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Chris Hapgood" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -53,13 +53,98 @@
     border: 1px solid black;
   }
   pre.src:hover:before { display: inline;}
-  pre.src-sh:before    { content: 'sh'; }
-  pre.src-bash:before  { content: 'sh'; }
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
   pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-R:before     { content: 'R'; }
-  pre.src-perl:before  { content: 'Perl'; }
-  pre.src-java:before  { content: 'Java'; }
-  pre.src-sql:before   { content: 'SQL'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
 
   table { border-collapse:collapse; }
   caption.t-above { caption-side: top; }
@@ -76,6 +161,19 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -92,6 +190,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" />
@@ -104,7 +203,7 @@
  * @licstart  The following is the entire license notice for the
  *  JavaScript code in org-info.js.
  *
- * Copyright (C) 2012-2013 Free Software Foundation, Inc.
+ * Copyright (C) 2012-2019 Free Software Foundation, Inc.
  *
  *
  * The JavaScript code in this tag is free software: you can
@@ -133,7 +232,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -172,7 +271,7 @@ org_html_manager.setup();  // activate after the parameters are set
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -225,354 +324,400 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgheadline6">1. Release 1.2.0</a>
+<li><a href="#orga820956">1. Release 1.3.1</a>
 <ul>
-<li><a href="#orgheadline2">1.1. Update dependencies</a>
-<ul>
-<li><a href="#orgheadline1">1.1.1. Update async-http-client to 1.9.39 (fixes issue #74)</a></li>
+<li><a href="#org278c82b">1.1. Update dependencies</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline3">1.2. Fix bug when destructuring map (blocker for clojure.spec)</a></li>
-<li><a href="#orgheadline4">1.3. Add ability to configure read timeout</a></li>
-<li><a href="#orgheadline5">1.4. Allow request options to be passed for websockets</a></li>
+<li><a href="#org056f486">2. Release 1.3.0</a>
+<ul>
+<li><a href="#orgc039401">2.1. Update documentation</a></li>
+<li><a href="#org0304cca">2.2. Update tests</a></li>
+<li><a href="#orga901497">2.3. Update dependencies</a></li>
+<li><a href="#org7c2bb21">2.4. Switch to lein-v for version management</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline9">2. Release 1.1.0</a>
+<li><a href="#org622fbf9">3. Release 1.2.0</a>
 <ul>
-<li><a href="#orgheadline7">2.1. Fix issue #69</a></li>
-<li><a href="#orgheadline8">2.2. Add support for asynchronous close</a></li>
+<li><a href="#org3835e5d">3.1. Update dependencies</a>
+<ul>
+<li><a href="#orgfc57db8">3.1.1. Update async-http-client to 1.9.39 (fixes issue #74)</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline11">3. Release 1.0.1</a>
-<ul>
-<li><a href="#orgheadline10">3.1. Fix websocket support</a></li>
+<li><a href="#org2c3867b">3.2. Fix bug when destructuring map (blocker for clojure.spec)</a></li>
+<li><a href="#org3ff5143">3.3. Add ability to configure read timeout</a></li>
+<li><a href="#orgd2d4a92">3.4. Allow request options to be passed for websockets</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline21">4. Release 1.0.0</a>
+<li><a href="#org540ead2">4. Release 1.1.0</a>
 <ul>
-<li><a href="#orgheadline17">4.1. Update to the latest version of AsyncHttpClient (1.9.31)</a>
-<ul>
-<li><a href="#orgheadline12">4.1.1. Remove `remove-params-on-redirect` option</a></li>
-<li><a href="#orgheadline13">4.1.2. Remove `async-connect` option</a></li>
-<li><a href="#orgheadline14">4.1.3. Overhaul character set handling for multipart functions</a></li>
-<li><a href="#orgheadline15">4.1.4. Use more precise exceptions</a></li>
-<li><a href="#orgheadline16">4.1.5. Move WebSocket implementation to its own namespace</a></li>
+<li><a href="#org815193d">4.1. Fix issue #69</a></li>
+<li><a href="#org7c087dd">4.2. Add support for asynchronous close</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline18">4.2. Use more idiomatic Clojure</a></li>
-<li><a href="#orgheadline19">4.3. Extract websocket code to separate namespace</a></li>
-<li><a href="#orgheadline20">4.4. Issue with the AsyncHttpClient Java library.</a></li>
+<li><a href="#org34c31e7">5. Release 1.0.1</a>
+<ul>
+<li><a href="#org74f689a">5.1. Fix websocket support</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline25">5. Release 0.6.1</a>
+<li><a href="#orgda6f448">6. Release 1.0.0</a>
 <ul>
-<li><a href="#orgheadline22">5.1. Allow websocket to take request options&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enhancement">enhancement</span></span></a></li>
-<li><a href="#orgheadline23">5.2. Add logging to client create/close calls</a></li>
-<li><a href="#orgheadline24">5.3. Update dependencies, including Clojure</a></li>
+<li><a href="#orgc569741">6.1. Update to the latest version of AsyncHttpClient (1.9.31)</a>
+<ul>
+<li><a href="#orgccc2706">6.1.1. Remove `remove-params-on-redirect` option</a></li>
+<li><a href="#org79ce265">6.1.2. Remove `async-connect` option</a></li>
+<li><a href="#org05a3abf">6.1.3. Overhaul character set handling for multipart functions</a></li>
+<li><a href="#org26200f5">6.1.4. Use more precise exceptions</a></li>
+<li><a href="#org4b68f35">6.1.5. Move WebSocket implementation to its own namespace</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline38">6. Release 0.6.0</a>
+<li><a href="#org579db4c">6.2. Use more idiomatic Clojure</a></li>
+<li><a href="#orge9029ed">6.3. Extract websocket code to separate namespace</a></li>
+<li><a href="#orgdd56316">6.4. Issue with the AsyncHttpClient Java library.</a></li>
+</ul>
+</li>
+<li><a href="#orgb257117">7. Release 0.6.1</a>
 <ul>
-<li><a href="#orgheadline26">6.1. Modernize Clojure syntax with `:require` and `:refer` instead of `:use`</a></li>
-<li><a href="#orgheadline37">6.2. Update com.ning/async-http-client dependency to 1.8.16</a>
+<li><a href="#org067d0fe">7.1. Allow websocket to take request options&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enhancement">enhancement</span></span></a></li>
+<li><a href="#org774bf13">7.2. Add logging to client create/close calls</a></li>
+<li><a href="#orgc155207">7.3. Update dependencies, including Clojure</a></li>
+</ul>
+</li>
+<li><a href="#orga88cfe1">8. Release 0.6.0</a>
 <ul>
-<li><a href="#orgheadline27">6.2.1. Handle new options and refactoring of Cookie class with maximum BC</a></li>
-<li><a href="#orgheadline28">6.2.2. Return java.net.UnknownHostException instead of java.net.ConnectException (with UnresolvedAddressexception cause) on bad host</a></li>
-<li><a href="#orgheadline29">6.2.3. Add wrap? option to cookies</a></li>
-<li><a href="#orgheadline30">6.2.4. Return timeout and connection limit exceptions in `error` function instead of throwing an exception on request execution thread</a></li>
-<li><a href="#orgheadline31">6.2.5. Return java.nio.charset.Charsets on multipart parts</a></li>
-<li><a href="#orgheadline32">6.2.6. Default charset on StringPart (typically) is US-ASCII</a></li>
-<li><a href="#orgheadline33">6.2.7. Remove `raw-url` function -it is no longer supported by the underlying Java AsyncHttpclient</a></li>
-<li><a href="#orgheadline34">6.2.8. Add `uri` function to partially back fill for raw-url</a></li>
-<li><a href="#orgheadline35">6.2.9. Remove async connect functionality -connections are now always async</a></li>
-<li><a href="#orgheadline36">6.2.10. Handle empty HttpResponseBodyPart in onBodyPartReceived</a></li>
+<li><a href="#org878a28d">8.1. Modernize Clojure syntax with `:require` and `:refer` instead of `:use`</a></li>
+<li><a href="#org4588eef">8.2. Update com.ning/async-http-client dependency to 1.8.16</a>
+<ul>
+<li><a href="#orgef50d73">8.2.1. Handle new options and refactoring of Cookie class with maximum BC</a></li>
+<li><a href="#orgbbc7ebe">8.2.2. Return java.net.UnknownHostException instead of java.net.ConnectException (with UnresolvedAddressexception cause) on bad host</a></li>
+<li><a href="#org830747a">8.2.3. Add wrap? option to cookies</a></li>
+<li><a href="#orga05f048">8.2.4. Return timeout and connection limit exceptions in `error` function instead of throwing an exception on request execution thread</a></li>
+<li><a href="#org822fdd8">8.2.5. Return java.nio.charset.Charsets on multipart parts</a></li>
+<li><a href="#org733a1c7">8.2.6. Default charset on StringPart (typically) is US-ASCII</a></li>
+<li><a href="#org433a969">8.2.7. Remove `raw-url` function -it is no longer supported by the underlying Java AsyncHttpclient</a></li>
+<li><a href="#org6c4a5bc">8.2.8. Add `uri` function to partially back fill for raw-url</a></li>
+<li><a href="#orgcb0a5b4">8.2.9. Remove async connect functionality -connections are now always async</a></li>
+<li><a href="#org6193497">8.2.10. Handle empty HttpResponseBodyPart in onBodyPartReceived</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgheadline48">7. Release 0.5.3</a>
+<li><a href="#org43c5616">9. Release 0.5.3</a>
 <ul>
-<li><a href="#orgheadline39">7.1. Update Clojure dependency to 1.6</a></li>
-<li><a href="#orgheadline40">7.2. Deprecate raw-url function and response key</a></li>
-<li><a href="#orgheadline45">7.3. Restructure tests</a>
+<li><a href="#orge131809">9.1. Update Clojure dependency to 1.6</a></li>
+<li><a href="#org56323aa">9.2. Deprecate raw-url function and response key</a></li>
+<li><a href="#org8d6ec0f">9.3. Restructure tests</a>
 <ul>
-<li><a href="#orgheadline41">7.3.1. Update jetty to 9.3.0.RC0</a></li>
-<li><a href="#orgheadline42">7.3.2. Update log dependencies</a></li>
-<li><a href="#orgheadline43">7.3.3. Provide fresh client to each test to resolve issue with Clojure 1.6</a></li>
-<li><a href="#orgheadline44">7.3.4. Fix brittle tests</a></li>
+<li><a href="#org037d1ab">9.3.1. Update jetty to 9.3.0.RC0</a></li>
+<li><a href="#orgafac942">9.3.2. Update log dependencies</a></li>
+<li><a href="#org80dc0fa">9.3.3. Provide fresh client to each test to resolve issue with Clojure 1.6</a></li>
+<li><a href="#orgab2ebb5">9.3.4. Fix brittle tests</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline46">7.4. Remove RequestBuilderWrapper</a></li>
-<li><a href="#orgheadline47">7.5. Update codox and lein-difftest plugins</a></li>
+<li><a href="#orga8a28f6">9.4. Remove RequestBuilderWrapper</a></li>
+<li><a href="#org9fe02fb">9.5. Update codox and lein-difftest plugins</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline49">8. Release 0.5.2</a></li>
-<li><a href="#orgheadline52">9. Release 0.5.1</a>
+<li><a href="#orgf73a6b4">10. Release 0.5.2</a></li>
+<li><a href="#orge15f697">11. Release 0.5.1</a>
 <ul>
-<li><a href="#orgheadline50">9.1. remove-params-on-redirect</a></li>
-<li><a href="#orgheadline51">9.2. Upgrade AHC to 1.7.10</a></li>
+<li><a href="#orgfa97bd3">11.1. remove-params-on-redirect</a></li>
+<li><a href="#org4619034">11.2. Upgrade AHC to 1.7.10</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline60">10. Release 0.5.0</a>
+<li><a href="#org9b9b2c5">12. Release 0.5.0</a>
 <ul>
-<li><a href="#orgheadline53">10.1. http.async.client/content-type</a></li>
-<li><a href="#orgheadline54">10.2. http.async.client/redirect?</a></li>
-<li><a href="#orgheadline55">10.3. http.async.client/location</a></li>
-<li><a href="#orgheadline56">10.4. Moved to Leiningen 2</a></li>
-<li><a href="#orgheadline57">10.5. PATCH</a></li>
-<li><a href="#orgheadline58">10.6. Initial WebSocket support</a></li>
-<li><a href="#orgheadline59">10.7. Upgrade AHC to v1.7.5</a></li>
+<li><a href="#org17e2104">12.1. http.async.client/content-type</a></li>
+<li><a href="#org36d25b1">12.2. http.async.client/redirect?</a></li>
+<li><a href="#orgb3ad3ca">12.3. http.async.client/location</a></li>
+<li><a href="#org67f222f">12.4. Moved to Leiningen 2</a></li>
+<li><a href="#org087c101">12.5. PATCH</a></li>
+<li><a href="#org9de60e4">12.6. Initial WebSocket support</a></li>
+<li><a href="#orgc2de633">12.7. Upgrade AHC to v1.7.5</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline64">11. Release 0.4.5</a>
+<li><a href="#org5af9663">13. Release 0.4.5</a>
 <ul>
-<li><a href="#orgheadline61">11.1. Multipart support</a></li>
-<li><a href="#orgheadline62">11.2. Add convenience url and raw-url</a></li>
-<li><a href="#orgheadline63">11.3. There's a function for that!</a></li>
+<li><a href="#orga603dda">13.1. Multipart support</a></li>
+<li><a href="#orgdbcc98c">13.2. Add convenience url and raw-url</a></li>
+<li><a href="#org09580d5">13.3. There's a function for that!</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline69">12. Release 0.4.4</a>
+<li><a href="#orgaf42eec">14. Release 0.4.4</a>
 <ul>
-<li><a href="#orgheadline65">12.1. Simplified callbacks API</a></li>
-<li><a href="#orgheadline66">12.2. Better documented callbacks</a></li>
-<li><a href="#orgheadline67">12.3. Upgrade AHC to 1.7.4</a></li>
-<li><a href="#orgheadline68">12.4. Upgrade Clojure to 1.4</a></li>
+<li><a href="#orge00f31d">14.1. Simplified callbacks API</a></li>
+<li><a href="#orgf3de8f8">14.2. Better documented callbacks</a></li>
+<li><a href="#org19c504c">14.3. Upgrade AHC to 1.7.4</a></li>
+<li><a href="#org38ba738">14.4. Upgrade Clojure to 1.4</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline72">13. Release 0.4.3</a>
+<li><a href="#orgbb40023">15. Release 0.4.3</a>
 <ul>
-<li><a href="#orgheadline70">13.1. Issue #30 by Cesar Canassa</a></li>
-<li><a href="#orgheadline71">13.2. Upgrade AHC to 1.7.1</a></li>
+<li><a href="#org273763e">15.1. Issue #30 by Cesar Canassa</a></li>
+<li><a href="#orgf7dc84d">15.2. Upgrade AHC to 1.7.1</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline74">14. Release 0.4.2</a>
+<li><a href="#orge7e0b3e">16. Release 0.4.2</a>
 <ul>
-<li><a href="#orgheadline73">14.1. Issue #29 by A. Diamond</a></li>
+<li><a href="#org4860f6c">16.1. Issue #29 by A. Diamond</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline79">15. Release 0.4.1</a>
+<li><a href="#org9716fdd">17. Release 0.4.1</a>
 <ul>
-<li><a href="#orgheadline75">15.1. Upgrade AHC to 1.7.0</a></li>
-<li><a href="#orgheadline76">15.2. Issues #26, #27, #28</a></li>
-<li><a href="#orgheadline77">15.3. Improved logging</a></li>
-<li><a href="#orgheadline78">15.4. Tested against Clojure 1.4.0-beta1</a></li>
+<li><a href="#org5b72a5e">17.1. Upgrade AHC to 1.7.0</a></li>
+<li><a href="#org40b2ad3">17.2. Issues #26, #27, #28</a></li>
+<li><a href="#orge6af00e">17.3. Improved logging</a></li>
+<li><a href="#orgae1a30f">17.4. Tested against Clojure 1.4.0-beta1</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline84">16. Release 0.4.0</a>
+<li><a href="#org82a62f9">18. Release 0.4.0</a>
 <ul>
-<li><a href="#orgheadline80">16.1. Clojure 1.3 compatible</a></li>
-<li><a href="#orgheadline81">16.2. Support for multiple values for same key (QString)</a></li>
-<li><a href="#orgheadline82">16.3. Clojure contrib independent</a></li>
-<li><a href="#orgheadline83">16.4. Upgrade async-http-client to v1.6.5</a></li>
+<li><a href="#org83372d2">18.1. Clojure 1.3 compatible</a></li>
+<li><a href="#org60ce1e4">18.2. Support for multiple values for same key (QString)</a></li>
+<li><a href="#org1b10dcf">18.3. Clojure contrib independent</a></li>
+<li><a href="#orgc3139d9">18.4. Upgrade async-http-client to v1.6.5</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline86">17. Release 0.3.1</a>
+<li><a href="#org67e902d">19. Release 0.3.1</a>
 <ul>
-<li><a href="#orgheadline85">17.1. Upgrade async-http-client to v1.6.4</a></li>
+<li><a href="#org56d1ba0">19.1. Upgrade async-http-client to v1.6.4</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline92">18. Release 0.3.0</a>
+<li><a href="#orgde2bae5">20. Release 0.3.0</a>
 <ul>
-<li><a href="#orgheadline87">18.1. Upgrade async-http-client to v1.6.3</a></li>
-<li><a href="#orgheadline88">18.2. Control over preemptive authentication</a></li>
-<li><a href="#orgheadline89">18.3. Explicit client usage</a></li>
-<li><a href="#orgheadline90">18.4. Removed with-client macro</a></li>
-<li><a href="#orgheadline91">18.5. Clojure 1.2.1</a></li>
+<li><a href="#orgfa2b809">20.1. Upgrade async-http-client to v1.6.3</a></li>
+<li><a href="#org615c63b">20.2. Control over preemptive authentication</a></li>
+<li><a href="#org3e3d04f">20.3. Explicit client usage</a></li>
+<li><a href="#orgfc0f7e3">20.4. Removed with-client macro</a></li>
+<li><a href="#org35a62e0">20.5. Clojure 1.2.1</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline104">19. Release 0.2.2</a>
+<li><a href="#org0dfc100">21. Release 0.2.2</a>
 <ul>
-<li><a href="#orgheadline93">19.1. get-encoding helper works w/o Content-Type header</a></li>
-<li><a href="#orgheadline94">19.2. Upgrade async-http-client to v.1.5.0</a></li>
-<li><a href="#orgheadline98">19.3. Exposed more configuration options</a>
+<li><a href="#orgac7b355">21.1. get-encoding helper works w/o Content-Type header</a></li>
+<li><a href="#org7654e41">21.2. Upgrade async-http-client to v.1.5.0</a></li>
+<li><a href="#org88d76da">21.3. Exposed more configuration options</a>
 <ul>
-<li><a href="#orgheadline95">19.3.1. Timeouts</a></li>
-<li><a href="#orgheadline96">19.3.2. Proxy</a></li>
-<li><a href="#orgheadline97">19.3.3. Authentication</a></li>
+<li><a href="#org65a0a75">21.3.1. Timeouts</a></li>
+<li><a href="#org6201945">21.3.2. Proxy</a></li>
+<li><a href="#orgeac1b35">21.3.3. Authentication</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline99">19.4. Zero byte copy mode</a></li>
-<li><a href="#orgheadline100">19.5. Allow providing your own poll</a></li>
-<li><a href="#orgheadline101">19.6. Allow Asynchronous Connect</a></li>
-<li><a href="#orgheadline102">19.7. Fix seq streaming API</a></li>
-<li><a href="#orgheadline103">19.8. Lots of performance improvements</a></li>
+<li><a href="#org0c5f2df">21.4. Zero byte copy mode</a></li>
+<li><a href="#orgada3cff">21.5. Allow providing your own poll</a></li>
+<li><a href="#orgb1b28ae">21.6. Allow Asynchronous Connect</a></li>
+<li><a href="#org518d8fd">21.7. Fix seq streaming API</a></li>
+<li><a href="#org9af347e">21.8. Lots of performance improvements</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline110">20. Release 0.2.1</a>
+<li><a href="#orgd668340">22. Release 0.2.1</a>
 <ul>
-<li><a href="#orgheadline105">20.1. Terminate body seq if errored&#xa0;&#xa0;&#xa0;<span class="tag"><span class="bug">bug</span></span></a></li>
-<li><a href="#orgheadline106">20.2. Canceling request</a></li>
-<li><a href="#orgheadline107">20.3. Request timeout</a></li>
-<li><a href="#orgheadline108">20.4. Close client</a></li>
-<li><a href="#orgheadline109">20.5. Upgrade to v1.3.2 of async-http-client</a></li>
+<li><a href="#org7476938">22.1. Terminate body seq if errored&#xa0;&#xa0;&#xa0;<span class="tag"><span class="bug">bug</span></span></a></li>
+<li><a href="#org81fbe3a">22.2. Canceling request</a></li>
+<li><a href="#org1549cb4">22.3. Request timeout</a></li>
+<li><a href="#org88cdff1">22.4. Close client</a></li>
+<li><a href="#org950edd6">22.5. Upgrade to v1.3.2 of async-http-client</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline117">21. Release 0.2.0</a>
+<li><a href="#org83f918a">23. Release 0.2.0</a>
 <ul>
-<li><a href="#orgheadline111">21.1. Stream as seq</a></li>
-<li><a href="#orgheadline112">21.2. Cookies</a></li>
-<li><a href="#orgheadline113">21.3. Authentication support</a></li>
-<li><a href="#orgheadline114">21.4. Proxy per request</a></li>
-<li><a href="#orgheadline115">21.5. Branding User-Agent</a></li>
-<li><a href="#orgheadline116">21.6. Keyworded maps in API</a></li>
+<li><a href="#org6fa61e5">23.1. Stream as seq</a></li>
+<li><a href="#org7f1b091">23.2. Cookies</a></li>
+<li><a href="#org98fc81c">23.3. Authentication support</a></li>
+<li><a href="#org7f57b39">23.4. Proxy per request</a></li>
+<li><a href="#org9be3fb2">23.5. Branding User-Agent</a></li>
+<li><a href="#org8a63353">23.6. Keyworded maps in API</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-2">
-<h2 id="orgheadline6"><span class="section-number-2">1</span> Release 1.2.0</h2>
+<div id="outline-container-orga820956" class="outline-2">
+<h2 id="orga820956"><span class="section-number-2">1</span> Release 1.3.1</h2>
 <div class="outline-text-2" id="text-1">
-</div><div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2"><span class="section-number-3">1.1</span> Update dependencies</h3>
-<div class="outline-text-3" id="text-1-1">
-</div><div id="outline-container-orgheadline1" class="outline-4">
-<h4 id="orgheadline1"><span class="section-number-4">1.1.1</span> Update async-http-client to 1.9.39 (fixes issue #74)</h4>
+</div>
+<div id="outline-container-org278c82b" class="outline-3">
+<h3 id="org278c82b"><span class="section-number-3">1.1</span> Update dependencies</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline3" class="outline-3">
-<h3 id="orgheadline3"><span class="section-number-3">1.2</span> Fix bug when destructuring map (blocker for clojure.spec)</h3>
-</div>
-<div id="outline-container-orgheadline4" class="outline-3">
-<h3 id="orgheadline4"><span class="section-number-3">1.3</span> Add ability to configure read timeout</h3>
-</div>
-<div id="outline-container-orgheadline5" class="outline-3">
-<h3 id="orgheadline5"><span class="section-number-3">1.4</span> Allow request options to be passed for websockets</h3>
-</div>
-</div>
-<div id="outline-container-orgheadline9" class="outline-2">
-<h2 id="orgheadline9"><span class="section-number-2">2</span> Release 1.1.0</h2>
+<div id="outline-container-org056f486" class="outline-2">
+<h2 id="org056f486"><span class="section-number-2">2</span> Release 1.3.0</h2>
 <div class="outline-text-2" id="text-2">
-</div><div id="outline-container-orgheadline7" class="outline-3">
-<h3 id="orgheadline7"><span class="section-number-3">2.1</span> Fix issue #69</h3>
 </div>
-<div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8"><span class="section-number-3">2.2</span> Add support for asynchronous close</h3>
+<div id="outline-container-orgc039401" class="outline-3">
+<h3 id="orgc039401"><span class="section-number-3">2.1</span> Update documentation</h3>
+</div>
+<div id="outline-container-org0304cca" class="outline-3">
+<h3 id="org0304cca"><span class="section-number-3">2.2</span> Update tests</h3>
+</div>
+<div id="outline-container-orga901497" class="outline-3">
+<h3 id="orga901497"><span class="section-number-3">2.3</span> Update dependencies</h3>
+</div>
+<div id="outline-container-org7c2bb21" class="outline-3">
+<h3 id="org7c2bb21"><span class="section-number-3">2.4</span> Switch to <a href="https://github.com/roomkey/lein-v">lein-v</a> for version management</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline11" class="outline-2">
-<h2 id="orgheadline11"><span class="section-number-2">3</span> Release 1.0.1</h2>
+<div id="outline-container-org622fbf9" class="outline-2">
+<h2 id="org622fbf9"><span class="section-number-2">3</span> Release 1.2.0</h2>
 <div class="outline-text-2" id="text-3">
-</div><div id="outline-container-orgheadline10" class="outline-3">
-<h3 id="orgheadline10"><span class="section-number-3">3.1</span> Fix websocket support</h3>
+</div>
+<div id="outline-container-org3835e5d" class="outline-3">
+<h3 id="org3835e5d"><span class="section-number-3">3.1</span> Update dependencies</h3>
 <div class="outline-text-3" id="text-3-1">
+</div>
+<div id="outline-container-orgfc57db8" class="outline-4">
+<h4 id="orgfc57db8"><span class="section-number-4">3.1.1</span> Update async-http-client to 1.9.39 (fixes issue #74)</h4>
+</div>
+</div>
+<div id="outline-container-org2c3867b" class="outline-3">
+<h3 id="org2c3867b"><span class="section-number-3">3.2</span> Fix bug when destructuring map (blocker for clojure.spec)</h3>
+</div>
+<div id="outline-container-org3ff5143" class="outline-3">
+<h3 id="org3ff5143"><span class="section-number-3">3.3</span> Add ability to configure read timeout</h3>
+</div>
+<div id="outline-container-orgd2d4a92" class="outline-3">
+<h3 id="orgd2d4a92"><span class="section-number-3">3.4</span> Allow request options to be passed for websockets</h3>
+</div>
+</div>
+<div id="outline-container-org540ead2" class="outline-2">
+<h2 id="org540ead2"><span class="section-number-2">4</span> Release 1.1.0</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org815193d" class="outline-3">
+<h3 id="org815193d"><span class="section-number-3">4.1</span> Fix issue #69</h3>
+</div>
+<div id="outline-container-org7c087dd" class="outline-3">
+<h3 id="org7c087dd"><span class="section-number-3">4.2</span> Add support for asynchronous close</h3>
+</div>
+</div>
+<div id="outline-container-org34c31e7" class="outline-2">
+<h2 id="org34c31e7"><span class="section-number-2">5</span> Release 1.0.1</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org74f689a" class="outline-3">
+<h3 id="org74f689a"><span class="section-number-3">5.1</span> Fix websocket support</h3>
+<div class="outline-text-3" id="text-5-1">
 <p>
 <a href="https://github.com/cch1/http.async.client/issues/66">#66</a>
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline21" class="outline-2">
-<h2 id="orgheadline21"><span class="section-number-2">4</span> Release 1.0.0</h2>
-<div class="outline-text-2" id="text-4">
-</div><div id="outline-container-orgheadline17" class="outline-3">
-<h3 id="orgheadline17"><span class="section-number-3">4.1</span> Update to the latest version of AsyncHttpClient (1.9.31)</h3>
-<div class="outline-text-3" id="text-4-1">
-</div><div id="outline-container-orgheadline12" class="outline-4">
-<h4 id="orgheadline12"><span class="section-number-4">4.1.1</span> Remove `remove-params-on-redirect` option</h4>
-<div class="outline-text-4" id="text-4-1-1">
+<div id="outline-container-orgda6f448" class="outline-2">
+<h2 id="orgda6f448"><span class="section-number-2">6</span> Release 1.0.0</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-orgc569741" class="outline-3">
+<h3 id="orgc569741"><span class="section-number-3">6.1</span> Update to the latest version of AsyncHttpClient (1.9.31)</h3>
+<div class="outline-text-3" id="text-6-1">
+</div>
+<div id="outline-container-orgccc2706" class="outline-4">
+<h4 id="orgccc2706"><span class="section-number-4">6.1.1</span> Remove `remove-params-on-redirect` option</h4>
+<div class="outline-text-4" id="text-6-1-1">
 <p>
 No longer supported by the underlying AsyncHttpClient library and of dubious value.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline13" class="outline-4">
-<h4 id="orgheadline13"><span class="section-number-4">4.1.2</span> Remove `async-connect` option</h4>
-<div class="outline-text-4" id="text-4-1-2">
+<div id="outline-container-org79ce265" class="outline-4">
+<h4 id="org79ce265"><span class="section-number-4">6.1.2</span> Remove `async-connect` option</h4>
+<div class="outline-text-4" id="text-6-1-2">
 <p>
 No longer supported by the underlying AsyncHttpClient library; all connections are performed asynchronously.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline14" class="outline-4">
-<h4 id="orgheadline14"><span class="section-number-4">4.1.3</span> Overhaul character set handling for multipart functions</h4>
+<div id="outline-container-org05a3abf" class="outline-4">
+<h4 id="org05a3abf"><span class="section-number-4">6.1.3</span> Overhaul character set handling for multipart functions</h4>
 </div>
-<div id="outline-container-orgheadline15" class="outline-4">
-<h4 id="orgheadline15"><span class="section-number-4">4.1.4</span> Use more precise exceptions</h4>
+<div id="outline-container-org26200f5" class="outline-4">
+<h4 id="org26200f5"><span class="section-number-4">6.1.4</span> Use more precise exceptions</h4>
 </div>
-<div id="outline-container-orgheadline16" class="outline-4">
-<h4 id="orgheadline16"><span class="section-number-4">4.1.5</span> Move WebSocket implementation to its own namespace</h4>
+<div id="outline-container-org4b68f35" class="outline-4">
+<h4 id="org4b68f35"><span class="section-number-4">6.1.5</span> Move WebSocket implementation to its own namespace</h4>
 </div>
 </div>
-<div id="outline-container-orgheadline18" class="outline-3">
-<h3 id="orgheadline18"><span class="section-number-3">4.2</span> Use more idiomatic Clojure</h3>
+<div id="outline-container-org579db4c" class="outline-3">
+<h3 id="org579db4c"><span class="section-number-3">6.2</span> Use more idiomatic Clojure</h3>
 </div>
-<div id="outline-container-orgheadline19" class="outline-3">
-<h3 id="orgheadline19"><span class="section-number-3">4.3</span> Extract websocket code to separate namespace</h3>
+<div id="outline-container-orge9029ed" class="outline-3">
+<h3 id="orge9029ed"><span class="section-number-3">6.3</span> Extract websocket code to separate namespace</h3>
 </div>
-<div id="outline-container-orgheadline20" class="outline-3">
-<h3 id="orgheadline20"><span class="section-number-3">4.4</span> Issue with the AsyncHttpClient Java library.</h3>
-<div class="outline-text-3" id="text-4-4">
+<div id="outline-container-orgdd56316" class="outline-3">
+<h3 id="orgdd56316"><span class="section-number-3">6.4</span> Issue with the AsyncHttpClient Java library.</h3>
+<div class="outline-text-3" id="text-6-4">
 <p>
-See <a href="https://github.com/AsyncHttpClient/async-http-client/issues/996">https://github.com/AsyncHttpClient/async-http-client/issues/996</a> <br  />
+See <a href="https://github.com/AsyncHttpClient/async-http-client/issues/996">https://github.com/AsyncHttpClient/async-http-client/issues/996</a> <br />
 To workaround, set a realm with
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">{:preemptive true :target-proxy true}
 </pre>
 </div>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline25" class="outline-2">
-<h2 id="orgheadline25"><span class="section-number-2">5</span> Release 0.6.1</h2>
-<div class="outline-text-2" id="text-5">
-</div><div id="outline-container-orgheadline22" class="outline-3">
-<h3 id="orgheadline22"><span class="section-number-3">5.1</span> Allow websocket to take request options&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enhancement">enhancement</span></span></h3>
+<div id="outline-container-orgb257117" class="outline-2">
+<h2 id="orgb257117"><span class="section-number-2">7</span> Release 0.6.1</h2>
+<div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-orgheadline23" class="outline-3">
-<h3 id="orgheadline23"><span class="section-number-3">5.2</span> Add logging to client create/close calls</h3>
+<div id="outline-container-org067d0fe" class="outline-3">
+<h3 id="org067d0fe"><span class="section-number-3">7.1</span> Allow websocket to take request options&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enhancement">enhancement</span></span></h3>
 </div>
-<div id="outline-container-orgheadline24" class="outline-3">
-<h3 id="orgheadline24"><span class="section-number-3">5.3</span> Update dependencies, including Clojure</h3>
+<div id="outline-container-org774bf13" class="outline-3">
+<h3 id="org774bf13"><span class="section-number-3">7.2</span> Add logging to client create/close calls</h3>
+</div>
+<div id="outline-container-orgc155207" class="outline-3">
+<h3 id="orgc155207"><span class="section-number-3">7.3</span> Update dependencies, including Clojure</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline38" class="outline-2">
-<h2 id="orgheadline38"><span class="section-number-2">6</span> Release 0.6.0</h2>
-<div class="outline-text-2" id="text-6">
-</div><div id="outline-container-orgheadline26" class="outline-3">
-<h3 id="orgheadline26"><span class="section-number-3">6.1</span> Modernize Clojure syntax with `:require` and `:refer` instead of `:use`</h3>
+<div id="outline-container-orga88cfe1" class="outline-2">
+<h2 id="orga88cfe1"><span class="section-number-2">8</span> Release 0.6.0</h2>
+<div class="outline-text-2" id="text-8">
 </div>
-<div id="outline-container-orgheadline37" class="outline-3">
-<h3 id="orgheadline37"><span class="section-number-3">6.2</span> Update com.ning/async-http-client dependency to 1.8.16</h3>
-<div class="outline-text-3" id="text-6-2">
-</div><div id="outline-container-orgheadline27" class="outline-4">
-<h4 id="orgheadline27"><span class="section-number-4">6.2.1</span> Handle new options and refactoring of Cookie class with maximum BC</h4>
-<div class="outline-text-4" id="text-6-2-1">
+<div id="outline-container-org878a28d" class="outline-3">
+<h3 id="org878a28d"><span class="section-number-3">8.1</span> Modernize Clojure syntax with `:require` and `:refer` instead of `:use`</h3>
+</div>
+<div id="outline-container-org4588eef" class="outline-3">
+<h3 id="org4588eef"><span class="section-number-3">8.2</span> Update com.ning/async-http-client dependency to 1.8.16</h3>
+<div class="outline-text-3" id="text-8-2">
+</div>
+<div id="outline-container-orgef50d73" class="outline-4">
+<h4 id="orgef50d73"><span class="section-number-4">8.2.1</span> Handle new options and refactoring of Cookie class with maximum BC</h4>
+<div class="outline-text-4" id="text-8-2-1">
 <p>
 Add `expires`, `http-only?` and `wrap?` options to Cookie options
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline28" class="outline-4">
-<h4 id="orgheadline28"><span class="section-number-4">6.2.2</span> Return java.net.UnknownHostException instead of java.net.ConnectException (with UnresolvedAddressexception cause) on bad host</h4>
+<div id="outline-container-orgbbc7ebe" class="outline-4">
+<h4 id="orgbbc7ebe"><span class="section-number-4">8.2.2</span> Return java.net.UnknownHostException instead of java.net.ConnectException (with UnresolvedAddressexception cause) on bad host</h4>
 </div>
-<div id="outline-container-orgheadline29" class="outline-4">
-<h4 id="orgheadline29"><span class="section-number-4">6.2.3</span> Add wrap? option to cookies</h4>
+<div id="outline-container-org830747a" class="outline-4">
+<h4 id="org830747a"><span class="section-number-4">8.2.3</span> Add wrap? option to cookies</h4>
 </div>
-<div id="outline-container-orgheadline30" class="outline-4">
-<h4 id="orgheadline30"><span class="section-number-4">6.2.4</span> Return timeout and connection limit exceptions in `error` function instead of throwing an exception on request execution thread</h4>
+<div id="outline-container-orga05f048" class="outline-4">
+<h4 id="orga05f048"><span class="section-number-4">8.2.4</span> Return timeout and connection limit exceptions in `error` function instead of throwing an exception on request execution thread</h4>
 </div>
-<div id="outline-container-orgheadline31" class="outline-4">
-<h4 id="orgheadline31"><span class="section-number-4">6.2.5</span> Return java.nio.charset.Charsets on multipart parts</h4>
+<div id="outline-container-org822fdd8" class="outline-4">
+<h4 id="org822fdd8"><span class="section-number-4">8.2.5</span> Return java.nio.charset.Charsets on multipart parts</h4>
 </div>
-<div id="outline-container-orgheadline32" class="outline-4">
-<h4 id="orgheadline32"><span class="section-number-4">6.2.6</span> Default charset on StringPart (typically) is US-ASCII</h4>
+<div id="outline-container-org733a1c7" class="outline-4">
+<h4 id="org733a1c7"><span class="section-number-4">8.2.6</span> Default charset on StringPart (typically) is US-ASCII</h4>
 </div>
-<div id="outline-container-orgheadline33" class="outline-4">
-<h4 id="orgheadline33"><span class="section-number-4">6.2.7</span> Remove `raw-url` function -it is no longer supported by the underlying Java AsyncHttpclient</h4>
+<div id="outline-container-org433a969" class="outline-4">
+<h4 id="org433a969"><span class="section-number-4">8.2.7</span> Remove `raw-url` function -it is no longer supported by the underlying Java AsyncHttpclient</h4>
 </div>
-<div id="outline-container-orgheadline34" class="outline-4">
-<h4 id="orgheadline34"><span class="section-number-4">6.2.8</span> Add `uri` function to partially back fill for raw-url</h4>
+<div id="outline-container-org6c4a5bc" class="outline-4">
+<h4 id="org6c4a5bc"><span class="section-number-4">8.2.8</span> Add `uri` function to partially back fill for raw-url</h4>
 </div>
-<div id="outline-container-orgheadline35" class="outline-4">
-<h4 id="orgheadline35"><span class="section-number-4">6.2.9</span> Remove async connect functionality -connections are now always async</h4>
+<div id="outline-container-orgcb0a5b4" class="outline-4">
+<h4 id="orgcb0a5b4"><span class="section-number-4">8.2.9</span> Remove async connect functionality -connections are now always async</h4>
 </div>
-<div id="outline-container-orgheadline36" class="outline-4">
-<h4 id="orgheadline36"><span class="section-number-4">6.2.10</span> Handle empty HttpResponseBodyPart in onBodyPartReceived</h4>
-<div class="outline-text-4" id="text-6-2-10">
+<div id="outline-container-org6193497" class="outline-4">
+<h4 id="org6193497"><span class="section-number-4">8.2.10</span> Handle empty HttpResponseBodyPart in onBodyPartReceived</h4>
+<div class="outline-text-4" id="text-8-2-10">
 <p>
 With an empty response body, 1.8.0 calls onBodyPartReceived with a zero- length HttpResponseBodyPart, while version 1.7.x did not even call onBodyPartReceived.
 </p>
@@ -580,108 +725,112 @@ With an empty response body, 1.8.0 calls onBodyPartReceived with a zero- length 
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline48" class="outline-2">
-<h2 id="orgheadline48"><span class="section-number-2">7</span> Release 0.5.3</h2>
-<div class="outline-text-2" id="text-7">
-</div><div id="outline-container-orgheadline39" class="outline-3">
-<h3 id="orgheadline39"><span class="section-number-3">7.1</span> Update Clojure dependency to 1.6</h3>
+<div id="outline-container-org43c5616" class="outline-2">
+<h2 id="org43c5616"><span class="section-number-2">9</span> Release 0.5.3</h2>
+<div class="outline-text-2" id="text-9">
 </div>
-<div id="outline-container-orgheadline40" class="outline-3">
-<h3 id="orgheadline40"><span class="section-number-3">7.2</span> Deprecate raw-url function and response key</h3>
-<div class="outline-text-3" id="text-7-2">
+<div id="outline-container-orge131809" class="outline-3">
+<h3 id="orge131809"><span class="section-number-3">9.1</span> Update Clojure dependency to 1.6</h3>
+</div>
+<div id="outline-container-org56323aa" class="outline-3">
+<h3 id="org56323aa"><span class="section-number-3">9.2</span> Deprecate raw-url function and response key</h3>
+<div class="outline-text-3" id="text-9-2">
 <p>
 Due to lack of support in future versions of the com.ning/async-http-client, raw-url will not be
 supported in future versions.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline45" class="outline-3">
-<h3 id="orgheadline45"><span class="section-number-3">7.3</span> Restructure tests</h3>
-<div class="outline-text-3" id="text-7-3">
-</div><div id="outline-container-orgheadline41" class="outline-4">
-<h4 id="orgheadline41"><span class="section-number-4">7.3.1</span> Update jetty to 9.3.0.RC0</h4>
+<div id="outline-container-org8d6ec0f" class="outline-3">
+<h3 id="org8d6ec0f"><span class="section-number-3">9.3</span> Restructure tests</h3>
+<div class="outline-text-3" id="text-9-3">
 </div>
-<div id="outline-container-orgheadline42" class="outline-4">
-<h4 id="orgheadline42"><span class="section-number-4">7.3.2</span> Update log dependencies</h4>
+<div id="outline-container-org037d1ab" class="outline-4">
+<h4 id="org037d1ab"><span class="section-number-4">9.3.1</span> Update jetty to 9.3.0.RC0</h4>
 </div>
-<div id="outline-container-orgheadline43" class="outline-4">
-<h4 id="orgheadline43"><span class="section-number-4">7.3.3</span> Provide fresh client to each test to resolve issue with Clojure 1.6</h4>
+<div id="outline-container-orgafac942" class="outline-4">
+<h4 id="orgafac942"><span class="section-number-4">9.3.2</span> Update log dependencies</h4>
 </div>
-<div id="outline-container-orgheadline44" class="outline-4">
-<h4 id="orgheadline44"><span class="section-number-4">7.3.4</span> Fix brittle tests</h4>
+<div id="outline-container-org80dc0fa" class="outline-4">
+<h4 id="org80dc0fa"><span class="section-number-4">9.3.3</span> Provide fresh client to each test to resolve issue with Clojure 1.6</h4>
 </div>
-</div>
-<div id="outline-container-orgheadline46" class="outline-3">
-<h3 id="orgheadline46"><span class="section-number-3">7.4</span> Remove RequestBuilderWrapper</h3>
-</div>
-<div id="outline-container-orgheadline47" class="outline-3">
-<h3 id="orgheadline47"><span class="section-number-3">7.5</span> Update codox and lein-difftest plugins</h3>
+<div id="outline-container-orgab2ebb5" class="outline-4">
+<h4 id="orgab2ebb5"><span class="section-number-4">9.3.4</span> Fix brittle tests</h4>
 </div>
 </div>
-<div id="outline-container-orgheadline49" class="outline-2">
-<h2 id="orgheadline49"><span class="section-number-2">8</span> Release 0.5.2</h2>
-<div class="outline-text-2" id="text-8">
+<div id="outline-container-orga8a28f6" class="outline-3">
+<h3 id="orga8a28f6"><span class="section-number-3">9.4</span> Remove RequestBuilderWrapper</h3>
+</div>
+<div id="outline-container-org9fe02fb" class="outline-3">
+<h3 id="org9fe02fb"><span class="section-number-3">9.5</span> Update codox and lein-difftest plugins</h3>
+</div>
+</div>
+<div id="outline-container-orgf73a6b4" class="outline-2">
+<h2 id="orgf73a6b4"><span class="section-number-2">10</span> Release 0.5.2</h2>
+<div class="outline-text-2" id="text-10">
 <p>
 Compile with Java 1.6
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline52" class="outline-2">
-<h2 id="orgheadline52"><span class="section-number-2">9</span> Release 0.5.1</h2>
-<div class="outline-text-2" id="text-9">
-</div><div id="outline-container-orgheadline50" class="outline-3">
-<h3 id="orgheadline50"><span class="section-number-3">9.1</span> remove-params-on-redirect</h3>
-<div class="outline-text-3" id="text-9-1">
+<div id="outline-container-orge15f697" class="outline-2">
+<h2 id="orge15f697"><span class="section-number-2">11</span> Release 0.5.1</h2>
+<div class="outline-text-2" id="text-11">
+</div>
+<div id="outline-container-orgfa97bd3" class="outline-3">
+<h3 id="orgfa97bd3"><span class="section-number-3">11.1</span> remove-params-on-redirect</h3>
+<div class="outline-text-3" id="text-11-1">
 <p>
 Issues <a href="https://github.com/cch1/http.async.client/issues/46">#46</a>, <a href="https://github.com/cch1/http.async.client/issues/47">#47</a> and <a href="https://github.com/cch1/http.async.client/issues/48">#48</a> by <a href="https://github.com/josephwilk">Joseph Wilk</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline51" class="outline-3">
-<h3 id="orgheadline51"><span class="section-number-3">9.2</span> Upgrade AHC to 1.7.10</h3>
+<div id="outline-container-org4619034" class="outline-3">
+<h3 id="org4619034"><span class="section-number-3">11.2</span> Upgrade AHC to 1.7.10</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline60" class="outline-2">
-<h2 id="orgheadline60"><span class="section-number-2">10</span> Release 0.5.0</h2>
-<div class="outline-text-2" id="text-10">
-</div><div id="outline-container-orgheadline53" class="outline-3">
-<h3 id="orgheadline53"><span class="section-number-3">10.1</span> <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-content-type">http.async.client/content-type</a></h3>
-<div class="outline-text-3" id="text-10-1">
+<div id="outline-container-org9b9b2c5" class="outline-2">
+<h2 id="org9b9b2c5"><span class="section-number-2">12</span> Release 0.5.0</h2>
+<div class="outline-text-2" id="text-12">
+</div>
+<div id="outline-container-org17e2104" class="outline-3">
+<h3 id="org17e2104"><span class="section-number-3">12.1</span> <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-content-type">http.async.client/content-type</a></h3>
+<div class="outline-text-3" id="text-12-1">
 <p>
 Added utility fn for <a href="http://cch1.github.io/http.async.client/docs.html#sec-2-5-5">Reading content-type</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline54" class="outline-3">
-<h3 id="orgheadline54"><span class="section-number-3">10.2</span> <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-redirect?">http.async.client/redirect?</a></h3>
-<div class="outline-text-3" id="text-10-2">
+<div id="outline-container-org36d25b1" class="outline-3">
+<h3 id="org36d25b1"><span class="section-number-3">12.2</span> <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-redirect?">http.async.client/redirect?</a></h3>
+<div class="outline-text-3" id="text-12-2">
 <p>
 Added utility fn for checking if response <a href="http://cch1.github.io/http.async.client/docs.html#sec-2-5-3">Is redirect?</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline55" class="outline-3">
-<h3 id="orgheadline55"><span class="section-number-3">10.3</span> <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-location">http.async.client/location</a></h3>
-<div class="outline-text-3" id="text-10-3">
+<div id="outline-container-orgb3ad3ca" class="outline-3">
+<h3 id="orgb3ad3ca"><span class="section-number-3">12.3</span> <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-location">http.async.client/location</a></h3>
+<div class="outline-text-3" id="text-12-3">
 <p>
 Added utility fn for <a href="http://cch1.github.io/http.async.client/docs.html#sec-2-5-6">Reading location</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline56" class="outline-3">
-<h3 id="orgheadline56"><span class="section-number-3">10.4</span> Moved to Leiningen 2</h3>
+<div id="outline-container-org67f222f" class="outline-3">
+<h3 id="org67f222f"><span class="section-number-3">12.4</span> Moved to Leiningen 2</h3>
 </div>
-<div id="outline-container-orgheadline57" class="outline-3">
-<h3 id="orgheadline57"><span class="section-number-3">10.5</span> <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PATCH">PATCH</a></h3>
-<div class="outline-text-3" id="text-10-5">
+<div id="outline-container-org087c101" class="outline-3">
+<h3 id="org087c101"><span class="section-number-3">12.5</span> <a href="http://cch1.github.io/http.async.client/doc/http.async.client.html#var-PATCH">PATCH</a></h3>
+<div class="outline-text-3" id="text-12-5">
 <p>
 Added support for HTTP PATCH method.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline58" class="outline-3">
-<h3 id="orgheadline58"><span class="section-number-3">10.6</span> Initial WebSocket support</h3>
-<div class="outline-text-3" id="text-10-6">
+<div id="outline-container-org9de60e4" class="outline-3">
+<h3 id="org9de60e4"><span class="section-number-3">12.6</span> Initial WebSocket support</h3>
+<div class="outline-text-3" id="text-12-6">
 <p>
 Not documented yet, <a href="https://github.com/cch1/http.async.client/blob/07b8f1de8f956505185ed224c71abceeff27265f/src/clj/http/async/client.clj#L305">Code is here</a>.
 Demo usage can be found in <a href="https://github.com/cch1/hac-live">hac-live</a> dome for EuroClojure 2012.
@@ -689,17 +838,18 @@ Demo usage can be found in <a href="https://github.com/cch1/hac-live">hac-live</
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline59" class="outline-3">
-<h3 id="orgheadline59"><span class="section-number-3">10.7</span> Upgrade AHC to v1.7.5</h3>
+<div id="outline-container-orgc2de633" class="outline-3">
+<h3 id="orgc2de633"><span class="section-number-3">12.7</span> Upgrade AHC to v1.7.5</h3>
 </div>
 </div>
 
-<div id="outline-container-orgheadline64" class="outline-2">
-<h2 id="orgheadline64"><span class="section-number-2">11</span> Release 0.4.5</h2>
-<div class="outline-text-2" id="text-11">
-</div><div id="outline-container-orgheadline61" class="outline-3">
-<h3 id="orgheadline61"><span class="section-number-3">11.1</span> Multipart support</h3>
-<div class="outline-text-3" id="text-11-1">
+<div id="outline-container-org5af9663" class="outline-2">
+<h2 id="org5af9663"><span class="section-number-2">13</span> Release 0.4.5</h2>
+<div class="outline-text-2" id="text-13">
+</div>
+<div id="outline-container-orga603dda" class="outline-3">
+<h3 id="orga603dda"><span class="section-number-3">13.1</span> Multipart support</h3>
+<div class="outline-text-3" id="text-13-1">
 <p>
 Allow POST and PUT to send multipart messages.
 When <b>vector</b> is provided as body it is treated as multipart.
@@ -707,158 +857,165 @@ Please consult documentation and tests for examples of usage.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline62" class="outline-3">
-<h3 id="orgheadline62"><span class="section-number-3">11.2</span> Add convenience url and raw-url</h3>
-<div class="outline-text-3" id="text-11-2">
+<div id="outline-container-orgdbcc98c" class="outline-3">
+<h3 id="orgdbcc98c"><span class="section-number-3">13.2</span> Add convenience url and raw-url</h3>
+<div class="outline-text-3" id="text-13-2">
 <p>
 <a href="https://github.com/cch1/http.async.client/issues/35">#35</a>. Allow easy retrieval of URL used to request resource.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline63" class="outline-3">
-<h3 id="orgheadline63"><span class="section-number-3">11.3</span> There's a function for that!</h3>
-<div class="outline-text-3" id="text-11-3">
+<div id="outline-container-org09580d5" class="outline-3">
+<h3 id="org09580d5"><span class="section-number-3">13.3</span> There's a function for that!</h3>
+<div class="outline-text-3" id="text-13-3">
 <p>
 Listen to what kibit has to say.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline69" class="outline-2">
-<h2 id="orgheadline69"><span class="section-number-2">12</span> Release 0.4.4</h2>
-<div class="outline-text-2" id="text-12">
-</div><div id="outline-container-orgheadline65" class="outline-3">
-<h3 id="orgheadline65"><span class="section-number-3">12.1</span> Simplified callbacks API</h3>
-<div class="outline-text-3" id="text-12-1">
+<div id="outline-container-orgaf42eec" class="outline-2">
+<h2 id="orgaf42eec"><span class="section-number-2">14</span> Release 0.4.4</h2>
+<div class="outline-text-2" id="text-14">
+</div>
+<div id="outline-container-orge00f31d" class="outline-3">
+<h3 id="orge00f31d"><span class="section-number-3">14.1</span> Simplified callbacks API</h3>
+<div class="outline-text-3" id="text-14-1">
 <p>
 Issue <a href="https://github.com/cch1/http.async.client/issues/32">#32</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline66" class="outline-3">
-<h3 id="orgheadline66"><span class="section-number-3">12.2</span> Better documented callbacks</h3>
-<div class="outline-text-3" id="text-12-2">
+<div id="outline-container-orgf3de8f8" class="outline-3">
+<h3 id="orgf3de8f8"><span class="section-number-3">14.2</span> Better documented callbacks</h3>
+<div class="outline-text-3" id="text-14-2">
 <p>
 This was long outstanding issue <a href="https://github.com/cch1/http.async.client/issues/12">#12</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline67" class="outline-3">
-<h3 id="orgheadline67"><span class="section-number-3">12.3</span> Upgrade <a href="https://github.com/sonatype/async-http-client">AHC</a> to 1.7.4</h3>
+<div id="outline-container-org19c504c" class="outline-3">
+<h3 id="org19c504c"><span class="section-number-3">14.3</span> Upgrade <a href="https://github.com/sonatype/async-http-client">AHC</a> to 1.7.4</h3>
 </div>
-<div id="outline-container-orgheadline68" class="outline-3">
-<h3 id="orgheadline68"><span class="section-number-3">12.4</span> Upgrade Clojure to 1.4</h3>
+<div id="outline-container-org38ba738" class="outline-3">
+<h3 id="org38ba738"><span class="section-number-3">14.4</span> Upgrade Clojure to 1.4</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline72" class="outline-2">
-<h2 id="orgheadline72"><span class="section-number-2">13</span> Release 0.4.3</h2>
-<div class="outline-text-2" id="text-13">
-</div><div id="outline-container-orgheadline70" class="outline-3">
-<h3 id="orgheadline70"><span class="section-number-3">13.1</span> Issue <a href="https://github.com/cch1/http.async.client/pull/30">#30</a> by <a href="https://github.com/canassa">Cesar Canassa</a></h3>
-<div class="outline-text-3" id="text-13-1">
+<div id="outline-container-orgbb40023" class="outline-2">
+<h2 id="orgbb40023"><span class="section-number-2">15</span> Release 0.4.3</h2>
+<div class="outline-text-2" id="text-15">
+</div>
+<div id="outline-container-org273763e" class="outline-3">
+<h3 id="org273763e"><span class="section-number-3">15.1</span> Issue <a href="https://github.com/cch1/http.async.client/pull/30">#30</a> by <a href="https://github.com/canassa">Cesar Canassa</a></h3>
+<div class="outline-text-3" id="text-15-1">
 <p>
 Fixes issue with single cookie in response.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline71" class="outline-3">
-<h3 id="orgheadline71"><span class="section-number-3">13.2</span> Upgrade AHC to 1.7.1</h3>
+<div id="outline-container-orgf7dc84d" class="outline-3">
+<h3 id="orgf7dc84d"><span class="section-number-3">15.2</span> Upgrade AHC to 1.7.1</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline74" class="outline-2">
-<h2 id="orgheadline74"><span class="section-number-2">14</span> Release 0.4.2</h2>
-<div class="outline-text-2" id="text-14">
-</div><div id="outline-container-orgheadline73" class="outline-3">
-<h3 id="orgheadline73"><span class="section-number-3">14.1</span> Issue <a href="https://github.com/cch1/http.async.client/pull/29">#29</a> by <a href="https://github.com/diamondap">A. Diamond</a></h3>
-<div class="outline-text-3" id="text-14-1">
+<div id="outline-container-orge7e0b3e" class="outline-2">
+<h2 id="orge7e0b3e"><span class="section-number-2">16</span> Release 0.4.2</h2>
+<div class="outline-text-2" id="text-16">
+</div>
+<div id="outline-container-org4860f6c" class="outline-3">
+<h3 id="org4860f6c"><span class="section-number-3">16.1</span> Issue <a href="https://github.com/cch1/http.async.client/pull/29">#29</a> by <a href="https://github.com/diamondap">A. Diamond</a></h3>
+<div class="outline-text-3" id="text-16-1">
 <p>
 Added support for client certificates.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline79" class="outline-2">
-<h2 id="orgheadline79"><span class="section-number-2">15</span> Release 0.4.1</h2>
-<div class="outline-text-2" id="text-15">
-</div><div id="outline-container-orgheadline75" class="outline-3">
-<h3 id="orgheadline75"><span class="section-number-3">15.1</span> Upgrade AHC to 1.7.0</h3>
+<div id="outline-container-org9716fdd" class="outline-2">
+<h2 id="org9716fdd"><span class="section-number-2">17</span> Release 0.4.1</h2>
+<div class="outline-text-2" id="text-17">
 </div>
-<div id="outline-container-orgheadline76" class="outline-3">
-<h3 id="orgheadline76"><span class="section-number-3">15.2</span> Issues <a href="https://github.com/cch1/http.async.client/issues/26">#26</a>, <a href="https://github.com/cch1/http.async.client/issues/27">#27</a>, <a href="https://github.com/cch1/http.async.client/issues/28">#28</a></h3>
-<div class="outline-text-3" id="text-15-2">
+<div id="outline-container-org5b72a5e" class="outline-3">
+<h3 id="org5b72a5e"><span class="section-number-3">17.1</span> Upgrade AHC to 1.7.0</h3>
+</div>
+<div id="outline-container-org40b2ad3" class="outline-3">
+<h3 id="org40b2ad3"><span class="section-number-3">17.2</span> Issues <a href="https://github.com/cch1/http.async.client/issues/26">#26</a>, <a href="https://github.com/cch1/http.async.client/issues/27">#27</a>, <a href="https://github.com/cch1/http.async.client/issues/28">#28</a></h3>
+<div class="outline-text-3" id="text-17-2">
 <dl class="org-dl">
 <dt><a href="https://github.com/cch1/http.async.client/issues/26">#26</a></dt><dd><a href="https://github.com/jkk">Justin Kramer</a>, <a href="https://github.com/btatnall">Brian Tatnall</a>
-            Empty response body hangs c/body, c/string</dd>
+Empty response body hangs c/body, c/string</dd>
 <dt><a href="https://github.com/cch1/http.async.client/issues/27">#27</a></dt><dd><a href="https://github.com/jkk">Justin Kramer</a>
 create-client's :idle-in-pool-timeout option not being set
 correctly</dd>
 <dt><a href="https://github.com/cch1/http.async.client/pull/28">#28</a></dt><dd><a href="https://github.com/klang">Karsten Lang</a>
-            Documentation update</dd>
+Documentation update</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-orgheadline77" class="outline-3">
-<h3 id="orgheadline77"><span class="section-number-3">15.3</span> Improved logging</h3>
-<div class="outline-text-3" id="text-15-3">
+<div id="outline-container-orge6af00e" class="outline-3">
+<h3 id="orge6af00e"><span class="section-number-3">17.3</span> Improved logging</h3>
+<div class="outline-text-3" id="text-17-3">
 <p>
 Improved logging configuration for running tests.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline78" class="outline-3">
-<h3 id="orgheadline78"><span class="section-number-3">15.4</span> Tested against Clojure 1.4.0-beta1</h3>
+<div id="outline-container-orgae1a30f" class="outline-3">
+<h3 id="orgae1a30f"><span class="section-number-3">17.4</span> Tested against Clojure 1.4.0-beta1</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline84" class="outline-2">
-<h2 id="orgheadline84"><span class="section-number-2">16</span> Release 0.4.0</h2>
-<div class="outline-text-2" id="text-16">
-</div><div id="outline-container-orgheadline80" class="outline-3">
-<h3 id="orgheadline80"><span class="section-number-3">16.1</span> Clojure 1.3 compatible</h3>
+<div id="outline-container-org82a62f9" class="outline-2">
+<h2 id="org82a62f9"><span class="section-number-2">18</span> Release 0.4.0</h2>
+<div class="outline-text-2" id="text-18">
 </div>
-<div id="outline-container-orgheadline81" class="outline-3">
-<h3 id="orgheadline81"><span class="section-number-3">16.2</span> Support for multiple values for same key (QString)</h3>
-<div class="outline-text-3" id="text-16-2">
+<div id="outline-container-org83372d2" class="outline-3">
+<h3 id="org83372d2"><span class="section-number-3">18.1</span> Clojure 1.3 compatible</h3>
+</div>
+<div id="outline-container-org60ce1e4" class="outline-3">
+<h3 id="org60ce1e4"><span class="section-number-3">18.2</span> Support for multiple values for same key (QString)</h3>
+<div class="outline-text-3" id="text-18-2">
 <p>
 <a href="https://github.com/cch1/http.async.client/issues/22">#22</a>
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline82" class="outline-3">
-<h3 id="orgheadline82"><span class="section-number-3">16.3</span> Clojure contrib independent</h3>
-<div class="outline-text-3" id="text-16-3">
+<div id="outline-container-org1b10dcf" class="outline-3">
+<h3 id="org1b10dcf"><span class="section-number-3">18.3</span> Clojure contrib independent</h3>
+<div class="outline-text-3" id="text-18-3">
 <p>
 <a href="https://github.com/cch1/http.async.client/pull/24">#24</a>
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline83" class="outline-3">
-<h3 id="orgheadline83"><span class="section-number-3">16.4</span> Upgrade async-http-client to v1.6.5</h3>
+<div id="outline-container-orgc3139d9" class="outline-3">
+<h3 id="orgc3139d9"><span class="section-number-3">18.4</span> Upgrade async-http-client to v1.6.5</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline86" class="outline-2">
-<h2 id="orgheadline86"><span class="section-number-2">17</span> Release 0.3.1</h2>
-<div class="outline-text-2" id="text-17">
-</div><div id="outline-container-orgheadline85" class="outline-3">
-<h3 id="orgheadline85"><span class="section-number-3">17.1</span> Upgrade async-http-client to v1.6.4</h3>
+<div id="outline-container-org67e902d" class="outline-2">
+<h2 id="org67e902d"><span class="section-number-2">19</span> Release 0.3.1</h2>
+<div class="outline-text-2" id="text-19">
+</div>
+<div id="outline-container-org56d1ba0" class="outline-3">
+<h3 id="org56d1ba0"><span class="section-number-3">19.1</span> Upgrade async-http-client to v1.6.4</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline92" class="outline-2">
-<h2 id="orgheadline92"><span class="section-number-2">18</span> Release 0.3.0</h2>
-<div class="outline-text-2" id="text-18">
-</div><div id="outline-container-orgheadline87" class="outline-3">
-<h3 id="orgheadline87"><span class="section-number-3">18.1</span> Upgrade async-http-client to v1.6.3</h3>
+<div id="outline-container-orgde2bae5" class="outline-2">
+<h2 id="orgde2bae5"><span class="section-number-2">20</span> Release 0.3.0</h2>
+<div class="outline-text-2" id="text-20">
 </div>
-<div id="outline-container-orgheadline88" class="outline-3">
-<h3 id="orgheadline88"><span class="section-number-3">18.2</span> Control over preemptive authentication</h3>
-<div class="outline-text-3" id="text-18-2">
+<div id="outline-container-orgfa2b809" class="outline-3">
+<h3 id="orgfa2b809"><span class="section-number-3">20.1</span> Upgrade async-http-client to v1.6.3</h3>
+</div>
+<div id="outline-container-org615c63b" class="outline-3">
+<h3 id="org615c63b"><span class="section-number-3">20.2</span> Control over preemptive authentication</h3>
+<div class="outline-text-3" id="text-20-2">
 <p>
 Patch provided by xeqi.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline89" class="outline-3">
-<h3 id="orgheadline89"><span class="section-number-3">18.3</span> Explicit client usage</h3>
-<div class="outline-text-3" id="text-18-3">
+<div id="outline-container-org3e3d04f" class="outline-3">
+<h3 id="org3e3d04f"><span class="section-number-3">20.3</span> Explicit client usage</h3>
+<div class="outline-text-3" id="text-20-3">
 <p>
 Now following functions require client as first argument:
 </p>
@@ -878,16 +1035,15 @@ You still create client with create-client function.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline90" class="outline-3">
-<h3 id="orgheadline90"><span class="section-number-3">18.4</span> Removed with-client macro</h3>
-<div class="outline-text-3" id="text-18-4">
+<div id="outline-container-orgfc0f7e3" class="outline-3">
+<h3 id="orgfc0f7e3"><span class="section-number-3">20.4</span> Removed with-client macro</h3>
+<div class="outline-text-3" id="text-20-4">
 <p>
 This didn't really bring much value.
 Migration path.
 From:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-client {:key val}
   ;; client usage
   (let [resp (GET url)]))
@@ -897,7 +1053,6 @@ From:
 To:
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(with-open [client (create-client :key val)]
   ;; client usage
   (let [resp (GET client url)]))
@@ -905,9 +1060,9 @@ To:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline91" class="outline-3">
-<h3 id="orgheadline91"><span class="section-number-3">18.5</span> Clojure 1.2.1</h3>
-<div class="outline-text-3" id="text-18-5">
+<div id="outline-container-org35a62e0" class="outline-3">
+<h3 id="org35a62e0"><span class="section-number-3">20.5</span> Clojure 1.2.1</h3>
+<div class="outline-text-3" id="text-20-5">
 <p>
 Fixed cyclic dependency that was preventing http.async.client from
 been used in Clojure 1.2.1.
@@ -915,64 +1070,66 @@ been used in Clojure 1.2.1.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline104" class="outline-2">
-<h2 id="orgheadline104"><span class="section-number-2">19</span> Release 0.2.2</h2>
-<div class="outline-text-2" id="text-19">
-</div><div id="outline-container-orgheadline93" class="outline-3">
-<h3 id="orgheadline93"><span class="section-number-3">19.1</span> get-encoding helper works w/o Content-Type header</h3>
+<div id="outline-container-org0dfc100" class="outline-2">
+<h2 id="org0dfc100"><span class="section-number-2">21</span> Release 0.2.2</h2>
+<div class="outline-text-2" id="text-21">
 </div>
-<div id="outline-container-orgheadline94" class="outline-3">
-<h3 id="orgheadline94"><span class="section-number-3">19.2</span> Upgrade async-http-client to v.1.5.0</h3>
+<div id="outline-container-orgac7b355" class="outline-3">
+<h3 id="orgac7b355"><span class="section-number-3">21.1</span> get-encoding helper works w/o Content-Type header</h3>
 </div>
-<div id="outline-container-orgheadline98" class="outline-3">
-<h3 id="orgheadline98"><span class="section-number-3">19.3</span> Exposed more configuration options</h3>
-<div class="outline-text-3" id="text-19-3">
-</div><div id="outline-container-orgheadline95" class="outline-4">
-<h4 id="orgheadline95"><span class="section-number-4">19.3.1</span> Timeouts</h4>
+<div id="outline-container-org7654e41" class="outline-3">
+<h3 id="org7654e41"><span class="section-number-3">21.2</span> Upgrade async-http-client to v.1.5.0</h3>
 </div>
-<div id="outline-container-orgheadline96" class="outline-4">
-<h4 id="orgheadline96"><span class="section-number-4">19.3.2</span> Proxy</h4>
+<div id="outline-container-org88d76da" class="outline-3">
+<h3 id="org88d76da"><span class="section-number-3">21.3</span> Exposed more configuration options</h3>
+<div class="outline-text-3" id="text-21-3">
 </div>
-<div id="outline-container-orgheadline97" class="outline-4">
-<h4 id="orgheadline97"><span class="section-number-4">19.3.3</span> Authentication</h4>
+<div id="outline-container-org65a0a75" class="outline-4">
+<h4 id="org65a0a75"><span class="section-number-4">21.3.1</span> Timeouts</h4>
+</div>
+<div id="outline-container-org6201945" class="outline-4">
+<h4 id="org6201945"><span class="section-number-4">21.3.2</span> Proxy</h4>
+</div>
+<div id="outline-container-orgeac1b35" class="outline-4">
+<h4 id="orgeac1b35"><span class="section-number-4">21.3.3</span> Authentication</h4>
 </div>
 </div>
-<div id="outline-container-orgheadline99" class="outline-3">
-<h3 id="orgheadline99"><span class="section-number-3">19.4</span> Zero byte copy mode</h3>
-<div class="outline-text-3" id="text-19-4">
+<div id="outline-container-org0c5f2df" class="outline-3">
+<h3 id="org0c5f2df"><span class="section-number-3">21.4</span> Zero byte copy mode</h3>
+<div class="outline-text-3" id="text-21-4">
 <p>
 If sending File as body, zero byte copy is used.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline100" class="outline-3">
-<h3 id="orgheadline100"><span class="section-number-3">19.5</span> Allow providing your own poll</h3>
-<div class="outline-text-3" id="text-19-5">
+<div id="outline-container-orgada3cff" class="outline-3">
+<h3 id="orgada3cff"><span class="section-number-3">21.5</span> Allow providing your own poll</h3>
+<div class="outline-text-3" id="text-21-5">
 <p>
 Vadim Geshel contribution.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline101" class="outline-3">
-<h3 id="orgheadline101"><span class="section-number-3">19.6</span> Allow Asynchronous Connect</h3>
-<div class="outline-text-3" id="text-19-6">
+<div id="outline-container-orgb1b28ae" class="outline-3">
+<h3 id="orgb1b28ae"><span class="section-number-3">21.6</span> Allow Asynchronous Connect</h3>
+<div class="outline-text-3" id="text-21-6">
 <p>
 Vadim Geshel contribution.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline102" class="outline-3">
-<h3 id="orgheadline102"><span class="section-number-3">19.7</span> Fix seq streaming API</h3>
-<div class="outline-text-3" id="text-19-7">
+<div id="outline-container-org518d8fd" class="outline-3">
+<h3 id="org518d8fd"><span class="section-number-3">21.7</span> Fix seq streaming API</h3>
+<div class="outline-text-3" id="text-21-7">
 <p>
 Previous versions of seq streaming API have been holding to head,
 not anymore.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline103" class="outline-3">
-<h3 id="orgheadline103"><span class="section-number-3">19.8</span> Lots of performance improvements</h3>
-<div class="outline-text-3" id="text-19-8">
+<div id="outline-container-org9af347e" class="outline-3">
+<h3 id="org9af347e"><span class="section-number-3">21.8</span> Lots of performance improvements</h3>
+<div class="outline-text-3" id="text-21-8">
 <p>
 Underlying async-http-client has undergone serious optimization
 changes.
@@ -980,41 +1137,40 @@ changes.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline110" class="outline-2">
-<h2 id="orgheadline110"><span class="section-number-2">20</span> Release 0.2.1</h2>
-<div class="outline-text-2" id="text-20">
-</div><div id="outline-container-orgheadline105" class="outline-3">
-<h3 id="orgheadline105"><span class="section-number-3">20.1</span> Terminate body seq if errored&#xa0;&#xa0;&#xa0;<span class="tag"><span class="bug">bug</span></span></h3>
+<div id="outline-container-orgd668340" class="outline-2">
+<h2 id="orgd668340"><span class="section-number-2">22</span> Release 0.2.1</h2>
+<div class="outline-text-2" id="text-22">
 </div>
-<div id="outline-container-orgheadline106" class="outline-3">
-<h3 id="orgheadline106"><span class="section-number-3">20.2</span> Canceling request</h3>
-<div class="outline-text-3" id="text-20-2">
+<div id="outline-container-org7476938" class="outline-3">
+<h3 id="org7476938"><span class="section-number-3">22.1</span> Terminate body seq if errored&#xa0;&#xa0;&#xa0;<span class="tag"><span class="bug">bug</span></span></h3>
+</div>
+<div id="outline-container-org81fbe3a" class="outline-3">
+<h3 id="org81fbe3a"><span class="section-number-3">22.2</span> Canceling request</h3>
+<div class="outline-text-3" id="text-22-2">
 <p>
 <b>http.async.client/cancel</b> and <b>http.async.client/canceled?</b>
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline107" class="outline-3">
-<h3 id="orgheadline107"><span class="section-number-3">20.3</span> Request timeout</h3>
-<div class="outline-text-3" id="text-20-3">
+<div id="outline-container-org1549cb4" class="outline-3">
+<h3 id="org1549cb4"><span class="section-number-3">22.3</span> Request timeout</h3>
+<div class="outline-text-3" id="text-22-3">
 <p>
 Per request configuration of request timeout in ms.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(GET url :timeout 100)
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline108" class="outline-3">
-<h3 id="orgheadline108"><span class="section-number-3">20.4</span> Close client</h3>
-<div class="outline-text-3" id="text-20-4">
+<div id="outline-container-org88cdff1" class="outline-3">
+<h3 id="org88cdff1"><span class="section-number-3">22.4</span> Close client</h3>
+<div class="outline-text-3" id="text-22-4">
 <p>
 <b>http.async.client/close</b>.
 </p>
 <div class="org-src-container">
-
 <pre class="src src-clojure">(c/close)
 ;; or
 (c/close hac)
@@ -1022,58 +1178,59 @@ Per request configuration of request timeout in ms.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline109" class="outline-3">
-<h3 id="orgheadline109"><span class="section-number-3">20.5</span> Upgrade to v1.3.2 of async-http-client</h3>
+<div id="outline-container-org950edd6" class="outline-3">
+<h3 id="org950edd6"><span class="section-number-3">22.5</span> Upgrade to v1.3.2 of async-http-client</h3>
 </div>
 </div>
-<div id="outline-container-orgheadline117" class="outline-2">
-<h2 id="orgheadline117"><span class="section-number-2">21</span> Release 0.2.0</h2>
-<div class="outline-text-2" id="text-21">
-</div><div id="outline-container-orgheadline111" class="outline-3">
-<h3 id="orgheadline111"><span class="section-number-3">21.1</span> Stream as seq</h3>
-<div class="outline-text-3" id="text-21-1">
+<div id="outline-container-org83f918a" class="outline-2">
+<h2 id="org83f918a"><span class="section-number-2">23</span> Release 0.2.0</h2>
+<div class="outline-text-2" id="text-23">
+</div>
+<div id="outline-container-org6fa61e5" class="outline-3">
+<h3 id="org6fa61e5"><span class="section-number-3">23.1</span> Stream as seq</h3>
+<div class="outline-text-3" id="text-23-1">
 <p>
 Response body can be seq, this allows for easy HTTP Stream
 handling. <a href="http://cch1.github.io/http.async.client/docs.html#sec-1.2.4">Documentation</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline112" class="outline-3">
-<h3 id="orgheadline112"><span class="section-number-3">21.2</span> Cookies</h3>
-<div class="outline-text-3" id="text-21-2">
+<div id="outline-container-org7f1b091" class="outline-3">
+<h3 id="org7f1b091"><span class="section-number-3">23.2</span> Cookies</h3>
+<div class="outline-text-3" id="text-23-2">
 <p>
 Added cookies support. <a href="http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.4">Sending</a> and <a href="http://cch1.github.io/http.async.client/docs.html#sec-1.2.5.4">receiving</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline113" class="outline-3">
-<h3 id="orgheadline113"><span class="section-number-3">21.3</span> Authentication support</h3>
-<div class="outline-text-3" id="text-21-3">
+<div id="outline-container-org98fc81c" class="outline-3">
+<h3 id="org98fc81c"><span class="section-number-3">23.3</span> Authentication support</h3>
+<div class="outline-text-3" id="text-23-3">
 <p>
 Basic and Digest from rfc2617 are supported. <a href="http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.6">Documentation</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline114" class="outline-3">
-<h3 id="orgheadline114"><span class="section-number-3">21.4</span> Proxy per request</h3>
-<div class="outline-text-3" id="text-21-4">
+<div id="outline-container-org7f57b39" class="outline-3">
+<h3 id="org7f57b39"><span class="section-number-3">23.4</span> Proxy per request</h3>
+<div class="outline-text-3" id="text-23-4">
 <p>
 Proxy can be specified per request. <a href="http://cch1.github.io/http.async.client/http://cch1.github.io/http.async.client/docs.html#sec-1.2.3.5">Documentation</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline115" class="outline-3">
-<h3 id="orgheadline115"><span class="section-number-3">21.5</span> Branding User-Agent</h3>
-<div class="outline-text-3" id="text-21-5">
+<div id="outline-container-org9be3fb2" class="outline-3">
+<h3 id="org9be3fb2"><span class="section-number-3">23.5</span> Branding User-Agent</h3>
+<div class="outline-text-3" id="text-23-5">
 <p>
 Specifying User-Agent per client.
 <a href="http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/create-client"><b>http.async.client/create-client</b></a> and <a href="http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/with-client"><b>http.async.client/with-client</b></a>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline116" class="outline-3">
-<h3 id="orgheadline116"><span class="section-number-3">21.6</span> Keyworded maps in API</h3>
-<div class="outline-text-3" id="text-21-6">
+<div id="outline-container-org8a63353" class="outline-3">
+<h3 id="org8a63353"><span class="section-number-3">23.6</span> Keyworded maps in API</h3>
+<div class="outline-text-3" id="text-23-6">
 <p>
 Like <b>:options</b> in <a href="http://cch1.github.io/http.async.client/autodoc/http.async.client-api.html#http.async.client/GET"><b>http.async.client/GET</b></a>.
 </p>
@@ -1083,7 +1240,7 @@ Like <b>:options</b> in <a href="http://cch1.github.io/http.async.client/autodoc
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Chris Hapgood</p>
-<p class="date">Created: 2016-08-25 Thu 15:50</p>
+<p class="date">Created: 2019-02-10 Sun 20:48</p>
 <p class="creator">Emacs 24.4.1 (Org mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
