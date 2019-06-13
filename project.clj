@@ -19,8 +19,8 @@
              :1.8.0 {:dependencies [[org.clojure/clojure "1.8.0" :upgrade? false]]}
              :1.9.0 {:dependencies [[org.clojure/clojure "1.9.0" :upgrade? false]]}
              :dev {:resource-paths ["test-resources"],
-                   :dependencies [[org.eclipse.jetty/jetty-server "9.4.14.v20181114"]
-                                  [org.eclipse.jetty/jetty-security "9.4.14.v20181114"]
+                   :dependencies [[org.eclipse.jetty/jetty-server "9.4.19.v20190610"]
+                                  [org.eclipse.jetty/jetty-security "9.4.19.v20190610"]
                                   [org.eclipse.jetty/jetty-continuation "9.4.14.v20181114"]
                                   [aleph "0.4.6"]
                                   [log4j "1.2.17"]
