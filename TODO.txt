@@ -1,0 +1,2 @@
+* https://github.com/johanhaleby/stub-http
+* Update AHC to 2.X (https://groups.google.com/forum/#!searchin/asynchttpclient/http.async.client%7Csort:date/asynchttpclient/C6uObpWhj68/kuGZjS_tAQAJ)
