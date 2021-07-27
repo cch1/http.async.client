@@ -17,9 +17,9 @@
   (:require [clojure.test :refer :all]
             [http.async.client.part :refer :all])
   (:import (java.nio.charset Charset)
-           (com.ning.http.client.multipart ByteArrayPart
-                                           FilePart
-                                           StringPart)
+           (org.asynchttpclient.request.body.multipart ByteArrayPart
+                                                       FilePart
+                                                       StringPart)
            (java.io File)))
 
 (set! *warn-on-reflection* true)
@@ -31,7 +31,7 @@
       (are [expected tested] (= expected tested)
         "test-name" (.getName #^StringPart p)
         "test-value" (.getValue #^StringPart p)
-        (StringPart/DEFAULT_CHARSET) (.getCharset #^StringPart p))))
+        (Charset/forName "UTF-8") (.getCharset #^StringPart p))))
   (testing "With encoding"
     (let [p (create-part {:type    :string
                           :name    "test-name"

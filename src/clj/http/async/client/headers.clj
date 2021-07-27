@@ -15,46 +15,40 @@
 ;;; limitations under the License.
 (ns http.async.client.headers "Asynchrounous HTTP Client - Clojure - Lazy headers"
     {:author "Hubert Iwaniuk"}
-    (:import (com.ning.http.client HttpResponseHeaders FluentCaseInsensitiveStringsMap)))
+  (:import (io.netty.handler.codec.http HttpHeaders)
+           (clojure.lang MapEntry APersistentMap)))
 
-(defn- kn [k]
+(defn- ^String kn [k]
   (if (keyword? k) (name k) k))
-
-(defn- v [#^FluentCaseInsensitiveStringsMap h k]
-  (let [vals (.get h (kn k))]
-    (if (= 1 (count vals))
-      (first vals)
-      (vec vals))))
 
 ;; Convertion of AHC Headers to lazy map.
 (defn convert-headers-to-map
   "Converts Http Response Headers to lazy map."
-  [#^HttpResponseHeaders headers]
-  (let [hds (.getHeaders headers)
-        names (.keySet hds)]
-    (proxy [clojure.lang.APersistentMap]
+  [#^HttpHeaders hds]
+  (let [names (.names hds)]
+    (proxy [APersistentMap]
         []
-      (containsKey [k] (.containsKey hds (kn k)))
-      (entryAt [k] (when (.containsKey hds (kn k))
-                     (proxy [clojure.lang.MapEntry]
+      (containsKey [k] (.contains hds (kn k)))
+      (entryAt [k] (when (.contains hds (kn k))
+                     (proxy [MapEntry]
                          [k nil]
-                       (val [] (v hds k)))))
+                       (val [] (.get hds (kn k))))))
       (valAt
-        ([k] (v hds k))
-        ([k default] (if (.containsKey hds k)
-                       (v hds k)
+        ([k] (.get hds (kn k)))
+        ([k default] (if (.contains hds (kn k))
+                       (.get hds (kn k))
                        default)))
       (cons [m] (throw (UnsupportedOperationException. "Form 'cons' not supported: headers are read only.")))
-      (count [] (.size hds))
+      (count [] (.size names))
       (assoc [k v] (throw (UnsupportedOperationException. "Form 'assoc' not supported: headers are read only.")))
       (without [k] (throw (UnsupportedOperationException. "Form 'without' not supported: headers are read only")))
       (seq [] ((fn thisfn [plseq]
                  (lazy-seq
                   (when-let [pseq (seq plseq)]
                     (let [k (keyword (.toLowerCase (first pseq)))]
-                      (cons (proxy [clojure.lang.MapEntry]
+                      (cons (proxy [MapEntry]
                                 [k nil]
-                              (val [] (v hds k)))
+                              (val [] (.get hds (kn k))))
                             (thisfn (rest pseq)))))))
                names)))))
 
