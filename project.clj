@@ -3,8 +3,8 @@
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "https://github.com/cch1/http.async.client"
   :source-paths ["src/clj"]
-                 [com.ning/async-http-client "1.9.40"]
   :dependencies [[org.clojure/clojure "1.10.3"]
+                 [org.asynchttpclient/async-http-client "2.12.3"]
                  [org.clojure/tools.logging "0.4.1"]]
   :min-lein-version "2.5.1"
   :plugins [[codox "0.8.12"]

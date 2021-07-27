@@ -17,16 +17,10 @@
   "Asynchronous HTTP Client Websocket Extensions- Clojure"
   {:author "Chris Hapgood"}
   (:refer-clojure :exclude [await send])
-  (:import (java.io ByteArrayOutputStream)
-           (com.ning.http.client HttpResponseBodyPart)
-           (com.ning.http.client.ws WebSocket
-                                    WebSocketUpgradeHandler$Builder
-                                    WebSocketListener
-                                    WebSocketByteListener WebSocketByteFragmentListener
-                                    WebSocketTextListener WebSocketTextFragmentListener
-                                    WebSocketCloseCodeReasonListener)
-           (com.ning.http.client.providers.netty.ws NettyWebSocket)
-           (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
+  (:import (org.asynchttpclient.ws WebSocket
+                                   WebSocketUpgradeHandler$Builder
+                                   WebSocketListener)
+           (org.asynchttpclient.netty.ws NettyWebSocket)))
 
 (defprotocol IWebSocket
   (-sendText [this text])
@@ -35,64 +29,36 @@
 (extend-protocol IWebSocket
   NettyWebSocket
   (-sendText [ws text]
-    (.sendMessage ws text))
+    (.sendTextFrame ws text))
   (-sendByte [ws byte]
-    (.sendMessage ws byte)))
+    (.sendBinaryFrame ws byte)))
 
 (defn send
-  "Send message via WebSocket."
-  [ws & {text :text
-         byte :byte}]
-  (when (satisfies? IWebSocket ws)
-    (if text
-      (-sendText ws text)
-      (-sendByte ws byte))))
+ "Send message via WebSocket."
+ [ws & {text :text
+        byte :byte}]
+ (when (satisfies? IWebSocket ws)
+   (if text
+     (-sendText ws text)
+     (-sendByte ws byte))))
 
-(defn- create-text-listener
-  [ws cb open-cb close-cb error-cb]
+(defn- create-listener
+  [ws text-cb byte-cb open-cb close-cb error-cb]
   (reify
-    WebSocketCloseCodeReasonListener
-    (onClose [_ ws* code reason]
-      (when close-cb (close-cb ws* code reason))
-      (reset! ws nil))
-
     WebSocketListener
     (^{:tag void} onOpen [_ #^WebSocket soc]
      (reset! ws soc)
      (when open-cb (open-cb soc)))
-    (^{:tag void} onClose [_ #^WebSocket soc])
-    (^{:tag void} onError [_ #^Throwable t]
-     (reset! ws nil)
-     (when error-cb (error-cb @ws t)))
-
-    WebSocketTextListener
-    (^{:tag void} onMessage [_ #^String s]
-     (cb @ws s))
-    WebSocketTextFragmentListener
-    (^{:tag void} onFragment [_ #^HttpResponseBodyPart part])))
-
-(defn- create-byte-listener
-  [ws cb open-cb close-cb error-cb]
-  (reify
-    WebSocketCloseCodeReasonListener
     (onClose [_ ws* code reason]
       (when close-cb (close-cb ws* code reason))
       (reset! ws nil))
-
-    WebSocketListener
-    (^{:tag void} onOpen [_ #^WebSocket soc]
-     (reset! ws soc)
-     (when open-cb (open-cb soc)))
-    (^{:tag void} onClose [_ #^WebSocket soc])
     (^{:tag void} onError [_ #^Throwable t]
      (reset! ws nil)
      (when error-cb (error-cb @ws t)))
-
-    WebSocketByteListener
-    (^{:tag void} onMessage [_ #^bytes b]
-     (cb @ws b))
-    WebSocketByteFragmentListener
-    (^{:tag void} onFragment [_ #^HttpResponseBodyPart part])))
+    (onTextFrame [_ s _ _]
+     (when text-cb (text-cb @ws s)))
+    (onBinaryFrame [_ b _ _]
+     (when byte-cb (byte-cb @ws b)))))
 
 (defn upgrade-handler
   "Creates a WebSocketUpgradeHandler"
@@ -105,6 +71,5 @@
   {:pre [(not (and text-cb byte-cb))]}
   (let [b (WebSocketUpgradeHandler$Builder.)
         ws (atom nil)]
-    (when text-cb (.addWebSocketListener b (create-text-listener ws text-cb open-cb close-cb error-cb)))
-    (when byte-cb (.addWebSocketListener b (create-byte-listener ws byte-cb open-cb close-cb error-cb)))
+    (.addWebSocketListener b (create-listener ws text-cb byte-cb open-cb close-cb error-cb))
     (.build b)))

@@ -25,6 +25,8 @@
             SSLContext
             HttpsURLConnection
             X509TrustManager)
+           (io.netty.handler.ssl
+             SslContext)
            (java.io
             File
             InputStream

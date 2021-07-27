@@ -14,16 +14,9 @@
 (ns http.async.client.util
   "Asynchronous HTTP Client - Clojure - Utils"
   {:author "Hubert Iwaniuk"}
-  (:import (com.ning.http.client ProxyServer
-                                 ProxyServer$Protocol
-                                 Realm$AuthScheme
-                                 Realm$RealmBuilder)))
-
-(defn- proto-map [proto]
-  (if proto
-    ({:http  ProxyServer$Protocol/HTTP
-      :https ProxyServer$Protocol/HTTPS} proto)
-    ProxyServer$Protocol/HTTP))
+  (:import (org.asynchttpclient.proxy ProxyServer$Builder ProxyServer)
+           (org.asynchttpclient Realm$AuthScheme
+                                Realm$Builder)))
 
 (defn set-proxy
   "Sets proxy on builder.
@@ -35,9 +28,12 @@
          host port
          (or (and (nil? user) (nil? password))
              (and user password))]}
-  (.setProxyServer b (if user
-                       (ProxyServer. (proto-map protocol) host port user password)
-                       (ProxyServer. (proto-map protocol) host port))))
+  (let [psb (ProxyServer$Builder. host port)
+        psb' (if user
+               (.setRealm psb (.setScheme (Realm$Builder. user password)
+                                          Realm$AuthScheme/BASIC))
+               psb)]
+    (.setProxyServer b (.build psb'))))
 
 (defn- type->auth-scheme [type]
   (or ({:basic Realm$AuthScheme/BASIC
@@ -48,9 +44,9 @@
   "Sets realm on builder.
   Note that in v.1.0.0 you must set a realm to enable HTTPS traffic
   via the proxy."
-  [{:keys [type user password realm preemptive target-proxy]
+  [{:keys [type user password realm preemptive]
     :or {type :basic}} b]
-  (let [rbld (Realm$RealmBuilder.)]
+  (let [rbld (Realm$Builder. user password)]
     (.setScheme rbld (type->auth-scheme type))
     (when (nil? user)
       (if (nil? password)
@@ -64,9 +60,4 @@
       (.setRealmName rbld realm))
     (when-not (nil? preemptive)
       (.setUsePreemptiveAuth rbld preemptive))
-    (when-not (nil? target-proxy)
-      (.setTargetProxy rbld target-proxy))
-    (doto rbld
-      (.setPrincipal user)
-      (.setPassword password))
     (.setRealm b (.build rbld))))

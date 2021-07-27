@@ -29,22 +29,20 @@
             [manifold.stream :as stream]
             [clojure.java.io :refer [input-stream]])
   (:import (java.net URI)
-           (com.ning.http.client AsyncHttpClient)
-           (org.apache.log4j ConsoleAppender Level Logger PatternLayout)
+           (org.asynchttpclient AsyncHttpClient)
            (org.eclipse.jetty.server Server Request)
            (org.eclipse.jetty.server.handler AbstractHandler)
            (org.eclipse.jetty.continuation ContinuationSupport)
            (org.eclipse.jetty.util.security Constraint)
            (org.eclipse.jetty.security ConstraintMapping ConstraintSecurityHandler
-                                       HashLoginService LoginService)
+                                       HashLoginService)
            (org.eclipse.jetty.security.authentication BasicAuthenticator)
            (javax.servlet.http HttpServletRequest HttpServletResponse Cookie)
            (java.io ByteArrayOutputStream
                     Closeable
                     File
                     IOException)
-           (java.net ServerSocket
-                     ConnectException
+           (java.net ConnectException
                      UnknownHostException)
            (java.util.concurrent TimeoutException)))
 (set! *warn-on-reflection* true)
@@ -603,7 +601,7 @@
   (testing "only host and port"
     (let [r (prepare-request :get "http://not-important/" :proxy {:host "localhost"
                                                                   :port 8080})]
-      (is (isa? (class r) com.ning.http.client.Request))))
+      (is (isa? (class r) org.asynchttpclient.Request))))
   (testing "wrong protocol"
     (is (thrown-with-msg? AssertionError #"Assert failed:.*protocol.*"
                           (prepare-request :get "http://not-important/" :proxy {:protocol :wrong
@@ -613,12 +611,12 @@
     (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :http
                                                                   :host "localhost"
                                                                   :port 8080})]
-      (is (isa? (class r) com.ning.http.client.Request))))
+      (is (isa? (class r) org.asynchttpclient.Request))))
   (testing "https protocol"
     (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :https
                                                                   :host "localhost"
                                                                   :port 8383})]
-      (is (isa? (class r) com.ning.http.client.Request))))
+      (is (isa? (class r) org.asynchttpclient.Request))))
   (testing "protocol but no host nor port"
     (is (thrown-with-msg? AssertionError #"Assert failed: host"
                           (prepare-request :get "http://not-important/" :proxy {:protocol :http}))))
@@ -637,14 +635,14 @@
                                                                   :port 8080
                                                                   :user "name"
                                                                   :password "..."})]
-      (is (isa? (class r) com.ning.http.client.Request))))
+      (is (isa? (class r) org.asynchttpclient.Request))))
   (testing "protocol, host, port, user and password"
     (let [r (prepare-request :get "http://not-important/" :proxy {:protocol :http
                                                                   :host "localhost"
                                                                   :port 8080
                                                                   :user "name"
                                                                   :password "..."})]
-      (is (isa? (class r) com.ning.http.client.Request)))))
+      (is (isa? (class r) org.asynchttpclient.Request)))))
 
 (deftest get-with-cookie
   (let [cv "sample-value"
@@ -841,22 +839,13 @@
         _ (future (Thread/sleep 300) (close client) (deliver closed true))]
     (is (deref closed 1000 false))))
 
-(deftest test-close-async-slow-callback
-  (let [closed (promise)
-        client (create-client)
-        resp (execute-request client (prepare-request :get (str *http-url* "empty"))
-                              :completed (fn [response]
-                                           (Thread/sleep 1000)))
-        _ (future (Thread/sleep 300) (close-async client) (deliver closed true))]
-    (is (deref closed 1000 false))))
-
 (deftest closing-client
   (let [client (create-client)]
     (await (GET client *http-url*))
     (close client)
     (let [resp (GET client *http-url*)]
       (is (true? (failed? resp)))
-      (is (instance? IOException (error resp))))))
+      (is (instance? IllegalStateException (error resp))))))
 
 (deftest extract-empty-body
   (let [resp (GET *client* (str *http-url* "empty"))]
@@ -878,17 +867,18 @@
   (let [open-latch (promise)
         close-latch (promise)
         receive-latch (promise)]
-    (with-open [ws (websocket *client* *ws-url*
-                              :text (fn [_ m] (log/infof "Received websocket text message: %s" m)
-                                      (deliver receive-latch m))
-                              :open (fn [& args] (log/infof "Websocket open")
-                                      (deliver open-latch :open))
-                              :close (fn [& args] (log/infof "Websocket close")
-                                       (deliver close-latch :close))
-                              :error (fn [& args] (log/errorf "Websocket error")))]
+    (let [ws (websocket *client* *ws-url*
+                        :text (fn [_ m] (log/infof "Received websocket text message: %s" m)
+                                (deliver receive-latch m))
+                        :open (fn [& args] (log/infof "Websocket open")
+                                (deliver open-latch :open))
+                        :close (fn [& args] (log/infof "Websocket close")
+                                 (deliver close-latch :close))
+                        :error (fn [& args] (log/errorf "Websocket error")))]
       (is (= (deref open-latch 1000 :timeout) :open))
       (send ws :text "hello")
-      (is (= (deref receive-latch 1000 :timeout) "hello")))
+      (is (= (deref receive-latch 1000 :timeout) "hello"))
+      (.sendCloseFrame ws))
     (is (= (deref close-latch 1000 :timeout) :close))))
 
 (deftest ws-xor-text-or-byte
