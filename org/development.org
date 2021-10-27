@@ -20,4 +20,9 @@ lein release patch
      1. loading the =org-publish-project-alist.el= file.
      2. Evaluating the Emacs Lisp contents of the file.
      3. Executing ~org-publish-project~ and supplying the project name ~gh-pages~.
-  9. In the subtree directory =gh-pages=, commit all generated files and push.
+  9. In the subtree directory =gh-pages=, commit all generated files.
+  10. In the root directory, commit the changed =gh-pages= subtree:
+#+BEGIN_SRC shell
+git add gh-pages
+git commit -m "Publish documentation"
+#+END_SRC
