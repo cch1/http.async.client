@@ -1,0 +1,23 @@
+#+TITLE: Asynchronous HTTP Client - Development
+#+SETUPFILE: setup.org
+
+* Documentation
+  This project uses a [[https://gist.github.com/SKempin/b7857a6ff6bddb05717cc17a44091202][git subtree]] in the =gh-pages= directory to hold the generated documentation.  The documentation is generated from two sources:
+  + The [[https://github.com/weavejester/codox][lein codox]] plugin
+  + The publishing of [[https://orgmode.org/org.html][Org]] files as HTML
+* Releasing
+  1. Update the code.
+  2. Commit code updates.
+  3. Update the org file-based documentation in the =./org= directory.
+  4. Commit all org file changes.
+  5. Push all commits to the remote repository.
+  6. Release with =lein release= - this should also generate a tag and push the tag.  For example:
+#+BEGIN_SRC shell
+lein release patch
+#+END_SRC
+  7. [@7]Generate the API docs with =lein doc=.
+  8. [[https://orgmode.org/org.html#Publishing][Publish]] the org docs by:
+     1. loading the =org-publish-project-alist.el= file.
+     2. Evaluating the Emacs Lisp contents of the file.
+     3. Executing ~org-publish-project~ and supplying the project name ~gh-pages~.
+  9. In the subtree directory =gh-pages=, commit all generated files and push.

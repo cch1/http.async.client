@@ -21,18 +21,16 @@
              [part :refer :all]]
             [clojure.string :refer [join]]
             [clojure.tools.logging :as log])
-  (:import (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder
-                                 AsyncHandler
-                                 FluentCaseInsensitiveStringsMap
-                                 HttpResponseStatus HttpResponseHeaders
-                                 HttpResponseBodyPart
-                                 Request RequestBuilder)
-           (com.ning.http.client.generators InputStreamBodyGenerator)
-           (com.ning.http.client.cookie Cookie)
+  (:import (org.asynchttpclient AsyncHandler AsyncHandler$State
+                                HttpResponseStatus
+                                HttpResponseBodyPart
+                                Request RequestBuilder)
+           (io.netty.handler.codec.http.cookie Cookie DefaultCookie)
+           (io.netty.handler.codec.http HttpHeaders)
+           (org.asynchttpclient.request.body.generator InputStreamBodyGenerator)
            (java.net URLEncoder)
            (java.io File
                     InputStream
-                    ByteArrayInputStream
                     ByteArrayOutputStream)))
 
 (def ^:dynamic *user-agent* "http.async.client")
@@ -140,8 +138,13 @@
     ;; cookies
     (doseq [{:keys [domain name value wrap? path max-age secure http-only?]
              :or {path "/" max-age 30 secure false wrap? false http-only? false}} cookies]
-      (.addCookie rb (Cookie/newValidCookie name value wrap? domain path
-                                            max-age secure http-only?)))
+      (.addCookie rb (doto (DefaultCookie. name value)
+                       (.setWrap wrap?)
+                       (.setDomain domain)
+                       (.setPath path)
+                       (.setMaxAge max-age)
+                       (.setSecure secure)
+                       (.setHttpOnly http-only?))))
     ;; query parameters
     (doseq [[k v] query] (if (vector? v)
                            (doseq [vv v] (.addQueryParam rb (name k) (str vv)))
@@ -149,10 +152,11 @@
     ;; message body
     (cond
       (map? body) (doseq [[k v] body] (.addFormParam rb (name k) (str v)))
-      (string? body) (.setBody rb (.getBytes (if (= "application/x-www-form-urlencoded" (:content-type headers))
-                                               (url-encode body)
-                                               body)
-                                             "UTF-8"))
+      (string? body) (.setBody rb (.getBytes
+                                    (if (= "application/x-www-form-urlencoded" (:content-type headers))
+                                      (url-encode body)
+                                      body)
+                                    "UTF-8"))
       (instance? InputStream body) (.setBody rb (InputStreamBodyGenerator. #^InputStream body))
       (instance? File body) (.setBody rb #^File body)
       (vector? body) (doseq [part body]
@@ -171,10 +175,10 @@
 (defn convert-action
   "Converts action (:abort, nil) to Async client STATE."
   [action]
-  {:tag com.ning.http.client.AsyncHandler$STATE}
+  {:tag AsyncHandler$State}
   (if (= action :abort)
-    com.ning.http.client.AsyncHandler$STATE/ABORT
-    com.ning.http.client.AsyncHandler$STATE/CONTINUE))
+    AsyncHandler$State/ABORT
+    AsyncHandler$State/CONTINUE))
 
 (defn execute-request
   "Executes provided request.
@@ -218,21 +222,21 @@
         (.executeRequest
          client req
          (reify AsyncHandler
-           (^{:tag com.ning.http.client.AsyncHandler$STATE}
+           (^{:tag AsyncHandler$State}
             onStatusReceived [this #^HttpResponseStatus e]
             (let [[result action] ((or status
                                        (:status *default-callbacks*))
                                    resp (convert-status-to-map e))]
               (deliver (:status resp) result)
               (convert-action action)))
-           (^{:tag com.ning.http.client.AsyncHandler$STATE}
-            onHeadersReceived [this #^HttpResponseHeaders e]
+           (^{:tag AsyncHandler$State}
+            onHeadersReceived [this #^HttpHeaders e]
             (let [[result action] ((or headers
                                        (:headers *default-callbacks*))
                                    resp (convert-headers-to-map e))]
               (deliver (:headers resp) result)
               (convert-action action)))
-           (^{:tag com.ning.http.client.AsyncHandler$STATE}
+           (^{:tag AsyncHandler$State}
             onBodyPartReceived [this #^HttpResponseBodyPart e]
             (let [l (.length e)]
               (when (pos? l)

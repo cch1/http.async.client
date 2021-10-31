@@ -15,9 +15,9 @@
   "Asynchronous HTTP Client - Clojure - Multipart API"
   {:author "Hubert Iwaniuk"}
   (:import (java.nio.charset Charset)
-           (com.ning.http.client.multipart ByteArrayPart
-                                           FilePart
-                                           StringPart)))
+           (org.asynchttpclient.request.body.multipart ByteArrayPart
+                                                       FilePart
+                                                       StringPart)))
 
 (defn create-string-part
   "Create string multipart part"

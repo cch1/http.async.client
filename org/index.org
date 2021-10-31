@@ -2,7 +2,8 @@
 #+SETUPFILE: setup.org
 
    + Documentation Components
-     + [[./doc/index.html][Auto-generated API documentation]].
+     + [[./doc/index.html][Auto-generated API documentation]]
      + [[./docs.org][Usage Documentation]]
      + [[./changelog.org][Changelog]]
+     + [[./development.org][Development]]
      + [[./todo.org][To Do]]

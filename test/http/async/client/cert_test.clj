@@ -20,11 +20,12 @@
             [clojure
              [test :refer :all]
              [stacktrace :refer [print-stack-trace]]])
-  (:import (com.ning.http.client AsyncHttpClient)
+  (:import (org.asynchttpclient AsyncHttpClient DefaultAsyncHttpClient)
            (java.security KeyStore)
            (java.security.cert X509Certificate)
            (javax.net.ssl KeyManagerFactory SSLContext)
-           (http.async.client.cert BlindTrustManager)))
+           (http.async.client.cert BlindTrustManager)
+           (org.asynchttpclient.netty.ssl JsseSslEngineFactory)))
 
 (set! *warn-on-reflection* true)
 
@@ -92,6 +93,7 @@
                          :certificate-file cert-file
                          :certificate-alias other-cert-alias)]
     (with-open [client (create-client :ssl-context ctx)]
-      (is (= AsyncHttpClient (class client)))
+      (is (instance? AsyncHttpClient client))
       ;; Make sure client is using the SSLContext we supplied
-      (is (= ctx (.getSSLContext (.getConfig client)))))))
+      (is (instance? JsseSslEngineFactory
+                     (-> client .getConfig .getSslEngineFactory))))))

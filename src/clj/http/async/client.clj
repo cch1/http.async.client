@@ -25,10 +25,35 @@
             [clojure.tools.logging :as log])
   (:import (java.io ByteArrayOutputStream)
            (java.util.concurrent LinkedBlockingQueue)
-           (com.ning.http.client AsyncHttpClient AsyncHttpClientConfig$Builder)
-           (com.ning.http.client.ws WebSocket)
-           (com.ning.http.client.providers.netty.ws NettyWebSocket)
-           (com.ning.http.client.providers.netty NettyAsyncHttpProviderConfig)))
+           (org.asynchttpclient AsyncHttpClient DefaultAsyncHttpClientConfig$Builder Request DefaultAsyncHttpClient)
+           (org.asynchttpclient.ws WebSocket WebSocketUpgradeHandler)
+           (javax.net.ssl SSLContext)
+           (org.asynchttpclient.netty.ssl JsseSslEngineFactory DefaultSslEngineFactory)
+           (io.netty.handler.ssl SslContext)))
+
+(defn- set-ssl-context
+  "This fn exists just to figure out whether the `ssl-context` we're setting
+  is an instance of javax.net.ssl.SSLContext or
+  io.netty.handler.ssl.SslContext. In older versions of the java lib we're
+  wrapping, javax.net.ssl.SSLContext was always used. But recent versions
+  have to pass a different SSLEngineFactory to support the former while the
+  latter is the new default."
+  [#^DefaultAsyncHttpClientConfig$Builder client-config-builder ssl-context]
+  (cond
+    (instance? SSLContext ssl-context)
+    (.setSslEngineFactory client-config-builder
+                          (JsseSslEngineFactory. ssl-context))
+
+    (instance? SslContext ssl-context)
+    (.setSslContext client-config-builder ssl-context)
+
+    :else
+    (throw
+      (IllegalArgumentException.
+        (str "ssl-context must be an instance of either "
+             "javax.net.ssl.SSLContext or io.netty.handler.ssl.SslContext; "
+             "got an instance of " (class ssl-context) " instead")))))
+
 
 ;; # Client Lifecycle
 
@@ -61,7 +86,7 @@
   - :read-timeout :: read timeout in ms
   - :request-timeout :: request timeout in ms
   - :user-agent :: User-Agent branding string
-  - :executor-service :: provide your own executor service for callbacks to be executed on
+  - :thread-factory :: Provide your own ThreadFactory for callbacks to be executed with
   - :ssl-context :: provide your own SSL Context"
   {:tag AsyncHttpClient}
   [& {:keys [compression-enabled
@@ -77,20 +102,20 @@
              read-timeout
              request-timeout
              user-agent
-             executor-service
+             thread-factory
              ssl-context]}]
-  (AsyncHttpClient.
+  (DefaultAsyncHttpClient.
    (.build
-    (let [b (AsyncHttpClientConfig$Builder.)]
+    (let [b (DefaultAsyncHttpClientConfig$Builder.)]
       (when-not (nil? compression-enabled) (.setCompressionEnforced b compression-enabled))
       (when connection-timeout (.setConnectTimeout b connection-timeout))
       (when-not (nil? follow-redirects) (.setFollowRedirect b follow-redirects))
       (when idle-in-pool-timeout (.setPooledConnectionIdleTimeout b idle-in-pool-timeout))
-      (when-not (nil? keep-alive) (.setAllowPoolingConnections b keep-alive))
+      (when-not (nil? keep-alive) (.setKeepAlive b keep-alive))
       (when max-conns-per-host (.setMaxConnectionsPerHost b max-conns-per-host))
       (when max-conns-total (.setMaxConnections b max-conns-total))
       (when max-redirects (.setMaxRedirects b max-redirects))
-      (when executor-service (.setExecutorService b executor-service))
+      (when thread-factory (.setThreadFactory b thread-factory))
       (when proxy
         (set-proxy proxy b))
       (when auth
@@ -98,7 +123,7 @@
       (when read-timeout (.setReadTimeout b read-timeout))
       (when request-timeout (.setRequestTimeout b request-timeout))
       (.setUserAgent b (if user-agent user-agent *user-agent*))
-      (when-not (nil? ssl-context) (.setSSLContext b ssl-context))
+      (when-not (nil? ssl-context) (set-ssl-context b ssl-context))
       b))))
 
 (defmacro ^{:private true} gen-methods [& methods]
@@ -215,10 +240,10 @@
     (if (instance? LinkedBlockingQueue b)
       ((fn gen-next []
          (lazy-seq
-          (let [v (.take b)]
+          (let [v (.take ^LinkedBlockingQueue b)]
             (if (= ::done v)
               (do
-                (.put b ::done)
+                (.put ^LinkedBlockingQueue b ::done)
                 nil)
               (cons v (gen-next)))))))
       b)))
@@ -296,7 +321,7 @@
 (defn uri
   "Get the request URI from the response"
   [resp]
-  (.toJavaNetURI (.getUri (:req resp))))
+  (.toJavaNetURI (.getUri ^Request (:req resp))))
 
 (defn send
   "Send message via WebSocket."
@@ -310,12 +335,16 @@
 (defn websocket
   "Opens WebSocket connection."
   {:tag WebSocket}
-  [client #^String url & options]
-  (let [wsugh (apply ws/upgrade-handler options)]
-    (.get (.executeRequest client (apply prepare-request :get url options) wsugh))))
-
+  [^AsyncHttpClient client #^String url & options]
+  (let [^WebSocketUpgradeHandler wsugh (apply ws/upgrade-handler options)
+        ^Request req (apply prepare-request :get url options)]
+    (.get (.executeRequest client req wsugh))))
 
 ;; closing
+
+(defn close-websocket [ws]
+  (.sendCloseFrame ws))
+
 (defprotocol IClosable
   (-close [this])
   (-open? [this]))
@@ -323,11 +352,11 @@
 (extend-protocol IClosable
   AsyncHttpClient
   (-close [client] (.close client))
-  (-open? [client] (not (.isClosed client)))
+  (-open? [client] (not (.isClosed client))))
 
-  NettyWebSocket
-  (-close [soc] (.close soc))
-  (-open? [soc] (.isOpen soc)))
+  ;NettyWebSocket
+  ;(-close [soc] (.sendCloseFrame soc))
+  ;(-open? [soc] (.isOpen soc)))
 
 (defn close
   "Closes client."
@@ -336,13 +365,6 @@
     (let [result (-close client)]
       (log/debug "Closed client: " client)
       result)))
-
-(defn close-async
-  "Asynchronously closes the underlying AsyncHttpProvider by spawning
-  a thread and avoid blocking AsyncHttpClient. Does not support
-  websocket clients."
-  [^AsyncHttpClient client]
-  (.closeAsynchronously client))
 
 (defn open?
   "Checks if client is open."

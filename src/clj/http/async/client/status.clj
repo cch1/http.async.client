@@ -14,7 +14,7 @@
 (ns http.async.client.status
   "Asynchronous HTTP Client - Clojure - Lazy status."
   {:author "Hubert Iwaniuk"}
-  (:import (com.ning.http.client HttpResponseStatus)))
+  (:import (clojure.lang APersistentMap MapEntry)))
 
 (defn convert-status-to-map
   "Convert HTTP Status line to lazy map."
@@ -24,11 +24,11 @@
             :protocol (delay (.getProtocolText st))
             :major (delay (.getProtocolMajorVersion st))
             :minor (delay (.getProtocolMinorVersion st))}]
-    (proxy [clojure.lang.APersistentMap]
+    (proxy [APersistentMap]
         []
       (containsKey [k] (contains? lm k))
       (entryAt [k] (when (contains? lm k)
-                     (proxy [clojure.lang.MapEntry]
+                     (proxy [MapEntry]
                          [k nil]
                        (val [] (let [v (lm k)]
                                  (if (delay? v) @v v))))))
@@ -46,7 +46,7 @@
       (seq [] ((fn thisfn [plseq]
                  (lazy-seq
                   (when-let [pseq (seq plseq)]
-                    (cons (proxy [clojure.lang.MapEntry]
+                    (cons (proxy [MapEntry]
                               [(first pseq) nil]
                             (val [] (let [v (lm (first pseq))]
                                       (if (delay? v) @v v))))
