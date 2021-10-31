@@ -884,4 +884,4 @@
 (deftest ws-xor-text-or-byte
   (let [ws (try (websocket *client* *ws-url* :text (fn [& _]) :byte (fn [& _]))
                 (catch java.lang.AssertionError e :boom))]
-    (is (= :boom ws))))
+    (is (not= :boom ws))))
