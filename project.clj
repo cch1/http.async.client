@@ -5,11 +5,11 @@
   :source-paths ["src/clj"]
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [org.asynchttpclient/async-http-client "2.12.3"]
-                 [org.clojure/tools.logging "0.4.1"]]
+                 [org.clojure/tools.logging "1.1.0"]]
   :min-lein-version "2.5.1"
-  :plugins [[codox "0.8.12"]
+  :plugins [[lein-codox "0.10.8"]
             [lein-difftest "2.0.0"]
-            [com.roomkey/lein-v "7.0.0"]]
+            [com.roomkey/lein-v "7.2.0"]]
   :middleware [lein-v.plugin/middleware]
   :profiles {:1.3.0 {:dependencies [[org.clojure/clojure "1.3.0" :upgrade? false]]}
              :1.4.0 {:dependencies [[org.clojure/clojure "1.4.0" :upgrade? false]]}
@@ -19,14 +19,14 @@
              :1.8.0 {:dependencies [[org.clojure/clojure "1.8.0" :upgrade? false]]}
              :1.9.0 {:dependencies [[org.clojure/clojure "1.9.0" :upgrade? false]]}
              :dev {:resource-paths ["test-resources"],
-                   :dependencies [[org.eclipse.jetty/jetty-server "9.4.19.v20190610"]
-                                  [org.eclipse.jetty/jetty-security "9.4.19.v20190610"]
-                                  [org.eclipse.jetty/jetty-continuation "9.4.14.v20181114"]
+                   :dependencies [[org.eclipse.jetty/jetty-server "10.0.7"]
+                                  [org.eclipse.jetty/jetty-security "10.0.7"]
+                                  [org.eclipse.jetty/jetty-continuation "9.4.44.v20210927"]
                                   [aleph "0.4.6"]
                                   [log4j "1.2.17"]
                                   [org.slf4j/slf4j-log4j12 "1.7.12" :upgrade? false]]}}
-  :codox {:output-dir "gh-pages/doc"
-          :src-dir-uri "http://github.com/cch1/http.async.client/blob/master/"
+  :codox {:output-path "gh-pages/doc"
+          :src-dir-uri "http://github.com/cch1/http.async.client/blob/{version}/{filepath}#L{line}"
           :src-linenum-anchor-prefix "L"}
   :license {:name "Apache License, Version 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0"

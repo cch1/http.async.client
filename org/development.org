@@ -15,7 +15,7 @@
 #+BEGIN_SRC shell
 lein release patch
 #+END_SRC
-  7. [@7]Generate the API docs with =lein doc=.
+  7. [@7]Generate the API docs with =lein codox=.
   8. [[https://orgmode.org/org.html#Publishing][Publish]] the org docs by:
      1. loading the =org-publish-project-alist.el= file.
      2. Evaluating the Emacs Lisp contents of the file.
