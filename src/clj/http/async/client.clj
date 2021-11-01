@@ -87,7 +87,12 @@
   - :request-timeout :: request timeout in ms
   - :user-agent :: User-Agent branding string
   - :thread-factory :: Provide your own ThreadFactory for callbacks to be executed with
-  - :ssl-context :: provide your own SSL Context"
+  - :ssl-context :: provide your own SSL Context
+  - :websocket :: map with websocket-config
+      :max-frame-size                      - set websocket max-frame size
+      :max-buffer-size                     - set websdocket max-buffer size
+      :aggregate-websocket-frame-fragments - set aggregate websocket frame fragments
+      :enable-compression                  - set enable compression"
   {:tag AsyncHttpClient}
   [& {:keys [compression-enabled
              connection-timeout
@@ -103,7 +108,8 @@
              request-timeout
              user-agent
              thread-factory
-             ssl-context]}]
+             ssl-context
+             websocket]}]
   (DefaultAsyncHttpClient.
    (.build
     (let [b (DefaultAsyncHttpClientConfig$Builder.)]
@@ -120,6 +126,8 @@
         (set-proxy proxy b))
       (when auth
         (set-realm auth b))
+      (when websocket
+        (set-websocket-config websocket b))
       (when read-timeout (.setReadTimeout b read-timeout))
       (when request-timeout (.setRequestTimeout b request-timeout))
       (.setUserAgent b (if user-agent user-agent *user-agent*))
