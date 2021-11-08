@@ -47,10 +47,7 @@
 (defn #^InputStream load-embedded-resource
   "Loads a resource embedded in a jar file. Returns an InputStream"
   [#^String resource]
-  (let [thr (Thread/currentThread)
-        loader (.getContextClassLoader thr)
-        resource (.getResource loader resource)]
-    (FileInputStream. (File. (.toURI resource)))))
+  (io/input-stream (io/resource resource)))
 
 (defn #^InputStream resource-stream
   "Loads the resource at the specified path, and returns it as an
