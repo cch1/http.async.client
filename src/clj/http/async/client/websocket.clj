@@ -68,7 +68,6 @@
       open-cb  :open
       close-cb :close
       error-cb :error}]
-  {:pre [(not (and text-cb byte-cb))]}
   (let [b (WebSocketUpgradeHandler$Builder.)
         ws (atom nil)]
     (.addWebSocketListener b (create-listener ws text-cb byte-cb open-cb close-cb error-cb))
