@@ -1,6 +1,8 @@
 #+TITLE: Asynchronous HTTP Client - Clojure - Changelog
 #+SETUPFILE: setup.org
 
+* Unreleased
+** Expose config for websocket in `create-client`
 * Release 1.4.0
 ** Breaking changes: Update of underlying Java library
    This version of http.async.client is based on the 2.X version of the Java =async-http-client= library.  Previous versions were based on the 1.X series.  While the API of the Clojure library has not changed, its behavior has adapted to match that of the underlying library.  Notable changes include:

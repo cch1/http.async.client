@@ -61,3 +61,16 @@
     (when-not (nil? preemptive)
       (.setUsePreemptiveAuth rbld preemptive))
     (.setRealm b (.build rbld))))
+
+(defn set-websocket-config [{:keys [max-frame-size
+                                    max-buffer-size
+                                    aggregate-websocket-frame-fragments
+                                    enable-compression] :as ws-config} b]
+  (when max-frame-size
+    (.setWebSocketMaxFrameSize b max-frame-size))
+  (when max-buffer-size
+    (.setWebSocketMaxBufferSize b max-buffer-size))
+  (when (some? aggregate-websocket-frame-fragments)
+    (.setAggregateWebSocketFrameFragments b aggregate-websocket-frame-fragments))
+  (when (some? enable-compression)
+    (.setEnablewebSocketCompression b enable-compression)))

@@ -880,3 +880,21 @@
       (is (= (deref receive-latch 1000 :timeout) "hello"))
       (.sendCloseFrame ws))
     (is (= (deref close-latch 1000 :timeout) :close))))
+
+(deftest websocket-config
+  (with-open [default-client (create-client)]
+    (let [default-config (bean (:config (bean default-client)))
+          new-max-frame-size (inc (:webSocketMaxFrameSize default-config))
+          new-max-buffer-size (inc (:webSocketMaxBufferSize default-config))
+          new-aggregate-websocket-frame-fragments (not (:new-aggregate-websocket-frame-fragments default-config))
+          new-enable-compression (not (:enableWebSocketCompression default-config))]
+      (testing "that we can create a client with websocket config"
+        (with-open [client (create-client :websocket {:max-frame-size new-max-frame-size
+                                                      :max-buffer-size new-max-buffer-size
+                                                      :aggregate-websocket-frame-fragments new-aggregate-websocket-frame-fragments
+                                                      :enable-compression new-enable-compression})]
+          (let [config (bean (:config (bean client)))]
+            (is (= new-max-frame-size (:webSocketMaxFrameSize config)))
+            (is (= new-max-buffer-size (:webSocketMaxBufferSize config)))
+            (is (= new-aggregate-websocket-frame-fragments (:aggregateWebSocketFrameFragments config)))
+            (is (= new-enable-compression (:enableWebSocketCompression config)))))))))
