@@ -880,8 +880,3 @@
       (is (= (deref receive-latch 1000 :timeout) "hello"))
       (.sendCloseFrame ws))
     (is (= (deref close-latch 1000 :timeout) :close))))
-
-(deftest ws-xor-text-or-byte
-  (let [ws (try (websocket *client* *ws-url* :text (fn [& _]) :byte (fn [& _]))
-                (catch java.lang.AssertionError e :boom))]
-    (is (not= :boom ws))))
