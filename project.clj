@@ -3,9 +3,9 @@
   :description      "Asynchronous HTTP Client for Clojure"
   :url              "https://github.com/cch1/http.async.client"
   :source-paths ["src/clj"]
-  :dependencies [[org.clojure/clojure "1.10.3"]
+  :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.asynchttpclient/async-http-client "2.12.3"]
-                 [org.clojure/tools.logging "1.1.0"]]
+                 [org.clojure/tools.logging "1.2.4"]]
   :min-lein-version "2.5.1"
   :plugins [[lein-codox "0.10.8"]
             [lein-difftest "2.0.0"]
@@ -22,7 +22,7 @@
                    :dependencies [[org.eclipse.jetty/jetty-server "10.0.7"]
                                   [org.eclipse.jetty/jetty-security "10.0.7"]
                                   [org.eclipse.jetty/jetty-continuation "9.4.44.v20210927"]
-                                  [aleph "0.4.6"]
+                                  [aleph "0.5.0"]
                                   [log4j "1.2.17"]
                                   [org.slf4j/slf4j-log4j12 "1.7.12" :upgrade? false]]}}
   :codox {:output-path "gh-pages/doc"
