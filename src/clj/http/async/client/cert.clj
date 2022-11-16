@@ -125,6 +125,9 @@
    :certificate-alias - A name by which to access an X509 certificate that will
    be loaded into the KeyStore.
 
+   :protocol - The version of TLS to be used, by default \"TLS\", but \"TLSv1.1\"
+   or \"TLSv1.2\" are also supported
+
    :trust-managers - [optional] A seq of javax.net.ssl.X509TrustManager objects.
    These are used to verify the certificates sent by the remote host. If
    you don't specify this option, the connection will use an instance of
@@ -134,7 +137,9 @@
              keystore-password
              certificate-alias
              certificate-file
-             trust-managers]}]
+             trust-managers
+             protocol]
+      :or {protocol "TLS"}}]
   (let [initial-keystore (load-keystore
                           (when keystore-file (resource-stream keystore-file))
                           keystore-password)
@@ -143,7 +148,7 @@
                             certificate-alias
                             (load-x509-cert certificate-file))
         key-mgr-factory (key-manager-factory keystore-with-cert keystore-password)
-        ctx (SSLContext/getInstance "TLS")
+        ctx (SSLContext/getInstance protocol)
         key-managers (.getKeyManagers key-mgr-factory)
         trust-managers (into-array javax.net.ssl.X509TrustManager
                                    (or trust-managers
